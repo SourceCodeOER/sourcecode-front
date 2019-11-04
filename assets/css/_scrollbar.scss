@@ -1,0 +1,25 @@
+@import "_variables";
+@import "_function";
+
+
+/* width */
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+body::-webkit-scrollbar-track {
+  background: transparent;
+  //@include box-shadow(inset $SHADOW)
+}
+
+/* Handle */
+body::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: $LINEAR_GRADIENT_RED_ORANGE;
+}
+
+/* Handle on hover */
+body::-webkit-scrollbar-thumb:hover {
+  background: $LINEAR_GRADIENT_RED_ORANGE;
+}

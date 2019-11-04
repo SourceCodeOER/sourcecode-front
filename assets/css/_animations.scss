@@ -1,0 +1,29 @@
+@import "_function";
+
+//fade
+
+.fade-enter-active, .fade-leave-active {
+  @include transitionHelper(opacity .5s)
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@-webkit-keyframes progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

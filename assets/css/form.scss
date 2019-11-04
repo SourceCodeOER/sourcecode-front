@@ -1,0 +1,82 @@
+@import "_function";
+@import "_variables";
+@import "_font";
+
+input[type=text], textarea {
+  border: 1px solid $RED;
+  padding: 0 25px;
+  @include border-radius(0);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  font-family: $Montserrat;
+  font-weight: lighter;
+  font-size: 0.75em;
+  color:$RED;
+  border-radius: 4px;
+
+  &:focus, &:focus::placeholder {
+    color:$LIGHT_RED;
+    border-color:$LIGHT_RED;
+  }
+}
+
+input {
+  line-height: 3.2em;
+}
+
+textarea {
+  resize: none;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 100px;
+}
+
+input::placeholder, textarea::placeholder {
+  font-size: 1em;
+  color: $RED;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-animation: autofill 0s forwards;
+  animation: autofill 0s forwards;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid $RED;
+  -webkit-text-fill-color: $RED;
+  -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+@keyframes autofill {
+  100% {
+    background: transparent;
+    color: $RED;
+  }
+}
+
+@-webkit-keyframes autofill {
+  100% {
+    background: transparent;
+    color: $RED;
+  }
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: $RED !important;
+}

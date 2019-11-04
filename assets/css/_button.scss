@@ -1,0 +1,64 @@
+@import "_variables";
+@import "_function";
+@import "_font";
+
+$animationTransition: .5s;
+
+.button-wrapper {
+  text-align: center;
+}
+
+button {
+  font-family: $Montserrat;
+  font-size: 0.875em;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 14px 14px;
+  border-radius: 4px;
+
+  background-color: transparent;
+  letter-spacing: 2px;
+  cursor: pointer;
+
+  margin-top: 10px;
+
+  @include transitionHelper(border-color $animationTransition ease, color $animationTransition ease, background-color $animationTransition ease);
+
+  &:focus {
+    outline: none;
+  }
+
+  &.button--light-blue-reverse {
+    border: 1px solid $LIGHT_BLUE;
+    background-color: $LIGHT_BLUE;
+    color: white;
+  }
+
+  &.button--linear-red-orange {
+    background: $LINEAR_GRADIENT_RED_ORANGE_H;
+    border: 0 solid transparent;
+    color: white;
+  }
+
+  &.button--linear-orange {
+    background: $LINEAR_GRADIENT_ORANGE;
+    border: 0 solid white;
+    color: white;
+  }
+
+  &.with-symbol {
+    svg, img {
+      width: 15px;
+      vertical-align: sub;
+    }
+  }
+}
+
+@media (hover: hover) {
+  &.button--linear-red:hover {
+    border: 0 solid $RED;
+    color: white;
+  }
+
+}
+

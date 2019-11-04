@@ -1,0 +1,75 @@
+// Fonts
+@import "font";
+// Variables
+@import "variables";
+// Functions
+@import "function";
+// animations
+@import "animations";
+// button
+@import "button";
+@import "scrollbar";
+@import "form";
+@import "symbols";
+
+//Les bases
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: $Montserrat;
+}
+
+html {
+  background-image: linear-gradient(0deg, #F5F5F5 0%, #E4E4E4 100%);
+  min-height: 100vh;
+}
+
+body {
+  color: $GREY;
+  font-size: 1em;
+}
+
+* {
+  @include box-sizing(border-box);
+}
+
+picture {
+  display: block;
+
+  img {
+    width: 100%;
+  }
+}
+
+picture, img, svg {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+
+h1, h2, h3 {
+  margin:0;
+  padding: 0;
+}
+
+h1 {
+  font-family: $CircularStd;
+  font-weight: bold;
+  font-size: 1.75em;
+}
+
+h2 {
+  font-family: $CircularStd;
+  font-weight: bold;
+  font-size: 1.125em;
+}

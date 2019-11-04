@@ -1,0 +1,85 @@
+@import "variables";
+
+@mixin transformHelper($props) {
+  -webkit-transform: $props;
+  -moz-transform: $props;
+  -ms-transform: $props;
+  -o-transform: $props;
+  transform: $props;
+}
+
+@mixin background-size($prop) {
+  -webkit-background-size: $prop;
+  background-size: $prop;
+}
+
+@mixin border-radius($prop) {
+  -webkit-border-radius: $prop;
+  -moz-border-radius: $prop;
+  border-radius: $prop;
+}
+
+@mixin transformOriginHelper($props) {
+  -webkit-transform-origin: $props;
+  -moz-transform-origin: $props;
+  -ms-transform-origin: $props;
+  -o-transform-origin: $props;
+  transform-origin: $props;
+}
+
+@mixin background-gradient($color1, $color2) {
+  background: -moz-linear-gradient(90deg, $color1 0%, $color2 100%);
+  background: -webkit-linear-gradient(90deg, $color1 0%, $color2 100%);
+  background: -ms-linear-gradient(90deg, $color1 0%, $color2 100%);
+}
+
+@mixin transitionHelper($props...) {
+  -webkit-transition: $props;
+  -moz-transition: $props;
+  -ms-transition: $props;
+  -o-transition: $props;
+  transition: $props;
+}
+
+@mixin animation($props...) {
+  -webkit-animation: $props;
+  -o-animation: $props;
+  animation: $props;
+}
+
+@mixin box-shadow($prop...) {
+  -webkit-box-shadow: $prop;
+  -moz-box-shadow: $prop;
+  box-shadow: $prop;
+}
+
+@mixin box-sizing($prop) {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@mixin background-image($prop) {
+
+  background: url(map-get($prop, 'default'));
+  background:
+    -webkit-image-set(
+        map-get($prop, 'imgSet')
+    ) map-get($prop, 'options');
+
+  background:
+    image-set(
+        map-get($prop, 'imgSet')
+    ) map-get($prop, 'options');
+}
+
+@mixin columns($prop) {
+  columns: $prop;
+  -moz-columns: $prop;
+  -webkit-columns: $prop;
+
+}
+
+@function sum-time($value1, $value2) {
+  @return $value1 + $value2;
+}
