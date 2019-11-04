@@ -1,7 +1,7 @@
 <template>
   <div id="Menu">
     <div class="logo-wrapper">
-      <img src="@/assets/logo/logo.svg" alt="Source Code - Logo">
+      <img src="@/assets/logo/logo.png" alt="Source Code - Logo">
     </div>
 
     <div class="menu-wrapper">
