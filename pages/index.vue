@@ -2,7 +2,7 @@
   <div class="container">
     <div class="search-banner">
       <div class="input-wrapper">
-        <SearchSymbol theme="red-theme"/>
+        <SearchSymbol/>
         <input type="text" placeholder="Rechercher">
       </div>
     </div>
