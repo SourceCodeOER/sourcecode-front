@@ -98,7 +98,7 @@
     }
 
     .menu-wrapper {
-      background-image: $LINEAR_GRADIENT_RED_ORANGE;
+      background-image: $MAIN_GRADIENT_V;
       color: white;
       height: calc(100% - #{$BANNER_LOGO_HEIGHT});
       padding: $PADDING_MENU 0;
@@ -129,7 +129,7 @@
       }
 
       &:hover {
-        background-color: $LIGHT_RED;
+        background-color: $PRIMARY_COLOR_LIGHT;
         @include transitionHelper(background-color .3s ease)
       }
     }

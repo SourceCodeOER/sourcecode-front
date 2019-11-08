@@ -3,7 +3,7 @@
 @import "_font";
 
 input[type=text], textarea {
-  border: 1px solid $RED;
+  border: 1px solid $PRIMARY_COLOR;
   padding: 0 25px;
   @include border-radius(0);
   -webkit-appearance: none;
@@ -14,12 +14,12 @@ input[type=text], textarea {
   font-family: $Montserrat;
   font-weight: lighter;
   font-size: 0.75em;
-  color:$RED;
+  color:$PRIMARY_COLOR;
   border-radius: 4px;
 
   &:focus, &:focus::placeholder {
-    color:$LIGHT_RED;
-    border-color:$LIGHT_RED;
+    color:$PRIMARY_COLOR_LIGHT;
+    border-color:$PRIMARY_COLOR_LIGHT;
   }
 }
 
@@ -36,7 +36,7 @@ textarea {
 
 input::placeholder, textarea::placeholder {
   font-size: 1em;
-  color: $RED;
+  color: $PRIMARY_COLOR;
 }
 
 input:-webkit-autofill,
@@ -56,27 +56,27 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  border: 1px solid $RED;
-  -webkit-text-fill-color: $RED;
+  border: 1px solid $PRIMARY_COLOR;
+  -webkit-text-fill-color: $PRIMARY_COLOR;
   -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0) inset;
   transition: background-color 5000s ease-in-out 0s;
 }
 @keyframes autofill {
   100% {
     background: transparent;
-    color: $RED;
+    color: $PRIMARY_COLOR;
   }
 }
 
 @-webkit-keyframes autofill {
   100% {
     background: transparent;
-    color: $RED;
+    color: $PRIMARY_COLOR;
   }
 }
 
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   background-color: transparent !important;
   background-image: none !important;
-  color: $RED !important;
+  color: $PRIMARY_COLOR !important;
 }

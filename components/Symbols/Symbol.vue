@@ -4,7 +4,7 @@
         props: {
             theme: {
                 type: String,
-                default: ""
+                default: "theme--default"
             }
         }
     }

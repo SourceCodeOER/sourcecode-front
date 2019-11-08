@@ -25,7 +25,17 @@
         },
         computed: {
             theme() {
-                return this.confirmed ? 'white-theme' : 'red-light-theme'
+                return this.confirmed ? 'white-theme' : 'theme--default'
+            }
+        },
+        methods: {
+            delete() {
+                // TODO
+                if (this.confirmed) {
+
+                } else {
+
+                }
             }
         }
     }
@@ -41,12 +51,12 @@
     padding: 10px 10px;
     border-radius: 4px;
     background-color: white;
-    color: $RED;
-    border: 1px solid $RED;
+    color: $PRIMARY_COLOR;
+    border: 1px solid $PRIMARY_COLOR;
     font-weight: lighter;
     font-size: .75em;
     margin-right: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 
     svg {
       margin-left: 5px;
@@ -54,7 +64,8 @@
     }
 
     &.tag--confirmed {
-      background: $LINEAR_GRADIENT_RED_ORANGE_H;
+      background: $MAIN_GRADIENT_H;
+      border: 0;
       color: white;
     }
   }

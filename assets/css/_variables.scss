@@ -1,49 +1,51 @@
 /*
   Some colors
+*/
 
-  $BLUE: #012766;
-  $YELLOW: #F7B02E;
-  $WHITE: #f5f7f6;
+$BLUE: #012766;
+$YELLOW: #F7B02E;
+$WHITE: #f5f7f6;
 
-  $GREEN_LIGHT: #AAFFA9;
-  $FLASH_GREEN: #11FFBD;
+$GREEN_LIGHT: #AAFFA9;
+$FLASH_GREEN: #11FFBD;
 
-  $FLASH_PURPLE: #FF79E1;
-  $PURPLE: #CE9FFC;
-  $DARK_PURPLE: #7367F0;
+$FLASH_PURPLE: #FF79E1;
+$PURPLE: #CE9FFC;
+$DARK_PURPLE: #7367F0;
 
-  $FLASH_BLUE: #00B8D6;
-  $NIGHT_BLUE: #034F87;
+$FLASH_BLUE: #00B8D6;
+$NIGHT_BLUE: #034F87;
 
-  $FLASH_RED: #ec008c;
- */
-
-/*
-  Some cool gradients
-
-
-  $LINEAR_GRADIENT_GREEN: linear-gradient(109.6deg, rgba(170, 255, 169, 1) 11.2%, rgba(17, 255, 189, 1) 91.1%);
-  $LINEAR_GRADIENT_PURPLE: linear-gradient(135deg, #CE9FFC 10%, #7367F0 100%);
-  $LINEAR_GRADIENT_BLUE_PURPLE: radial-gradient(circle farthest-corner at 10% 20%, rgba(142, 224, 251, 1) 0%, rgba(255, 121, 225, 1) 100.7%);
-  $LINEAR_GRADIENT_BLUE: linear-gradient(115.7deg, rgba(3, 79, 135, 1) 6.2%, rgba(0, 184, 214, 1) 112.9%);
-  $LINEAR_GRADIENT_RED: linear-gradient(to right, $RED, $FLASH_RED);
- */
-
-/*
-  Some cool shadows
-  $SHADOW_RED: 1px 4px 7px 3px rgba(#fc6767, 0.4);
-  $SHADOW_BLUE: 1px 4px 7px 3px rgba($NIGHT_BLUE, 0.4);
- */
-
-/*
-  App color
- */
+$FLASH_RED: #ec008c;
 
 $RED: #F5213F;
 $LIGHT_RED: #fa7575;
 $ORANGE: #FE6234;
 $LIGHT_BLUE: #07C3EE;
 $GREY: #545454;
+
+$NEW_BLUE: #0589eb;
+
+/*
+  Some cool gradients
+*/
+
+
+$LINEAR_GRADIENT_GREEN: linear-gradient(109.6deg, rgba(170, 255, 169, 1) 11.2%, rgba(17, 255, 189, 1) 91.1%);
+$LINEAR_GRADIENT_PURPLE: linear-gradient(135deg, #CE9FFC 10%, #7367F0 100%);
+$LINEAR_GRADIENT_BLUE_PURPLE: radial-gradient(circle farthest-corner at 10% 20%, rgba(142, 224, 251, 1) 0%, rgba(255, 121, 225, 1) 100.7%);
+$LINEAR_GRADIENT_BLUE: linear-gradient(115.7deg, rgba(3, 79, 135, 1) 6.2%, rgba(0, 184, 214, 1) 112.9%);
+$LINEAR_GRADIENT_RED: linear-gradient(to right, $RED, $FLASH_RED);
+
+/*
+  Some cool shadows
+*/
+$SHADOW_RED: 1px 4px 7px 3px rgba(#fc6767, 0.4);
+$SHADOW_BLUE: 1px 4px 7px 3px rgba($NIGHT_BLUE, 0.4);
+
+/*
+  App color
+ */
 
 
 /*
@@ -60,6 +62,20 @@ $LINEAR_GRADIENT_ORANGE: linear-gradient(to right, #eea849, #f46b45);
  */
 
 $SHADOW: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+
+/*
+  App Main color scheme
+ */
+
+
+$PRIMARY_COLOR: $RED;
+$PRIMARY_COLOR_LIGHT: lighten($PRIMARY_COLOR, 23);
+$SECONDARY_COLOR: $ORANGE;
+$TERNARY_COLOR: $LIGHT_BLUE;
+
+$MAIN_GRADIENT_V: linear-gradient(45deg, $SECONDARY_COLOR 0%, $PRIMARY_COLOR 100%);
+$MAIN_GRADIENT_H: linear-gradient(225deg, $PRIMARY_COLOR 0%, $SECONDARY_COLOR 100%);
+
 
 /*
   App layout

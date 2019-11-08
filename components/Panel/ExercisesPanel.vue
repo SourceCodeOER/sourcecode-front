@@ -2,6 +2,7 @@
   <section id="ExercisesPanel" class="exercises-wrapper">
     <header>
       <h1>Résultats de recherche</h1>
+      <hr>
     </header>
 
     <article v-for="i in 20" :key="i">
@@ -38,6 +39,11 @@
 
     header {
       margin-bottom: 30px;
+
+      hr {
+        border:0;
+        border-top:1px solid rgba($GREY, .3);
+      }
     }
 
     button {
@@ -62,7 +68,7 @@
         grid-area: rating;
         font-family: $CircularStd;
         font-weight: bold;
-        color: $ORANGE;
+        color: $SECONDARY_COLOR;
         font-size: 1.75em;
       }
 

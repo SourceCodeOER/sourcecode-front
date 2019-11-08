@@ -77,7 +77,7 @@
       margin-bottom: 20px;
 
       .orange {
-        color: $ORANGE;
+        color: $SECONDARY_COLOR;
       }
     }
 

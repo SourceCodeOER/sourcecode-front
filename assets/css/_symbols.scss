@@ -1,5 +1,9 @@
 @import "./_variables";
 
+.theme--default {
+  fill:$PRIMARY_COLOR;
+}
+
 .red-theme {
   fill: $RED;
 }
