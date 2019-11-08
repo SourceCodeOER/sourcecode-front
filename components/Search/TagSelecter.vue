@@ -1,33 +1,15 @@
 <template>
   <li class="tag-selecter">
     <span @click="toggleList">
-      <ArrowSymbol class="arrow" :class="{'arrow-rotate': active}" theme="orange-theme"/>
+      <ArrowSymbol class="arrow" :class="{'arrow-rotate': active}"/>
       {{title}}
     </span>
     <ul :class="{active}">
       <li>
         <input type="text" v-model="filter" placeholder="Filtrer">
       </li>
-      <li>
-        <label>
-          Un
-          <input type="checkbox">
-          <span class="checkmark"></span>
-        </label>
-      </li>
-      <li>
-        <label>
-          Deux
-          <input type="checkbox">
-          <span class="checkmark"></span>
-        </label>
-      </li>
-      <li>
-        <label>
-          Trois
-          <input type="checkbox">
-          <span class="checkmark"></span>
-        </label>
+      <li v-for="el in filteredTags" :key="el.id">
+        <CheckBox :title="el.title" :state="!!map.get(el.id)" :id="el.id" @check="check"></CheckBox>
       </li>
     </ul>
   </li>
@@ -35,32 +17,66 @@
 
 <script>
     import ArrowSymbol from "../Symbols/ArrowSymbol";
+    import CheckBox from "../Input/CheckBox";
 
     export default {
         name: "TagSelecter",
-        components: {ArrowSymbol},
-        component: {
-            ArrowSymbol
-        },
+        components: {CheckBox, ArrowSymbol},
         props: {
             title: {
                 type: String,
                 required: true
             },
             tags: {
-                type: Object,
-                //required: true
+                type: Array,
+                default() {
+                    return [
+                        {
+                            id: 1,
+                            title:'Facile'
+                        },
+                        {
+                            id: 2,
+                            title:'Normal'
+                        },
+                        {
+                            id: 3,
+                            title:'Difficile'
+                        },
+                        {
+                            id: 4,
+                            title:'Java'
+                        },
+                        {
+                            id: 5,
+                            title:'QCM'
+                        },
+                        {
+                            id: 6,
+                            title:'Liste Chainées'
+                        }
+                    ]
+                }
             }
         },
         data() {
             return {
                 filter: "",
-                active: false
+                active: false,
+                map: new Map()
+            }
+        },
+        computed: {
+            filteredTags() {
+                return this.filter === '' ? this.tags : this.tags.filter(element => element.title.toLowerCase().match(this.filter.toLowerCase()) !== null);
             }
         },
         methods: {
             toggleList() {
                 this.active = !this.active
+            },
+            check(event) {
+                this.map.set(event.id, event.state);
             }
         }
     }
@@ -80,10 +96,6 @@
     overflow-x: hidden;
     @include transitionHelper(max-height .4s ease);
 
-    li {
-      margin-bottom: 20px;
-    }
-
     .active {
       max-height: 200px;
     }
@@ -91,69 +103,10 @@
   }
 
   .tag-selecter {
-    ul > li:nth-child(n + 2) {
-      position: relative;
-      display: block;
-      line-height: 2em;
-      padding-left: 35px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
+    margin-bottom: 20px;
 
-      label {
-        display: inline-block;
-        width: 100%;
-      }
-
-      &:hover input ~ .checkmark {
-        background-color: #ccc;
-      }
-
-      input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-
-        &:checked ~ .checkmark {
-          background-color: $LIGHT_BLUE;
-        }
-
-        &:checked ~ .checkmark:after {
-          display: block;
-          background-color: $LIGHT_BLUE;
-        }
-      }
-
-      .checkmark:after {
-        left: 9px;
-        top: 5px;
-        width: 5px;
-        height: 10px;
-        border: solid white;
-        border-width: 0 3px 3px 0;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-      }
-    }
-
-    .checkmark {
-      position: absolute;
-      top: 50%;
-      @include transformHelper(translateY(-50%));
-      left: 0;
-      height: 25px;
-      width: 25px;
-      background-color: #eee;
-
-      &:after {
-        content: "";
-        position: absolute;
-        display: none;
-      }
+    ul > li {
+      margin-bottom: 10px;
     }
 
     > span {
@@ -164,7 +117,6 @@
       margin-bottom: 10px;
     }
   }
-
 
   li {
     margin-bottom: 10px;
