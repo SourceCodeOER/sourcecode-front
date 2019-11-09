@@ -25,7 +25,7 @@
         },
         computed: {
             theme() {
-                return this.confirmed ? 'white-theme' : 'theme--default'
+                return this.confirmed ? 'theme--white' : 'theme--default'
             }
         },
         methods: {
