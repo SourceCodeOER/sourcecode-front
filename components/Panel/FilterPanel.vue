@@ -38,18 +38,20 @@
   </div>
 </template>
 
-<script>
-    import FilterSymbol from "../Symbols/FilterSymbol";
-    import Tag from "../Tag/Tag";
-    import TagSelecter from "../Search/TagSelecter";
+<script lang="ts">
+    import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
+    import Tag from "~/components/Tag/Tag.vue";
+    import TagSelecter from "~/components/Search/TagSelecter.vue";
+    import {Component, Vue} from 'vue-property-decorator';
 
-    export default {
-        name: "FilterPanel",
+    @Component({
         components: {
             FilterSymbol,
-            TagSelecter,
-            Tag
+            Tag,
+            TagSelecter
         }
+    })
+    export default class FilterPanel extends Vue {
     }
 </script>
 

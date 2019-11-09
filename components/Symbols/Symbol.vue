@@ -1,11 +1,10 @@
-<script>
-    export default {
-        name: "Symbol",
-        props: {
-            theme: {
-                type: String,
-                default: "theme--default"
-            }
-        }
+<script lang="ts">
+    import {Component, Vue, Prop} from 'vue-property-decorator'
+
+    @Component({
+        name: 'SymbolLogo'
+    })
+    export default class Symbol extends Vue {
+        @Prop({type: String, default: "theme--default"}) readonly theme?: string;
     }
 </script>

@@ -51,13 +51,16 @@
   </div>
 </template>
 
-<script>
-    import ArrowSymbol from "./Symbols/ArrowSymbol";
+<script lang="ts">
+    import {Vue, Component} from "vue-property-decorator";
+    import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
 
-    export default {
-        name: "Menu",
-        components: {ArrowSymbol}
-    }
+    @Component({
+        components: {
+            ArrowSymbol
+        }
+    })
+    export default class Menu extends Vue{}
 </script>
 
 <style lang="scss" scoped>

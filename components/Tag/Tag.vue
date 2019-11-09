@@ -5,37 +5,30 @@
   </div>
 </template>
 
-<script>
-    import CrossSymbol from "../Symbols/CrossSymbol";
+<script lang="ts">
+    import CrossSymbol from "~/components/Symbols/CrossSymbol.vue";
 
-    export default {
-        name: "Tag",
+    import {Vue, Component, Prop} from 'vue-property-decorator'
+
+    @Component({
         components: {
             CrossSymbol
-        },
-        props: {
-            title: {
-                required: true,
-                type: String
-            },
-            confirmed: {
-                type: Boolean,
-                default: false
-            }
-        },
-        computed: {
-            theme() {
-                return this.confirmed ? 'theme--white' : 'theme--default'
-            }
-        },
-        methods: {
-            delete() {
-                // TODO
-                if (this.confirmed) {
+        }
+    })
+    export default class Tag extends Vue {
+        @Prop({type: String, required: true}) readonly title!: string;
+        @Prop({type: Boolean, default: false}) readonly confirmed?: boolean;
 
-                } else {
+        get theme() {
+            return this.confirmed ? 'theme--white' : 'theme--default'
+        }
 
-                }
+        delete() {
+            // TODO
+            if (this.confirmed) {
+
+            } else {
+
             }
         }
     }

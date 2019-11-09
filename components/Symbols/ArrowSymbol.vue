@@ -16,10 +16,10 @@
 
 </template>
 
-<script>
-  import Symbol from "./Symbol";
-    export default {
-        name: "ArrowSymbol",
-        mixins: [Symbol]
-    }
+<script lang="ts">
+    import Symbol from "./Symbol.vue";
+    import {Component, Mixins} from 'vue-property-decorator'
+
+    @Component
+    export default class ArrowSymbol extends Mixins(Symbol) {}
 </script>

@@ -8,15 +8,16 @@
 
 <script lang="ts">
     import {Vue, Component, Prop, Emit, Watch} from 'vue-property-decorator'
+    import {CheckBoxObjectEmitted} from "@/types";
 
     @Component
     export default class CheckBox extends Vue {
 
-        checked = false;
+        checked:boolean = false;
 
         @Prop(String) readonly title!: string;
         @Prop(Boolean) readonly state!: boolean;
-        @Prop({type: [String, Number], default: 'none'}) readonly id!: string | number;
+        @Prop({type: [String, Number], default: 'none'}) readonly id!: number;
 
         @Emit()
         check(): { state: boolean; id: string | number; title: string } {
@@ -25,7 +26,7 @@
 
         @Watch('checked')
         @Emit('check')
-        onStateChanged(val: boolean) {
+        onStateChanged(val: boolean): CheckBoxObjectEmitted {
             return {title: this.title, state: val, id: this.id}
         }
 

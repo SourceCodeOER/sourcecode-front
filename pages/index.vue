@@ -3,7 +3,7 @@
     <div class="search-banner">
       <div class="input-wrapper">
         <SearchSymbol/>
-        <input type="text" placeholder="Rechercher">
+        <input type="text" v-model="searchModel" placeholder="Rechercher">
       </div>
     </div>
 
@@ -14,17 +14,21 @@
   </div>
 </template>
 
-<script>
-    import FilterPanel from "../components/Panel/FilterPanel";
-    import ExercisesPanel from "../components/Panel/ExercisesPanel";
-    import SearchSymbol from "../components/Symbols/SearchSymbol";
+<script lang="ts">
+    import FilterPanel from "~/components/Panel/FilterPanel.vue";
+    import ExercisesPanel from "~/components/Panel/ExercisesPanel.vue";
+    import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
+    import {Component, Vue} from "vue-property-decorator";
 
-    export default {
+    @Component({
         components: {
             FilterPanel,
             ExercisesPanel,
             SearchSymbol
         }
+    })
+    export default class extends Vue {
+        searchModel: string = ''
     }
 </script>
 

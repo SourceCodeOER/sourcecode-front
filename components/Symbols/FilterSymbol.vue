@@ -6,11 +6,10 @@
   </svg>
 </template>
 
-<script>
-    import Symbol from "./Symbol";
+<script lang="ts">
+    import Symbol from "./Symbol.vue";
+    import {Component, Mixins} from 'vue-property-decorator'
 
-    export default {
-        name: "FilterSymbol",
-        mixins: [Symbol]
-    }
+    @Component
+    export default class FilterSymbol extends Mixins(Symbol) {}
 </script>

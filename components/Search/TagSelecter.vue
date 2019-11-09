@@ -15,70 +15,68 @@
   </li>
 </template>
 
-<script>
-    import ArrowSymbol from "../Symbols/ArrowSymbol";
-    import CheckBox from "../Input/CheckBox";
+<script lang="ts">
+    import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
+    import CheckBox from "~/components/Input/CheckBox.vue";
+    import {Vue, Component, Prop} from "vue-property-decorator";
+    import {CheckBoxObjectEmitted, Tag} from "~/types";
 
-    export default {
-        name: "TagSelecter",
-        components: {CheckBox, ArrowSymbol},
-        props: {
-            title: {
-                type: String,
-                required: true
-            },
-            tags: {
-                type: Array,
-                default() {
-                    return [
-                        {
-                            id: 1,
-                            title:'Facile'
-                        },
-                        {
-                            id: 2,
-                            title:'Normal'
-                        },
-                        {
-                            id: 3,
-                            title:'Difficile'
-                        },
-                        {
-                            id: 4,
-                            title:'Java'
-                        },
-                        {
-                            id: 5,
-                            title:'QCM'
-                        },
-                        {
-                            id: 6,
-                            title:'Liste Chainées'
-                        }
-                    ]
-                }
-            }
-        },
-        data() {
-            return {
-                filter: "",
-                active: false,
-                map: new Map()
-            }
-        },
-        computed: {
-            filteredTags() {
-                return this.filter === '' ? this.tags : this.tags.filter(element => element.title.toLowerCase().match(this.filter.toLowerCase()) !== null);
-            }
-        },
-        methods: {
-            toggleList() {
-                this.active = !this.active
-            },
-            check(event) {
-                this.map.set(event.id, event.state);
-            }
+    @Component({
+        components: {
+            CheckBox,
+            ArrowSymbol
         }
+    })
+    export default class TagSelecter extends Vue {
+        filter: string = "";
+        active: boolean = false;
+        map: Map<number, boolean> = new Map();
+
+        @Prop({type: String, required: true}) readonly title!: string;
+
+        @Prop({
+            type: Array, default() {
+                return [
+                    {
+                        id: 1,
+                        title: 'Facile'
+                    },
+                    {
+                        id: 2,
+                        title: 'Normal'
+                    },
+                    {
+                        id: 3,
+                        title: 'Difficile'
+                    },
+                    {
+                        id: 4,
+                        title: 'Java'
+                    },
+                    {
+                        id: 5,
+                        title: 'QCM'
+                    },
+                    {
+                        id: 6,
+                        title: 'Liste Chainées'
+                    }
+                ]
+            }
+        }) readonly tags!: Tag[];
+
+        get filteredTags(): Tag[] {
+            return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.title.toLowerCase().match(this.filter.toLowerCase()) !== null);
+        }
+
+        toggleList() {
+            this.active = !this.active
+        }
+
+        check({id, state}: CheckBoxObjectEmitted) {
+            this.map.set(id, state);
+        }
+
     }
 </script>
 

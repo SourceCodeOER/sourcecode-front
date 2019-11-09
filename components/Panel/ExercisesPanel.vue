@@ -22,10 +22,11 @@
   </section>
 </template>
 
-<script>
-    export default {
-        name: "ExercisesPanel"
-    }
+<script lang="ts">
+  import {Vue, Component} from "vue-property-decorator";
+
+  @Component
+  export default class ExercisesPanel extends Vue{}
 </script>
 
 <style lang="scss" scoped>
