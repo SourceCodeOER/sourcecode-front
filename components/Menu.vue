@@ -132,7 +132,7 @@
       }
 
       &:hover {
-        background-color: $PRIMARY_COLOR_LIGHT;
+        background-color: rgba(white, .2);
         @include transitionHelper(background-color .3s ease)
       }
     }

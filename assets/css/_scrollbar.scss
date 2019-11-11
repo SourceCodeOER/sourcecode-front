@@ -16,10 +16,10 @@ body::-webkit-scrollbar-track {
 /* Handle */
 body::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: $LINEAR_GRADIENT_RED_ORANGE;
+  background: $MAIN_GRADIENT_V;
 }
 
 /* Handle on hover */
 body::-webkit-scrollbar-thumb:hover {
-  background: $LINEAR_GRADIENT_RED_ORANGE;
+  background: $MAIN_GRADIENT_V;
 }

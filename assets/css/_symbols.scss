@@ -4,6 +4,19 @@
   fill:$PRIMARY_COLOR;
 }
 
+.theme--primary-color {
+  fill: $PRIMARY_COLOR;
+}
+
+.theme--primary-color-light {
+  fill: $PRIMARY_COLOR_LIGHT;
+}
+
+.theme--secondary-color {
+  fill: darken($SECONDARY_COLOR, 12);
+}
+
+
 .theme--red {
   fill: $RED;
 }

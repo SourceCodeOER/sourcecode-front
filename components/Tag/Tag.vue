@@ -20,7 +20,7 @@
         @Prop({type: Boolean, default: false}) readonly confirmed?: boolean;
 
         get theme() {
-            return this.confirmed ? 'theme--white' : 'theme--default'
+            return this.confirmed ? 'theme--white' : 'theme--secondary-color'
         }
 
         delete() {
@@ -44,8 +44,8 @@
     padding: 10px 10px;
     border-radius: 4px;
     background-color: white;
-    color: $PRIMARY_COLOR;
-    border: 1px solid $PRIMARY_COLOR;
+    color: darken($SECONDARY_COLOR, 12);
+    border: 1px solid darken($SECONDARY_COLOR, 12);
     font-weight: lighter;
     font-size: .75em;
     margin-right: 5px;
@@ -57,7 +57,7 @@
     }
 
     &.tag--confirmed {
-      background: $MAIN_GRADIENT_H;
+      background: darken($SECONDARY_COLOR, 12);
       border: 0;
       color: white;
     }
