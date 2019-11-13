@@ -1,4 +1,3 @@
-
 export default {
   mode: 'universal',
   /*
@@ -30,6 +29,9 @@ export default {
   axios: {
     proxy: true
   },
+  proxy: {
+    '/api/': { target: 'http://127.0.0.1:4010'}
+  },
   i18n: {
     vueI18n: {
       fallbackLocale: 'fr'
@@ -49,7 +51,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: {color: '#fff'},
   /*
   ** Global CSS
   */
@@ -66,7 +68,8 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
+    'nuxt-typed-vuex',
   ],
   /*
   ** Nuxt.js modules
@@ -80,7 +83,8 @@ export default {
   */
   build: {
     transpile: [
-      "vee-validate/dist/rules"
+      "vee-validate/dist/rules",
+      "/nuxt-typed-vuex/"
     ]
   }
 }
