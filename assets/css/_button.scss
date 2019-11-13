@@ -28,6 +28,18 @@ button {
     outline: none;
   }
 
+  &.button--ternary-color-reverse {
+    border: 1px solid $TERNARY_COLOR;
+    background-color: $TERNARY_COLOR;
+    color: white;
+  }
+
+  &.button--ternary-color {
+    border: 1px solid $TERNARY_COLOR;
+    background-color: transparent;
+    color: $TERNARY_COLOR;
+  }
+
   &.button--light-blue-reverse {
     border: 1px solid $TERNARY_COLOR;
     background-color: $TERNARY_COLOR;
