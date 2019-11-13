@@ -7,26 +7,25 @@
 
       <div class="filters">
         <div class="selected-tags">
-          <Tag confirmed title="Facile"></Tag>
-          <Tag confirmed title="Java"></Tag>
-          <Tag confirmed title="QCM"></Tag>
-          <Tag title="Liste Chainées"></Tag>
+          <Tag v-for="(tag) in confirmedTags" confirmed :title="tag.text" :key="tag.text + tag.category" :category="tag.category" :id="tag.id"></Tag>
+          <Tag v-for="(tag) in selectedTags" :title="tag.text" :key="tag.text + tag.category" :category="tag.category" :id="tag.id"></Tag>
         </div>
 
         <ul class="selectable-tags">
-          <TagSelecter class="tag-selecter" title="Langage"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Difficulté"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Type d'exercice"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Plateforme"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Auteur"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Cotation"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Thématique"></TagSelecter>
-          <TagSelecter class="tag-selecter" title="Institution"></TagSelecter>
+          <TagSelecter ref="tagSelecter" v-for="tag in tags" :tags="tag.tags" :category="tag.id" :key="tag.id">{{tag.category}}</TagSelecter>
         </ul>
 
         <div class="button-wrapper">
-          <button class="button--light-blue-reverse">
+          <button @click="apply" class="button--ternary-color-reverse">
             Appliquer
+          </button>
+
+          <button @click="reset" v-if="!isEmptyTagsArray" class="button--ternary-color-reverse">
+            Sauver filtre
+          </button>
+
+          <button @click="reset" v-if="!isEmptyTagsArray" class="button--ternary-color">
+            Réinitialiser
           </button>
         </div>
       </div>
@@ -42,7 +41,7 @@
     import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
     import Tag from "~/components/Tag/Tag.vue";
     import TagSelecter from "~/components/Search/TagSelecter.vue";
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component, Vue, Ref} from 'vue-property-decorator';
 
     @Component({
         components: {
@@ -52,6 +51,45 @@
         }
     })
     export default class FilterPanel extends Vue {
+
+        @Ref() tagSelecter!: TagSelecter[];
+
+        get confirmedTags() {
+            return this.$accessor.tags.filteredConfirmedTags
+        }
+
+        get selectedTags() {
+            return this.$accessor.tags.filteredSelectedTags
+        }
+
+        get isEmptyTagsArray() {
+            return this.confirmedTags.length + this.selectedTags.length === 0
+        }
+
+
+        get tags() {
+            return this.$accessor.tags.tags
+        }
+
+        apply() {
+            this.$accessor.tags.apply();
+            this.resetFilterPanel()
+        }
+
+        reset() {
+            this.$accessor.tags.CLEAR();
+            this.resetFilterPanel()
+        }
+
+        private resetFilterPanel() {
+            const filterPanel = document.getElementById('FilterPanel');
+
+            if(!!filterPanel) {
+                filterPanel.scrollTop = 0
+            }
+
+            this.tagSelecter.forEach(instance => instance.$data.active = false)
+        }
     }
 </script>
 
@@ -72,6 +110,23 @@
     overflow-y: scroll;
     overflow-x: hidden;
 
+
+    .filter-tag-wrapper {
+      height: calc(100% - 50px);
+
+    }
+
+    .filters {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .button-wrapper {
+      margin-top:auto;
+      padding-bottom: 20px;
+    }
+
     h3 {
       font-family: $CircularStd;
       font-weight: 200;
@@ -88,7 +143,7 @@
     }
 
     .selected-tags {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .selectable-tags {

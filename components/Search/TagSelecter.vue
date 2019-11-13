@@ -2,14 +2,14 @@
   <li class="tag-selecter">
     <span @click="toggleList">
       <ArrowSymbol class="arrow" :class="{'arrow-rotate': active}"/>
-      {{title}}
+      <slot></slot>
     </span>
     <ul :class="{active}">
       <li>
         <input type="text" v-model="filter" placeholder="Filtrer">
       </li>
       <li v-for="el in filteredTags" :key="el.id">
-        <CheckBox :title="el.title" :state="!!map.get(el.id)" :id="el.id" @check="check"></CheckBox>
+        <CheckBox :title="el.text" :state="el.state === 2 || el.state === 1" :id="el.id" @check="check"></CheckBox>
       </li>
     </ul>
   </li>
@@ -19,7 +19,7 @@
     import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
     import CheckBox from "~/components/Input/CheckBox.vue";
     import {Vue, Component, Prop} from "vue-property-decorator";
-    import {CheckBoxObjectEmitted, Tag} from "~/types";
+    import {CheckBoxObjectEmitted, SelectedTag, Tag} from "~/types";
 
     @Component({
         components: {
@@ -30,51 +30,28 @@
     export default class TagSelecter extends Vue {
         filter: string = "";
         active: boolean = false;
-        map: Map<number, boolean> = new Map();
-
-        @Prop({type: String, required: true}) readonly title!: string;
 
         @Prop({
             type: Array, default() {
-                return [
-                    {
-                        id: 1,
-                        title: 'Facile'
-                    },
-                    {
-                        id: 2,
-                        title: 'Normal'
-                    },
-                    {
-                        id: 3,
-                        title: 'Difficile'
-                    },
-                    {
-                        id: 4,
-                        title: 'Java'
-                    },
-                    {
-                        id: 5,
-                        title: 'QCM'
-                    },
-                    {
-                        id: 6,
-                        title: 'Liste Chainées'
-                    }
-                ]
+                return []
             }
-        }) readonly tags!: Tag[];
+        }) readonly tags!: SelectedTag[];
 
-        get filteredTags(): Tag[] {
-            return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.title.toLowerCase().match(this.filter.toLowerCase()) !== null);
+        @Prop({
+            type: Number,
+            required: true
+        }) readonly category!: number
+
+        get filteredTags(): SelectedTag[] {
+            return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.text.toLowerCase().match(this.filter.toLowerCase()) !== null);
         }
 
         toggleList() {
             this.active = !this.active
         }
 
-        check({id, state}: CheckBoxObjectEmitted) {
-            this.map.set(id, state);
+        check({id, state, text}: CheckBoxObjectEmitted) {
+            this.$accessor.tags.addTag({id, text, state: state ? 1 : 0, category: this.category})
         }
 
     }
@@ -104,7 +81,7 @@
     margin-bottom: 20px;
 
     ul > li {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     > span {
@@ -113,6 +90,7 @@
       user-select: none;
       -webkit-user-select: none;
       margin-bottom: 10px;
+      text-transform: capitalize;
     }
   }
 

@@ -20,14 +20,19 @@
         @Prop({type: [String, Number], default: 'none'}) readonly id!: number;
 
         @Emit()
-        check(): { state: boolean; id: string | number; title: string } {
-            return {title: this.title, state: this.checked, id: this.id}
+        check(): { state: boolean; id: string | number; text: string } {
+            return {text: this.title, state: this.checked, id: this.id}
         }
 
         @Watch('checked')
         @Emit('check')
         onStateChanged(val: boolean): CheckBoxObjectEmitted {
-            return {title: this.title, state: val, id: this.id}
+            return {text: this.title, state: val, id: this.id}
+        }
+
+        @Watch('state')
+        onStatePropChanged(val:boolean) {
+            this.checked = val
         }
 
         created() {
@@ -44,7 +49,7 @@
   label {
     position: relative;
     display: block;
-    line-height: 2em;
+    line-height: 1.5em;
     padding-left: 35px;
     -webkit-user-select: none;
     -moz-user-select: none;

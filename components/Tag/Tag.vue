@@ -1,7 +1,7 @@
 <template>
   <div class="tag" :class="{'tag--confirmed' : confirmed}">
     {{title}}
-    <CrossSymbol :theme="theme"/>
+    <CrossSymbol @click.native="deleteTag" :theme="theme"/>
   </div>
 </template>
 
@@ -18,18 +18,15 @@
     export default class Tag extends Vue {
         @Prop({type: String, required: true}) readonly title!: string;
         @Prop({type: Boolean, default: false}) readonly confirmed?: boolean;
+        @Prop({type: Number, required: true}) readonly category!: number;
+        @Prop({type: Number, required: true}) readonly id!: number;
 
         get theme() {
             return this.confirmed ? 'theme--white' : 'theme--secondary-color'
         }
 
-        delete() {
-            // TODO
-            if (this.confirmed) {
-
-            } else {
-
-            }
+        deleteTag() {
+            this.$accessor.tags.REMOVE_TAG({id:this.id, text: this.title, state: this.confirmed ? 1: 2, category: this.category})
         }
     }
 </script>

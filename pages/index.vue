@@ -25,6 +25,13 @@
             FilterPanel,
             ExercisesPanel,
             SearchSymbol
+        },
+        async fetch({app: {$accessor}}) {
+            try {
+                await $accessor.tags.fetchTags()
+            } catch (e) {
+                $accessor.tags.INIT([])
+            }
         }
     })
     export default class extends Vue {
