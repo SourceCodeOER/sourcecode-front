@@ -13,10 +13,13 @@
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.2.4",
     "@nuxtjs/axios": "^5.7.1",
+    "lodash.clonedeep": "^4.5.0",
     "nuxt": "^2.0.0",
     "nuxt-i18n": "^6.3.0",
+    "nuxt-typed-vuex": "^0.1.10",
     "vee-validate": "^3.0.11",
-    "vue-property-decorator": "^8.3.0"
+    "vue-property-decorator": "^8.3.0",
+    "vuex-class-component": "^2.1.1"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.3.4",
