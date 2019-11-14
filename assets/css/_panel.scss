@@ -1,0 +1,32 @@
+@import "_variables";
+@import "_function";
+@import "_font";
+
+
+.panel {
+  position: fixed;
+  top: $PADDING_TOP_CONTENT;
+  height: calc(100vh - #{$BANNER_LOGO_HEIGHT + 2* $PADDING_TOP_INNER_CONTENT});
+  width: $FILTER_PANEL_WIDTH;
+  border-radius: 4px;
+  background-color: white;
+  @include box-shadow($SHADOW);
+  padding: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  .panel-wrapper {
+    height: calc(100% - 50px);
+  }
+
+  h3 {
+    font-family: $CircularStd;
+    font-weight: 200;
+    font-size: 1.125em;
+    margin-bottom: 20px;
+
+    .secondary-color {
+      color: $SECONDARY_COLOR;
+    }
+  }
+}
