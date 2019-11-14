@@ -62,27 +62,27 @@ export const mutations = mutationTree(state, {
   /**
    * Add a tag in the selectedTag array and update the state in the tags array
    * @param state
-   * @param text
-   * @param id
-   * @param category
+   * @param selectedTag
    * @constructor
    */
-  ADD_TAG(state, {text, id, category}: SelectedTag) {
-    const index: number = state.selectedTags.findIndex((tag: SelectedTag) => id === tag.id);
+  ADD_TAG(state, selectedTag: SelectedTag) {
+    const index: number = state.selectedTags.findIndex((tag: SelectedTag) => selectedTag.id === tag.id);
 
     if (index !== -1 && state.selectedTags[index].state === DEACTIVATED) {
-      const i = state.tags.findIndex((el) => el.id === category);
-      const j = state.tags[i].tags.findIndex((el) => el.id === id);
+      const i = state.tags.findIndex((el) => el.id === selectedTag.category);
+      const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
 
       state.selectedTags[index].state = ACTIVE;
       state.tags[i].tags[j].state = ACTIVE
 
     } else if (index === -1) {
-      const i = state.tags.findIndex((el) => el.id === category);
-      const j = state.tags[i].tags.findIndex((el) => el.id === id);
+      const i = state.tags.findIndex((el) => el.id === selectedTag.category);
+      const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
 
-      state.selectedTags.push({text, id, state: PENDING, category});
-      state.tags[i].tags[j].state = PENDING
+      const stateOfSelectedTag = selectedTag.state === ACTIVE ? ACTIVE : PENDING;
+
+      state.selectedTags.push({text:selectedTag.text, id:selectedTag.id, state: stateOfSelectedTag, category:selectedTag.category});
+      state.tags[i].tags[j].state = stateOfSelectedTag
     }
   },
   /**
@@ -191,9 +191,29 @@ export const actions = actionTree({state, getters, mutations}, {
 
     arrayToMapOfArray(map, filteredSelectedTags);
 
-    console.log(Array.from(map.values()));
+    console.log(Array.from(map.values())); // TODO : Database stuff
 
     commit('APPLY')
+  },
+  /**
+   * Enable to apply a filter with a custom confirmedTags array
+   * @param commit
+   * @param confirmedTags
+   */
+  async applyConfirmedTags({commit}, confirmedTags:SelectedTag[]) {
+
+    commit('CLEAR');
+
+    confirmedTags.forEach(el => {
+      commit('ADD_TAG', el)
+    });
+
+    const map: Map<number, number | number[]> = new Map();
+
+    arrayToMapOfArray(map, confirmedTags);
+
+    console.log(Array.from(map.values())); // TODO : Database stuff
+
   },
   /**
    * Fetch all the tags with categories on the database
