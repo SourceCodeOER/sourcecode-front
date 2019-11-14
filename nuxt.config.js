@@ -48,6 +48,10 @@ export default {
     lazy: true,
     defaultLocale: 'fr',
   },
+  moment: {
+    defaultLocale: 'fr',
+    locales: ['fr']
+  },
   /*
   ** Customize the progress-bar color
   */
@@ -70,6 +74,7 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
+    '@nuxtjs/moment'
   ],
   /*
   ** Nuxt.js modules
