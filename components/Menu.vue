@@ -18,12 +18,12 @@
             Accueil
           </nuxt-link>
 
-          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
+          <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
             <div class="logo-link-wrapper">
               <img src="@/assets/logo/history.svg" alt="Historique">
             </div>
             Historique
-          </nuxt-link>
+          </li>
 
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
@@ -54,13 +54,22 @@
 <script lang="ts">
     import {Vue, Component} from "vue-property-decorator";
     import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
+    import {BusEvent} from '~/components/Event/BusEvent'
+
+    type FILTER_PANEL = 0;
+    type HISTORICAL_PANEL = 1;
+    type FAVORITE_PANEL = 2;
 
     @Component({
         components: {
             ArrowSymbol
         }
     })
-    export default class Menu extends Vue{}
+    export default class Menu extends Vue{
+        changePanel(id:FILTER_PANEL|HISTORICAL_PANEL|FAVORITE_PANEL) {
+            BusEvent.$emit('changePanel', id)
+        }
+    }
 </script>
 
 <style lang="scss" scoped>

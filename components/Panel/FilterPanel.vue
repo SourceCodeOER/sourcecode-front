@@ -1,9 +1,9 @@
 <template>
-  <div id="FilterPanel">
+  <div id="FilterPanel" class="panel">
 
-    <h3>Tout - <span class="orange">42 résultats</span></h3>
+    <h3>Tout - <span class="secondary-color">42 résultats</span></h3>
 
-    <div class="filter-tag-wrapper">
+    <div class="panel-wrapper">
 
       <div class="filters">
         <div class="selected-tags">
@@ -73,6 +73,9 @@
 
         apply() {
             this.$accessor.tags.apply();
+            if(!this.isEmptyTagsArray) {
+              this.$accessor.historical.addHistorical(this.confirmedTags);
+            }
             this.resetFilterPanel()
         }
 
@@ -97,24 +100,10 @@
   @import "./../../assets/css/_variables";
   @import "./../../assets/css/_function";
   @import "./../../assets/css/_font";
+  @import "./../../assets/css/_panel";
 
   #FilterPanel {
-    position: fixed;
-    top: $PADDING_TOP_CONTENT;
-    height: calc(100vh - #{$BANNER_LOGO_HEIGHT + 2* $PADDING_TOP_INNER_CONTENT});
-    width: $FILTER_PANEL_WIDTH;
-    border-radius: 4px;
-    background-color: white;
-    @include box-shadow($SHADOW);
-    padding: 20px;
-    overflow-y: scroll;
-    overflow-x: hidden;
 
-
-    .filter-tag-wrapper {
-      height: calc(100% - 50px);
-
-    }
 
     .filters {
       display: flex;
@@ -127,16 +116,6 @@
       padding-bottom: 20px;
     }
 
-    h3 {
-      font-family: $CircularStd;
-      font-weight: 200;
-      font-size: 1.125em;
-      margin-bottom: 20px;
-
-      .orange {
-        color: $SECONDARY_COLOR;
-      }
-    }
 
     .no-filter {
       text-align: center;
