@@ -1,7 +1,6 @@
-
 export interface CheckBoxObjectEmitted {
-  text:string,
-  state:boolean,
+  text: string,
+  state: boolean,
   id: number
 }
 
@@ -28,12 +27,12 @@ export type SelectedTag = {
 }
 
 export type TagsCategory = {
-  id:number,
+  id: number,
   category: string,
   tags: Tag[]
 }
 
-export interface ExtendedTag extends TagsCategory{
+export interface ExtendedTag extends TagsCategory {
   tags: SelectedTag[]
 }
 
@@ -47,10 +46,12 @@ export type Metric = {
 }
 
 export type TagExercise = {
-  id: number,
-  text: string,
-  category: string,
-  category_id: number
+  tag_id: number,
+  tag_text: string,
+  category: {
+    category_id: number,
+    category_text: string
+  }
 }
 
 export type Exercise = {
