@@ -24,6 +24,7 @@
     import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
     import {Component, Vue} from "vue-property-decorator";
     import {BusEvent} from '~/components/Event/BusEvent'
+    import {MetadataRequest} from "~/types";
 
     const FILTER_PANEL = 0;
     const HISTORICAL_PANEL = 1;
@@ -37,11 +38,8 @@
             HistoricalPanel
         },
         async fetch({app: {$accessor}}) {
-            try {
-                await $accessor.tags.fetchTags()
-            } catch (e) {
-                $accessor.tags.INIT([])
-            }
+            await $accessor.tags.fetch();
+            await $accessor.search.fetch({});
         }
     })
     export default class extends Vue {
@@ -57,7 +55,6 @@
         }
 
         created() {
-
             BusEvent.$on('changePanel', this.changePanel)
         }
     }

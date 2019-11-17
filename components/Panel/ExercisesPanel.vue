@@ -19,14 +19,54 @@
         <button class="button--light-blue-reverse">Voir l'exercice</button>
       </div>
     </article>
+    <div id="Anchor"></div>
   </section>
 </template>
 
 <script lang="ts">
-  import {Vue, Component} from "vue-property-decorator";
+    import {Vue, Component} from "vue-property-decorator";
 
-  @Component
-  export default class ExercisesPanel extends Vue{}
+    @Component
+    export default class ExercisesPanel extends Vue {
+        private observer: IntersectionObserver | undefined = undefined
+
+        beforeDestroy() {
+            if (process.client) {
+                if (!!this.observer) this.observer.disconnect()
+            }
+        }
+
+        mounted() {
+            if (process.client) {
+
+                const ratio = .2;
+
+                const options = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: ratio
+                };
+
+                const that = this;
+
+                const handleIntersect = function (entries: any) {
+                    entries.forEach((entry: any) => {
+                        if (entry.intersectionRatio > ratio && that.$accessor.search.isRemainingPages) {
+                            that.$accessor.search.next()
+                        }
+                    });
+                };
+
+                this.observer = new IntersectionObserver(handleIntersect, options);
+                const target = document.querySelector('#Anchor');
+
+                if (target !== null) {
+                    this.observer.observe(target);
+                }
+
+            }
+        }
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -42,8 +82,8 @@
       margin-bottom: 30px;
 
       hr {
-        border:0;
-        border-top:1px solid rgba($GREY, .3);
+        border: 0;
+        border-top: 1px solid rgba($GREY, .3);
       }
     }
 

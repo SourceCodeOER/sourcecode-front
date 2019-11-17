@@ -7,12 +7,16 @@
 
       <div class="filters">
         <div class="selected-tags">
-          <Tag v-for="(tag) in confirmedTags" confirmed :title="tag.text" :key="tag.text + tag.category" :category="tag.category" :id="tag.id"></Tag>
-          <Tag v-for="(tag) in selectedTags" :title="tag.text" :key="tag.text + tag.category" :category="tag.category" :id="tag.id"></Tag>
+          <Tag v-for="(tag) in confirmedTags" confirmed :title="tag.text" :key="tag.text + tag.category"
+               :category="tag.category" :id="tag.id"></Tag>
+          <Tag v-for="(tag) in selectedTags" :title="tag.text" :key="tag.text + tag.category" :category="tag.category"
+               :id="tag.id"></Tag>
         </div>
 
         <ul class="selectable-tags">
-          <TagSelecter ref="tagSelecter" v-for="tag in tags" :tags="tag.tags" :category="tag.id" :key="tag.id">{{tag.category}}</TagSelecter>
+          <TagSelecter ref="tagSelecter" v-for="tag in tags" :tags="tag.tags" :category="tag.id" :key="tag.id">
+            {{tag.category}}
+          </TagSelecter>
         </ul>
 
         <div class="button-wrapper">
@@ -73,8 +77,9 @@
 
         apply() {
             this.$accessor.tags.apply();
-            if(!this.isEmptyTagsArray) {
-              this.$accessor.historical.addHistorical(this.confirmedTags);
+            if (!this.isEmptyTagsArray) {
+                this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+                this.$accessor.historical.addHistorical(this.confirmedTags);
             }
             this.resetFilterPanel()
         }
@@ -87,7 +92,7 @@
         private resetFilterPanel() {
             const filterPanel = document.getElementById('FilterPanel');
 
-            if(!!filterPanel) {
+            if (!!filterPanel) {
                 filterPanel.scrollTop = 0
             }
 
@@ -112,7 +117,7 @@
     }
 
     .button-wrapper {
-      margin-top:auto;
+      margin-top: auto;
       padding-bottom: 20px;
     }
 
