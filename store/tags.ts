@@ -43,7 +43,8 @@ export const state = () => ({
    * The defaultTags array with modification of state for tags
    */
   tags: [] as ExtendedTag[],
-  tagsRequest: [] as (number | number[])[]
+  tagsRequest: [] as (number | number[])[],
+  isModified: false as Boolean
 });
 
 export const getters = getterTree(state, {
@@ -51,7 +52,7 @@ export const getters = getterTree(state, {
    * Retrieve all the tags that are already confirmed
    * @param state
    */
-  filteredConfirmedTags: state => state.selectedTags.filter((tag) => tag.state === ACTIVE),
+  filteredConfirmedTags: state => state.selectedTags.filter((tag) => tag.state === ACTIVE || tag.state === DEACTIVATED),
   /**
    * Retrieve all the tags that are not confirmed yet but in pending
    * @param state
@@ -74,7 +75,8 @@ export const mutations = mutationTree(state, {
       const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
 
       state.selectedTags[index].state = ACTIVE;
-      state.tags[i].tags[j].state = ACTIVE
+      state.tags[i].tags[j].state = ACTIVE;
+      state.isModified = true;
 
     } else if (index === -1) {
       const i = state.tags.findIndex((el) => el.id === selectedTag.category);
@@ -82,7 +84,8 @@ export const mutations = mutationTree(state, {
 
 
       state.selectedTags.push({text:selectedTag.text, id:selectedTag.id, state: PENDING, category:selectedTag.category});
-      state.tags[i].tags[j].state = PENDING
+      state.tags[i].tags[j].state = PENDING;
+      state.isModified = true;
     }
   },
   /**
@@ -101,7 +104,9 @@ export const mutations = mutationTree(state, {
       const j = state.tags[i].tags.findIndex((el) => el.id === id);
 
       state.selectedTags[index].state = DEACTIVATED;
-      state.tags[i].tags[j].state = DEACTIVATED
+      state.tags[i].tags[j].state = DEACTIVATED;
+      state.isModified = true;
+
 
     } else if (index !== -1 && state.selectedTags[index].state === PENDING) {
 
@@ -109,7 +114,8 @@ export const mutations = mutationTree(state, {
       const j = state.tags[i].tags.findIndex((el) => el.id === id);
 
       state.selectedTags.splice(index, 1);
-      state.tags[i].tags[j].state = INACTIVE
+      state.tags[i].tags[j].state = INACTIVE;
+      state.isModified = true;
 
     }
   },
@@ -137,6 +143,8 @@ export const mutations = mutationTree(state, {
         else if (tag.state === DEACTIVATED) tag.state = INACTIVE
       })
     }
+
+    state.isModified = false
 
   },
   /**

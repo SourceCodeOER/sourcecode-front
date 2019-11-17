@@ -1,5 +1,5 @@
 <template>
-  <div class="tag" :class="{'tag--confirmed' : confirmed}">
+  <div class="tag" :class="{'tag--confirmed' : state === 1, 'tag--deactivated': state === 0}">
     {{title}}
     <CrossSymbol @click.native="deleteTag" :theme="theme"/>
   </div>
@@ -9,6 +9,7 @@
     import CrossSymbol from "~/components/Symbols/CrossSymbol.vue";
 
     import {Vue, Component, Prop} from 'vue-property-decorator'
+    import {ACTIVE, DEACTIVATED, PENDING} from "~/types";
 
     @Component({
         components: {
@@ -17,16 +18,22 @@
     })
     export default class Tag extends Vue {
         @Prop({type: String, required: true}) readonly title!: string;
-        @Prop({type: Boolean, default: false}) readonly confirmed?: boolean;
+        @Prop({type: Number, default: 2}) readonly state!: DEACTIVATED|ACTIVE|PENDING;
         @Prop({type: Number, required: true}) readonly category!: number;
         @Prop({type: Number, required: true}) readonly id!: number;
 
         get theme() {
-            return this.confirmed ? 'theme--white' : 'theme--secondary-color'
+            if (this.state === 2) {
+                return 'theme--secondary-color'
+            } else if(this.state === 1) {
+                return 'theme--white'
+            } else {
+                return 'theme--red'
+            }
         }
 
         deleteTag() {
-            this.$accessor.tags.REMOVE_TAG({id:this.id, text: this.title, state: this.confirmed ? 1: 2, category: this.category})
+            if(this.state !== 0) this.$accessor.tags.REMOVE_TAG({id:this.id, text: this.title, state: this.state, category: this.category})
         }
     }
 </script>
@@ -54,9 +61,15 @@
     }
 
     &.tag--confirmed {
-      background: darken($SECONDARY_COLOR, 12);
+      background-color: darken($SECONDARY_COLOR, 12);
       border: 0;
       color: white;
+    }
+
+    &.tag--deactivated {
+      background-color: transparent;
+      border-color: $RED;
+      color:$RED;
     }
   }
 </style>

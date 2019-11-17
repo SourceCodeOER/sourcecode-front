@@ -7,7 +7,7 @@
 
       <div class="filters">
         <div class="selected-tags">
-          <Tag v-for="(tag) in confirmedTags" confirmed :title="tag.text" :key="tag.text + tag.category"
+          <Tag v-for="(tag) in confirmedTags" :state="tag.state" :title="tag.text" :key="tag.text + tag.category"
                :category="tag.category" :id="tag.id"></Tag>
           <Tag v-for="(tag) in selectedTags" :title="tag.text" :key="tag.text + tag.category" :category="tag.category"
                :id="tag.id"></Tag>
@@ -20,7 +20,7 @@
         </ul>
 
         <div class="button-wrapper">
-          <button @click="apply" class="button--ternary-color-reverse">
+          <button :disabled="!isModified" @click="apply" :class="{'button--ternary-color-reverse' : isModified, 'button--ternary-color': !isModified }">
             Appliquer
           </button>
 
@@ -68,6 +68,10 @@
 
         get isEmptyTagsArray() {
             return this.confirmedTags.length + this.selectedTags.length === 0
+        }
+
+        get isModified() {
+            return this.$accessor.tags.isModified
         }
 
 

@@ -14,10 +14,10 @@ export interface Category {
   category: string
 }
 
-type DEACTIVATED = 0
-type ACTIVE = 1
-type PENDING = 2
-type INACTIVE = 3
+export type DEACTIVATED = 0
+export type ACTIVE = 1
+export type PENDING = 2
+export type INACTIVE = 3
 
 export type SelectedTag = {
   id: number,
