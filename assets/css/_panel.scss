@@ -13,7 +13,7 @@
   @include box-shadow($SHADOW);
   padding: 20px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: visible;
 
   .panel-wrapper {
     height: calc(100% - 50px);

@@ -65,7 +65,7 @@
 
   ul {
     list-style-type: none;
-    padding: 0 10px 0 20px;
+    padding: 0 20px 0 20px;
     max-height: 0;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -108,7 +108,7 @@
     margin-right: 10px;
 
     &.arrow-rotate {
-      @include transformHelper(rotate(90deg))
+      @include transformHelper(translateX(2px) rotate(90deg))
     }
   }
 </style>

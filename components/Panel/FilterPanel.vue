@@ -1,12 +1,18 @@
 <template>
   <div id="FilterPanel" class="panel">
 
-    <h3>Tout - <span class="secondary-color">42 résultats</span></h3>
+    <h3><span class="secondary-color">42 résultats</span> <StarSymbol theme="theme--secondary-color"/><br>Tout</h3>
 
+    <div class="cta-wrapper">
+      <ReturnSymbol @click.native="reset" class="return" theme="theme--secondary-color"/>
+    </div>
     <div class="panel-wrapper">
 
       <div class="filters">
         <div class="selected-tags">
+          <div class="no-filter" v-if="isEmptyTagsArray">
+            <span>Aucun filtre</span>
+          </div>
           <Tag v-for="(tag) in confirmedTags" :state="tag.state" :title="tag.text" :key="tag.text + tag.category"
                :category="tag.category" :id="tag.id"></Tag>
           <Tag v-for="(tag) in selectedTags" :title="tag.text" :key="tag.text + tag.category" :category="tag.category"
@@ -23,19 +29,7 @@
           <button :disabled="!isModified" @click="apply" :class="{'button--ternary-color-reverse' : isModified, 'button--ternary-color': !isModified }">
             Appliquer
           </button>
-
-          <button @click="reset" v-if="!isEmptyTagsArray" class="button--ternary-color-reverse">
-            Sauver filtre
-          </button>
-
-          <button @click="reset" v-if="!isEmptyTagsArray" class="button--ternary-color">
-            Réinitialiser
-          </button>
         </div>
-      </div>
-
-      <div class="no-filter" v-if="false">
-        <span>Aucun filtre</span>
       </div>
     </div>
   </div>
@@ -43,6 +37,8 @@
 
 <script lang="ts">
     import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
+    import ReturnSymbol from "~/components/Symbols/ReturnSymbol.vue";
+    import StarSymbol from "~/components/Symbols/StarSymbol.vue";
     import Tag from "~/components/Tag/Tag.vue";
     import TagSelecter from "~/components/Search/TagSelecter.vue";
     import {Component, Vue, Ref} from 'vue-property-decorator';
@@ -51,7 +47,9 @@
         components: {
             FilterSymbol,
             Tag,
-            TagSelecter
+            TagSelecter,
+            ReturnSymbol,
+            StarSymbol
         }
     })
     export default class FilterPanel extends Vue {
@@ -113,30 +111,78 @@
 
   #FilterPanel {
 
-
-    .filters {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+    .panel-wrapper {
+      height: auto;
     }
 
+    .cta-wrapper {
+      position: absolute;
+      top:20px;
+      right: 20px;
+
+      svg {
+        width: 19px;
+        vertical-align: middle;
+        margin-left: 10px;
+        cursor: pointer;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    h3 {
+      svg {
+        width: 19px;
+        margin-left: 5px;
+        height: 23px;
+        vertical-align: sub;
+        cursor: pointer;
+      }
+    }
+
+
     .button-wrapper {
+      position: absolute;
+      bottom: 0;
       margin-top: auto;
       padding-bottom: 20px;
+      width: calc(100% - 40px);
     }
 
 
     .no-filter {
       text-align: center;
+      margin-top: 35px;
     }
 
     .selected-tags {
       margin-bottom: 20px;
+      min-height: 90px;
+      max-height: 90px;
+      overflow-y: hidden;
+      z-index: 3;
+      position: relative;
+      background-color: white;
+
+      &:hover {
+        height: auto;
+        max-height: 400px;
+        overflow-y: scroll;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed $TERNARY_COLOR;
+      }
     }
 
     .selectable-tags {
       list-style-type: none;
       padding: 0;
+      overflow-y: scroll;
+      overflow-x: visible;
+      height: calc(100vh - 450px);
+      position: absolute;
+      top: 180px;
 
       .tag-selecter {
         margin-bottom: 20px;
