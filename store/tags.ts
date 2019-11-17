@@ -44,7 +44,7 @@ export const state = () => ({
    */
   tags: [] as ExtendedTag[],
   tagsRequest: [] as (number | number[])[],
-  isModified: false as Boolean
+  modificationTrace: 0 as number
 });
 
 export const getters = getterTree(state, {
@@ -57,7 +57,8 @@ export const getters = getterTree(state, {
    * Retrieve all the tags that are not confirmed yet but in pending
    * @param state
    */
-  filteredSelectedTags: state => state.selectedTags.filter((tag) => tag.state === PENDING)
+  filteredSelectedTags: state => state.selectedTags.filter((tag) => tag.state === PENDING),
+  isModified: state => state.modificationTrace
 });
 
 export const mutations = mutationTree(state, {
@@ -76,7 +77,7 @@ export const mutations = mutationTree(state, {
 
       state.selectedTags[index].state = ACTIVE;
       state.tags[i].tags[j].state = ACTIVE;
-      state.isModified = true;
+      state.modificationTrace += 1;
 
     } else if (index === -1) {
       const i = state.tags.findIndex((el) => el.id === selectedTag.category);
@@ -85,7 +86,7 @@ export const mutations = mutationTree(state, {
 
       state.selectedTags.push({text:selectedTag.text, id:selectedTag.id, state: PENDING, category:selectedTag.category});
       state.tags[i].tags[j].state = PENDING;
-      state.isModified = true;
+      state.modificationTrace += 1;
     }
   },
   /**
@@ -105,7 +106,8 @@ export const mutations = mutationTree(state, {
 
       state.selectedTags[index].state = DEACTIVATED;
       state.tags[i].tags[j].state = DEACTIVATED;
-      state.isModified = true;
+      state.modificationTrace -= 1;
+
 
 
     } else if (index !== -1 && state.selectedTags[index].state === PENDING) {
@@ -115,7 +117,7 @@ export const mutations = mutationTree(state, {
 
       state.selectedTags.splice(index, 1);
       state.tags[i].tags[j].state = INACTIVE;
-      state.isModified = true;
+      state.modificationTrace -= 1;
 
     }
   },
@@ -143,8 +145,7 @@ export const mutations = mutationTree(state, {
         else if (tag.state === DEACTIVATED) tag.state = INACTIVE
       })
     }
-
-    state.isModified = false
+    state.modificationTrace = 0;
 
   },
   /**
@@ -167,6 +168,8 @@ export const mutations = mutationTree(state, {
     state.selectedTags = [];
     state.tags = cloneDeep(state.defaultTags);
     state.tagsRequest = [];
+    state.modificationTrace = 0;
+
   },
   SET_TAGS_REQUEST(state, tagsRequest:(number | number[])[]) {
     state.tagsRequest = tagsRequest
