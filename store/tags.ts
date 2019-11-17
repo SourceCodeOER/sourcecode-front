@@ -42,7 +42,8 @@ export const state = () => ({
   /**
    * The defaultTags array with modification of state for tags
    */
-  tags: [] as ExtendedTag[]
+  tags: [] as ExtendedTag[],
+  tagsRequest: [] as (number | number[])[]
 });
 
 export const getters = getterTree(state, {
@@ -79,10 +80,9 @@ export const mutations = mutationTree(state, {
       const i = state.tags.findIndex((el) => el.id === selectedTag.category);
       const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
 
-      const stateOfSelectedTag = selectedTag.state === ACTIVE ? ACTIVE : PENDING;
 
-      state.selectedTags.push({text:selectedTag.text, id:selectedTag.id, state: stateOfSelectedTag, category:selectedTag.category});
-      state.tags[i].tags[j].state = stateOfSelectedTag
+      state.selectedTags.push({text:selectedTag.text, id:selectedTag.id, state: PENDING, category:selectedTag.category});
+      state.tags[i].tags[j].state = PENDING
     }
   },
   /**
@@ -157,9 +157,13 @@ export const mutations = mutationTree(state, {
    */
   CLEAR(state) {
     state.selectedTags = [];
-    state.tags = cloneDeep(state.defaultTags)
+    state.tags = cloneDeep(state.defaultTags);
+    state.tagsRequest = [];
+  },
+  SET_TAGS_REQUEST(state, tagsRequest:(number | number[])[]) {
+    state.tagsRequest = tagsRequest
   }
-})
+});
 
 
 export const actions = actionTree({state, getters, mutations}, {
@@ -180,7 +184,7 @@ export const actions = actionTree({state, getters, mutations}, {
    * @param commit
    * @param getters
    */
-  async apply({commit, getters}) {
+  apply({commit, getters}) {
     const filteredConfirmedTags: SelectedTag[] = getters.filteredConfirmedTags;
 
     const map: Map<number, number | number[]> = new Map();
@@ -191,7 +195,7 @@ export const actions = actionTree({state, getters, mutations}, {
 
     arrayToMapOfArray(map, filteredSelectedTags);
 
-    console.log(Array.from(map.values())); // TODO : Database stuff
+    commit('SET_TAGS_REQUEST', Array.from(map.values()));
 
     commit('APPLY')
   },
@@ -200,7 +204,7 @@ export const actions = actionTree({state, getters, mutations}, {
    * @param commit
    * @param confirmedTags
    */
-  async applyConfirmedTags({commit}, confirmedTags:SelectedTag[]) {
+  applyConfirmedTags({commit}, confirmedTags:SelectedTag[]) {
 
     commit('CLEAR');
 
@@ -209,17 +213,17 @@ export const actions = actionTree({state, getters, mutations}, {
     });
 
     const map: Map<number, number | number[]> = new Map();
-
     arrayToMapOfArray(map, confirmedTags);
 
-    console.log(Array.from(map.values())); // TODO : Database stuff
+    commit('SET_TAGS_REQUEST', Array.from(map.values()));
+    commit('APPLY');
 
   },
   /**
    * Fetch all the tags with categories on the database
    * @param commit
    */
-  async fetchTags({commit}) {
+  async fetch({commit}) {
     const data: TagsCategory[] = [
       {
         id: 1,
