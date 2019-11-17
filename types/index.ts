@@ -36,3 +36,56 @@ export type TagsCategory = {
 export interface ExtendedTag extends TagsCategory{
   tags: SelectedTag[]
 }
+
+/**
+ * Exercises types
+ */
+
+export type Metric = {
+  votes: number,
+  avg_score: number | null
+}
+
+export type TagExercise = {
+  id: number,
+  text: string,
+  category: string,
+  category_id: number
+}
+
+export type Exercise = {
+  title: string,
+  description: string,
+  id: number,
+  version: number,
+  createdAt: string,
+  metrics: Metric,
+  tags: TagExercise[]
+}
+
+export type MetadataResponse = {
+  currentPage: number,
+  totalItems: number,
+  totalPages: number,
+  pageSize: number
+}
+
+export type MetadataRequest = {
+  page?: number,
+  size?: number
+}
+
+export type SearchResponse = {
+  metadata: MetadataResponse,
+  data: Exercise[]
+}
+
+export type SearchCriterion = {
+  title?: string,
+  tags?: (number | number[])[]
+}
+
+export type SearchRequest = {
+  metadata?: MetadataRequest,
+  data?: SearchCriterion
+}
