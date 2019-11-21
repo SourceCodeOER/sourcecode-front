@@ -1,5 +1,5 @@
 import {ExtendedTag, SelectedTag, Tag, TagsCategory} from '~/types'
-import {getterTree, mutationTree, actionTree} from 'nuxt-typed-vuex'
+import {mutationTree, actionTree} from 'nuxt-typed-vuex'
 
 const cloneDeep = require('lodash.clonedeep');
 
