@@ -57,6 +57,9 @@
     font-size: .75em;
     margin-right: 5px;
     margin-bottom: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 
     svg {
       margin-left: 5px;
