@@ -3,7 +3,7 @@
     <div class="search-banner">
       <div class="input-wrapper">
         <SearchSymbol/>
-        <input type="text" v-model="searchModel" placeholder="Rechercher">
+        <input type="text" v-on:input="debounceInput" placeholder="Rechercher">
       </div>
     </div>
 
@@ -24,7 +24,7 @@
     import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
     import {Component, Vue} from "vue-property-decorator";
     import {BusEvent} from '~/components/Event/BusEvent'
-    import {MetadataRequest} from "~/types";
+    const debounce = require('lodash.debounce');
 
     const FILTER_PANEL = 0;
     const HISTORICAL_PANEL = 1;
@@ -43,12 +43,15 @@
         }
     })
     export default class extends Vue {
-        searchModel: string = '';
         currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;
 
         private changePanel(id: 0|1|2) {
             this.currentAsidePanel = id
         }
+
+        debounceInput =  debounce((e:any) => {
+            this.$accessor.search.fetch({data: {title: e.target.value}})
+        }, 500);
 
         beforeDestroy() {
             BusEvent.$off('changePanel', this.changePanel)
@@ -93,6 +96,7 @@
     padding-right: $PADDING_CONTENT;
     display: flex;
     align-items: center;
+    z-index: 1000;
 
     .input-wrapper {
       width: 100%;
