@@ -4,7 +4,7 @@
     <h3>Historique <span @click="close" class="secondary-color"><ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/> Retour</span></h3>
 
     <div class="panel-wrapper">
-      <div class="historical" v-for="el in historical" @click="fetchFilter(el.tags)" :key="el.datetime">
+      <div class="historical" v-for="(el, id) in historical" @click="fetchFilter(el.tags)" :key="el.datetime + '_' + id">
         <h4>{{el.datetime}}</h4>
         <template v-for="(tag, i) in el.tags">
           <span v-if="i === 0" :key="tag.id">{{tag.text}}</span>

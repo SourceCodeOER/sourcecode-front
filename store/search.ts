@@ -52,7 +52,7 @@ export const actions = actionTree({state, mutations, getters}, {
     const newSearchRequest:SearchRequest = {...searchRequest};
     try {
       const response: SearchResponse = await this.app.$axios.$post('/api/search', searchRequest);
-      console.log(response);
+      //console.log(response);
       commit('INIT', response);
       commit('SET_SEARCH_CRITERION', searchRequest.data)
     } catch (e) {
@@ -72,7 +72,7 @@ export const actions = actionTree({state, mutations, getters}, {
 
     try {
       const response: SearchResponse = await this.app.$axios.$post('/api/search', request);
-      console.log(response);
+      //console.log(response);
       commit('ADD_EXERCISES', response.data);
       commit('SET_METADATA', response.metadata);
     } catch (e) {

@@ -76,6 +76,11 @@
     padding-left: $PADDING_CONTENT;
     padding-right: $PADDING_CONTENT;
     padding-top: $PADDING_TOP_CONTENT;
+    max-height: calc(100vh - #{$PADDING_TOP_INNER_CONTENT});
+    height: calc(100vh - #{$PADDING_TOP_INNER_CONTENT});
+    position: relative;
+    overflow-y: hidden;
+
   }
 
   .search-banner {

@@ -5,9 +5,6 @@ const cloneDeep = require('lodash.clonedeep');
 
 const DEACTIVATED = 0;
 const ACTIVE = 1;
-const PENDING = 2;
-const INACTIVE = 3;
-
 
 /**
  * helper function to map an array of TagSelecter into a map containing array or number of id's of a category
@@ -43,22 +40,11 @@ export const state = () => ({
    * The defaultTags array with modification of state for tags
    */
   tags: [] as ExtendedTag[],
-  tagsRequest: [] as (number | number[])[],
-  modificationTrace: 0 as number
-});
-
-export const getters = getterTree(state, {
   /**
-   * Retrieve all the tags that are already confirmed
-   * @param state
+   * The tag id's that are selected (CNF form)
+   * example : [1, [2, 3]] = 1 n (2 v 3)
    */
-  filteredConfirmedTags: state => state.selectedTags.filter((tag) => tag.state === ACTIVE || tag.state === DEACTIVATED),
-  /**
-   * Retrieve all the tags that are not confirmed yet but in pending
-   * @param state
-   */
-  filteredSelectedTags: state => state.selectedTags.filter((tag) => tag.state === PENDING),
-  isModified: state => state.modificationTrace
+  tagsRequest: [] as (number | number[])[]
 });
 
 export const mutations = mutationTree(state, {
@@ -69,25 +55,11 @@ export const mutations = mutationTree(state, {
    * @constructor
    */
   ADD_TAG(state, selectedTag: SelectedTag) {
-    const index: number = state.selectedTags.findIndex((tag: SelectedTag) => selectedTag.id === tag.id);
+    state.selectedTags.push(selectedTag);
+    const i = state.tags.findIndex((el) => el.id === selectedTag.category);
+    const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
 
-    if (index !== -1 && state.selectedTags[index].state === DEACTIVATED) {
-      const i = state.tags.findIndex((el) => el.id === selectedTag.category);
-      const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
-
-      state.selectedTags[index].state = ACTIVE;
-      state.tags[i].tags[j].state = ACTIVE;
-      state.modificationTrace += 1;
-
-    } else if (index === -1) {
-      const i = state.tags.findIndex((el) => el.id === selectedTag.category);
-      const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
-
-
-      state.selectedTags.push({text:selectedTag.text, id:selectedTag.id, state: PENDING, category:selectedTag.category});
-      state.tags[i].tags[j].state = PENDING;
-      state.modificationTrace += 1;
-    }
+    state.tags[i].tags[j].state = ACTIVE;
   },
   /**
    * Remove a tag in the selectedTag array unless this is a old confirmed one
@@ -98,54 +70,12 @@ export const mutations = mutationTree(state, {
    * @constructor
    */
   REMOVE_TAG(state, {id, category}: SelectedTag) {
-    const index: number = state.selectedTags.findIndex((tag: SelectedTag) => id === tag.id);
+    const index = state.selectedTags.findIndex((el) => el.id === id);
+    state.selectedTags.splice(index, 1);
 
-    if (index !== -1 && state.selectedTags[index].state === ACTIVE) {
-      const i = state.tags.findIndex((el) => el.id === category);
-      const j = state.tags[i].tags.findIndex((el) => el.id === id);
-
-      state.selectedTags[index].state = DEACTIVATED;
-      state.tags[i].tags[j].state = DEACTIVATED;
-      state.modificationTrace -= 1;
-
-
-
-    } else if (index !== -1 && state.selectedTags[index].state === PENDING) {
-
-      const i = state.tags.findIndex((el) => el.id === category);
-      const j = state.tags[i].tags.findIndex((el) => el.id === id);
-
-      state.selectedTags.splice(index, 1);
-      state.tags[i].tags[j].state = INACTIVE;
-      state.modificationTrace -= 1;
-
-    }
-  },
-  /**
-   * Applies the tags selection by retaining those who have a state CONFIRMED or PENDING
-   * The tags array is updated too for the states
-   * @param state
-   * @constructor
-   */
-  APPLY(state) {
-    const array: SelectedTag[] = [];
-
-    state.selectedTags.forEach((el) => {
-      if (el.state !== DEACTIVATED) {
-        el.state = ACTIVE;
-        array.push(el)
-      }
-    });
-
-    state.selectedTags = array;
-
-    for (let i = 0; i < state.tags.length; i++) {
-      state.tags[i].tags.forEach((tag) => {
-        if (tag.state === PENDING) tag.state = ACTIVE;
-        else if (tag.state === DEACTIVATED) tag.state = INACTIVE
-      })
-    }
-    state.modificationTrace = 0;
+    const i = state.tags.findIndex((el) => el.id === category);
+    const j = state.tags[i].tags.findIndex((el) => el.id === id);
+    state.tags[i].tags[j].state = DEACTIVATED;
 
   },
   /**
@@ -168,22 +98,20 @@ export const mutations = mutationTree(state, {
     state.selectedTags = [];
     state.tags = cloneDeep(state.defaultTags);
     state.tagsRequest = [];
-    state.modificationTrace = 0;
-
   },
-  SET_TAGS_REQUEST(state, tagsRequest:(number | number[])[]) {
+  SET_TAGS_REQUEST(state, tagsRequest: (number | number[])[]) {
     state.tagsRequest = tagsRequest
   }
 });
 
 
-export const actions = actionTree({state, getters, mutations}, {
+export const actions = actionTree({state, mutations}, {
   /**
    * Add a tag or remove a tag from the selectedTags array. The tags array is updated for the changed state
    * @param commit
    * @param payload
    */
-  addTag({commit}, payload: SelectedTag) {
+  addOrRemoveTag({commit}, payload: SelectedTag) {
     if (payload.state === ACTIVE) {
       commit('ADD_TAG', payload)
     } else {
@@ -194,28 +122,22 @@ export const actions = actionTree({state, getters, mutations}, {
    * Apply modifications to filter with tags
    * @param commit
    * @param getters
+   * @param state
    */
-  apply({commit, getters}) {
-    const filteredConfirmedTags: SelectedTag[] = getters.filteredConfirmedTags;
+  apply({commit, getters, state}) {
 
     const map: Map<number, number | number[]> = new Map();
 
-    arrayToMapOfArray(map, filteredConfirmedTags);
-
-    const filteredSelectedTags: SelectedTag[] = getters.filteredSelectedTags;
-
-    arrayToMapOfArray(map, filteredSelectedTags);
+    arrayToMapOfArray(map, state.selectedTags);
 
     commit('SET_TAGS_REQUEST', Array.from(map.values()));
-
-    commit('APPLY')
   },
   /**
    * Enable to apply a filter with a custom confirmedTags array
    * @param commit
    * @param confirmedTags
    */
-  applyConfirmedTags({commit}, confirmedTags:SelectedTag[]) {
+  applyConfirmedTags({commit}, confirmedTags: SelectedTag[]) {
 
     commit('CLEAR');
 
@@ -227,7 +149,6 @@ export const actions = actionTree({state, getters, mutations}, {
     arrayToMapOfArray(map, confirmedTags);
 
     commit('SET_TAGS_REQUEST', Array.from(map.values()));
-    commit('APPLY');
 
   },
   /**
@@ -414,7 +335,7 @@ export const actions = actionTree({state, getters, mutations}, {
         const {id, category, tags} = data[i];
 
         const selectedTags: SelectedTag[] = tags.map((el: Tag) => {
-          const selectedTag: SelectedTag = {...el, category: id, state: INACTIVE};
+          const selectedTag: SelectedTag = {...el, category: id, state: DEACTIVATED};
           return selectedTag
         });
 

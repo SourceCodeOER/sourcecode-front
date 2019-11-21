@@ -20,7 +20,9 @@ export const mutations = mutationTree(state, {
 
 export const actions = actionTree({state, mutations}, {
   addHistorical({commit}, selectedTags: SelectedTag[]) {
-    const moment: string = this.app.$moment().format(this.app.$moment.HTML5_FMT.TIME_SECONDS);
-    commit('ADD_HISTORICAL', {tags: cloneDeep(selectedTags), datetime: moment})
+    if(selectedTags.length !== 0) {
+      const moment: string = this.app.$moment().format(this.app.$moment.HTML5_FMT.TIME_SECONDS);
+      commit('ADD_HISTORICAL', {tags: cloneDeep(selectedTags), datetime: moment})
+    }
   }
 });

@@ -1,34 +1,70 @@
 <template>
   <section id="ExercisesPanel" class="exercises-wrapper">
-    <header>
+    <header ref="headerExercise">
       <h1>Résultats de recherche</h1>
       <hr>
+      <div class="tags-wrapper" v-if="confirmedTags.length > 0">
+        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.text" :key="tag.text + '_' + tag.category + '_'+ id"
+             :category="tag.category" :id="tag.id"></Tag>
+      </div>
     </header>
 
-    <article v-for="i in 20" :key="i">
-      <div class="rating">4,7</div>
+    <div ref="bodyExercise" class="exercises-content-wrapper">
+      <article v-for="i in 20" :key="i">
+        <div class="rating">4,7</div>
 
-      <div class="info-wrapper">
-        <h2>Bitwise operation : high order bits</h2>
-        <div class="tags">
-          Facile | Java | QCM | Listes chainées
+        <div class="info-wrapper">
+          <h2>Bitwise operation : high order bits</h2>
+          <div class="tags">
+            Facile | Java | QCM | Listes chainées
+          </div>
         </div>
-      </div>
 
-      <div class="cta-wrapper">
-        <button class="button--light-blue-reverse">Voir l'exercice</button>
-      </div>
-    </article>
-    <div id="Anchor"></div>
+        <div class="cta-wrapper">
+          <button class="button--light-blue-reverse">Voir l'exercice</button>
+        </div>
+      </article>
+      <div id="Anchor"></div>
+    </div>
   </section>
 </template>
 
 <script lang="ts">
-    import {Vue, Component} from "vue-property-decorator";
+    import {Vue, Component, Watch, Ref} from "vue-property-decorator";
+    import Tag from "~/components/Tag/Tag.vue";
 
-    @Component
+
+    @Component({
+        components: {
+            Tag
+        }
+    })
     export default class ExercisesPanel extends Vue {
-        private observer: IntersectionObserver | undefined = undefined
+        private observer: IntersectionObserver | undefined = undefined;
+
+        @Ref() headerExercise!: HTMLElement;
+        @Ref() bodyExercise!: HTMLElement;
+
+        get numberOfFilter() {
+            return this.$accessor.tags.selectedTags.length
+        }
+
+        get confirmedTags() {
+            return this.$accessor.tags.selectedTags
+        }
+
+        @Watch('numberOfFilter')
+        onNumberOfFilterChange() {
+            this.$nextTick(() => {
+
+              const headerHeight: number = this.headerExercise.offsetHeight;
+              const parent: HTMLElement | null = this.bodyExercise.parentElement;
+
+              if(!!parent) {
+                  this.bodyExercise.style.height = (parent.offsetHeight - headerHeight) + 'px';
+              }
+            })
+        }
 
         beforeDestroy() {
             if (process.client) {
@@ -77,9 +113,18 @@
   #ExercisesPanel {
     width: calc(100% - #{$FILTER_PANEL_WIDTH + $PADDING_CONTENT});
     margin-left: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+
 
     header {
-      margin-bottom: 30px;
+      padding-bottom: 20px;
+
+      .tags-wrapper {
+        margin-top: 10px;
+      }
 
       hr {
         border: 0;
@@ -90,6 +135,12 @@
     button {
       margin: 0;
       font-size: .625em;
+    }
+
+    .exercises-content-wrapper {
+      overflow-y: scroll;
+      max-height: calc(100% - 66px);
+      padding: 15px;
     }
 
     article {

@@ -1,5 +1,5 @@
 <template>
-  <label>
+  <label @click.prevent="check">
     {{title}}
     <input type="checkbox" v-model="checked">
     <span class="checkmark"></span>
@@ -20,14 +20,9 @@
         @Prop({type: [String, Number], default: 'none'}) readonly id!: number;
 
         @Emit()
-        check(): { state: boolean; id: string | number; text: string } {
+        check(): CheckBoxObjectEmitted {
+            this.checked = !this.checked;
             return {text: this.title, state: this.checked, id: this.id}
-        }
-
-        @Watch('checked')
-        @Emit('check')
-        onStateChanged(val: boolean): CheckBoxObjectEmitted {
-            return {text: this.title, state: val, id: this.id}
         }
 
         @Watch('state')

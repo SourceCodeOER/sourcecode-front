@@ -16,13 +16,11 @@ export interface Category {
 
 export type DEACTIVATED = 0
 export type ACTIVE = 1
-export type PENDING = 2
-export type INACTIVE = 3
 
 export type SelectedTag = {
   id: number,
   text: string,
-  state: DEACTIVATED | ACTIVE | PENDING | INACTIVE,
+  state: DEACTIVATED | ACTIVE
   category: number
 }
 

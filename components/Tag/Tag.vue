@@ -1,7 +1,7 @@
 <template>
   <div class="tag" :class="{'tag--confirmed' : state === 1, 'tag--deactivated': state === 0}">
     {{title}}
-    <CrossSymbol @click.native="deleteTag" :theme="theme"/>
+    <CrossSymbol @click.native.stop="deleteTag" :theme="theme"/>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
     import CrossSymbol from "~/components/Symbols/CrossSymbol.vue";
 
     import {Vue, Component, Prop} from 'vue-property-decorator'
-    import {ACTIVE, DEACTIVATED, PENDING} from "~/types";
+    import {ACTIVE, DEACTIVATED} from "~/types";
 
     @Component({
         components: {
@@ -18,22 +18,25 @@
     })
     export default class Tag extends Vue {
         @Prop({type: String, required: true}) readonly title!: string;
-        @Prop({type: Number, default: 2}) readonly state!: DEACTIVATED|ACTIVE|PENDING;
+        @Prop({type: Number, default: 0}) readonly state!: DEACTIVATED|ACTIVE;
         @Prop({type: Number, required: true}) readonly category!: number;
         @Prop({type: Number, required: true}) readonly id!: number;
 
         get theme() {
-            if (this.state === 2) {
+            if (this.state === 0) {
                 return 'theme--secondary-color'
-            } else if(this.state === 1) {
+            }
+
+            if (this.state === 1) {
                 return 'theme--white'
-            } else {
-                return 'theme--red'
             }
         }
 
-        deleteTag() {
-            if(this.state !== 0) this.$accessor.tags.REMOVE_TAG({id:this.id, text: this.title, state: this.state, category: this.category})
+        async deleteTag() {
+            await this.$accessor.tags.addOrRemoveTag({id:this.id, text: this.title, state: 0, category: this.category});
+            await this.$accessor.tags.apply();
+            await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+            this.$accessor.historical.addHistorical(this.$accessor.tags.selectedTags)
         }
     }
 </script>

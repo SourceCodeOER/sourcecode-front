@@ -25,11 +25,20 @@
             Historique
           </li>
 
+          <!--
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
               <img src="@/assets/logo/exercises.svg" alt="Exercices">
             </div>
             Exercices
+          </nuxt-link>
+          -->
+
+          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
+            <div class="logo-link-wrapper">
+              <StarSymbol theme="theme--white"/>
+            </div>
+            Favoris
           </nuxt-link>
 
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
@@ -54,6 +63,7 @@
 <script lang="ts">
     import {Vue, Component} from "vue-property-decorator";
     import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
+    import StarSymbol from '~/components/Symbols/StarSymbol.vue'
     import {BusEvent} from '~/components/Event/BusEvent'
 
     type FILTER_PANEL = 0;
@@ -62,7 +72,8 @@
 
     @Component({
         components: {
-            ArrowSymbol
+            ArrowSymbol,
+            StarSymbol
         }
     })
     export default class Menu extends Vue{
@@ -152,6 +163,10 @@
       display: flex;
       justify-content: center;
       margin-right: 8px;
+
+      svg {
+        width: 100%;
+      }
     }
 
     .disconnect {

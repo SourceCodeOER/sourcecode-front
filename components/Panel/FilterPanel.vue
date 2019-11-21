@@ -1,36 +1,21 @@
 <template>
   <div id="FilterPanel" class="panel">
 
-    <h3><span class="secondary-color">42 résultats</span> <StarSymbol theme="theme--secondary-color"/><br>Tout</h3>
+    <h3><span class="secondary-color">42 résultats</span>
+      <StarSymbol theme="theme--secondary-color"/>
+      <br>Tout
+    </h3>
 
     <div class="cta-wrapper">
       <ReturnSymbol @click.native="reset" class="return" theme="theme--secondary-color"/>
     </div>
     <div class="panel-wrapper">
-
-      <div class="filters">
-        <div class="selected-tags">
-          <div class="no-filter" v-if="isEmptyTagsArray">
-            <span>Aucun filtre</span>
-          </div>
-          <Tag v-for="(tag) in confirmedTags" :state="tag.state" :title="tag.text" :key="tag.text + tag.category"
-               :category="tag.category" :id="tag.id"></Tag>
-          <Tag v-for="(tag) in selectedTags" :title="tag.text" :key="tag.text + tag.category" :category="tag.category"
-               :id="tag.id"></Tag>
-        </div>
-
         <ul class="selectable-tags">
-          <TagSelecter ref="tagSelecter" v-for="tag in tags" :tags="tag.tags" :category="tag.id" :key="tag.id">
+          <TagSelecter ref="tagSelecter" v-for="tag in tags" @apply="apply" :tags="tag.tags" :category="tag.id"
+                       :key="tag.id">
             {{tag.category}}
           </TagSelecter>
         </ul>
-
-        <div class="button-wrapper">
-          <button :disabled="!isModified" @click="apply" :class="{'button--ternary-color-reverse' : isModified, 'button--ternary-color': !isModified }">
-            Appliquer
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -57,37 +42,23 @@
         @Ref() tagSelecter!: TagSelecter[];
 
         get confirmedTags() {
-            return this.$accessor.tags.filteredConfirmedTags
+            return this.$accessor.tags.selectedTags
         }
-
-        get selectedTags() {
-            return this.$accessor.tags.filteredSelectedTags
-        }
-
-        get isEmptyTagsArray() {
-            return this.confirmedTags.length + this.selectedTags.length === 0
-        }
-
-        get isModified() {
-            return this.$accessor.tags.isModified
-        }
-
 
         get tags() {
             return this.$accessor.tags.tags
         }
 
-        apply() {
-            this.$accessor.tags.apply();
-            if (!this.isEmptyTagsArray) {
-                this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-                this.$accessor.historical.addHistorical(this.confirmedTags);
-            }
-            this.resetFilterPanel()
+        async apply() {
+            await this.$accessor.tags.apply();
+            await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+            this.$accessor.historical.addHistorical(this.confirmedTags);
         }
 
-        reset() {
+        async reset() {
             this.$accessor.tags.CLEAR();
+            await this.$accessor.search.fetch({data: {tags: []}});
+
             this.resetFilterPanel()
         }
 
@@ -110,14 +81,17 @@
   @import "./../../assets/css/_panel";
 
   #FilterPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
 
     .panel-wrapper {
-      height: auto;
+      height: calc(100% - 80px);
     }
 
     .cta-wrapper {
       position: absolute;
-      top:20px;
+      top: 20px;
       right: 20px;
 
       svg {
@@ -142,7 +116,6 @@
       }
     }
 
-
     .button-wrapper {
       position: absolute;
       bottom: 0;
@@ -151,51 +124,19 @@
       width: calc(100% - 40px);
     }
 
-
-    .no-filter {
-      text-align: center;
-      margin-top: 35px;
-    }
-
-    .selected-tags {
-      margin-bottom: 20px;
-      min-height: 90px;
-      max-height: 90px;
-      overflow-y: hidden;
-      z-index: 3;
-      position: relative;
-      background-color: white;
-
-      &:hover {
-        height: auto;
-        max-height: 400px;
-        overflow-y: scroll;
-        padding-bottom: 10px;
-        border-bottom: 1px dashed $TERNARY_COLOR;
-      }
-    }
-
     .selectable-tags {
       list-style-type: none;
       padding: 0;
       overflow-y: scroll;
       overflow-x: visible;
-      height: calc(100vh - 450px);
-      position: absolute;
-      top: 180px;
+      height: 100%;
+      margin-bottom: 0;
 
       .tag-selecter {
         margin-bottom: 20px;
       }
     }
 
-    .filters {
-
-      button {
-        width: 100%;
-      }
-
-    }
   }
 
 
