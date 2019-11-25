@@ -1,0 +1,35 @@
+@import "variables";
+
+.banner {
+  background-color: white;
+  height: $BANNER_LOGO_HEIGHT;
+  position: fixed;
+  top: 0;
+  width: calc(100% - #{$MENU_WIDTH});
+  padding-left: $PADDING_CONTENT;
+  padding-right: $PADDING_CONTENT;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+
+  &.search-banner {
+
+    .input-wrapper {
+      width: 100%;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding-left: 50px;
+    }
+
+    svg {
+      width: 15px;
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+    }
+  }
+}

@@ -11,6 +11,8 @@
 //@import "scrollbar";
 @import "form";
 @import "symbols";
+@import "banner";
+@import "panel";
 
 //Les bases
 
@@ -72,4 +74,16 @@ h2 {
   font-family: $CircularStd;
   font-weight: bold;
   font-size: 1.125em;
+}
+
+.container {
+  width: calc(100% - #{$MENU_WIDTH});
+  margin-left: auto;
+  position: relative;
+}
+
+.wrapper {
+  padding-left: $PADDING_CONTENT;
+  padding-right: $PADDING_CONTENT;
+  padding-top: $PADDING_TOP_CONTENT;
 }
