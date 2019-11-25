@@ -1,9 +1,11 @@
 <template>
   <div id="FilterPanel" class="panel">
 
-    <h3><span class="secondary-color">42 résultats</span>
+    <h3>
+      Filtres<br>
+      <span class="secondary-color">Ajouter aux favoris
       <StarSymbol theme="theme--secondary-color"/>
-      <br>Tout
+      </span>
     </h3>
 
     <div class="cta-wrapper">
@@ -78,7 +80,6 @@
   @import "./../../assets/css/_variables";
   @import "./../../assets/css/_function";
   @import "./../../assets/css/_font";
-  @import "./../../assets/css/_panel";
 
   #FilterPanel {
     display: flex;
@@ -93,6 +94,7 @@
       position: absolute;
       top: 20px;
       right: 20px;
+      color:$SECONDARY_COLOR;
 
       svg {
         width: 19px;
@@ -112,7 +114,12 @@
         margin-left: 5px;
         height: 23px;
         vertical-align: sub;
+      }
+
+      span {
+        display: block;
         cursor: pointer;
+        margin-top: 10px;
       }
     }
 
