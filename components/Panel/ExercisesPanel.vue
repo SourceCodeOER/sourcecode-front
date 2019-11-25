@@ -13,28 +13,14 @@
       </div>
       <hr>
       <div class="tags-wrapper" v-if="confirmedTags.length > 0">
-        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.text" :key="tag.text + '_' + tag.category + '_'+ id"
+        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.text"
+             :key="tag.text + '_' + tag.category + '_'+ id"
              :category="tag.category" :id="tag.id"></Tag>
       </div>
     </header>
 
     <div ref="bodyExercise" class="exercises-content-wrapper">
-      <article v-for="i in 20" :key="i">
-        <div class="rating">4,7</div>
-
-        <div class="info-wrapper">
-          <h2>Bitwise operation : high order bits</h2>
-          <div class="tags">
-            Facile | Java | QCM | Listes chainées
-          </div>
-        </div>
-
-        <div class="cta-wrapper">
-          <nuxt-link to="/exercices/1">
-            <button class="button--light-blue-reverse">Voir l'exercice</button>
-          </nuxt-link>
-        </div>
-      </article>
+      <PreviewExercise v-for="i in 20" :key="i" :exercise="exercise"></PreviewExercise>
       <div id="Anchor"></div>
     </div>
   </section>
@@ -43,15 +29,66 @@
 <script lang="ts">
     import {Vue, Component, Watch, Ref} from "vue-property-decorator";
     import Tag from "~/components/Tag/Tag.vue";
+    import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
+    import {Exercise} from "~/types";
 
 
     @Component({
         components: {
-            Tag
+            Tag,
+            PreviewExercise
         }
     })
     export default class ExercisesPanel extends Vue {
         private observer: IntersectionObserver | undefined = undefined;
+
+        private exercise: Exercise = {
+            id: 0,
+            title: "Bitwise operation : high order bits",
+            createdAt: "",
+            updatedAt: "",
+            version: 0,
+            description: "Lorem ipsum",
+            metrics: {
+                avg_score: 4.7,
+                votes: 200
+            },
+            tags: [
+                {
+                    tag_id: 1,
+                    tag_text: "Facile",
+                    category: {
+                        category_id: 1,
+                        category_text: "difficulté"
+                    }
+                },
+                {
+                    tag_id: 1,
+                    tag_text: "Java",
+                    category: {
+                        category_id: 1,
+                        category_text: "langage"
+                    }
+                },
+                {
+                    tag_id: 1,
+                    tag_text: "QCM",
+                    category: {
+                        category_id: 1,
+                        category_text: "type d'exercice"
+                    }
+                },
+                {
+                    tag_id: 1,
+                    tag_text: "Listes Chainées",
+                    category: {
+                        category_id: 1,
+                        category_text: "thématique"
+                    }
+                },
+            ],
+
+        }
 
         @Ref() headerExercise!: HTMLElement;
         @Ref() bodyExercise!: HTMLElement;
@@ -76,12 +113,12 @@
         onNumberOfFilterChange() {
             this.$nextTick(() => {
 
-              const headerHeight: number = this.headerExercise.offsetHeight;
-              const parent: HTMLElement | null = this.bodyExercise.parentElement;
+                const headerHeight: number = this.headerExercise.offsetHeight;
+                const parent: HTMLElement | null = this.bodyExercise.parentElement;
 
-              if(!!parent) {
-                  this.bodyExercise.style.height = (parent.offsetHeight - headerHeight) + 'px';
-              }
+                if (!!parent) {
+                    this.bodyExercise.style.height = (parent.offsetHeight - headerHeight) + 'px';
+                }
             })
         }
 
@@ -151,59 +188,16 @@
       }
     }
 
-    button {
-      margin: 0;
-      font-size: .625em;
-    }
-
     .exercises-content-wrapper {
       overflow-y: scroll;
       max-height: calc(100% - 66px);
       padding: 15px;
     }
 
-    article {
-      display: grid;
-      grid-template-areas: "rating main-info cta";
-      grid-template-columns: 60px 1fr 200px;
-      align-items: center;
-      background-color: white;
-      border-radius: 4px;
-      @include box-shadow($SHADOW);
-      min-height: 75px;
-      margin-bottom: 10px;
-      padding: 0 20px;
-
-
-      .rating {
-        grid-area: rating;
-        font-family: $CircularStd;
-        font-weight: bold;
-        color: $SECONDARY_COLOR;
-        font-size: 1.75em;
-      }
-
-      .tags {
-        font-family: $Montserrat;
+    header {
+      .results {
         font-weight: lighter;
-        font-size: .75em;
-        margin-top: 5px;
       }
-
-      .info-wrapper {
-        grid-area: main-info;
-      }
-
-      .cta-wrapper {
-        grid-area: cta;
-        text-align: right;
-      }
-    }
-  }
-
-  header {
-    .results {
-      font-weight: lighter;
     }
   }
 </style>
