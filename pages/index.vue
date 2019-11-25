@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="search-banner">
+    <div class="banner search-banner">
       <div class="input-wrapper">
         <SearchSymbol/>
         <input type="text" v-on:input="debounceInput" placeholder="Rechercher">
@@ -24,6 +24,7 @@
     import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
     import {Component, Vue} from "vue-property-decorator";
     import {BusEvent} from '~/components/Event/BusEvent'
+
     const debounce = require('lodash.debounce');
 
     const FILTER_PANEL = 0;
@@ -45,11 +46,11 @@
     export default class extends Vue {
         currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;
 
-        private changePanel(id: 0|1|2) {
+        private changePanel(id: 0 | 1 | 2) {
             this.currentAsidePanel = id
         }
 
-        debounceInput =  debounce((e:any) => {
+        debounceInput = debounce((e: any) => {
             this.$accessor.search.fetch({data: {title: e.target.value}})
         }, 500);
 
@@ -65,55 +66,12 @@
 
 <style lang="scss" scoped>
   @import "./../assets/css/_variables";
-  @import "./../assets/css/_function";
-  @import "./../assets/css/_font";
-
-
-  .container {
-    width: calc(100% - #{$MENU_WIDTH});
-    margin-left: auto;
-    position: relative;
-  }
 
   .wrapper {
-    padding-left: $PADDING_CONTENT;
-    padding-right: $PADDING_CONTENT;
-    padding-top: $PADDING_TOP_CONTENT;
     max-height: calc(100vh - #{$PADDING_TOP_INNER_CONTENT});
     height: calc(100vh - #{$PADDING_TOP_INNER_CONTENT});
     position: relative;
     overflow-y: hidden;
-
   }
 
-  .search-banner {
-    background-color: white;
-    height: $BANNER_LOGO_HEIGHT;
-    position: fixed;
-    top: 0;
-    width: calc(100% - #{$MENU_WIDTH});
-    padding-left: $PADDING_CONTENT;
-    padding-right: $PADDING_CONTENT;
-    display: flex;
-    align-items: center;
-    z-index: 1000;
-
-    .input-wrapper {
-      width: 100%;
-      position: relative;
-    }
-
-    input {
-      width: 100%;
-      padding-left: 50px;
-    }
-
-    svg {
-      width: 15px;
-      position: absolute;
-      top: 50%;
-      left: 20px;
-      transform: translateY(-50%);
-    }
-  }
 </style>
