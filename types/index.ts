@@ -58,6 +58,7 @@ export type Exercise = {
   id: number,
   version: number,
   createdAt: string,
+  updatedAt: string,
   metrics: Metric,
   tags: TagExercise[]
 }
