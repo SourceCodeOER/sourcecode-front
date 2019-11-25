@@ -41,7 +41,7 @@ export const mutations = mutationTree(state, {
   },
   SET_SEARCH_CRITERION(state, searchCriterion: SearchCriterion | undefined) {
     if (!!searchCriterion) {
-      if (!!searchCriterion.title) state.search_criterion.title = searchCriterion.title
+      if (!!searchCriterion.title || searchCriterion.title === '') state.search_criterion.title = searchCriterion.title;
       if (!!searchCriterion.tags) state.search_criterion.tags = searchCriterion.tags
     }
   }
@@ -49,9 +49,9 @@ export const mutations = mutationTree(state, {
 
 export const actions = actionTree({state, mutations, getters}, {
   async fetch({commit, state}, searchRequest: SearchRequest) {
-    const newSearchRequest:SearchRequest = {...searchRequest};
+    const newSearchRequest:SearchRequest = {...state.search_criterion, ...searchRequest};
     try {
-      const response: SearchResponse = await this.app.$axios.$post('/api/search', searchRequest);
+      const response: SearchResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
       //console.log(response);
       commit('INIT', response);
       commit('SET_SEARCH_CRITERION', searchRequest.data)
