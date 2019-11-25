@@ -1,7 +1,16 @@
 <template>
   <section id="ExercisesPanel" class="exercises-wrapper">
     <header ref="headerExercise">
-      <h1>Résultats de recherche</h1>
+      <div class="header-wrapper">
+        <h1>
+          Résultats de recherche
+          <span v-if="!isEmptySearchModel"> - {{searchModel}}</span>
+        </h1>
+
+        <div class="results">
+          42 résultats
+        </div>
+      </div>
       <hr>
       <div class="tags-wrapper" v-if="confirmedTags.length > 0">
         <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.text" :key="tag.text + '_' + tag.category + '_'+ id"
@@ -21,7 +30,9 @@
         </div>
 
         <div class="cta-wrapper">
-          <button class="button--light-blue-reverse">Voir l'exercice</button>
+          <nuxt-link to="/exercices/1">
+            <button class="button--light-blue-reverse">Voir l'exercice</button>
+          </nuxt-link>
         </div>
       </article>
       <div id="Anchor"></div>
@@ -51,6 +62,14 @@
 
         get confirmedTags() {
             return this.$accessor.tags.selectedTags
+        }
+
+        get searchModel() {
+            return this.$accessor.search.search_criterion.title
+        }
+
+        get isEmptySearchModel() {
+            return this.$accessor.search.search_criterion.title === ""
         }
 
         @Watch('numberOfFilter')
@@ -179,6 +198,12 @@
         grid-area: cta;
         text-align: right;
       }
+    }
+  }
+
+  header {
+    .results {
+      font-weight: lighter;
     }
   }
 </style>
