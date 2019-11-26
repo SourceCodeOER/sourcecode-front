@@ -17,12 +17,12 @@ const arrayToMapOfArray = (map: Map<number, number | number[]>, tags: SelectedTa
 
     if (array !== undefined) {
       if (typeof array === "number") {
-        map.set(tag.category, [array, tag.id])
+        map.set(tag.category, [array, tag.tag_id])
       } else {
-        map.set(tag.category, [...array, tag.id])
+        map.set(tag.category, [...array, tag.tag_id])
       }
     } else {
-      map.set(tag.category, tag.id)
+      map.set(tag.category, tag.tag_id)
     }
   }
 };
@@ -57,7 +57,7 @@ export const mutations = mutationTree(state, {
   ADD_TAG(state, selectedTag: SelectedTag) {
     state.selectedTags.push(selectedTag);
     const i = state.tags.findIndex((el) => el.id === selectedTag.category);
-    const j = state.tags[i].tags.findIndex((el) => el.id === selectedTag.id);
+    const j = state.tags[i].tags.findIndex((el) => el.tag_id === selectedTag.tag_id);
 
     state.tags[i].tags[j].state = ACTIVE;
   },
@@ -69,12 +69,12 @@ export const mutations = mutationTree(state, {
    * @param category
    * @constructor
    */
-  REMOVE_TAG(state, {id, category}: SelectedTag) {
-    const index = state.selectedTags.findIndex((el) => el.id === id);
+  REMOVE_TAG(state, {tag_id, category}: SelectedTag) {
+    const index = state.selectedTags.findIndex((el) => el.tag_id === tag_id);
     state.selectedTags.splice(index, 1);
 
     const i = state.tags.findIndex((el) => el.id === category);
-    const j = state.tags[i].tags.findIndex((el) => el.id === id);
+    const j = state.tags[i].tags.findIndex((el) => el.tag_id === tag_id);
     state.tags[i].tags[j].state = DEACTIVATED;
 
   },
@@ -156,6 +156,8 @@ export const actions = actionTree({state, mutations}, {
    * @param commit
    */
   async fetch({commit}) {
+
+    /*
     const data: TagsCategory[] = [
       {
         id: 1,
@@ -327,8 +329,10 @@ export const actions = actionTree({state, mutations}, {
       }
     ];
 
+     */
+
     try {
-      //const data: TagsCategory[] = await this.$axios.$get('api/tags_by_categories');
+      const data: TagsCategory[] = await this.$axios.$get('api/tags_by_categories');
       const array: ExtendedTag[] = [];
 
       for (let i in data) {

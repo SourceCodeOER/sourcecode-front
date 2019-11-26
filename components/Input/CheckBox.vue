@@ -22,7 +22,7 @@
         @Emit()
         check(): CheckBoxObjectEmitted {
             this.checked = !this.checked;
-            return {text: this.title, state: this.checked, id: this.id}
+            return {tag_text: this.title, state: this.checked, tag_id: this.id}
         }
 
         @Watch('state')
@@ -50,6 +50,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    text-transform: capitalize;
 
     &:hover input ~ .checkmark {
       background-color: #ccc;

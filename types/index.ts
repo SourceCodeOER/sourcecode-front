@@ -1,25 +1,21 @@
-export interface CheckBoxObjectEmitted {
-  text: string,
+export interface CheckBoxObjectEmitted extends Tag {
   state: boolean,
-  id: number
 }
 
 export interface Tag {
-  id: number,
-  text: string
+  tag_id: number,
+  tag_text: string
 }
 
 export interface Category {
-  id: number,
-  category: string
+  category_id: number,
+  category_text: string
 }
 
 export type DEACTIVATED = 0
 export type ACTIVE = 1
 
-export type SelectedTag = {
-  id: number,
-  text: string,
+export interface SelectedTag extends Tag {
   state: DEACTIVATED | ACTIVE
   category: number
 }
@@ -40,16 +36,11 @@ export interface ExtendedTag extends TagsCategory {
 
 export type Metric = {
   votes: number,
-  avg_score: number | null
+  avg_vote: number | null
 }
 
-export type TagExercise = {
-  tag_id: number,
-  tag_text: string,
-  category: {
-    category_id: number,
-    category_text: string
-  }
+export interface TagExercise extends Tag  {
+  category: Category
 }
 
 export type Exercise = {

@@ -33,7 +33,7 @@
         }
 
         async deleteTag() {
-            await this.$accessor.tags.addOrRemoveTag({id:this.id, text: this.title, state: 0, category: this.category});
+            await this.$accessor.tags.addOrRemoveTag({tag_id:this.id, tag_text: this.title, state: 0, category: this.category});
             await this.$accessor.tags.apply();
             await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
             this.$accessor.historical.addHistorical(this.$accessor.tags.selectedTags)

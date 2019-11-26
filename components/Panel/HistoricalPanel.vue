@@ -7,8 +7,8 @@
       <div class="historical" v-for="(el, id) in historical" @click="fetchFilter(el.tags)" :key="el.datetime + '_' + id">
         <h4>{{el.datetime}}</h4>
         <template v-for="(tag, i) in el.tags">
-          <span v-if="i === 0" :key="tag.id">{{tag.text}}</span>
-          <span v-else :key="tag.id"> | {{tag.text}}</span>
+          <span v-if="i === 0" :key="tag.tag_id">{{tag.tag_text}}</span>
+          <span v-else :key="tag.tag_id"> | {{tag.tag_text}}</span>
         </template>
       </div>
 
@@ -36,8 +36,9 @@
             BusEvent.$emit('changePanel', 0)
         }
 
-        fetchFilter(confirmedTags: SelectedTag[]) {
-            this.$accessor.tags.applyConfirmedTags(confirmedTags);
+        async fetchFilter(confirmedTags: SelectedTag[]) {
+            await this.$accessor.tags.applyConfirmedTags(confirmedTags);
+            await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
             BusEvent.$emit('changePanel', 0)
         }
     }

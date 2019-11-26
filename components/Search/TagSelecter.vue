@@ -9,7 +9,7 @@
         <input type="text" v-model="filter" placeholder="Filtrer">
       </li>
       <li v-for="el in filteredTags" :key="el.id">
-        <CheckBox :title="el.text" :state="el.state === 2 || el.state === 1" :id="el.id" @check="check"></CheckBox>
+        <CheckBox :title="el.tag_text" :state="el.state === 2 || el.state === 1" :id="el.tag_id" @check="check"></CheckBox>
       </li>
     </ul>
   </li>
@@ -43,15 +43,15 @@
         }) readonly category!: number
 
         get filteredTags(): SelectedTag[] {
-            return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.text.toLowerCase().match(this.filter.toLowerCase()) !== null);
+            return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.tag_text.toLowerCase().match(this.filter.toLowerCase()) !== null);
         }
 
         toggleList() {
             this.active = !this.active
         }
 
-        check({id, state, text}: CheckBoxObjectEmitted) {
-            this.$accessor.tags.addOrRemoveTag({id, text, state: state ? 1 : 0, category: this.category});
+        check({tag_id, state, tag_text}: CheckBoxObjectEmitted) {
+            this.$accessor.tags.addOrRemoveTag({tag_id, tag_text, state: state ? 1 : 0, category: this.category});
             this.$emit('apply')
         }
 
