@@ -30,7 +30,7 @@ export default {
     proxy: true
   },
   proxy: {
-    '/api/': { target: 'http://127.0.0.1:4010'}
+    '/api/': { target: 'http://127.0.0.1:3000'}
   },
   i18n: {
     vueI18n: {
