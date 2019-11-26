@@ -49,10 +49,10 @@ export const mutations = mutationTree(state, {
 
 export const actions = actionTree({state, mutations, getters}, {
   async fetch({commit, state}, searchRequest: SearchRequest) {
-    const newSearchRequest:SearchRequest = {...state.search_criterion, ...searchRequest};
+
+    const newSearchRequest:SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}};
     try {
       const response: SearchResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
-      //console.log(response);
       commit('INIT', response);
       commit('SET_SEARCH_CRITERION', searchRequest.data)
     } catch (e) {
