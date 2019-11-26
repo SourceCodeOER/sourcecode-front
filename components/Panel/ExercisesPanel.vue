@@ -8,19 +8,21 @@
         </h1>
 
         <div class="results">
-          42 résultats
+          {{nbOfResults}} résultats
         </div>
       </div>
       <hr>
       <div class="tags-wrapper" v-if="confirmedTags.length > 0">
-        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.text"
-             :key="tag.text + '_' + tag.category + '_'+ id"
-             :category="tag.category" :id="tag.id"></Tag>
+        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text"
+             :key="tag.tag_text + '_' + tag.category + '_'+ id"
+             :category="tag.category" :id="tag.tag_id"></Tag>
       </div>
     </header>
 
     <div ref="bodyExercise" class="exercises-content-wrapper">
-      <PreviewExercise v-for="i in 20" :key="i" :exercise="exercise"></PreviewExercise>
+      <PreviewExercise v-for="(exercise, id) in exercises"
+                       :key="exercise.title + '_' + id + '_' + exercise.id"
+                       :exercise="exercise"/>
       <div id="Anchor"></div>
     </div>
   </section>
@@ -42,6 +44,7 @@
     export default class ExercisesPanel extends Vue {
         private observer: IntersectionObserver | undefined = undefined;
 
+        /*
         private exercise: Exercise = {
             id: 0,
             title: "Bitwise operation : high order bits",
@@ -90,6 +93,8 @@
 
         }
 
+         */
+
         @Ref() headerExercise!: HTMLElement;
         @Ref() bodyExercise!: HTMLElement;
 
@@ -107,6 +112,14 @@
 
         get isEmptySearchModel() {
             return this.$accessor.search.search_criterion.title === ""
+        }
+
+        get nbOfResults() {
+            return this.$accessor.search.metadata.totalItems
+        }
+
+        get exercises() {
+            return this.$accessor.search.exercises
         }
 
         @Watch('numberOfFilter')

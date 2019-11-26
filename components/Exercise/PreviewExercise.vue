@@ -65,11 +65,15 @@
 
             let formatted: string = '';
 
+            let firstPrinted:boolean = false;
+
             for (let i = 0; i < orderedTextTags.length; i++) {
-                if (i !== 0) {
-                    formatted += ' | ' + orderedTextTags[i]
-                } else {
-                    formatted += orderedTextTags[i]
+                const value = orderedTextTags[i];
+                if (firstPrinted && value !== undefined) {
+                    formatted += ' | ' + value
+                } else if (!firstPrinted && value !== undefined) {
+                    formatted += value;
+                    firstPrinted = true;
                 }
             }
 
@@ -77,12 +81,13 @@
         }
 
         get rating() {
-            const avg: number | null = this.exercise.metrics.avg_score;
-            if (this.exercise.metrics.avg_score === null) {
+            const avg: number | null = this.exercise.metrics.avg_vote;
+            if (avg === null) {
                 return '-'
             }
 
-            return avg
+            return parseFloat(avg.toString()) !== 0 ? avg : 0
+
         }
     }
 </script>
