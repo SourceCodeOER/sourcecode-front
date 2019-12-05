@@ -69,8 +69,7 @@
   @import "./../assets/css/_variables";
 
   .wrapper {
-    max-height: calc(100vh - #{$PADDING_TOP_INNER_CONTENT});
-    height: calc(100vh - #{$PADDING_TOP_INNER_CONTENT});
+    height: 100vh;
     position: relative;
     overflow-y: hidden;
   }
