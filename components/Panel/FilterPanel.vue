@@ -66,8 +66,14 @@
     }
 
     toggleList(tagSelecter: TagSelecter) {
-      if (this.selectedTagSelecter !== undefined) this.selectedTagSelecter.$data.active = false
-      this.selectedTagSelecter = tagSelecter
+      if (this.selectedTagSelecter !== undefined) {
+        this.selectedTagSelecter.$data.active = false;
+        this.selectedTagSelecter = undefined;
+      }
+
+      if (tagSelecter.$data.active === true) {
+        this.selectedTagSelecter = tagSelecter
+      }
     }
 
     private resetFilterPanel() {
@@ -77,7 +83,7 @@
         filterPanel.scrollTop = 0
       }
 
-      if(this.selectedTagSelecter !== undefined) {
+      if (this.selectedTagSelecter !== undefined) {
         this.selectedTagSelecter.$data.active = false;
         this.selectedTagSelecter = undefined;
       }
