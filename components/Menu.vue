@@ -1,8 +1,10 @@
 <template>
   <div id="Menu">
-    <div class="logo-wrapper">
-      <img src="@/assets/logo/logo.png" alt="Source Code - Logo">
-    </div>
+    <nuxt-link to="/">
+      <div class="logo-wrapper">
+        <img src="@/assets/logo/logo.png" alt="Source Code - Logo">
+      </div>
+    </nuxt-link>
 
     <div class="menu-wrapper">
       <div class="connection-profile">
@@ -10,6 +12,9 @@
       </div>
 
       <nav class="menu-nav-list">
+
+        <span>Pages</span>
+
         <ul>
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
@@ -18,6 +23,18 @@
             Accueil
           </nuxt-link>
 
+          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
+            <div class="logo-link-wrapper">
+              <img src="@/assets/logo/exercises.svg" alt="Exercices">
+            </div>
+            Exercices
+          </nuxt-link>
+        </ul>
+
+        <span>Panneaux</span>
+
+        <ul>
+
           <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
             <div class="logo-link-wrapper">
               <img src="@/assets/logo/history.svg" alt="Historique">
@@ -25,21 +42,18 @@
             Historique
           </li>
 
-          <!--
-          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
-            <div class="logo-link-wrapper">
-              <img src="@/assets/logo/exercises.svg" alt="Exercices">
-            </div>
-            Exercices
-          </nuxt-link>
-          -->
-
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
               <StarSymbol theme="theme--white"/>
             </div>
             Favoris
           </nuxt-link>
+
+        </ul>
+
+        <span>Gestion</span>
+
+        <ul>
 
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
@@ -128,10 +142,20 @@
       position: relative;
     }
 
+    nav {
+      margin-top: 60px;
+
+      span {
+        font-weight: bold;
+        padding: 0 #{$PADDING_MENU/2};
+        font-size: 0.875em;
+      }
+    }
+
     ul {
       padding: 0;
       list-style-type: none;
-      margin-top: 60px;
+      margin-top: 5px;
     }
 
     .cta-link {
