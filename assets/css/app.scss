@@ -102,7 +102,8 @@ pre.sourceCode {
 }
 
 code {
-  font-size: 1.2em;
+  font-family: $SourceCodePro;
+  font-size: 1em;
 
   .kw {
     color:$TERNARY_COLOR;
@@ -116,4 +117,21 @@ code {
     color:$NIGHT_BLUE
   }
 
+  .fu {
+    color:$NIGHT_BLUE
+
+  }
+
+}
+
+
+.exercise-article {
+  em {
+    color:$GREY;
+    font-weight: bold;
+  }
+
+  a {
+    color:$NIGHT_BLUE
+  }
 }
