@@ -9,7 +9,7 @@
 
     <div class="wrapper">
       <transition name="fade" mode="out-in" duration="500">
-        <FilterPanel v-if="currentAsidePanel === 0"/>
+        <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
       </transition>
       <ExercisesPanel/>
@@ -56,6 +56,10 @@
     debounceInput = debounce((e: any) => {
       this.$accessor.search.fetch({data: {title: e.target.value}})
     }, 250);
+
+    resetInput() {
+      this.inputText.value = ''
+    }
 
     beforeDestroy() {
       BusEvent.$off('changePanel', this.changePanel)

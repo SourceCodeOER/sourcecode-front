@@ -29,7 +29,7 @@
   import StarSymbol from "~/components/Symbols/StarSymbol.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import TagSelecter from "~/components/Search/TagSelecter.vue";
-  import {Component, Vue, Ref} from 'vue-property-decorator';
+  import {Component, Vue, Ref, Emit} from 'vue-property-decorator';
 
   @Component({
     components: {
@@ -58,9 +58,10 @@
       this.$accessor.historical.addHistorical(this.confirmedTags);
     }
 
+    @Emit()
     async reset() {
       this.$accessor.tags.CLEAR();
-      await this.$accessor.search.fetch({data: {tags: []}});
+      await this.$accessor.search.fetch({data: {tags: [], title: ''}});
 
       this.resetFilterPanel()
     }
