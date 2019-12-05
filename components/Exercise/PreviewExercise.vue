@@ -1,7 +1,7 @@
 <template>
   <article>
-    <div class="rating">
-      {{rating}}
+    <div class="rating" :class="{'rating--empty': exercise.metrics.votes === 0}" @mouseover="displayOverlay" @mouseleave="dissimOverlay">
+        {{rating}}
     </div>
 
     <div class="info-wrapper">
@@ -16,6 +16,12 @@
         <button class="button--light-blue-reverse">Voir l'exercice</button>
       </nuxt-link>
     </div>
+
+    <div v-show="overlay" class="overlay">
+      <span>
+        Soyez le premier à côter cet exercice !
+      </span>
+    </div>
   </article>
 </template>
 
@@ -27,6 +33,8 @@
     @Component
     export default class PreviewExercise extends Vue {
         @Prop({type: Object, required: true}) readonly exercise!: Exercise;
+
+        overlay:boolean = false;
 
         get metaTitleLink() {
             return `${this.exercise.title} | Source Code`
@@ -83,10 +91,18 @@
         get rating() {
             const avg: number = this.exercise.metrics.avg_vote;
 
-            if(this.exercise.metrics.votes === 0) return '-';
+            if(this.exercise.metrics.votes === 0) return 0;
 
             return parseFloat(avg.toString()) !== 0 ? avg : 0
 
+        }
+
+        displayOverlay() {
+          this.overlay = true
+        }
+
+        dissimOverlay() {
+          this.overlay = false
         }
     }
 </script>
@@ -107,6 +123,29 @@
     min-height: 75px;
     margin-bottom: 10px;
     padding: 0 20px;
+    position: relative;
+
+    .overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: $MAIN_GRADIENT_V;
+      color:white;
+      border-radius: 4px;
+      font-weight: bold;
+      font-family: $CircularStd;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        position: relative;
+
+      }
+    }
 
     button {
       margin: 0;
@@ -119,6 +158,14 @@
       font-weight: bold;
       color: $SECONDARY_COLOR;
       font-size: 1.75em;
+      user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -webkit-user-select: none;
+
+      &.rating--empty {
+        color:lighten($GREY, 30);
+      }
     }
 
     .tags {
