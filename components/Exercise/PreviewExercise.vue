@@ -81,10 +81,9 @@
         }
 
         get rating() {
-            const avg: number | null = this.exercise.metrics.avg_vote;
-            if (avg === null) {
-                return '-'
-            }
+            const avg: number = this.exercise.metrics.avg_vote;
+
+            if(this.exercise.metrics.votes === 0) return '-';
 
             return parseFloat(avg.toString()) !== 0 ? avg : 0
 

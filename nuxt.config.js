@@ -83,6 +83,9 @@ export default {
     'nuxt-i18n',
     '@nuxtjs/axios',
   ],
+  serverMiddleware: [
+    '~api/exercise-converter'
+  ],
   /*
   ** Build configuration
   */
