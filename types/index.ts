@@ -36,7 +36,7 @@ export interface ExtendedTag extends TagsCategory {
 
 export type Metric = {
   votes: number,
-  avg_vote: number | null
+  avg_vote: number
 }
 
 export interface TagExercise extends Tag  {
