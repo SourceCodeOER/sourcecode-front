@@ -40,6 +40,7 @@
         },
         async fetch({app: {$accessor}}) {
             await $accessor.tags.fetch();
+            await $accessor.tags.apply();
             await $accessor.search.fetch({});
         }
     })
@@ -52,7 +53,7 @@
 
         debounceInput = debounce((e: any) => {
             this.$accessor.search.fetch({data: {title: e.target.value}})
-        }, 500);
+        }, 250);
 
         beforeDestroy() {
             BusEvent.$off('changePanel', this.changePanel)
