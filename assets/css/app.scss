@@ -87,3 +87,33 @@ h2 {
   padding-right: $PADDING_CONTENT;
   padding-top: $PADDING_TOP_CONTENT;
 }
+
+.exercise {
+  img {
+    margin-top:20px;
+    margin-bottom: 20px;
+  }
+}
+
+pre.sourceCode {
+  margin-top:30px;
+  margin-bottom:30px;
+  overflow-x: scroll;
+}
+
+code {
+  font-size: 1.2em;
+
+  .kw {
+    color:$TERNARY_COLOR;
+  }
+
+  .dt {
+    color:$TERNARY_COLOR
+  }
+
+  .co {
+    color:$NIGHT_BLUE
+  }
+
+}
