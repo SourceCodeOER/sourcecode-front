@@ -12,68 +12,78 @@
       <ReturnSymbol @click.native="reset" class="return" theme="theme--secondary-color"/>
     </div>
     <div class="panel-wrapper">
-        <ul class="selectable-tags">
-          <TagSelecter ref="tagSelecter" v-for="tag in tags" @apply="apply" :tags="tag.tags" :category="tag.id"
-                       :key="tag.id">
-            {{tag.category}}
-          </TagSelecter>
-        </ul>
+      <ul class="selectable-tags">
+        <TagSelecter v-for="tag in tags" @apply="apply" @toggle-list="toggleList" :tags="tag.tags"
+                     :category="tag.id"
+                     :key="tag.id">
+          {{tag.category}}
+        </TagSelecter>
+      </ul>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-    import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
-    import ReturnSymbol from "~/components/Symbols/ReturnSymbol.vue";
-    import StarSymbol from "~/components/Symbols/StarSymbol.vue";
-    import Tag from "~/components/Tag/Tag.vue";
-    import TagSelecter from "~/components/Search/TagSelecter.vue";
-    import {Component, Vue, Ref} from 'vue-property-decorator';
+  import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
+  import ReturnSymbol from "~/components/Symbols/ReturnSymbol.vue";
+  import StarSymbol from "~/components/Symbols/StarSymbol.vue";
+  import Tag from "~/components/Tag/Tag.vue";
+  import TagSelecter from "~/components/Search/TagSelecter.vue";
+  import {Component, Vue, Ref} from 'vue-property-decorator';
 
-    @Component({
-        components: {
-            FilterSymbol,
-            Tag,
-            TagSelecter,
-            ReturnSymbol,
-            StarSymbol
-        }
-    })
-    export default class FilterPanel extends Vue {
-
-        @Ref() tagSelecter!: TagSelecter[];
-
-        get confirmedTags() {
-            return this.$accessor.tags.selectedTags
-        }
-
-        get tags() {
-            return this.$accessor.tags.tags
-        }
-
-        async apply() {
-            await this.$accessor.tags.apply();
-            await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-            this.$accessor.historical.addHistorical(this.confirmedTags);
-        }
-
-        async reset() {
-            this.$accessor.tags.CLEAR();
-            await this.$accessor.search.fetch({data: {tags: []}});
-
-            this.resetFilterPanel()
-        }
-
-        private resetFilterPanel() {
-            const filterPanel = document.getElementById('FilterPanel');
-
-            if (!!filterPanel) {
-                filterPanel.scrollTop = 0
-            }
-
-            this.tagSelecter.forEach(instance => instance.$data.active = false)
-        }
+  @Component({
+    components: {
+      FilterSymbol,
+      Tag,
+      TagSelecter,
+      ReturnSymbol,
+      StarSymbol
     }
+  })
+  export default class FilterPanel extends Vue {
+
+    selectedTagSelecter: TagSelecter | undefined = undefined;
+
+    get confirmedTags() {
+      return this.$accessor.tags.selectedTags
+    }
+
+    get tags() {
+      return this.$accessor.tags.tags
+    }
+
+    async apply() {
+      await this.$accessor.tags.apply();
+      await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+      this.$accessor.historical.addHistorical(this.confirmedTags);
+    }
+
+    async reset() {
+      this.$accessor.tags.CLEAR();
+      await this.$accessor.search.fetch({data: {tags: []}});
+
+      this.resetFilterPanel()
+    }
+
+    toggleList(tagSelecter: TagSelecter) {
+      if (this.selectedTagSelecter !== undefined) this.selectedTagSelecter.$data.active = false
+      this.selectedTagSelecter = tagSelecter
+    }
+
+    private resetFilterPanel() {
+      const filterPanel = document.getElementById('FilterPanel');
+
+      if (!!filterPanel) {
+        filterPanel.scrollTop = 0
+      }
+
+      if(this.selectedTagSelecter !== undefined) {
+        this.selectedTagSelecter.$data.active = false;
+        this.selectedTagSelecter = undefined;
+      }
+
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -94,7 +104,7 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      color:$SECONDARY_COLOR;
+      color: $SECONDARY_COLOR;
 
       svg {
         width: 19px;

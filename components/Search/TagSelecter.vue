@@ -9,53 +9,56 @@
         <input type="text" v-model="filter" placeholder="Filtrer">
       </li>
       <li v-for="el in filteredTags" :key="el.id">
-        <CheckBox :title="el.tag_text" :state="el.state === 2 || el.state === 1" :id="el.tag_id" @check="check"></CheckBox>
+        <CheckBox :title="el.tag_text" :state="el.state === 2 || el.state === 1" :id="el.tag_id" @check="check"/>
       </li>
     </ul>
   </li>
 </template>
 
 <script lang="ts">
-    import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
-    import CheckBox from "~/components/Input/CheckBox.vue";
-    import {Vue, Component, Prop} from "vue-property-decorator";
-    import {CheckBoxObjectEmitted, SelectedTag, Tag} from "~/types";
+  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
+  import CheckBox from "~/components/Input/CheckBox.vue";
+  import {Vue, Component, Prop} from "vue-property-decorator";
+  import {CheckBoxObjectEmitted, SelectedTag, Tag} from "~/types";
+  import {Emit} from "~/node_modules/vue-property-decorator";
 
-    @Component({
-        components: {
-            CheckBox,
-            ArrowSymbol
-        }
-    })
-    export default class TagSelecter extends Vue {
-        filter: string = "";
-        active: boolean = false;
-
-        @Prop({
-            type: Array, default() {
-                return []
-            }
-        }) readonly tags!: SelectedTag[];
-
-        @Prop({
-            type: Number,
-            required: true
-        }) readonly category!: number
-
-        get filteredTags(): SelectedTag[] {
-            return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.tag_text.toLowerCase().match(this.filter.toLowerCase()) !== null);
-        }
-
-        toggleList() {
-            this.active = !this.active
-        }
-
-        check({tag_id, state, tag_text}: CheckBoxObjectEmitted) {
-            this.$accessor.tags.addOrRemoveTag({tag_id, tag_text, state: state ? 1 : 0, category: this.category});
-            this.$emit('apply')
-        }
-
+  @Component({
+    components: {
+      CheckBox,
+      ArrowSymbol
     }
+  })
+  export default class TagSelecter extends Vue {
+    filter: string = "";
+    active: boolean = false;
+
+    @Prop({
+      type: Array, default() {
+        return []
+      }
+    }) readonly tags!: SelectedTag[];
+
+    @Prop({
+      type: Number,
+      required: true
+    }) readonly category!: number
+
+    get filteredTags(): SelectedTag[] {
+      return this.filter === '' ? this.tags : this.tags.filter((element: Tag) => element.tag_text.toLowerCase().match(this.filter.toLowerCase()) !== null);
+    }
+
+    @Emit()
+    toggleList(): TagSelecter {
+      this.active = !this.active;
+      return this
+    }
+
+    check({tag_id, state, tag_text}: CheckBoxObjectEmitted) {
+      this.$accessor.tags.addOrRemoveTag({tag_id, tag_text, state: state ? 1 : 0, category: this.category});
+      this.$emit('apply')
+    }
+
+  }
 </script>
 
 <style lang="scss" scoped>
