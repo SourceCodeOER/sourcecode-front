@@ -28,7 +28,7 @@
 
         <h2>Description</h2>
 
-        <article v-html="exercise.description"></article>
+        <article v-html="exercise.description" class="exercise-article"></article>
       </section>
     </div>
   </div>
