@@ -17,7 +17,7 @@
       </nuxt-link>
     </div>
 
-    <div v-show="overlay" class="overlay">
+    <div @click="gotoExercise" v-show="overlay && exercise.metrics.votes === 0" class="overlay">
       <span>
         Soyez le premier à côter cet exercice !
       </span>
@@ -104,6 +104,10 @@
         dissimOverlay() {
           this.overlay = false
         }
+
+        gotoExercise() {
+          this.$router.push(this.metaLink)
+        }
     }
 </script>
 
@@ -140,6 +144,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor:pointer;
 
       span {
         position: relative;
@@ -162,6 +167,7 @@
       -moz-user-select: none;
       -ms-user-select: none;
       -webkit-user-select: none;
+      cursor:pointer;
 
       &.rating--empty {
         color:lighten($GREY, 30);
