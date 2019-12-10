@@ -4,7 +4,7 @@
       <span>
         {{exercise.title}}
       </span>
-      <nuxt-link to="/" tag="span">
+      <nuxt-link to="/exercices" tag="span">
         <ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/>
         Retour à la recherche
       </nuxt-link>
