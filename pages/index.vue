@@ -1,88 +1,74 @@
 <template>
-  <div class="container">
+  <div class="container" id="Exercises">
     <div class="banner search-banner">
-      <div class="input-wrapper">
-        <SearchSymbol/>
-        <input ref="inputText" type="text" v-on:input="debounceInput" placeholder="Rechercher">
-      </div>
+      Une initiative créée par l'UCLouvain
     </div>
 
     <div class="wrapper">
-      <transition name="fade" mode="out-in" duration="500">
-        <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
-        <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
-      </transition>
-      <ExercisesPanel/>
+
+      <div class="content">
+        <h1>Source Code</h1>
+        <blockquote>
+          la nouvelle bibliothèque open source d’exercices informatiques
+        </blockquote>
+
+        <h2 class="title-blue">Le but de la plateforme</h2>
+
+        <p>
+          A l’instar des projets open source, <i>Source Code</i> offre la possibilité à un public varié de collaborer ensemble sur la problématique des exercices en informatique. Celle ci consistant en la volonté de référencer des ressources informatiques, tout en profitant de la contribution des autres sur cette même plateforme.
+        </p>
+
+        <blockquote>
+          À mesure que la bibliothèque s’étoffera, cette dernière deviendra une grande source d’inspiration.
+        </blockquote>
+
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-  import FilterPanel from "~/components/Panel/FilterPanel.vue";
-  import HistoricalPanel from '~/components/Panel/HistoricalPanel.vue'
-  import ExercisesPanel from "~/components/Panel/ExercisesPanel.vue";
-  import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
-  import {Component, Ref, Vue} from "vue-property-decorator";
-  import {BusEvent} from '~/components/Event/BusEvent'
+<script>
 
-  const debounce = require('lodash.debounce');
-
-  const FILTER_PANEL = 0;
-  const HISTORICAL_PANEL = 1;
-  const FAVORITE_PANEL = 2;
-
-  @Component({
-    components: {
-      FilterPanel,
-      ExercisesPanel,
-      SearchSymbol,
-      HistoricalPanel
-    },
-    async fetch({app: {$accessor}}) {
-      await $accessor.tags.fetch();
-      await $accessor.tags.apply();
-      await $accessor.search.fetch({});
-    }
-  })
-  export default class extends Vue {
-    currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;
-
-    @Ref() inputText!: HTMLInputElement;
-
-    private changePanel(id: 0 | 1 | 2) {
-      this.currentAsidePanel = id
-    }
-
-    debounceInput = debounce((e: any) => {
-      this.$accessor.search.fetch({data: {title: e.target.value}})
-    }, 250);
-
-    resetInput() {
-      this.inputText.value = ''
-    }
-
-    beforeDestroy() {
-      BusEvent.$off('changePanel', this.changePanel)
-    }
-
-    mounted() {
-      const title = this.$accessor.search.search_criterion.title;
-      this.inputText.value = !!title ? title : ''
-    }
-
-    created() {
-      BusEvent.$on('changePanel', this.changePanel)
-    }
-  }
 </script>
 
 <style lang="scss" scoped>
+  @import "./../assets/css/_function";
   @import "./../assets/css/_variables";
+  @import "./../assets/css/_font";
 
-  .wrapper {
-    height: 100vh;
-    position: relative;
-    overflow-y: hidden;
+  #Exercises {
+
+    .content {
+      background-color:white;
+      border-radius: 4px;
+      @include box-shadow($SHADOW);
+      padding:20px;
+      p {
+        max-width: 850px;
+      }
+
+      blockquote {
+        font-style:italic;
+        position: relative;
+        margin-left: 20px;
+        margin-top:30px;
+        font-family: $CircularStd;
+
+        &:before {
+          content:"";
+          position: absolute;
+          left: -20px;
+          width: 5px;
+          background-color: $TERNARY_COLOR;
+          height: 100%;
+        }
+      }
+
+      h2 {
+        margin-top:40px;
+      }
+    }
+
   }
 
 </style>
