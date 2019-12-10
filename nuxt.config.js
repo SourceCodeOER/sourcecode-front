@@ -32,22 +32,6 @@ export default {
   proxy: {
     '/api/': { target: 'http://127.0.0.1:3000'}
   },
-  i18n: {
-    vueI18n: {
-      fallbackLocale: 'fr'
-    },
-    locales: [
-      {
-        name: 'French',
-        code: 'fr',
-        iso: 'fr-be',
-        file: 'fr-be.js'
-      }
-    ],
-    langDir: 'lang/',
-    lazy: true,
-    defaultLocale: 'fr',
-  },
   moment: {
     defaultLocale: 'fr',
     locales: ['fr']
@@ -80,7 +64,6 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    'nuxt-i18n',
     '@nuxtjs/axios',
   ],
   serverMiddleware: [
