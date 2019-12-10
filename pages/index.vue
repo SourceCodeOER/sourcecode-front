@@ -12,7 +12,7 @@
           la nouvelle bibliothèque open source d’exercices informatiques
         </blockquote>
 
-        <h2 class="title-blue">Le but de la plateforme</h2>
+        <h2 class="title--secondary-color">Le but de la plateforme</h2>
 
         <p>
           A l’instar des projets open source, <i>Source Code</i> offre la possibilité à un public varié de collaborer ensemble sur la problématique des exercices en informatique. Celle ci consistant en la volonté de référencer des ressources informatiques, tout en profitant de la contribution des autres sur cette même plateforme.
