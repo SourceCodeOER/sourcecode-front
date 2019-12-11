@@ -28,7 +28,7 @@
 
         <h2>Description</h2>
 
-        <article v-html="exercise.description" class="exercise-article"></article>
+        <article v-html="$md.render(exercise.description)" class="exercise-article"></article>
       </section>
     </div>
   </div>
@@ -48,9 +48,6 @@
 
             try {
                 const exercise: Exercise = await $axios.$get(`api/exercises/${id}`);
-                const {data} = await $axios.$post('intern-api/exercise-converter', {raw: exercise.description});
-
-                exercise.description = data;
                 return {exercise}
             } catch (e) {
                 error({statusCode: 404, message: "Cette exercice est introuvable"});
@@ -88,8 +85,6 @@
             return arrayOfTagByCategories
         }
 
-        mounted() {
-        }
     }
 </script>
 
