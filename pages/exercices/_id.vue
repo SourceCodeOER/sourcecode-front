@@ -12,14 +12,29 @@
 
     <div class="wrapper">
       <aside class="panel">
-        <h3>Détails</h3>
+        <div>
 
-        <div v-for="item in tag_by_categories" :key="item.category">
-          <h4>{{item.category}}</h4>
-          <ul>
-            <li v-for="tag in item.tags" :key="tag + '_' + item.category">{{tag}}</li>
-          </ul>
+          <h3>Détails</h3>
+
+          <div v-for="item in tag_by_categories" :key="item.category">
+            <h4>{{item.category}}</h4>
+            <ul>
+              <li v-for="tag in item.tags" :key="tag + '_' + item.category">{{tag}}</li>
+            </ul>
+          </div>
         </div>
+
+        <div v-if="!!exercise.url" class="sources">
+          <h3>Sources</h3>
+
+          <a :href="exercise.url" target="_blank" class="button-wrapper">
+            <button class=" button--ternary-color-reverse">
+              Lien vers l'exercice
+            </button>
+          </a>
+
+        </div>
+
       </aside>
 
       <section class="exercise">
@@ -35,57 +50,57 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
-    import {Exercise, TagExercise} from "~/types";
+  import {Component, Vue} from "vue-property-decorator";
+  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
+  import {Exercise, TagExercise} from "~/types";
 
-    @Component({
-        components: {
-            ArrowSymbol
-        },
-        async asyncData({params, error, app: {$axios}}) {
-            const id = params.id;
+  @Component({
+    components: {
+      ArrowSymbol
+    },
+    async asyncData({params, error, app: {$axios}}) {
+      const id = params.id;
 
-            try {
-                const exercise: Exercise = await $axios.$get(`api/exercises/${id}`);
-                return {exercise}
-            } catch (e) {
-                error({statusCode: 404, message: "Cette exercice est introuvable"});
-            }
+      try {
+        const exercise: Exercise = await $axios.$get(`api/exercises/${id}`);
+        return {exercise}
+      } catch (e) {
+        error({statusCode: 404, message: "Cette exercice est introuvable"});
+      }
 
-
-        }
-    })
-    export default class extends Vue {
-        exercise!: Exercise;
-
-        get tag_by_categories() {
-            const map: Map<string, string[]> = new Map();
-
-            this.exercise.tags.forEach((tag: TagExercise) => {
-                const el: string[] | undefined = map.get(tag.category.category_text);
-                if (el !== undefined) {
-                    el.push(tag.tag_text)
-                } else {
-                    map.set(tag.category.category_text, [tag.tag_text])
-                }
-            });
-
-            const entries = (new Map([...map.entries()].sort((a, b) => a[0] > b[0] ? 1 : -1))).entries();
-            new Map([...map.entries()].sort((a, b) => a[0] > b[0] ? 1 : -1));
-            let tag_with_categories = entries.next();
-
-            const arrayOfTagByCategories: { category: string, tags: string[] }[] = [];
-            while (!tag_with_categories.done) {
-                const value = tag_with_categories.value;
-                arrayOfTagByCategories.push({category: value[0], tags: value[1]});
-                tag_with_categories = entries.next()
-            }
-
-            return arrayOfTagByCategories
-        }
 
     }
+  })
+  export default class extends Vue {
+    exercise!: Exercise;
+
+    get tag_by_categories() {
+      const map: Map<string, string[]> = new Map();
+
+      this.exercise.tags.forEach((tag: TagExercise) => {
+        const el: string[] | undefined = map.get(tag.category.category_text);
+        if (el !== undefined) {
+          el.push(tag.tag_text)
+        } else {
+          map.set(tag.category.category_text, [tag.tag_text])
+        }
+      });
+
+      const entries = (new Map([...map.entries()].sort((a, b) => a[0] > b[0] ? 1 : -1))).entries();
+      new Map([...map.entries()].sort((a, b) => a[0] > b[0] ? 1 : -1));
+      let tag_with_categories = entries.next();
+
+      const arrayOfTagByCategories: { category: string, tags: string[] }[] = [];
+      while (!tag_with_categories.done) {
+        const value = tag_with_categories.value;
+        arrayOfTagByCategories.push({category: value[0], tags: value[1]});
+        tag_with_categories = entries.next()
+      }
+
+      return arrayOfTagByCategories
+    }
+
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -129,10 +144,14 @@
 
       h4 {
         text-transform: capitalize;
-        color:$TERNARY_COLOR;
+        color: $TERNARY_COLOR;
         font-family: $CircularStd;
-        margin-top:10px;
-        margin-bottom:10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      > div:not(:first-of-type) {
+        margin-top:20px
       }
 
       ul {
@@ -144,6 +163,13 @@
       li:not(:last-child) {
         margin-bottom: 5px;
       }
+
+      .sources {
+        button {
+          font-size: .725em;
+          width: 100%;
+        }
+      }
     }
 
     section {
@@ -153,7 +179,7 @@
       background-color: white;
       @include box-shadow($SHADOW);
       border-radius: 4px;
-      margin-bottom:30px;
+      margin-bottom: 30px;
       padding: 20px;
 
       h1 {
@@ -162,8 +188,8 @@
 
       h2 {
         color: $SECONDARY_COLOR;
-        margin-bottom: 10px ;
-        margin-top: 30px ;
+        margin-bottom: 10px;
+        margin-top: 30px;
       }
 
       article {
