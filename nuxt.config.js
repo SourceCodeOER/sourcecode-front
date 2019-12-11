@@ -65,10 +65,14 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/markdownit'
   ],
-  serverMiddleware: [
-    '~api/exercise-converter'
-  ],
+  markdownit: {
+    injected: true,
+    html: true,
+    langPrefix: '',
+    use: [ 'markdown-it-highlightjs' ]
+  },
   /*
   ** Build configuration
   */
