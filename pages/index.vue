@@ -9,17 +9,17 @@
       <div class="content">
         <h1>Source Code</h1>
         <blockquote>
-          la nouvelle bibliothèque open source d’exercices informatiques
+          le nouveau catalogue open source d’exercices informatiques
         </blockquote>
 
         <h2 class="title--secondary-color">Le but de la plateforme</h2>
 
         <p>
-          A l’instar des projets open source, <i>Source Code</i> offre la possibilité à un public varié de collaborer ensemble sur la problématique des exercices en informatique. Celle ci consistant en la volonté de référencer des ressources informatiques, tout en profitant de la contribution des autres sur cette même plateforme.
+          À l’instar des <i>Open Educational Resources</i>, <strong>Source Code</strong> offre la possibilité à des équipes pédagogiques de collaborer sur la problématique de <b>création et de partage des exercices</b>. Cette dernière consiste à référencer des <b>ressources informatiques</b> , en permettant à un public varié de profiter de toutes contributions.
         </p>
 
         <blockquote>
-          À mesure que la bibliothèque s’étoffera, cette dernière deviendra une grande source d’inspiration.
+          À mesure que le catalogue s’étoffera, ce dernier deviendra une ressource incontournable pour tous.
         </blockquote>
 
       </div>
@@ -44,7 +44,7 @@
       @include box-shadow($SHADOW);
       padding:20px;
       p {
-        max-width: 850px;
+        max-width: 900px;
       }
 
       blockquote {
