@@ -168,6 +168,9 @@
       -ms-user-select: none;
       -webkit-user-select: none;
       cursor:pointer;
+      height: 100%;
+      display: flex;
+      align-items: center;
 
       &.rating--empty {
         color:lighten($GREY, 30);
