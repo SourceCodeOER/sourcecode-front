@@ -51,7 +51,8 @@ export type Exercise = {
   createdAt: string,
   updatedAt: string,
   metrics: Metric,
-  tags: TagExercise[]
+  tags: TagExercise[],
+  url?: string|null
 }
 
 export type MetadataResponse = {
