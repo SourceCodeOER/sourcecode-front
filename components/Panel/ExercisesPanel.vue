@@ -19,7 +19,11 @@
       </div>
     </header>
 
-    <div ref="bodyExercise" class="exercises-content-wrapper">
+    <div class="no-result" v-show="nbOfResults === 0">
+      Aucun résultat :(
+    </div>
+
+    <div v-show="nbOfResults > 0" ref="bodyExercise" class="exercises-content-wrapper">
       <PreviewExercise v-for="(exercise, id) in exercises"
                        :key="exercise.title + '_' + id + '_' + exercise.id"
                        :exercise="exercise"/>
@@ -160,6 +164,13 @@
       .results {
         font-weight: lighter;
       }
+    }
+
+    .no-result {
+      text-align: center;
+      font-family: $CircularStd;
+      margin-top: 75px;
+      font-size: 2.5em;
     }
   }
 </style>
