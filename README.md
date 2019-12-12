@@ -8,12 +8,12 @@ Like _Open Educational Resources_, *Source Code* offers educational teams the op
 
 ## Before the setup !!
 
-This application works with a *database and an API*. This provided by the 
+This application works with a **database and an API**. This provided by the 
 [Exercises Library API](https://github.com/jy95/sourcecode_api) repo.
 
 In order to build the setup for this project, you must ensure that you follow all the [steps](https://github.com/jy95/sourcecode_api#set-up) in the `Exercises Library API`.
 
-To make *Source Code* works, you must enable the databases and run the application of the back-end part !
+To make **Source Code** works, you must enable the databases and run the application of the back-end part !
 
 ## Requirements
 
