@@ -5,7 +5,8 @@ const cloneDeep = require('lodash.clonedeep');
 
 export interface Historical {
   datetime: string,
-  tags: SelectedTag[]
+  title?:string
+  tags?: SelectedTag[]
 }
 
 export const state = () => ({
@@ -13,16 +14,16 @@ export const state = () => ({
 });
 
 export const mutations = mutationTree(state, {
-  ADD_HISTORICAL(state, selectedTags: Historical) {
-    state.historical.push(selectedTags)
+  ADD_HISTORICAL(state, historical: Historical) {
+    state.historical.push(historical)
   }
 });
 
 export const actions = actionTree({state, mutations}, {
-  addHistorical({commit}, selectedTags: SelectedTag[]) {
-    if(selectedTags.length !== 0) {
+  addHistorical({commit}, historical: {tags?: SelectedTag[], title?: string}) {
+    if(historical.tags && historical.tags.length !== 0 || historical.title) {
       const moment: string = this.app.$moment().format(this.app.$moment.HTML5_FMT.TIME_SECONDS);
-      commit('ADD_HISTORICAL', {tags: cloneDeep(selectedTags), datetime: moment})
+      commit('ADD_HISTORICAL', {tags: cloneDeep(historical.tags), datetime: moment, title: historical.title})
     }
   }
 });

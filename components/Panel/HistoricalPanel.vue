@@ -1,14 +1,20 @@
 <template>
   <div id="HistoricalPanel" class="panel">
 
-    <h3>Historique <span @click="close" class="secondary-color"><ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/> Retour</span></h3>
+    <h3>Historique <span @click="close" class="secondary-color"><ArrowSymbol class="reversed-arrow"
+                                                                             theme="theme--secondary-color"/> Retour</span>
+    </h3>
 
     <div class="panel-wrapper">
-      <div class="historical" v-for="(el, id) in historical" @click="fetchFilter(el.tags)" :key="el.datetime + '_' + id">
+      <div class="historical" v-for="(el, id) in historical" @click="fetchFilter({tags: el.tags, title: el.title})"
+           :key="el.datetime + '_' + id">
         <h4>{{el.datetime}}</h4>
+        <div v-if="el.title" class="title">
+          {{el.title}}
+        </div>
         <template v-for="(tag, i) in el.tags">
           <span v-if="i === 0" :key="tag.tag_id">{{tag.tag_text}}</span>
-          <span v-else :key="tag.tag_id"> | {{tag.tag_text}}</span>
+          <span v-else :key="tag.tag_id"><span class="separator"> |</span> {{tag.tag_text}}</span>
         </template>
       </div>
 
@@ -18,30 +24,43 @@
 </template>
 
 <script lang="ts">
-    import {BusEvent} from '~/components/Event/BusEvent'
-    import {Component, Vue} from "vue-property-decorator";
-    import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
-    import {SelectedTag} from "~/types";
+  import {BusEvent} from '~/components/Event/BusEvent'
+  import {Component, Vue} from "vue-property-decorator";
+  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
+  import {SelectedTag} from "~/types";
 
-    @Component({
-        components: {
-            ArrowSymbol
-        }
-    })
-    export default class HistoricalPanel extends Vue {
-        get historical() {
-            return this.$accessor.historical.historical
-        }
-        close() {
-            BusEvent.$emit('changePanel', 0)
-        }
-
-        async fetchFilter(confirmedTags: SelectedTag[]) {
-            await this.$accessor.tags.applyConfirmedTags(confirmedTags);
-            await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-            BusEvent.$emit('changePanel', 0)
-        }
+  @Component({
+    components: {
+      ArrowSymbol
     }
+  })
+  export default class HistoricalPanel extends Vue {
+    get historical() {
+      return this.$accessor.historical.historical
+    }
+
+    close() {
+      BusEvent.$emit('changePanel', 0)
+    }
+
+    async fetchFilter(historical: { tags?: SelectedTag[], title?: string }) {
+      let tagsRequest: (number | number[])[] = [];
+      if (historical.tags) {
+        await this.$accessor.tags.applyConfirmedTags(historical.tags);
+        tagsRequest = this.$accessor.tags.tagsRequest;
+      } else {
+        this.$accessor.tags.CLEAR()
+      }
+
+      let title = '';
+      if (historical.title) {
+        title = historical.title
+      }
+
+      await this.$accessor.search.fetch({data: {tags: tagsRequest, title: title}});
+      BusEvent.$emit('changePanel', 0)
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -84,6 +103,16 @@
     .historical {
       padding: 20px;
       cursor: pointer;
+
+      .title {
+        margin-bottom: 20px;
+        color: $TERNARY_COLOR;
+        font-family: $CircularStd;
+      }
+
+      .separator {
+        color: $TERNARY_COLOR;
+      }
 
       &:hover {
         background-color: rgba($GREY, .1);

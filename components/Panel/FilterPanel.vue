@@ -55,7 +55,8 @@
     async apply() {
       await this.$accessor.tags.apply();
       await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-      this.$accessor.historical.addHistorical(this.confirmedTags);
+
+      this.$accessor.historical.addHistorical({tags:this.confirmedTags, title: this.$accessor.search.search_criterion.title});
     }
 
     @Emit()

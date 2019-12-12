@@ -54,7 +54,10 @@
     }
 
     debounceInput = debounce((e: any) => {
-      this.$accessor.search.fetch({data: {title: e.target.value}})
+
+      const value = e.target.value;
+      this.$accessor.search.fetch({data: {title: value}});
+      this.$accessor.historical.addHistorical({tags:this.$accessor.tags.selectedTags, title: value})
     }, 250);
 
     resetInput() {

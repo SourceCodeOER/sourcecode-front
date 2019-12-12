@@ -36,7 +36,8 @@
             await this.$accessor.tags.addOrRemoveTag({tag_id:this.id, tag_text: this.title, state: 0, category: this.category});
             await this.$accessor.tags.apply();
             await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-            this.$accessor.historical.addHistorical(this.$accessor.tags.selectedTags)
+
+            this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: this.$accessor.search.search_criterion.title})
         }
     }
 </script>
