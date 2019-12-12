@@ -154,8 +154,9 @@ export const actions = actionTree({state, mutations}, {
   /**
    * Fetch all the tags with categories on the database
    * @param commit
+   * @param state
    */
-  async fetch({commit}) {
+  async fetch({commit, state}) {
 
     /*
     const data: TagsCategory[] = [
@@ -349,6 +350,21 @@ export const actions = actionTree({state, mutations}, {
           tags: selectedTags
         })
       }
+
+      const selectedTags: SelectedTag[] = state.selectedTags;
+
+      selectedTags.forEach((tag:SelectedTag) => {
+
+        const tagsCategory: ExtendedTag | undefined = array.find(el => el.id === tag.category);
+
+        if(tagsCategory !== undefined) {
+          const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el) => el.tag_id === tag.tag_id);
+
+          if(selectedTag !== undefined) {
+            selectedTag.state = ACTIVE
+          }
+        }
+      });
 
       commit('INIT', array)
     } catch (e) {
