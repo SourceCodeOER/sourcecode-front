@@ -62,15 +62,13 @@
 @mixin background-image($prop) {
 
   background: url(map-get($prop, 'default'));
-  background:
-    -webkit-image-set(
-        map-get($prop, 'imgSet')
-    ) map-get($prop, 'options');
+  background: -webkit-image-set(
+      map-get($prop, 'imgSet')
+  ) map-get($prop, 'options');
 
-  background:
-    image-set(
-        map-get($prop, 'imgSet')
-    ) map-get($prop, 'options');
+  background: image-set(
+      map-get($prop, 'imgSet')
+  ) map-get($prop, 'options');
 }
 
 @mixin columns($prop) {
@@ -80,6 +78,20 @@
 
 }
 
-@function sum-time($value1, $value2) {
-  @return $value1 + $value2;
+@mixin hyphens($yes) {
+  @if ($yes) {
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -o-hyphens: auto;
+    hyphens: auto;
+  } @else {
+    word-break: inherit;
+    -webkit-hyphens: inherit;
+    -moz-hyphens: inherit;
+    -ms-hyphens: inherit;
+    -o-hyphens: inherit;
+    hyphens: inherit;
+  }
 }
