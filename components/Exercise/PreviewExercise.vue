@@ -33,7 +33,7 @@
     @Component
     export default class PreviewExercise extends Vue {
         @Prop({type: Object, required: true}) readonly exercise!: Exercise;
-      
+
         get metaTitleLink() {
             return `${this.exercise.title} | Source Code`
         }

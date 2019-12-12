@@ -3,23 +3,25 @@
 
 
 /* width */
-body::-webkit-scrollbar {
-  width: 5px;
-}
+.scroll-bar--grey, body {
 
-/* Track */
-body::-webkit-scrollbar-track {
-  background: transparent;
-  //@include box-shadow(inset $SHADOW)
-}
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
 
-/* Handle */
-body::-webkit-scrollbar-thumb {
-  border-radius: 20px;
-  background: $MAIN_GRADIENT_V;
-}
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-/* Handle on hover */
-body::-webkit-scrollbar-thumb:hover {
-  background: $MAIN_GRADIENT_V;
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: lighten($GREY, 30);
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: $GREY;
+  }
 }

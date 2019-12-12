@@ -1,5 +1,5 @@
 <template>
-  <div id="FilterPanel" class="panel">
+  <div id="FilterPanel" class="panel scroll-bar--grey">
 
     <h3>
       Filtres<br>
