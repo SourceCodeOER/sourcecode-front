@@ -1,7 +1,12 @@
 <template>
   <article>
-    <div class="rating" :class="{'rating--empty': exercise.metrics.votes === 0}" @mouseover="displayOverlay" @mouseleave="dissimOverlay">
+    <div class="rating" :class="{'rating--empty': exercise.metrics.votes === 0}">
         {{rating}}
+        <div @click="gotoExercise" class="overlay">
+          <span>
+            Soyez le premier à côter cet exercice !
+          </span>
+        </div>
     </div>
 
     <div class="info-wrapper">
@@ -17,11 +22,6 @@
       </nuxt-link>
     </div>
 
-    <div @click="gotoExercise" v-show="overlay && exercise.metrics.votes === 0" class="overlay">
-      <span>
-        Soyez le premier à côter cet exercice !
-      </span>
-    </div>
   </article>
 </template>
 
@@ -33,9 +33,7 @@
     @Component
     export default class PreviewExercise extends Vue {
         @Prop({type: Object, required: true}) readonly exercise!: Exercise;
-
-        overlay:boolean = false;
-
+      
         get metaTitleLink() {
             return `${this.exercise.title} | Source Code`
         }
@@ -97,14 +95,6 @@
 
         }
 
-        displayOverlay() {
-          this.overlay = true
-        }
-
-        dissimOverlay() {
-          this.overlay = false
-        }
-
         gotoExercise() {
           this.$router.push(this.metaLink)
         }
@@ -129,27 +119,37 @@
     padding: 0 20px;
     position: relative;
 
+
     .overlay {
       position: absolute;
       left: 0;
       right: 0;
       top: 0;
       bottom: 0;
+      opacity: 0;
+      visibility: hidden;
       background: $MAIN_GRADIENT_V;
       color:white;
       border-radius: 4px;
       font-weight: bold;
       font-family: $CircularStd;
-      font-size: 1.2em;
+      font-size: 0.75em;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor:pointer;
+      @include transitionHelper(opacity .4s ease);
 
       span {
         position: relative;
 
       }
+    }
+
+    .rating--empty:hover .overlay {
+      visibility: visible;
+      opacity: 1;
+
     }
 
     button {
