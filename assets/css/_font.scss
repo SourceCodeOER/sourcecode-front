@@ -2,14 +2,14 @@
   font-family: 'Circular Std';
   font-style: normal;
   font-weight: bold;
-  src: local('Circular Std Bold'), url('~assets/fonts/CircularStd-Bold.ttf') format('ttf');
+  src: local('Circular Std Bold'), url('~assets/fonts/CircularStd-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Circular Std';
   font-style: normal;
   font-weight: 200;
-  src: local('Circular Std Book'), url('~assets/fonts/CircularStd-Book.ttf') format('ttf');
+  src: local('Circular Std Book'), url('~assets/fonts/CircularStd-Book.ttf') format('truetype');
 }
 
 $Montserrat: 'Montserrat', sans-serif;
