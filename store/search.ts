@@ -13,7 +13,7 @@ export const state = () => ({
     currentPage: 1,
     totalItems: 0,
     totalPages: 0,
-    pageSize: 10
+    pageSize: 20
   } as MetadataResponse,
   /**
    * The search criterion composed by a title and tags id
@@ -54,7 +54,7 @@ export const mutations = mutationTree(state, {
       currentPage: 1,
       totalItems: 0,
       totalPages: 0,
-      pageSize: 10
+      pageSize: state.metadata.pageSize
     }
   },
   /**
@@ -98,7 +98,7 @@ export const actions = actionTree({state, mutations, getters}, {
    */
   async fetch({commit, state}, searchRequest: SearchRequest) {
 
-    const newSearchRequest:SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}, metadata: {}};
+    const newSearchRequest:SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}, metadata: {size: state.metadata.pageSize}};
     try {
       const response: SearchResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
       commit('INIT', response);
@@ -116,7 +116,8 @@ export const actions = actionTree({state, mutations, getters}, {
 
     const request: SearchRequest = {
       metadata: {
-        page: state.metadata.currentPage + 1
+        page: state.metadata.currentPage + 1,
+        size: state.metadata.pageSize
       },
       data: {
         ...state.search_criterion
