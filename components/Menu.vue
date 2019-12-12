@@ -37,6 +37,13 @@
 
           <ul>
 
+            <li @click="changePanel(0)" class="cta-link cta-link-with-arrow">
+              <div class="logo-link-wrapper">
+                <FilterSymbol theme="theme--white"/>
+              </div>
+              Filtres
+            </li>
+
             <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
                 <img src="@/assets/logo/history.svg" alt="Historique">
@@ -79,34 +86,36 @@
 </template>
 
 <script lang="ts">
-    import {Vue, Component} from "vue-property-decorator";
-    import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
-    import StarSymbol from '~/components/Symbols/StarSymbol.vue'
-    import {BusEvent} from '~/components/Event/BusEvent'
+  import {Vue, Component} from "vue-property-decorator";
+  import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
+  import StarSymbol from '~/components/Symbols/StarSymbol.vue'
+  import FilterSymbol from '~/components/Symbols/FilterSymbol.vue'
+  import {BusEvent} from '~/components/Event/BusEvent'
 
-    type FILTER_PANEL = 0;
-    type HISTORICAL_PANEL = 1;
-    type FAVORITE_PANEL = 2;
+  type FILTER_PANEL = 0;
+  type HISTORICAL_PANEL = 1;
+  type FAVORITE_PANEL = 2;
 
-    @Component({
-        components: {
-            ArrowSymbol,
-            StarSymbol
-        }
-    })
-    export default class Menu extends Vue{
-        changePanel(id:FILTER_PANEL|HISTORICAL_PANEL|FAVORITE_PANEL) {
-            BusEvent.$emit('changePanel', id)
-        }
-
-        get isExercisePage() {
-          if(this.$route.name !== undefined) {
-            return this.$route.name === "exercices"
-          }
-
-          return false;
-        }
+  @Component({
+    components: {
+      ArrowSymbol,
+      StarSymbol,
+      FilterSymbol
     }
+  })
+  export default class Menu extends Vue {
+    changePanel(id: FILTER_PANEL | HISTORICAL_PANEL | FAVORITE_PANEL) {
+      BusEvent.$emit('changePanel', id)
+    }
+
+    get isExercisePage() {
+      if (this.$route.name !== undefined) {
+        return this.$route.name === "exercices"
+      }
+
+      return false;
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
