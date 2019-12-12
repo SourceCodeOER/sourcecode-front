@@ -76,7 +76,7 @@
     @include transitionHelper(max-height .4s ease);
 
     .active {
-      max-height: 200px;
+      max-height: 300px;
     }
 
   }
