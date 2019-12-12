@@ -44,57 +44,6 @@
     export default class ExercisesPanel extends Vue {
         private observer: IntersectionObserver | undefined = undefined;
 
-        /*
-        private exercise: Exercise = {
-            id: 0,
-            title: "Bitwise operation : high order bits",
-            createdAt: "",
-            updatedAt: "",
-            version: 0,
-            description: "Lorem ipsum",
-            metrics: {
-                avg_score: 4.7,
-                votes: 200
-            },
-            tags: [
-                {
-                    tag_id: 1,
-                    tag_text: "Facile",
-                    category: {
-                        category_id: 1,
-                        category_text: "difficulté"
-                    }
-                },
-                {
-                    tag_id: 1,
-                    tag_text: "Java",
-                    category: {
-                        category_id: 1,
-                        category_text: "langage"
-                    }
-                },
-                {
-                    tag_id: 1,
-                    tag_text: "QCM",
-                    category: {
-                        category_id: 1,
-                        category_text: "type d'exercice"
-                    }
-                },
-                {
-                    tag_id: 1,
-                    tag_text: "Listes Chainées",
-                    category: {
-                        category_id: 1,
-                        category_text: "thématique"
-                    }
-                },
-            ],
-
-        }
-
-         */
-
         @Ref() headerExercise!: HTMLElement;
         @Ref() bodyExercise!: HTMLElement;
 
