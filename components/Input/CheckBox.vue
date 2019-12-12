@@ -51,6 +51,7 @@
     -ms-user-select: none;
     user-select: none;
     text-transform: capitalize;
+    @include hyphens(true);
 
     &:hover input ~ .checkmark {
       background-color: #ccc;
