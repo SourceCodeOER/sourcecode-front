@@ -81,3 +81,12 @@ export type SearchRequest = {
   metadata?: MetadataRequest,
   data?: SearchCriterion
 }
+
+/**
+ * Historical
+ */
+export interface Historical {
+  datetime: string,
+  title?:string
+  tags?: SelectedTag[]
+}

@@ -1,13 +1,7 @@
-import {SelectedTag} from "~/types";
+import {Historical, SelectedTag} from "~/types";
 import {actionTree, mutationTree} from "nuxt-typed-vuex";
 const cloneDeep = require('lodash.clonedeep');
 
-
-export interface Historical {
-  datetime: string,
-  title?:string
-  tags?: SelectedTag[]
-}
 
 export const state = () => ({
   historical: [] as Historical[]
