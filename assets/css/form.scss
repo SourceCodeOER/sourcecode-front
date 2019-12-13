@@ -2,27 +2,9 @@
 @import "_variables";
 @import "_font";
 
-input[type=text], textarea {
-  border: 1px solid $PRIMARY_COLOR;
-  padding: 0 25px;
-  @include border-radius(0);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  outline: none;
-  background-color: transparent;
-  font-family: $Montserrat;
-  font-weight: lighter;
-  font-size: 0.75em;
-  color:$PRIMARY_COLOR;
-  border-radius: 4px;
-
-  &:focus, &:focus::placeholder {
-    color:$PRIMARY_COLOR_LIGHT;
-    border-color:$PRIMARY_COLOR_LIGHT;
-  }
-}
-
+/**
+  Base for input, select and textarea
+ */
 input {
   line-height: 3.2em;
 }
@@ -34,49 +16,42 @@ textarea {
   height: 100px;
 }
 
-input::placeholder, textarea::placeholder {
-  font-size: 1em;
-  color: $PRIMARY_COLOR;
-}
+input[type=text], input[type=password], input[type=email], textarea, select {
+  padding: 0 25px;
+  @include border-radius(0);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  font-family: $Montserrat;
+  font-weight: lighter;
+  font-size: 0.75em;
+  border-radius: 4px;
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-animation: autofill 0s forwards;
-  animation: autofill 0s forwards;
-}
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  border: 1px solid $PRIMARY_COLOR;
-  -webkit-text-fill-color: $PRIMARY_COLOR;
-  -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0) inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-@keyframes autofill {
-  100% {
-    background: transparent;
-    color: $PRIMARY_COLOR;
+  &::placeholder {
+    font-size: 1em;
   }
-}
 
-@-webkit-keyframes autofill {
-  100% {
-    background: transparent;
-    color: $PRIMARY_COLOR;
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0) inset;
+    transition: background-color 5000s ease-in-out 0s;
   }
+
+  &:-webkit-autofill {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
 }
 
-input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
-  background-color: transparent !important;
-  background-image: none !important;
-  color: $PRIMARY_COLOR !important;
-}
+/**
+  Custom theme of textarea
+ */
+
+@include input-theme(primary-color, $PRIMARY_COLOR, $PRIMARY_COLOR_LIGHT);
+@include input-theme(secondary-color, $SECONDARY_COLOR, lighten($SECONDARY_COLOR, 10));
+@include input-theme(grey, $GREY, lighten($GREY, 20));
