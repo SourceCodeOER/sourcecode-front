@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
+  <div class="container--with-menu">
     <div class="banner search-banner">
       <div class="input-wrapper">
         <SearchSymbol/>
-        <input ref="inputText" type="text" v-on:input="debounceInput" placeholder="Rechercher">
+        <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput" placeholder="Rechercher">
       </div>
     </div>
 

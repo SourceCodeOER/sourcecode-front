@@ -1,5 +1,5 @@
 <template>
-  <div class="container" id="Exercises">
+  <div class="container--with-menu" id="Exercises">
     <div class="banner search-banner">
       Une initiative créée par l'UCLouvain
     </div>

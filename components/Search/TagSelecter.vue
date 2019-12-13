@@ -6,7 +6,7 @@
     </span>
     <ul :class="{active}">
       <li>
-        <input type="text" v-model="filter" placeholder="Filtrer">
+        <input type="text" class="input--primary-color" v-model="filter" placeholder="Filtrer">
       </li>
       <li v-for="el in filteredTags" :key="el.id">
         <CheckBox :title="el.tag_text" :state="el.state === 2 || el.state === 1" :id="el.tag_id" @check="check"/>

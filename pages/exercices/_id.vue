@@ -1,5 +1,5 @@
 <template>
-  <div class="container" id="Exercise">
+  <div class="container--with-menu" id="Exercise">
     <div class="banner">
       <span>
         {{exercise.title}}
