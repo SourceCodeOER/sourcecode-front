@@ -95,3 +95,55 @@
     hyphens: inherit;
   }
 }
+
+@mixin input-theme($name, $color1, $color2) {
+  input[type=text], input[type=password], input[type=email], textarea, select {
+    &.input--#{$name} {
+      border: 1px solid $color1;
+      color: $color1;
+
+      &::placeholder {
+        color: $color1;
+      }
+
+      &:focus, &:focus::placeholder {
+        color: $color2;
+        border-color: $color2;
+      }
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus,
+      &:-webkit-autofill:active {
+        -webkit-animation: autofill--#{$name} 0s forwards;
+        animation: autofill--#{$name} 0s forwards;
+      }
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        border: 1px solid $color1;
+        -webkit-text-fill-color: $color1;
+      }
+
+      &:-webkit-autofill {
+        color: $color1 !important;
+      }
+
+    }
+  }
+
+  @keyframes autofill--#{$name} {
+    100% {
+      background: transparent;
+      color: $color1;
+    }
+  }
+
+  @-webkit-keyframes autofill--#{$name} {
+    100% {
+      background: transparent;
+      color: $color1;
+    }
+  }
+}
