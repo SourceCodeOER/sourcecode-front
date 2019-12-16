@@ -27,7 +27,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/axios"
+      "@nuxtjs/axios",
+      "@types/nuxtjs__auth"
     ]
   },
   "include": ["**/*.ts", "**/*.vue"],

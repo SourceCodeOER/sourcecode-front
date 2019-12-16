@@ -30,7 +30,24 @@ export default {
     proxy: true
   },
   proxy: {
-    '/api/': { target: 'http://127.0.0.1:3000'}
+    '/api/': { target: 'http://127.0.0.1:3000'},
+    '/auth/': { target: 'http://127.0.0.1:3000'}
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'auth/login', method: 'post', propertyName: 'token' },
+          user:false,
+          logout: false
+        }
+      }
+    },
+    redirect: {
+      home: false,
+      callback:false,
+      logout:false
+    }
   },
   moment: {
     defaultLocale: 'fr',
@@ -50,7 +67,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/validator',
+    '~/plugins/validator'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -65,6 +82,7 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/markdownit'
   ],
   markdownit: {
