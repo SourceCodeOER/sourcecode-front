@@ -8,7 +8,7 @@
     </div>
 
     <div class="wrapper">
-      <transition name="fade" mode="out-in" duration="500">
+      <transition name="fade" mode="out-in" duration="400">
         <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
       </transition>
@@ -59,7 +59,7 @@
       const value = e.target.value;
       this.$accessor.search.fetch({data: {title: value}});
       this.$accessor.historical.addHistorical({tags:this.$accessor.tags.selectedTags, title: value})
-    }, 250);
+    }, 300);
 
     resetInput() {
       this.inputText.value = ''
