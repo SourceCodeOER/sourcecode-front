@@ -139,6 +139,14 @@
       return this.$auth.loggedIn;
     }
 
+    get fullName() {
+      return this.$accessor.user.user.fullName
+    }
+
+    get role() {
+      return this.$accessor.user.user.role
+    }
+
     async logout() {
       await this.$auth.logout();
     }
