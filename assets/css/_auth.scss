@@ -1,0 +1,68 @@
+@import "_variables";
+@import "_function";
+@import "_font";
+
+
+h1 {
+  text-align: center;
+  font-weight: normal;
+  font-family: $Montserrat;
+}
+
+.container {
+  background: $MAIN_GRADIENT_V;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.wrapper {
+  max-width: 700px;
+  width: 100%;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 30px;
+  @include box-shadow($SHADOW);
+  border-radius: 4px;
+
+  picture {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+  }
+}
+
+form {
+  margin-top: 50px;
+
+  label {
+    width: 100%;
+    font-family: $CircularStd;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    font-weight: bold;
+    min-height: 95px;
+
+    span {
+      font-style: italic;
+      font-weight: normal;
+    }
+  }
+
+  input {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .button-wrapper {
+    margin-top: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
