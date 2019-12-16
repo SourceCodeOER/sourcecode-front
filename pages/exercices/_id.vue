@@ -158,6 +158,8 @@
         list-style-type: none;
         padding: 0;
         font-weight: 300;
+        @include hyphens(true);
+
       }
 
       li:not(:last-child) {
