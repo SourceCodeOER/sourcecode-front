@@ -90,3 +90,20 @@ export interface Historical {
   title?:string
   tags?: SelectedTag[]
 }
+
+
+/**
+ * User
+ */
+
+
+export type UserRole = 'admin' | 'user' | 'guest'
+
+export interface User {
+  fullName:string,
+  role: UserRole
+}
+export interface UserInfo {
+  token:string,
+  user: User
+}
