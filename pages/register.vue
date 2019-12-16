@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <NotificationError ref="notificationError" :message="message"/>
 
     <div class="wrapper">
       <picture>
@@ -31,7 +32,7 @@
         <ValidationProvider tag="label"
                             mode="eager"
                             name="nom complet"
-                            rules="required"
+                            rules="required|max:50"
                             v-slot="{ errors }">
           Nom complet
           <input id="FullName" name="fullname" v-model="form.fullName" class="input--grey" type="text">
@@ -52,12 +53,17 @@
 <script lang="ts">
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {Component, Ref, Vue} from "vue-property-decorator";
+  import {AxiosError} from "~/node_modules/axios";
+  import Notification from "~/components/Notification/Notification";
+  import NotificationError from "~/components/Notification/NotificationError.vue";
+
 
   @Component({
-    layout: 'authentification',
+    layout: 'authentication',
     components: {
       ValidationProvider,
-      ValidationObserver
+      ValidationObserver,
+      NotificationError
     }
   })
   export default class extends Vue {
@@ -67,7 +73,9 @@
       fullName: ''
     };
 
-    isSubmit: boolean = false;
+    message: string = "Une erreur est survenue :(";
+
+    @Ref() notificationError!: Notification;
 
     @Ref() observer!: InstanceType<typeof ValidationObserver>;
 
@@ -84,35 +92,42 @@
       const isValid = await this.observer.validate();
       if (isValid) {
 
-
         try {
           await this.$axios.post('auth/register', this.form);
 
-          await this.$auth.loginWith('local', {
-            data: {
-              email: this.form.email,
-              password: this.form.password
-            },
+          const {data} = await this.$axios.post('/auth/login', {
+            email: this.form.email,
+            password: this.form.password
           });
 
-          this.$router.push('/');
-          //this.responseMessage = this.$t('contact.success');
+          await this.$auth.setUserToken(data.token);
+
+          this.$accessor.user.SET_USER_INFO(data.user);
+
+          this.$router.back()
         } catch (e) {
-          throw new e
-          //this.responseMessage = this.$t('contact.error');
+
+          const error: AxiosError = (e as AxiosError);
+
+          if (error.response) {
+            switch (error.response.status) {
+              case 409:
+                this.message = "Cette adresse email existe déjà !";
+                break;
+              case 400:
+                this.message = "Un ou plusieurs champs semblent incorrectes.";
+                break;
+              default:
+                this.message = "Une erreur est survenue depuis notre serveur :(";
+                break;
+            }
+            this.notificationError.display();
+
+            setTimeout(() => {
+              this.notificationError.dissim()
+            }, 4000)
+          }
         }
-
-        this.isSubmit = true;
-
-        this.resetFields();
-
-        requestAnimationFrame(() => {
-          this.observer.reset();
-        });
-
-        setTimeout(() => {
-          this.isSubmit = false;
-        }, 5000);
       }
     }
   }

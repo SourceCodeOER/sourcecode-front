@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <NotificationError ref="notificationError" message="La combinaison email / mot de passe est incorrecte !"/>
+    <NotificationError ref="notificationError" :message="message"/>
 
     <div class="wrapper">
       <picture>
@@ -49,7 +49,7 @@
   import Notification from "~/components/Notification/Notification";
 
   @Component({
-    layout: 'authentification',
+    layout: 'authentication',
     components: {
       ValidationProvider,
       ValidationObserver,
@@ -65,6 +65,8 @@
       password: ''
     };
 
+    message: string = "Une erreur est survenue :(";
+
     @Ref() observer!: InstanceType<typeof ValidationObserver>;
 
     private resetFields() {
@@ -79,26 +81,37 @@
       const isValid = await this.observer.validate();
       if (isValid) {
         try {
-          await this.$auth.loginWith('local', {
-            data: {
-              email: this.form.email,
-              password: this.form.password
-            },
+          const {data} = await this.$axios.post('/auth/login', {
+            email: this.form.email,
+            password: this.form.password
           });
 
-          this.$router.back()
-        } catch (e) {
+          await this.$auth.setUserToken(data.token);
 
+          this.$accessor.user.SET_USER_INFO(data.user);
+
+          this.$router.back()
+
+        } catch (e) {
           const error: AxiosError = (e as AxiosError);
 
           if (error.response) {
-            if (error.response.status === 401) {
-              this.notificationError.display();
-
-              setTimeout(() => {
-                this.notificationError.dissim()
-              }, 4000)
+            switch (error.response.status) {
+              case 401:
+                this.message = "La combinaison adresse email / mot de passe est incorrecte.";
+                break;
+              case 400:
+                this.message = "Un ou plusieurs champs semblent incorrectes.";
+                break;
+              default:
+                this.message = "Une erreur est survenue depuis notre serveur :(";
+                break;
             }
+            this.notificationError.display();
+
+            setTimeout(() => {
+              this.notificationError.dissim()
+            }, 4000)
           }
         }
 
