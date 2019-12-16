@@ -3,8 +3,8 @@
 
     <h3>
       Filtres<br>
-      <span class="secondary-color">Ajouter aux favoris
-      <StarSymbol theme="theme--secondary-color"/>
+      <span v-if="$auth.loggedIn" class="secondary-color">Ajouter aux favoris
+      <StarHalfSymbol theme="theme--secondary-color"/>
       </span>
     </h3>
 
@@ -26,7 +26,7 @@
 <script lang="ts">
   import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
   import ReturnSymbol from "~/components/Symbols/ReturnSymbol.vue";
-  import StarSymbol from "~/components/Symbols/StarSymbol.vue";
+  import StarHalfSymbol from "~/components/Symbols/StarHalfSymbol.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import TagSelecter from "~/components/Search/TagSelecter.vue";
   import {Component, Vue, Ref, Emit} from 'vue-property-decorator';
@@ -37,7 +37,7 @@
       Tag,
       TagSelecter,
       ReturnSymbol,
-      StarSymbol
+      StarHalfSymbol
     }
   })
   export default class FilterPanel extends Vue {
@@ -128,7 +128,7 @@
 
     h3 {
       svg {
-        width: 19px;
+        width: 23px;
         margin-left: 5px;
         height: 23px;
         vertical-align: sub;
