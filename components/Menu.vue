@@ -8,7 +8,17 @@
 
     <div class="menu-wrapper">
       <div class="connection-profile">
-        <span>Alexandre Dewit</span>
+        <div v-if="!isAuthenticated">
+          <nuxt-link to="/login">
+            <span class="connection-profile--login">
+              se connecter
+            </span>
+          </nuxt-link>
+
+
+
+        </div>
+        <span v-else>Alexandre Dewit</span>
       </div>
 
       <nav class="menu-nav-list">
@@ -51,7 +61,7 @@
               Historique
             </li>
 
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
+            <nuxt-link class="cta-link cta-link-with-arrow" v-if="isAuthenticated" tag="li" to="/">
               <div class="logo-link-wrapper">
                 <StarSymbol theme="theme--white"/>
               </div>
@@ -62,24 +72,33 @@
         </template>
 
 
-        <span>Gestion</span>
+        <template v-if="isAuthenticated">
+          <span>Gestion</span>
+          <ul>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
+              <div class="logo-link-wrapper">
+                <img src="@/assets/logo/profile.svg" alt="Profile">
+              </div>
+              Profil
+            </nuxt-link>
+          </ul>
+        </template>
 
-        <ul>
-
-          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
-            <div class="logo-link-wrapper">
-              <img src="@/assets/logo/profile.svg" alt="Profile">
-            </div>
-            Profil
-          </nuxt-link>
-        </ul>
       </nav>
 
-      <div class="cta-link disconnect">
+      <div v-if="isAuthenticated" class="cta-link bottom" @click="logout">
         <div class="logo-link-wrapper">
           <img src="@/assets/logo/disconnect.svg" alt="Déconnexion">
         </div>
         Déconnexion
+      </div>
+
+      <div v-else class="cta-link bottom cta-register">
+        <nuxt-link to="/register">
+          <span class="connection-profile--login">
+            créer un compte
+          </span>
+        </nuxt-link>
       </div>
     </div>
   </div>
@@ -114,6 +133,14 @@
       }
 
       return false;
+    }
+
+    get isAuthenticated() {
+      return this.$auth.loggedIn;
+    }
+
+    async logout() {
+      await this.$auth.logout();
     }
   }
 </script>
@@ -153,6 +180,11 @@
       font-family: $CircularStd;
       font-weight: bold;
       padding: 0 $PADDING_MENU;
+      text-align: center;
+
+      .connection-profile--login {
+        text-decoration: underline;
+      }
     }
 
     .menu-wrapper {
@@ -214,11 +246,23 @@
       }
     }
 
-    .disconnect {
+    .bottom {
       position: absolute;
       bottom: 30px;
       left: 0;
       right: 0;
+    }
+
+    .cta-register {
+      text-align: center;
+
+      a {
+        display: block;
+        width: 100%;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+
     }
   }
 </style>

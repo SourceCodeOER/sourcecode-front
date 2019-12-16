@@ -51,8 +51,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import {Component, Vue} from "vue-property-decorator";
 
+  @Component({
+    auth:false
+  })
+  export default class extends Vue{}
 </script>
 
 <style lang="scss" scoped>
