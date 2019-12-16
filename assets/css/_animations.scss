@@ -10,6 +10,17 @@
   opacity: 0;
 }
 
+.slide-fade-left-enter-active {
+  transition: opacity .3s ease, transform .3s ease;
+}
+.slide-fade-left-leave-active {
+  transition: opacity .8s cubic-bezier(1.0, 0.5, 0.8, 1.0), transform .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-left-enter, .slide-fade-left-leave-to {
+  @include transformHelper(translateX(300px));
+  opacity: 0;
+}
+
 @keyframes progress {
   from {
     width: 0;
