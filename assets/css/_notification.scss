@@ -1,0 +1,28 @@
+@import "_variables";
+@import "_function";
+@import "_font";
+
+.notification {
+  position: fixed;
+  right: 30px;
+  top:40px;
+  padding: 20px;
+  background-color: lighten($GREY, 60);
+  min-height: 90px;
+  width: 300px;
+  border-left: 15px solid lighten($GREY, 30);
+  display: flex;
+  align-items: center;
+
+  @include box-shadow($SHADOW);
+  border-radius: 4px;
+  font-family: $CircularStd;
+  font-style: italic;
+
+  &.notification--error {
+    background-color: lighten($RED, 45);
+    border-left: 15px solid lighten($RED, 15);
+
+
+  }
+}
