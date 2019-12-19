@@ -1,4 +1,5 @@
 @import "variables";
+@import "function";
 
 .banner {
   background-color: white;
@@ -13,23 +14,47 @@
   z-index: 1000;
 
   &.search-banner {
-
-    .input-wrapper {
+    .input-wrapper--with-icon {
       width: 100%;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  &.banner--with-shadow-bottom {
+    @include box-shadow($SHADOW_BOTTOM)
+
+  }
+
+  &.banner--nav {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+
+    span:first-child {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    span:last-child {
+      color: $SECONDARY_COLOR;
+      display: block;
       position: relative;
+      cursor: pointer;
     }
 
-    input {
-      width: 100%;
-      padding-left: 50px;
+    .reversed-arrow {
+      @include transformHelper(rotate(180deg));
+      @include transformOriginHelper(center center);
+      height: 15px;
+      width: 8px;
+      margin-bottom: -1px;
+      margin-right: 2px;
     }
 
-    svg {
-      width: 15px;
-      position: absolute;
-      top: 50%;
-      left: 20px;
-      transform: translateY(-50%);
-    }
   }
 }
