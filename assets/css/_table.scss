@@ -1,0 +1,61 @@
+@import "variables";
+@import "_function";
+
+table {
+  border-spacing: 0;
+
+  .table-icon {
+    width: 25px;
+    vertical-align: middle;
+  }
+
+  &.table--with-sticky-header {
+    thead th {
+      position: sticky;
+      top: 0;
+      background-color: white;
+    }
+  }
+
+  thead {
+    th {
+      border-bottom: 2px solid lighten($GREY, 40);
+      padding: 20px;
+    }
+  }
+
+  tbody {
+
+    tr {
+      transition: background-color .4s ease;
+
+      &:hover {
+        background-color: lighten($GREY, 63);
+      }
+    }
+
+    td {
+      padding: 15px;
+
+      &:nth-child(n + 2) {
+        text-align: right;
+      }
+    }
+
+    tr td {
+      border-bottom: 1px solid lighten($GREY, 40);
+    }
+  }
+
+  thead, tbody {
+    th, td {
+      &.item-centered {
+        text-align: center;
+      }
+
+      &.item-left {
+        text-align: left;
+      }
+    }
+  }
+}
