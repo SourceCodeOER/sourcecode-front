@@ -10,7 +10,6 @@
       <h1>Se connecter</h1>
       <ValidationObserver ref="observer" tag="form" v-slot="{ valid }" @submit.prevent="validateBeforeSubmit()">
         <ValidationProvider tag="label"
-                            mode="eager"
                             name="email"
                             rules="required|email"
                             v-slot="{ errors }">
@@ -20,7 +19,6 @@
         </ValidationProvider>
 
         <ValidationProvider tag="label"
-                            mode="eager"
                             name="mot de passe"
                             rules="required"
                             v-slot="{ errors }">
@@ -54,7 +52,8 @@
       ValidationProvider,
       ValidationObserver,
       NotificationError
-    }
+    },
+    auth: "guest"
   })
   export default class extends Vue {
 
