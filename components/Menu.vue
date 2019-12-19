@@ -15,8 +15,6 @@
             </span>
           </nuxt-link>
 
-
-
         </div>
         <span v-else>Alexandre Dewit</span>
       </div>
@@ -75,11 +73,17 @@
         <template v-if="isAuthenticated">
           <span>Gestion</span>
           <ul>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/mes-exercices">
+              <div class="logo-link-wrapper">
+                <DocumentSymbol theme="theme--white"/>
+              </div>
+              Mes exercices
+            </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/profil">
               <div class="logo-link-wrapper">
                 <img src="@/assets/logo/profile.svg" alt="Profile">
               </div>
-              Profil
+              Mon profil
             </nuxt-link>
           </ul>
         </template>
@@ -107,6 +111,7 @@
 <script lang="ts">
   import {Vue, Component} from "vue-property-decorator";
   import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
+  import DocumentSymbol from '~/components/Symbols/DocumentSymbol.vue'
   import StarSymbol from '~/components/Symbols/StarSymbol.vue'
   import FilterSymbol from '~/components/Symbols/FilterSymbol.vue'
   import {BusEvent} from '~/components/Event/BusEvent'
@@ -119,7 +124,8 @@
     components: {
       ArrowSymbol,
       StarSymbol,
-      FilterSymbol
+      FilterSymbol,
+      DocumentSymbol
     }
   })
   export default class Menu extends Vue {
@@ -129,7 +135,8 @@
 
     get isExercisePage() {
       if (this.$route.name !== undefined) {
-        return this.$route.name === "exercices"
+        console.log(this.$route.name);
+        return this.$route.name === "exercices" || this.$route.name === "gestion-mes-exercices"
       }
 
       return false;
@@ -227,12 +234,12 @@
       align-items: center;
       height: 40px;
       position: relative;
-      padding: 0 $PADDING_MENU;
+      padding: 0 $PADDING_MENU/1.5 0 $PADDING_MENU/1.5;
 
       &.cta-link-with-arrow:after {
         content: url("~assets/logo/arrow.svg");
         position: absolute;
-        right: $PADDING_MENU;
+        right: $PADDING_MENU/1.5;
 
       }
 
@@ -259,6 +266,8 @@
       bottom: 30px;
       left: 0;
       right: 0;
+      padding: 0 $PADDING_MENU;
+
     }
 
     .cta-register {
