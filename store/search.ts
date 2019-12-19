@@ -1,4 +1,4 @@
-import {Exercise, MetadataResponse, SearchCriterion, SearchRequest, SearchResponse} from "~/types";
+import {Exercise, MetadataRequest, MetadataResponse, SearchCriterion, SearchRequest, SearchResponse} from "~/types";
 import {actionTree, getterTree, mutationTree} from "nuxt-typed-vuex";
 
 export const state = () => ({
@@ -58,6 +58,15 @@ export const mutations = mutationTree(state, {
     }
   },
   /**
+   * Reset the search criterion with default values
+   * @param state
+   * @constructor
+   */
+  RESET_SEARCH_CRITERION(state) {
+    state.search_criterion.tags = [];
+    state.search_criterion.title = ''
+  },
+  /**
    * Set a new metadata object to replace the old one
    * @param state
    * @param metadata
@@ -97,8 +106,19 @@ export const actions = actionTree({state, mutations, getters}, {
    * @param searchRequest
    */
   async fetch({commit, state}, searchRequest: SearchRequest) {
+    const metadata: MetadataRequest = {};
 
-    const newSearchRequest:SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}, metadata: {size: state.metadata.pageSize}};
+    if (searchRequest.metadata) {
+      if (!!searchRequest.metadata.size) {
+        metadata.size = searchRequest.metadata.size
+
+      }
+      if (!!searchRequest.metadata.page) {
+        metadata.page = searchRequest.metadata.page
+      }
+    }
+
+    const newSearchRequest: SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}, metadata};
     try {
       const response: SearchResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
       commit('INIT', response);
