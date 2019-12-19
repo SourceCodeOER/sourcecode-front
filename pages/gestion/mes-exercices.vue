@@ -48,7 +48,7 @@
             <td>{{!!exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</td>
             <td>{{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</td>
             <td class="item-centered">
-              <CheckSymbol class="table-icon" v-if="!!exercise.file"/>
+              <CheckSymbol class="table-icon" theme="theme--green" v-if="!!exercise.file"/>
               <CloseSymbol class="table-icon" theme="theme--red-light" v-else/>
             </td>
             <td class="item-centered">
