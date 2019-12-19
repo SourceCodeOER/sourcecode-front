@@ -20,7 +20,7 @@ table {
   thead {
     th {
       border-bottom: 2px solid lighten($GREY, 40);
-      padding: 20px;
+      padding: 20px 15px;
     }
   }
 
@@ -36,10 +36,6 @@ table {
 
     td {
       padding: 15px;
-
-      &:nth-child(n + 2) {
-        text-align: right;
-      }
     }
 
     tr td {
@@ -49,12 +45,18 @@ table {
 
   thead, tbody {
     th, td {
+      text-align: right;
+
       &.item-centered {
         text-align: center;
       }
 
       &.item-left {
         text-align: left;
+      }
+
+      &.item-right {
+        text-align: right;
       }
     }
   }
