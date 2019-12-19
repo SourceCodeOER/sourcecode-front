@@ -16,9 +16,16 @@
   fill: darken($SECONDARY_COLOR, 12);
 }
 
+.theme--ternary-color {
+  fill: $TERNARY_COLOR;
+}
 
 .theme--red {
   fill: $RED;
+}
+
+.theme--green {
+  fill: $GREEN;
 }
 
 .theme--grey {
