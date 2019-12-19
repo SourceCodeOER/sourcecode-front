@@ -31,23 +31,21 @@
         <table class="table--with-sticky-header">
           <thead>
           <tr>
-            <th>Id</th>
-            <th>Titre</th>
-            <th>Cotation</th>
+            <th class="item-left">Titre</th>
             <th>Nb de votes</th>
+            <th>Moyenne</th>
             <th>Mis à jour</th>
-            <th>Fichier(s)</th>
-            <th>Validé</th>
-            <th>Supprimer</th>
+            <th class="item-centered">Fichier(s)</th>
+            <th class="item-centered">Validé</th>
+            <th class="item-centered">Supprimer</th>
           </tr>
           </thead>
 
           <tbody>
           <tr v-for="exercise in exercises" :key="exercise.id">
-            <td class="item-centered">{{exercise.id}}</td>
             <td class="item-left">{{exercise.title}}</td>
-            <td>{{!!exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</td>
             <td>{{exercise.metrics.votes}}</td>
+            <td>{{!!exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</td>
             <td>{{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</td>
             <td class="item-centered">
               <CheckSymbol class="table-icon" v-if="!!exercise.file"/>
