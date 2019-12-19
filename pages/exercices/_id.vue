@@ -24,12 +24,18 @@
           </div>
         </div>
 
-        <div v-if="!!exercise.url" class="sources">
+        <div v-if="!!exercise.url || !!exercise.file" class="sources">
           <h3>Sources</h3>
 
-          <a :href="exercise.url" target="_blank" class="button-wrapper">
+          <a v-if="!!exercise.url" :href="exercise.url" target="_blank" class="button-wrapper">
             <button class=" button--ternary-color-reverse">
               Lien vers l'exercice
+            </button>
+          </a>
+
+          <a v-if="!!exercise.file" :href="`${cdnLink}/${exercise.file}`" target="_blank" class="button-wrapper">
+            <button class=" button--ternary-color-reverse">
+              Télécharger l'exercice
             </button>
           </a>
 
@@ -73,6 +79,7 @@
   })
   export default class extends Vue {
     exercise!: Exercise;
+    private cdnLink!:string;
 
     get tag_by_categories() {
       const map: Map<string, string[]> = new Map();
@@ -98,6 +105,11 @@
       }
 
       return arrayOfTagByCategories
+    }
+
+    created() {
+      const link: string | undefined = process.env.CDN_SERVER;
+      this.cdnLink = link ? link : ''
     }
 
   }
