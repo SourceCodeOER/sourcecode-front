@@ -54,7 +54,7 @@ export type Exercise = {
   tags: TagExercise[],
   url?: string|null,
   isValidated:boolean,
-  file:string
+  file?: string|null,
 }
 
 export type MetadataResponse = {
