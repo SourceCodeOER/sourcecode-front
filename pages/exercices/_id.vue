@@ -10,7 +10,7 @@
       </nuxt-link>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper wrapper--with-panel">
       <aside class="panel">
         <div>
 
@@ -146,9 +146,6 @@
     }
 
     section {
-      width: calc(100% - #{$FILTER_PANEL_WIDTH + $PADDING_CONTENT});
-      margin-left: auto;
-      height: 100%;
       background-color: white;
       @include box-shadow($SHADOW);
       border-radius: 4px;

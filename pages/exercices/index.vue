@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper wrapper--with-panel">
       <transition name="fade" mode="out-in" duration="400">
         <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>

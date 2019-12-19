@@ -10,7 +10,7 @@
       </nuxt-link>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper wrapper--with-panel">
       <transition name="fade" mode="out-in" duration="400">
         <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
@@ -156,9 +156,6 @@
   #MyExercises {
 
     section {
-      width: calc(100% - 330px);
-      margin-left: auto;
-      height: 100%;
       background-color: white;
       @include box-shadow($SHADOW);
       border-radius: 4px;

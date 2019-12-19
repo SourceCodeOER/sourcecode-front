@@ -1,0 +1,46 @@
+// Variables
+@import "_variables";
+// Functions
+@import "_function";
+
+@import "_font";
+
+h1, h2, h3 {
+  margin: 0;
+  padding: 0;
+}
+
+
+h1, h2, h3, h4 {
+  &.title--secondary-color {
+    color: $SECONDARY_COLOR
+  }
+
+  &.title--red {
+    color: $RED
+  }
+
+  &.title--primary-color {
+    color: $PRIMARY_COLOR
+  }
+
+  &.title--primary-color__light {
+    color: $PRIMARY_COLOR_LIGHT
+  }
+
+  &.title--ternary-color {
+    color: $TERNARY_COLOR
+  }
+}
+
+h1 {
+  font-family: $CircularStd;
+  font-weight: bold;
+  font-size: 1.75em;
+}
+
+h2 {
+  font-family: $CircularStd;
+  font-weight: bold;
+  font-size: 1.125em;
+}

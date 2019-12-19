@@ -133,9 +133,6 @@
   @import "./../../assets/css/_font";
 
   #ExercisesPanel {
-    width: calc(100% - #{$FILTER_PANEL_WIDTH + $PADDING_CONTENT});
-    margin-left: auto;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: stretch;

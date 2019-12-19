@@ -1,0 +1,25 @@
+// Variables
+@import "_variables";
+// Functions
+@import "_function";
+
+.container--with-menu {
+  width: calc(100% - #{$MENU_WIDTH});
+  margin-left: auto;
+  position: relative;
+
+  .wrapper {
+    padding-left: $PADDING_CONTENT;
+    padding-right: $PADDING_CONTENT;
+    padding-top: $PADDING_TOP_CONTENT;
+
+    &.wrapper--with-panel {
+      > *:last-child {
+        width: calc(100% - #{$FILTER_PANEL_WIDTH + $PADDING_CONTENT});
+        margin-left: auto;
+        height: 100%;
+
+      }
+    }
+  }
+}
