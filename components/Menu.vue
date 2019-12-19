@@ -135,7 +135,6 @@
 
     get isExercisePage() {
       if (this.$route.name !== undefined) {
-        console.log(this.$route.name);
         return this.$route.name === "exercices" || this.$route.name === "gestion-mes-exercices"
       }
 
