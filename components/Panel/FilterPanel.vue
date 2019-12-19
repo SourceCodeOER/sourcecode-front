@@ -29,7 +29,7 @@
   import StarHalfSymbol from "~/components/Symbols/StarHalfSymbol.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import TagSelecter from "~/components/Search/TagSelecter.vue";
-  import {Component, Vue, Ref, Emit} from 'vue-property-decorator';
+  import {Component, Vue, Emit} from 'vue-property-decorator';
 
   @Component({
     components: {
@@ -56,7 +56,10 @@
       await this.$accessor.tags.apply();
       await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
 
-      this.$accessor.historical.addHistorical({tags:this.confirmedTags, title: this.$accessor.search.search_criterion.title});
+      this.$accessor.historical.addHistorical({
+        tags: this.confirmedTags,
+        title: this.$accessor.search.search_criterion.title
+      });
     }
 
     @Emit()
