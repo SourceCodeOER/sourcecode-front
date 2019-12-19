@@ -1,7 +1,7 @@
 <template>
   <div class="container--with-menu">
     <div class="banner search-banner">
-      <div class="input-wrapper">
+      <div class="input-wrapper--with-icon">
         <SearchSymbol/>
         <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput" placeholder="Rechercher">
       </div>
