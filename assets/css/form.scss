@@ -48,6 +48,20 @@ input[type=text], input[type=password], input[type=email], textarea, select {
 
 }
 
+.input-wrapper--with-icon {
+  position: relative;
+  input {
+    padding-left: 50px;
+  }
+  svg {
+    width: 15px;
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+  }
+}
+
 /**
   Custom theme of textarea
  */
