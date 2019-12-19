@@ -99,9 +99,9 @@
     async fetch({app: {$accessor}}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply();
-      await $accessor.search.fetch({} as SearchRequest);
+      await $accessor.search.fetch({metadata: {size:50}} as SearchRequest);
     },
-    middleware: 'auth'
+    middleware: ['auth', 'gestion-store']
   })
   export default class extends Vue {
     currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;

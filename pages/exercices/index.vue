@@ -24,6 +24,7 @@
   import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
   import {Component, Ref, Vue} from "vue-property-decorator";
   import {BusEvent} from '~/components/Event/BusEvent'
+  import {SearchRequest} from "~/types";
 
   const debounce = require('lodash.debounce');
 
@@ -41,9 +42,10 @@
     async fetch({app: {$accessor}}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply();
-      await $accessor.search.fetch({});
+      await $accessor.search.fetch({metadata: {size:20}} as SearchRequest);
     },
-    auth:false
+    auth:false,
+    middleware: 'exercises-store'
   })
   export default class extends Vue {
     currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;

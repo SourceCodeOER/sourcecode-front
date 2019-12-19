@@ -75,7 +75,9 @@
       }
 
 
-    }
+    },
+    middleware: ['exercises-store']
+
   })
   export default class extends Vue {
     exercise!: Exercise;
