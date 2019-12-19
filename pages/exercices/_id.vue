@@ -1,8 +1,8 @@
 <template>
   <div class="container--with-menu" id="Exercise">
-    <div class="banner">
+    <div class="banner banner--with-shadow-bottom banner--nav">
       <span>
-        {{exercise.title}}
+        Exercices > {{exercise.title}}
       </span>
       <nuxt-link to="/exercices" tag="span">
         <ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/>
@@ -110,35 +110,6 @@
   @import "../../assets/css/_font";
 
   #Exercise {
-
-    .banner {
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-
-
-      span:first-child {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
-
-      span:last-child {
-        color: $SECONDARY_COLOR;
-        display: block;
-        position: relative;
-        cursor: pointer;
-      }
-
-      .reversed-arrow {
-        @include transformHelper(rotate(180deg));
-        @include transformOriginHelper(center center);
-        height: 15px;
-        width: 8px;
-        margin-bottom: -1px;
-        margin-right: 2px;
-      }
-    }
 
     .panel {
 
