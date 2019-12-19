@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 export default {
   mode: 'universal',
   /*
@@ -30,8 +32,8 @@ export default {
     proxy: true
   },
   proxy: {
-    '/api/': { target: 'http://127.0.0.1:3000'},
-    '/auth/': { target: 'http://127.0.0.1:3000'}
+    '/api/': { target: process.env.API_SERVER},
+    '/auth/': { target: process.env.API_SERVER}
   },
   auth: {
     strategies: {
@@ -75,6 +77,7 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
+    '@nuxtjs/dotenv',
     '@nuxtjs/moment'
   ],
   /*

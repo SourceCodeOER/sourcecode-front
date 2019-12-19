@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.3.4",
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/moment": "^1.4.0",
     "@types/nuxtjs__auth": "^4.8.3",
     "cypress": "^3.7.0",
