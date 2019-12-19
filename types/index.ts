@@ -52,7 +52,9 @@ export type Exercise = {
   updatedAt: string,
   metrics: Metric,
   tags: TagExercise[],
-  url?: string|null
+  url?: string|null,
+  isValidated:boolean,
+  file:string
 }
 
 export type MetadataResponse = {
