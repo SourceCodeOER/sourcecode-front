@@ -61,7 +61,8 @@
       ValidationProvider,
       ValidationObserver,
       NotificationError
-    }
+    },
+    auth:'guest'
   })
   export default class extends Vue {
     form: { password: string; fullName: string; email: string } = {
