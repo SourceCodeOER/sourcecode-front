@@ -59,6 +59,7 @@
               <TrashSymbol class="table-icon" theme="theme--primary-color-light"/>
             </td>
           </tr>
+          <tr id="Anchor"/>
           </tbody>
         </table>
       </section>
@@ -67,7 +68,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
+  import {Component, Mixins, Ref} from 'vue-property-decorator'
   import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
   import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
   import TrashSymbol from "~/components/Symbols/TrashSymbol.vue";
@@ -76,15 +77,13 @@
   import {SearchRequest} from "~/types";
   import FilterPanel from "~/components/Panel/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/HistoricalPanel.vue";
-  import {Ref} from "~/node_modules/vue-property-decorator";
-  import {BusEvent} from "~/components/Event/BusEvent";
+  import FavoritePanel from "~/components/Panel/FavoritePanel.vue";
+  import FilterPanelMixins from '~/components/Mixins/FilterPanelMixins.vue'
+  import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
 
   const debounce = require('lodash.debounce');
 
-
-  const FILTER_PANEL = 0;
-  const HISTORICAL_PANEL = 1;
-  const FAVORITE_PANEL = 2;
+  const ratio = .2;
 
   @Component({
     components: {
@@ -93,52 +92,62 @@
       HistoricalPanel,
       SearchSymbol,
       TrashSymbol,
+      FavoritePanel,
       CloseSymbol,
       CheckSymbol
     },
     async fetch({app: {$accessor}}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply();
-      await $accessor.search.fetch({metadata: {size:50}} as SearchRequest);
+      await $accessor.search.fetch({metadata: {size: 50}} as SearchRequest);
+      await $accessor.favorites.fetch()
     },
+    auth: true,
     middleware: ['auth', 'gestion-store']
   })
-  export default class extends Vue {
-    currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;
-
+  export default class extends Mixins(FilterPanelMixins, IntersectMixins) {
     @Ref() inputText!: HTMLInputElement;
 
-    debounceInput = debounce((e: any) => {
+    intersectionObserverOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '0px',
+      threshold: ratio
+    };
 
+    get exercises() {
+      return this.$accessor.search.exercises
+    }
+
+    debounceInput = debounce((e: any) => {
       const value = e.target.value;
       this.$accessor.search.fetch({data: {title: value}});
       this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: value})
     }, 300);
 
-    private changePanel(id: 0 | 1 | 2) {
-      this.currentAsidePanel = id
-    }
-
     resetInput() {
       this.inputText.value = ''
     }
 
-    beforeDestroy() {
-      BusEvent.$off('changePanel', this.changePanel)
+    handleIntersect(entries: IntersectionObserverEntry[]) {
+      entries.forEach((entry: IntersectionObserverEntry) => {
+        if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
+          this.$accessor.search.next()
+        }
+      });
+    }
+
+    beforeMount() {
+      const target = document.querySelector('#Anchor');
+      if (target !== null) {
+        this.targets.push(target);
+      }
     }
 
     mounted() {
       const title = this.$accessor.search.search_criterion.title;
-      this.inputText.value = !!title ? title : ''
+      this.inputText.value = !!title ? title : '';
     }
 
-    created() {
-      BusEvent.$on('changePanel', this.changePanel)
-    }
-
-    get exercises() {
-      return this.$accessor.search.exercises
-    }
 
   }
 </script>

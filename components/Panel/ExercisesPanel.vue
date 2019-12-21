@@ -33,98 +33,82 @@
 </template>
 
 <script lang="ts">
-    import {Vue, Component, Watch, Ref} from "vue-property-decorator";
-    import Tag from "~/components/Tag/Tag.vue";
-    import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
-    import {Exercise} from "~/types";
+  import {Component, Watch, Ref, Mixins} from "vue-property-decorator";
+  import Tag from "~/components/Tag/Tag.vue";
+  import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
+  import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
 
+  const ratio = .2;
 
-    @Component({
-        components: {
-            Tag,
-            PreviewExercise
-        }
-    })
-    export default class ExercisesPanel extends Vue {
-        private observer: IntersectionObserver | undefined = undefined;
-
-        @Ref() headerExercise!: HTMLElement;
-        @Ref() bodyExercise!: HTMLElement;
-
-        get numberOfFilter() {
-            return this.$accessor.tags.selectedTags.length
-        }
-
-        get confirmedTags() {
-            return this.$accessor.tags.selectedTags
-        }
-
-        get searchModel() {
-            return this.$accessor.search.search_criterion.title
-        }
-
-        get isEmptySearchModel() {
-            return this.$accessor.search.search_criterion.title === ""
-        }
-
-        get nbOfResults() {
-            return this.$accessor.search.metadata.totalItems
-        }
-
-        get exercises() {
-            return this.$accessor.search.exercises
-        }
-
-        @Watch('numberOfFilter')
-        onNumberOfFilterChange() {
-            this.$nextTick(() => {
-
-                const headerHeight: number = this.headerExercise.offsetHeight;
-                const parent: HTMLElement | null = this.bodyExercise.parentElement;
-
-                if (!!parent) {
-                    this.bodyExercise.style.height = (parent.offsetHeight - headerHeight) + 'px';
-                }
-            })
-        }
-
-        beforeDestroy() {
-            if (process.client) {
-                if (!!this.observer) this.observer.disconnect()
-            }
-        }
-
-        mounted() {
-            if (process.client) {
-
-                const ratio = .2;
-
-                const options = {
-                    root: null,
-                    rootMargin: '0px',
-                    threshold: ratio
-                };
-
-                const that = this;
-
-                const handleIntersect = function (entries: any) {
-                    entries.forEach((entry: any) => {
-                        if (entry.intersectionRatio > ratio && that.$accessor.search.isRemainingPages) {
-                            that.$accessor.search.next()
-                        }
-                    });
-                };
-
-                this.observer = new IntersectionObserver(handleIntersect, options);
-                const target = document.querySelector('#Anchor');
-
-                if (target !== null) {
-                    this.observer.observe(target);
-                }
-
-            }
-        }
+  @Component({
+    components: {
+      Tag,
+      PreviewExercise
     }
+  })
+  export default class ExercisesPanel extends Mixins(IntersectMixins) {
+    @Ref() headerExercise!: HTMLElement;
+    @Ref() bodyExercise!: HTMLElement;
+
+    intersectionObserverOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '0px',
+      threshold: ratio
+    };
+
+
+    get numberOfFilter() {
+      return this.$accessor.tags.selectedTags.length
+    }
+
+    get confirmedTags() {
+      return this.$accessor.tags.selectedTags
+    }
+
+    get searchModel() {
+      return this.$accessor.search.search_criterion.title
+    }
+
+    get isEmptySearchModel() {
+      return this.$accessor.search.search_criterion.title === ""
+    }
+
+    get nbOfResults() {
+      return this.$accessor.search.metadata.totalItems
+    }
+
+    get exercises() {
+      return this.$accessor.search.exercises
+    }
+
+    @Watch('numberOfFilter')
+    onNumberOfFilterChange() {
+      this.$nextTick(() => {
+
+        const headerHeight: number = this.headerExercise.offsetHeight;
+        const parent: HTMLElement | null = this.bodyExercise.parentElement;
+
+        if (!!parent) {
+          this.bodyExercise.style.height = (parent.offsetHeight - headerHeight) + 'px';
+        }
+      })
+    }
+
+    handleIntersect(entries: IntersectionObserverEntry[]) {
+      entries.forEach((entry: IntersectionObserverEntry) => {
+        if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
+          this.$accessor.search.next()
+        }
+      });
+    }
+
+    beforeMount() {
+      const target = document.querySelector('#Anchor');
+      if (target !== null) {
+        this.targets.push(target);
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

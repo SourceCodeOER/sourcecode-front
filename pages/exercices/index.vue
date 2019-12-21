@@ -3,7 +3,8 @@
     <div class="banner search-banner">
       <div class="input-wrapper--with-icon">
         <SearchSymbol/>
-        <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput" placeholder="Rechercher">
+        <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput"
+               placeholder="Rechercher">
       </div>
     </div>
 
@@ -11,6 +12,7 @@
       <transition name="fade" mode="out-in" duration="400">
         <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
+        <FavoritePanel v-else-if="currentAsidePanel === 2"/>
       </transition>
       <ExercisesPanel/>
     </div>
@@ -19,65 +21,52 @@
 
 <script lang="ts">
   import FilterPanel from "~/components/Panel/FilterPanel.vue";
-  import HistoricalPanel from '~/components/Panel/HistoricalPanel.vue'
+  import HistoricalPanel from '~/components/Panel/HistoricalPanel.vue';
+  import FavoritePanel from '~/components/Panel/FavoritePanel.vue';
   import ExercisesPanel from "~/components/Panel/ExercisesPanel.vue";
   import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
-  import {Component, Ref, Vue} from "vue-property-decorator";
-  import {BusEvent} from '~/components/Event/BusEvent'
+  import {Component, Ref, Mixins} from "vue-property-decorator";
   import {SearchRequest} from "~/types";
+  import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
 
   const debounce = require('lodash.debounce');
-
-  const FILTER_PANEL = 0;
-  const HISTORICAL_PANEL = 1;
-  const FAVORITE_PANEL = 2;
 
   @Component({
     components: {
       FilterPanel,
       ExercisesPanel,
+      FavoritePanel,
       SearchSymbol,
       HistoricalPanel
     },
-    async fetch({app: {$accessor}}) {
+    async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply();
-      await $accessor.search.fetch({metadata: {size:20}} as SearchRequest);
+      await $accessor.search.fetch({metadata: {size: 20}} as SearchRequest);
+
+      if($auth.loggedIn) {
+        await $accessor.favorites.fetch()
+      }
     },
-    auth:false,
+    auth: false,
     middleware: 'exercises-store'
   })
-  export default class extends Vue {
-    currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;
-
+  export default class extends Mixins(FilterPanelMixins) {
     @Ref() inputText!: HTMLInputElement;
 
-    private changePanel(id: 0 | 1 | 2) {
-      this.currentAsidePanel = id
-    }
-
     debounceInput = debounce((e: any) => {
-
       const value = e.target.value;
       this.$accessor.search.fetch({data: {title: value}});
-      this.$accessor.historical.addHistorical({tags:this.$accessor.tags.selectedTags, title: value})
+      this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: value})
     }, 300);
 
     resetInput() {
       this.inputText.value = ''
     }
 
-    beforeDestroy() {
-      BusEvent.$off('changePanel', this.changePanel)
-    }
-
     mounted() {
       const title = this.$accessor.search.search_criterion.title;
       this.inputText.value = !!title ? title : ''
-    }
-
-    created() {
-      BusEvent.$on('changePanel', this.changePanel)
     }
   }
 </script>
