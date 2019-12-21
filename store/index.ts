@@ -5,6 +5,7 @@ import * as tags from '~/store/tags'
 import * as historical from '~/store/historical'
 import * as search from '~/store/search'
 import * as user from '~/store/user'
+import * as favorites from '~/store/favorites'
 
 
 // This compiles to nothing and only serves to return the correct type of the accessor
@@ -14,6 +15,7 @@ export const accessorType = getAccessorType({
     tags,
     historical,
     search,
-    user
+    user,
+    favorites
   },
 })
