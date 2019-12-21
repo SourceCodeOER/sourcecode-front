@@ -46,9 +46,9 @@ export default {
       }
     },
     redirect: {
-      home: false,
+      home: '/',
       callback:false,
-      logout:false
+      logout:'/'
     }
   },
   moment: {
