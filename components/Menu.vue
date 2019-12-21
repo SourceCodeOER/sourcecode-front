@@ -59,12 +59,12 @@
               Historique
             </li>
 
-            <nuxt-link class="cta-link cta-link-with-arrow" v-if="isAuthenticated" tag="li" to="/">
+            <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
                 <StarSymbol theme="theme--white"/>
               </div>
               Favoris
-            </nuxt-link>
+            </li>
 
           </ul>
         </template>
