@@ -109,3 +109,14 @@ export interface UserInfo {
   token:string,
   user: User
 }
+
+
+/**
+ * Favorites
+ */
+export interface Configuration {
+  name:string,
+  title?:string,
+  tags: number[],
+  id:number
+}
