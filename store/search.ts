@@ -109,13 +109,11 @@ export const actions = actionTree({state, mutations, getters}, {
     const metadata: MetadataRequest = {};
 
     if (searchRequest.metadata) {
-      if (!!searchRequest.metadata.size) {
-        metadata.size = searchRequest.metadata.size
-
-      }
-      if (!!searchRequest.metadata.page) {
-        metadata.page = searchRequest.metadata.page
-      }
+        metadata.size = !!searchRequest.metadata.size ? searchRequest.metadata.size : state.metadata.pageSize;
+        metadata.page = !!searchRequest.metadata.page ? searchRequest.metadata.page : 1;
+    } else {
+      metadata.page = 1;
+      metadata.size = state.metadata.pageSize
     }
 
     const newSearchRequest: SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}, metadata};
