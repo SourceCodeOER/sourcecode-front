@@ -22,6 +22,20 @@ button {
 
   margin-top: 10px;
 
+  &.button--with-symbol {
+
+    padding-right: 40px;
+    position: relative;
+
+    svg, img {
+      position: absolute;
+      top:50%;
+      width: 25px;
+      right: 10px;
+      @include transformHelper(translateY(-50%));
+    }
+  }
+
   @include transitionHelper(border-color $animationTransition ease, color $animationTransition ease, background-color $animationTransition ease);
 
   &:focus {
