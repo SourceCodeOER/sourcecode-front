@@ -7,9 +7,11 @@
 
     intersectionObserverOptions: IntersectionObserverInit = {};
 
-    targets: Element[] = [];
-
     handleIntersect(entries: IntersectionObserverEntry[]) {
+    }
+
+    targets(): Element[] {
+      return []
     }
 
     beforeDestroy() {
@@ -21,7 +23,7 @@
     mounted() {
       if (process.client) {
         this.observer = new IntersectionObserver(this.handleIntersect, this.intersectionObserverOptions);
-        this.targets.forEach((element) => {
+        this.targets().forEach((element) => {
           // Dumb verification because of typescript...
           if (this.observer) {
             this.observer.observe(element)
