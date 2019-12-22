@@ -27,7 +27,7 @@
       <PreviewExercise v-for="(exercise, id) in exercises"
                        :key="exercise.title + '_' + id + '_' + exercise.id"
                        :exercise="exercise"/>
-      <div id="Anchor"></div>
+      <div ref="anchor" id="Anchor"></div>
     </div>
   </section>
 </template>
@@ -49,6 +49,7 @@
   export default class ExercisesPanel extends Mixins(IntersectMixins) {
     @Ref() headerExercise!: HTMLElement;
     @Ref() bodyExercise!: HTMLElement;
+    @Ref() anchor!: Element;
 
     intersectionObserverOptions: IntersectionObserverInit = {
       root: null,
@@ -102,11 +103,8 @@
       });
     }
 
-    beforeMount() {
-      const target = document.querySelector('#Anchor');
-      if (target !== null) {
-        this.targets.push(target);
-      }
+    targets(): Element[] {
+      return [this.anchor]
     }
   }
 </script>
