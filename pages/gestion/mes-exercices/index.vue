@@ -20,12 +20,16 @@
 
         <h1>Mes exercices</h1>
 
-        <div class="search-bar">
+        <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
             <SearchSymbol/>
             <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput"
                    placeholder="Rechercher">
           </div>
+
+          <nuxt-link to="/gestion/mes-exercices/creer-exercice">
+            <button class="button--ternary-color-reverse button--with-symbol">Créer un exercice <PlusSymbol theme="theme--white"/></button>
+          </nuxt-link>
         </div>
 
         <table class="table--with-sticky-header">
@@ -59,7 +63,7 @@
               <TrashSymbol class="table-icon" theme="theme--primary-color-light"/>
             </td>
           </tr>
-          <tr id="Anchor"/>
+          <tr ref="anchor" id="Anchor"/>
           </tbody>
         </table>
       </section>
@@ -74,6 +78,7 @@
   import TrashSymbol from "~/components/Symbols/TrashSymbol.vue";
   import CloseSymbol from "~/components/Symbols/CloseSymbol.vue";
   import CheckSymbol from "~/components/Symbols/CheckSymbol.vue";
+  import PlusSymbol from "~/components/Symbols/PlusSymbol.vue";
   import {SearchRequest} from "~/types";
   import FilterPanel from "~/components/Panel/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/HistoricalPanel.vue";
@@ -94,7 +99,8 @@
       TrashSymbol,
       FavoritePanel,
       CloseSymbol,
-      CheckSymbol
+      CheckSymbol,
+      PlusSymbol
     },
     async fetch({app: {$accessor}}) {
       await $accessor.tags.fetch();
@@ -107,6 +113,7 @@
   })
   export default class extends Mixins(FilterPanelMixins, IntersectMixins) {
     @Ref() inputText!: HTMLInputElement;
+    @Ref() anchor!: Element;
 
     intersectionObserverOptions: IntersectionObserverInit = {
       root: null,
@@ -136,12 +143,10 @@
       });
     }
 
-    beforeMount() {
-      const target = document.querySelector('#Anchor');
-      if (target !== null) {
-        this.targets.push(target);
-      }
+    targets(): Element[] {
+      return [this.anchor]
     }
+
 
     mounted() {
       const title = this.$accessor.search.search_criterion.title;
@@ -154,10 +159,10 @@
 
 <style lang="scss" scoped>
 
-  @import "./../../assets/css/_variables";
-  @import "./../../assets/css/_function";
-  @import "./../../assets/css/_font";
-  @import "./../../assets/css/_table";
+  @import "../../../assets/css/variables";
+  @import "../../../assets/css/function";
+  @import "../../../assets/css/font";
+  @import "../../../assets/css/table";
 
 
   #MyExercises {
@@ -169,15 +174,26 @@
       margin-bottom: 30px;
       padding: 20px;
 
-      .search-bar {
+      .header-wrapper {
         position: sticky;
         padding: 48px 0 10px 0;
         top: 72px;
         width: 100%;
         background-color: white;
+        display: flex;
+        justify-content: space-between;
+
+        button {
+          margin: 0;
+        }
       }
 
       .input-wrapper--with-icon {
+        position: relative;
+        height: 40px;
+        width: 100%;
+        max-width: 400px;
+
         input {
           max-width: 400px;
           width: 100%;
