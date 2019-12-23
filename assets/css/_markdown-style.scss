@@ -76,4 +76,26 @@
   a {
     color: $NIGHT_BLUE
   }
+
+  blockquote {
+    font-style: italic;
+    position: relative;
+    margin-left: 20px;
+    margin-top: 30px;
+    font-family: $CircularStd;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      width: 5px;
+      background-color: $TERNARY_COLOR;
+      height: 100%;
+    }
+  }
+
+  hr {
+    border-color: lighten($TERNARY_COLOR, 20) !important;
+    border-style: solid;
+  }
 }
