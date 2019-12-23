@@ -77,23 +77,6 @@
         max-width: 900px;
       }
 
-      blockquote {
-        font-style: italic;
-        position: relative;
-        margin-left: 20px;
-        margin-top: 30px;
-        font-family: $CircularStd;
-
-        &:before {
-          content: "";
-          position: absolute;
-          left: -20px;
-          width: 5px;
-          background-color: $TERNARY_COLOR;
-          height: 100%;
-        }
-      }
-
       h2 {
         margin-top: 40px;
       }
