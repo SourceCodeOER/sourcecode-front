@@ -54,6 +54,24 @@ button {
     color: $TERNARY_COLOR;
   }
 
+  &.button--primary-color {
+    border: 1px solid $PRIMARY_COLOR;
+    background-color: transparent;
+    color: $PRIMARY_COLOR;
+  }
+
+  &.button--primary-color-light {
+    border: 1px solid $PRIMARY_COLOR_LIGHT;
+    background-color: transparent;
+    color: $PRIMARY_COLOR_LIGHT;
+  }
+
+  &.button--secondary-color {
+    border: 1px solid $SECONDARY_COLOR;
+    background-color: transparent;
+    color: $SECONDARY_COLOR;
+  }
+
   &.button--light-blue-reverse {
     border: 1px solid $TERNARY_COLOR;
     background-color: $TERNARY_COLOR;
