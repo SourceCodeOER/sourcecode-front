@@ -15,7 +15,7 @@
       <div class="tags-wrapper" v-if="confirmedTags.length > 0">
         <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text"
              :key="tag.tag_text + '_' + tag.category + '_'+ id"
-             :category="tag.category" :id="tag.tag_id"></Tag>
+             :category="tag.category" :id="tag.tag_id"/>
       </div>
     </header>
 
