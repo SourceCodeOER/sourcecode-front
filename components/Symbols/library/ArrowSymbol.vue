@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-    import Symbol from "./Symbol.vue";
+    import Symbol from "../Symbol.vue";
     import {Component, Mixins} from 'vue-property-decorator'
 
     @Component
