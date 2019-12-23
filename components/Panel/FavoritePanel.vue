@@ -1,7 +1,7 @@
 <template>
   <div id="FavoritePanel" class="panel">
 
-    <h3>Favoris <span @click="close" class="secondary-color"><ArrowSymbol class="reversed-arrow"
+    <h3>Favoris <span @click="close" class="secondary-color"><Icon type="arrow" class="reversed-arrow"
                                                                           theme="theme--secondary-color"/> Retour</span>
     </h3>
 
@@ -17,12 +17,12 @@
 <script lang="ts">
   import {BusEvent} from '~/components/Event/BusEvent'
   import {Component, Vue} from "vue-property-decorator";
-  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
   import {Configuration, SelectedTag} from "~/types";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
     components: {
-      ArrowSymbol
+      Icon
     }
   })
   export default class FavoritePanel extends Vue {

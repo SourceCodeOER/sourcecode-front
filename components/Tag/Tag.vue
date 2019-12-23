@@ -1,19 +1,18 @@
 <template>
   <div class="tag" :class="{'tag--confirmed' : state === 1, 'tag--deactivated': state === 0}">
     {{title}}
-    <CrossSymbol @click.native.stop="deleteTag" :theme="theme"/>
+    <Icon type="arrow" @click.native.stop="deleteTag" :theme="theme"/>
   </div>
 </template>
 
 <script lang="ts">
-    import CrossSymbol from "~/components/Symbols/CrossSymbol.vue";
-
     import {Vue, Component, Prop} from 'vue-property-decorator'
     import {ACTIVE, DEACTIVATED} from "~/types";
+    import Icon from "~/components/Symbols/Icon.vue";
 
     @Component({
         components: {
-            CrossSymbol
+          Icon
         }
     })
     export default class Tag extends Vue {

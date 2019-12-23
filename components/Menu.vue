@@ -26,20 +26,20 @@
         <ul>
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
-              <img src="@/assets/logo/menu.svg" alt="Accueil">
+              <Icon type="menuBasic" theme="theme--white"/>
             </div>
             Accueil
           </nuxt-link>
 
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/exercices">
             <div class="logo-link-wrapper">
-              <img src="@/assets/logo/exercises.svg" alt="Exercices">
+              <Icon type="exercises" theme="theme--white"/>
             </div>
             Exercices
           </nuxt-link>
         </ul>
 
-        <template v-if="isExercisePage">
+        <template v-if="displayFilterPanel">
 
           <span>Panneaux</span>
 
@@ -47,23 +47,53 @@
 
             <li @click="changePanel(0)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
-                <FilterSymbol theme="theme--white"/>
+                <Icon type="filterBasic" theme="theme--white"/>
               </div>
               Filtres
             </li>
 
             <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
-                <img src="@/assets/logo/history.svg" alt="Historique">
+                <Icon type="history" theme="theme--white"/>
               </div>
               Historique
             </li>
 
             <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
-                <StarSymbol theme="theme--white"/>
+                <Icon type="star" theme="theme--white"/>
               </div>
               Favoris
+            </li>
+
+          </ul>
+        </template>
+
+        <template v-if="displayCreationPanel">
+
+          <span>Panneaux</span>
+
+          <ul>
+
+            <li @click="changePanel(0)" class="cta-link cta-link-with-arrow">
+              <div class="logo-link-wrapper">
+                <Icon type="album" theme="theme--white"/>
+              </div>
+              Similarités
+            </li>
+
+            <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
+              <div class="logo-link-wrapper">
+                <Icon type="tags" theme="theme--white"/>
+              </div>
+              Tags
+            </li>
+
+            <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
+              <div class="logo-link-wrapper">
+                <Icon type="eye" theme="theme--white"/>
+              </div>
+              Preview
             </li>
 
           </ul>
@@ -75,13 +105,13 @@
           <ul>
             <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/mes-exercices">
               <div class="logo-link-wrapper">
-                <DocumentSymbol theme="theme--white"/>
+                <Icon type="document" theme="theme--white"/>
               </div>
               Mes exercices
             </nuxt-link>
             <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/profil">
               <div class="logo-link-wrapper">
-                <img src="@/assets/logo/profile.svg" alt="Profile">
+                <Icon type="user" theme="theme--white"/>
               </div>
               Mon profil
             </nuxt-link>
@@ -92,7 +122,7 @@
 
       <div v-if="isAuthenticated" class="cta-link bottom" @click="logout">
         <div class="logo-link-wrapper">
-          <img src="@/assets/logo/disconnect.svg" alt="Déconnexion">
+          <Icon theme="theme--white" type="off"/>
         </div>
         Déconnexion
       </div>
@@ -110,10 +140,7 @@
 
 <script lang="ts">
   import {Vue, Component} from "vue-property-decorator";
-  import ArrowSymbol from '~/components/Symbols/ArrowSymbol.vue'
-  import DocumentSymbol from '~/components/Symbols/DocumentSymbol.vue'
-  import StarSymbol from '~/components/Symbols/StarSymbol.vue'
-  import FilterSymbol from '~/components/Symbols/FilterSymbol.vue'
+  import Icon from "~/components/Symbols/Icon.vue";
   import {BusEvent} from '~/components/Event/BusEvent'
 
   type FILTER_PANEL = 0;
@@ -122,10 +149,7 @@
 
   @Component({
     components: {
-      ArrowSymbol,
-      StarSymbol,
-      FilterSymbol,
-      DocumentSymbol
+      Icon
     }
   })
   export default class Menu extends Vue {
@@ -133,9 +157,17 @@
       BusEvent.$emit('changePanel', id)
     }
 
-    get isExercisePage() {
+    get displayFilterPanel() {
       if (this.$route.name !== undefined) {
         return this.$route.name === "exercices" || this.$route.name === "gestion-mes-exercices"
+      }
+
+      return false;
+    }
+
+    get displayCreationPanel() {
+      if (this.$route.name !== undefined) {
+        return this.$route.name === "gestion-mes-exercices-creer-exercice"
       }
 
       return false;

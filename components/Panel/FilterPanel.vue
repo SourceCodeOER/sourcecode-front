@@ -4,12 +4,12 @@
     <h3>
       Filtres<br>
       <span v-if="$auth.loggedIn" class="secondary-color">Ajouter aux favoris
-      <StarHalfSymbol theme="theme--secondary-color"/>
+      <Icon type="starHalf" theme="theme--secondary-color"/>
       </span>
     </h3>
 
     <div class="cta-wrapper">
-      <ReturnSymbol @click.native="reset" class="return" theme="theme--secondary-color"/>
+      <Icon type="return" @click.native="reset" class="return" theme="theme--secondary-color"/>
     </div>
     <div class="panel-wrapper">
       <ul class="selectable-tags">
@@ -24,20 +24,16 @@
 </template>
 
 <script lang="ts">
-  import FilterSymbol from "~/components/Symbols/FilterSymbol.vue";
-  import ReturnSymbol from "~/components/Symbols/ReturnSymbol.vue";
-  import StarHalfSymbol from "~/components/Symbols/StarHalfSymbol.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import TagSelecter from "~/components/Search/TagSelecter.vue";
   import {Component, Vue, Emit} from 'vue-property-decorator';
+  import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
     components: {
-      FilterSymbol,
       Tag,
       TagSelecter,
-      ReturnSymbol,
-      StarHalfSymbol
+      Icon
     }
   })
   export default class FilterPanel extends Vue {

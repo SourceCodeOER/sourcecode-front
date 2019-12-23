@@ -5,7 +5,7 @@
         Gestion > Mes exercices
       </span>
       <nuxt-link to="/exercices" tag="span">
-        <ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/>
+        <Icon type="arrow" class="reversed-arrow" theme="theme--secondary-color"/>
         Retour
       </nuxt-link>
     </div>
@@ -22,13 +22,13 @@
 
         <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
-            <SearchSymbol/>
+            <Icon type="search"/>
             <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput"
                    placeholder="Rechercher">
           </div>
 
           <nuxt-link to="/gestion/mes-exercices/creer-exercice">
-            <button class="button--ternary-color-reverse button--with-symbol">Créer un exercice <PlusSymbol theme="theme--white"/></button>
+            <button class="button--ternary-color-reverse button--with-symbol">Créer un exercice <Icon type="plus" theme="theme--white"/></button>
           </nuxt-link>
         </div>
 
@@ -52,15 +52,15 @@
             <td>{{!!exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</td>
             <td>{{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</td>
             <td class="item-centered">
-              <CheckSymbol class="table-icon" theme="theme--green" v-if="!!exercise.file"/>
-              <CloseSymbol class="table-icon" theme="theme--red-light" v-else/>
+              <Icon type="check" class="table-icon" theme="theme--green" v-if="!!exercise.file"/>
+              <Icon type="close" class="table-icon" theme="theme--red-light" v-else/>
             </td>
             <td class="item-centered">
-              <CheckSymbol class="table-icon" theme="theme--green" v-if="exercise.isValidated"/>
-              <CloseSymbol class="table-icon" theme="theme--red-light" v-else/>
+              <Icon type="check" class="table-icon" theme="theme--green" v-if="exercise.isValidated"/>
+              <Icon type="close" class="table-icon" theme="theme--red-light" v-else/>
             </td>
             <td class="item-centered">
-              <TrashSymbol class="table-icon" theme="theme--primary-color-light"/>
+              <Icon type="trash" class="table-icon" theme="theme--primary-color-light"/>
             </td>
           </tr>
           <tr ref="anchor" id="Anchor"/>
@@ -73,18 +73,13 @@
 
 <script lang="ts">
   import {Component, Mixins, Ref} from 'vue-property-decorator'
-  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
-  import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
-  import TrashSymbol from "~/components/Symbols/TrashSymbol.vue";
-  import CloseSymbol from "~/components/Symbols/CloseSymbol.vue";
-  import CheckSymbol from "~/components/Symbols/CheckSymbol.vue";
-  import PlusSymbol from "~/components/Symbols/PlusSymbol.vue";
   import {SearchRequest} from "~/types";
   import FilterPanel from "~/components/Panel/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/HistoricalPanel.vue";
   import FavoritePanel from "~/components/Panel/FavoritePanel.vue";
   import FilterPanelMixins from '~/components/Mixins/FilterPanelMixins.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   const debounce = require('lodash.debounce');
 
@@ -92,15 +87,10 @@
 
   @Component({
     components: {
-      ArrowSymbol,
       FilterPanel,
       HistoricalPanel,
-      SearchSymbol,
-      TrashSymbol,
       FavoritePanel,
-      CloseSymbol,
-      CheckSymbol,
-      PlusSymbol
+      Icon
     },
     async fetch({app: {$accessor}}) {
       await $accessor.tags.fetch();

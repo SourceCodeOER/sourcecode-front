@@ -5,7 +5,7 @@
         Gestion > Mon profil
       </span>
       <nuxt-link to="/exercices" tag="span">
-        <ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/>
+        <Icon type="arrow" class="reversed-arrow" theme="theme--secondary-color"/>
         Retour
       </nuxt-link>
     </div>
@@ -14,11 +14,11 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator'
-  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
     components: {
-      ArrowSymbol
+      Icon
     }
   })
   export default class extends Vue {

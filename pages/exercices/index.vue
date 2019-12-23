@@ -2,7 +2,7 @@
   <div class="container--with-menu">
     <div class="banner search-banner">
       <div class="input-wrapper--with-icon">
-        <SearchSymbol/>
+        <Icon type="search"/>
         <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput"
                placeholder="Rechercher">
       </div>
@@ -24,10 +24,10 @@
   import HistoricalPanel from '~/components/Panel/HistoricalPanel.vue';
   import FavoritePanel from '~/components/Panel/FavoritePanel.vue';
   import ExercisesPanel from "~/components/Panel/ExercisesPanel.vue";
-  import SearchSymbol from "~/components/Symbols/SearchSymbol.vue";
   import {Component, Ref, Mixins} from "vue-property-decorator";
   import {SearchRequest} from "~/types";
   import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   const debounce = require('lodash.debounce');
 
@@ -36,8 +36,8 @@
       FilterPanel,
       ExercisesPanel,
       FavoritePanel,
-      SearchSymbol,
-      HistoricalPanel
+      HistoricalPanel,
+      Icon
     },
     async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();

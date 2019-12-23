@@ -5,7 +5,7 @@
         Exercices > {{exercise.title}}
       </span>
       <nuxt-link to="/exercices" tag="span">
-        <ArrowSymbol class="reversed-arrow" theme="theme--secondary-color"/>
+        <Icon type="arrow" class="reversed-arrow" theme="theme--secondary-color"/>
         Retour à la recherche
       </nuxt-link>
     </div>
@@ -57,12 +57,12 @@
 
 <script lang="ts">
   import {Component, Vue} from "vue-property-decorator";
-  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
   import {Exercise, TagExercise} from "~/types";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
     components: {
-      ArrowSymbol
+      Icon
     },
     async asyncData({params, error, app: {$axios}}) {
       const id = params.id;

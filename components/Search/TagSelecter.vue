@@ -1,7 +1,7 @@
 <template>
   <li class="tag-selecter">
     <span @click="toggleList">
-      <ArrowSymbol class="arrow" :class="{'arrow-rotate': active}"/>
+      <Icon type="arrow" class="arrow" :class="{'arrow-rotate': active}"/>
       <slot></slot>
     </span>
     <ul :class="{active}">
@@ -16,16 +16,16 @@
 </template>
 
 <script lang="ts">
-  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
   import CheckBox from "~/components/Input/CheckBox.vue";
   import {Vue, Component, Prop} from "vue-property-decorator";
   import {CheckBoxObjectEmitted, SelectedTag, Tag} from "~/types";
   import {Emit} from "~/node_modules/vue-property-decorator";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
     components: {
       CheckBox,
-      ArrowSymbol
+      Icon
     }
   })
   export default class TagSelecter extends Vue {

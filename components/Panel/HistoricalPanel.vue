@@ -1,7 +1,7 @@
 <template>
   <div id="HistoricalPanel" class="panel">
 
-    <h3>Historique <span @click="close" class="secondary-color"><ArrowSymbol class="reversed-arrow"
+    <h3>Historique <span @click="close" class="secondary-color"><Icon type="arrow" class="reversed-arrow"
                                                                              theme="theme--secondary-color"/> Retour</span>
     </h3>
 
@@ -26,12 +26,12 @@
 <script lang="ts">
   import {BusEvent} from '~/components/Event/BusEvent'
   import {Component, Vue} from "vue-property-decorator";
-  import ArrowSymbol from "~/components/Symbols/ArrowSymbol.vue";
   import {SelectedTag} from "~/types";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
     components: {
-      ArrowSymbol
+      Icon
     }
   })
   export default class HistoricalPanel extends Vue {
