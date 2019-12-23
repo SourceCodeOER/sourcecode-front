@@ -97,7 +97,7 @@
 }
 
 @mixin input-theme($name, $color1, $color2) {
-  input[type=text], input[type=password], input[type=email], textarea, select {
+  input, textarea, select {
     &.input--#{$name} {
       border: 1px solid $color1;
       color: $color1;
