@@ -2,13 +2,16 @@
   <div id="FilterPanel" class="panel scroll-bar--grey">
 
     <h3>
-      Filtres<br>
-      <span v-if="$auth.loggedIn" class="secondary-color">Ajouter aux favoris
-      <Icon type="starHalf" theme="theme--secondary-color"/>
-      </span>
+      {{title}}
+      <template v-if="searchMode">
+        <br>
+        <span v-if="$auth.loggedIn" class="secondary-color">Ajouter aux favoris
+        <Icon type="starHalf" theme="theme--secondary-color"/>
+        </span>
+      </template>
     </h3>
 
-    <div class="cta-wrapper">
+    <div class="cta-wrapper" v-if="searchMode">
       <Icon type="return" @click.native="reset" class="return" theme="theme--secondary-color"/>
     </div>
     <div class="panel-wrapper">
@@ -26,7 +29,7 @@
 <script lang="ts">
   import Tag from "~/components/Tag/Tag.vue";
   import TagSelecter from "~/components/Search/TagSelecter.vue";
-  import {Component, Vue, Emit} from 'vue-property-decorator';
+  import {Component, Vue, Emit, Prop} from 'vue-property-decorator';
   import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
@@ -40,6 +43,10 @@
 
     selectedTagSelecter: TagSelecter | undefined = undefined;
 
+    @Prop({type: Boolean, default: false}) searchMode!: boolean;
+    @Prop({type: Boolean, default: false}) historicalMode!: boolean;
+    @Prop({type: String, default: 'Filtres'}) title!: boolean;
+
     get confirmedTags() {
       return this.$accessor.tags.selectedTags
     }
@@ -50,18 +57,26 @@
 
     async apply() {
       await this.$accessor.tags.apply();
-      await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
 
-      this.$accessor.historical.addHistorical({
-        tags: this.confirmedTags,
-        title: this.$accessor.search.search_criterion.title
-      });
+      if (this.searchMode) {
+        await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+      }
+
+      if (this.historicalMode) {
+        this.$accessor.historical.addHistorical({
+          tags: this.confirmedTags,
+          title: this.$accessor.search.search_criterion.title
+        });
+      }
     }
 
     @Emit()
     async reset() {
       this.$accessor.tags.CLEAR();
-      await this.$accessor.search.fetch({data: {tags: [], title: ''}});
+
+      if (this.searchMode) {
+        await this.$accessor.search.fetch({data: {tags: [], title: ''}});
+      }
 
       this.resetFilterPanel()
     }
