@@ -1,11 +1,18 @@
 <template>
   <div>
+    <Notification/>
     <nuxt/>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import {Component, Vue} from "vue-property-decorator";
+  import Notification from '~/components/Notification/Notification.vue'
 
-  export default {
-  }
+  @Component({
+    components: {
+      Notification
+    }
+  })
+  export default class extends Vue {}
 </script>

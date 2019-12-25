@@ -1,16 +1,21 @@
 <template>
   <div>
     <Menu/>
+    <Notification/>
     <nuxt/>
   </div>
 </template>
 
-<script>
-  import Menu from "../components/Menu";
+<script lang="ts">
+  import Menu from "../components/Menu.vue";
+  import {Component, Vue} from "vue-property-decorator";
+  import Notification from '~/components/Notification/Notification.vue'
 
-  export default {
-      components: {
-          Menu
-      }
-  }
+  @Component({
+    components: {
+      Menu,
+      Notification
+    }
+  })
+  export default class extends Vue {}
 </script>
