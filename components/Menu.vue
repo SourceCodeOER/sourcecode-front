@@ -16,7 +16,7 @@
           </nuxt-link>
 
         </div>
-        <span v-else>Alexandre Dewit</span>
+        <span v-else>{{fullName}}</span>
       </div>
 
       <nav class="menu-nav-list">
@@ -143,17 +143,13 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import {BusEvent} from '~/components/Event/BusEvent'
 
-  type FILTER_PANEL = 0;
-  type HISTORICAL_PANEL = 1;
-  type FAVORITE_PANEL = 2;
-
   @Component({
     components: {
       Icon
     }
   })
   export default class Menu extends Vue {
-    changePanel(id: FILTER_PANEL | HISTORICAL_PANEL | FAVORITE_PANEL) {
+    changePanel(id: number) {
       BusEvent.$emit('changePanel', id)
     }
 
@@ -178,11 +174,11 @@
     }
 
     get fullName() {
-      return this.$accessor.user.user.fullName
+      return this.$auth.user.fullName
     }
 
     get role() {
-      return this.$accessor.user.user.role
+      return this.$auth.user.role
     }
 
     async logout() {
