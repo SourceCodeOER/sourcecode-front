@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <NotificationError ref="notificationError" :message="message"/>
-
     <div class="wrapper">
       <picture>
         <img src="@/assets/logo/logo.png" alt="Source Code : Logo">
@@ -51,18 +49,15 @@
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {Component, Ref, Vue} from "vue-property-decorator";
   import {AxiosError} from "~/node_modules/axios";
-  import Notification from "~/components/Notification/Notification";
-  import NotificationError from "~/components/Notification/NotificationError.vue";
-
+  import {BusEvent} from "~/components/Event/BusEvent";
 
   @Component({
     layout: 'authentication',
     components: {
       ValidationProvider,
-      ValidationObserver,
-      NotificationError
+      ValidationObserver
     },
-    auth:'guest'
+    auth: 'guest'
   })
   export default class extends Vue {
     form: { password: string; fullName: string; email: string } = {
@@ -70,10 +65,6 @@
       password: '',
       fullName: ''
     };
-
-    message: string = "Une erreur est survenue :(";
-
-    @Ref() notificationError!: Notification;
 
     @Ref() observer!: InstanceType<typeof ValidationObserver>;
 
@@ -93,14 +84,12 @@
         try {
           await this.$axios.post('auth/register', this.form);
 
-          const {data} = await this.$axios.post('/auth/login', {
-            email: this.form.email,
-            password: this.form.password
+          await this.$auth.loginWith('local', {
+            data: {
+              email: this.form.email,
+              password: this.form.password
+            },
           });
-
-          await this.$auth.setUserToken(data.token);
-
-          this.$accessor.user.SET_USER_INFO(data.user);
 
           this.$router.back()
         } catch (e) {
@@ -110,20 +99,22 @@
           if (error.response) {
             switch (error.response.status) {
               case 409:
-                this.message = "Cette adresse email existe déjà !";
+                BusEvent.$emit('displayNotification', {mode: "error", message: "Cette adresse email existe déjà !"});
                 break;
               case 400:
-                this.message = "Un ou plusieurs champs semblent incorrectes.";
+                BusEvent.$emit('displayNotification', {
+                  mode: "error",
+                  message: "Un ou plusieurs champs semblent incorrectes."
+                });
                 break;
               default:
-                this.message = "Une erreur est survenue depuis notre serveur :(";
+                BusEvent.$emit('displayNotification', {
+                  mode: "error",
+                  message: "Une erreur est survenue depuis notre serveur :("
+                });
                 break;
             }
-            this.notificationError.display();
 
-            setTimeout(() => {
-              this.notificationError.dissim()
-            }, 4000)
           }
         }
       }

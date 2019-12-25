@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <NotificationError ref="notificationError" :message="message"/>
-
     <div class="wrapper">
       <picture>
         <img src="@/assets/logo/logo.png" alt="Source Code : Logo">
@@ -43,28 +41,22 @@
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {Component, Ref, Vue} from "vue-property-decorator";
   import {AxiosError} from "~/node_modules/axios";
-  import NotificationError from "~/components/Notification/NotificationError.vue";
-  import Notification from "~/components/Notification/Notification";
+  import {BusEvent} from "~/components/Event/BusEvent";
 
   @Component({
     layout: 'authentication',
     components: {
       ValidationProvider,
-      ValidationObserver,
-      NotificationError
+      ValidationObserver
     },
     auth: "guest"
   })
   export default class extends Vue {
 
-    @Ref() notificationError!: Notification;
-
     form: { password: string; email: string } = {
       email: '',
       password: ''
     };
-
-    message: string = "Une erreur est survenue :(";
 
     @Ref() observer!: InstanceType<typeof ValidationObserver>;
 
@@ -80,14 +72,12 @@
       const isValid = await this.observer.validate();
       if (isValid) {
         try {
-          const {data} = await this.$axios.post('/auth/login', {
-            email: this.form.email,
-            password: this.form.password
+          await this.$auth.loginWith('local', {
+            data: {
+              email: this.form.email,
+              password: this.form.password
+            },
           });
-
-          await this.$auth.setUserToken(data.token);
-
-          this.$accessor.user.SET_USER_INFO(data.user);
 
           this.$router.back()
 
@@ -97,20 +87,25 @@
           if (error.response) {
             switch (error.response.status) {
               case 401:
-                this.message = "La combinaison adresse email / mot de passe est incorrecte.";
+                BusEvent.$emit('displayNotification', {
+                  mode: "error",
+                  message: "La combinaison adresse email / mot de passe est incorrecte."
+                });
                 break;
               case 400:
-                this.message = "Un ou plusieurs champs semblent incorrectes.";
+                BusEvent.$emit('displayNotification', {
+                  mode: "error",
+                  message: "Un ou plusieurs champs semblent incorrectes."
+                });
                 break;
               default:
-                this.message = "Une erreur est survenue depuis notre serveur :(";
+                BusEvent.$emit('displayNotification', {
+                  mode: "error",
+                  message: "Une erreur est survenue depuis notre serveur :("
+                });
                 break;
             }
-            this.notificationError.display();
 
-            setTimeout(() => {
-              this.notificationError.dissim()
-            }, 4000)
           }
         }
 

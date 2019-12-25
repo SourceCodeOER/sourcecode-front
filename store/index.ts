@@ -4,7 +4,6 @@ import { getAccessorType } from 'nuxt-typed-vuex'
 import * as tags from '~/store/tags'
 import * as historical from '~/store/historical'
 import * as search from '~/store/search'
-import * as user from '~/store/user'
 import * as favorites from '~/store/favorites'
 
 
@@ -15,7 +14,6 @@ export const accessorType = getAccessorType({
     tags,
     historical,
     search,
-    user,
     favorites
   },
 })
