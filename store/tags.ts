@@ -123,32 +123,50 @@ export const actions = actionTree({state, mutations}, {
    * @param commit
    * @param getters
    * @param state
+   * @param mode
    */
-  apply({commit, getters, state}) {
+  apply({commit, getters, state}, mode: "strict" | "default") {
 
-    const map: Map<number, number | number[]> = new Map();
+    if (mode === "strict") {
+      const array: number[][] = state.selectedTags.map(tag => [tag.tag_id]);
+      commit('SET_TAGS_REQUEST', array);
 
-    arrayToMapOfArray(map, state.selectedTags);
+    } else {
+      const map: Map<number, number | number[]> = new Map();
 
-    commit('SET_TAGS_REQUEST', Array.from(map.values()));
+      arrayToMapOfArray(map, state.selectedTags);
+
+      commit('SET_TAGS_REQUEST', Array.from(map.values()));
+    }
+
   },
   /**
    * Enable to apply a filter with a custom confirmedTags array
    * @param commit
+   * @param state
+   * @param payload
    * @param confirmedTags
    */
-  applyConfirmedTags({commit}, confirmedTags: SelectedTag[]) {
+  applyConfirmedTags({commit, state}, payload: {confirmedTags: SelectedTag[], mode: "strict" | "default"}) {
 
     commit('CLEAR');
 
-    confirmedTags.forEach(el => {
+    payload.confirmedTags.forEach(el => {
       commit('ADD_TAG', el)
+
     });
 
-    const map: Map<number, number | number[]> = new Map();
-    arrayToMapOfArray(map, confirmedTags);
+    if (payload.mode === "strict") {
+      const array: number[][] = payload.confirmedTags.map(tag => [tag.tag_id]);
+      commit('SET_TAGS_REQUEST', array);
+    } else {
 
-    commit('SET_TAGS_REQUEST', Array.from(map.values()));
+      const map: Map<number, number | number[]> = new Map();
+      arrayToMapOfArray(map, payload.confirmedTags);
+
+      commit('SET_TAGS_REQUEST', Array.from(map.values()));
+    }
+
 
   },
   /**
@@ -179,14 +197,14 @@ export const actions = actionTree({state, mutations}, {
 
       const selectedTags: SelectedTag[] = state.selectedTags;
 
-      selectedTags.forEach((tag:SelectedTag) => {
+      selectedTags.forEach((tag: SelectedTag) => {
 
         const tagsCategory: ExtendedTag | undefined = array.find(el => el.id === tag.category);
 
-        if(tagsCategory !== undefined) {
+        if (tagsCategory !== undefined) {
           const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el) => el.tag_id === tag.tag_id);
 
-          if(selectedTag !== undefined) {
+          if (selectedTag !== undefined) {
             selectedTag.state = ACTIVE
           }
         }

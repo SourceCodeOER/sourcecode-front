@@ -46,6 +46,7 @@
     @Prop({type: Boolean, default: false}) searchMode!: boolean;
     @Prop({type: Boolean, default: false}) historicalMode!: boolean;
     @Prop({type: String, default: 'Filtres'}) title!: boolean;
+    @Prop({type: String, default: 'default'}) mode!: "strict" | "default";
 
     get confirmedTags() {
       return this.$accessor.tags.selectedTags
@@ -56,7 +57,7 @@
     }
 
     async apply() {
-      await this.$accessor.tags.apply();
+      await this.$accessor.tags.apply(this.mode);
 
       if (this.searchMode) {
         await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});

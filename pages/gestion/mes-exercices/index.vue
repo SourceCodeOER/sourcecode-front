@@ -94,7 +94,7 @@
     },
     async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
-      await $accessor.tags.apply();
+      await $accessor.tags.apply("default");
       await $accessor.search.fetch({metadata: {size: 50}, data: {user_ids: [$auth.user.id]}} as SearchRequest);
       await $accessor.favorites.fetch()
     },

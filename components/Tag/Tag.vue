@@ -6,39 +6,48 @@
 </template>
 
 <script lang="ts">
-    import {Vue, Component, Prop} from 'vue-property-decorator'
-    import {ACTIVE, DEACTIVATED} from "~/types";
-    import Icon from "~/components/Symbols/Icon.vue";
+  import {Vue, Component, Prop} from 'vue-property-decorator'
+  import {ACTIVE, DEACTIVATED} from "~/types";
+  import Icon from "~/components/Symbols/Icon.vue";
 
-    @Component({
-        components: {
-          Icon
-        }
-    })
-    export default class Tag extends Vue {
-        @Prop({type: String, required: true}) readonly title!: string;
-        @Prop({type: Number, default: 0}) readonly state!: DEACTIVATED|ACTIVE;
-        @Prop({type: Number, required: true}) readonly category!: number;
-        @Prop({type: Number, required: true}) readonly id!: number;
-
-        get theme() {
-            if (this.state === 0) {
-                return 'theme--secondary-color'
-            }
-
-            if (this.state === 1) {
-                return 'theme--white'
-            }
-        }
-
-        async deleteTag() {
-            await this.$accessor.tags.addOrRemoveTag({tag_id:this.id, tag_text: this.title, state: 0, category: this.category});
-            await this.$accessor.tags.apply();
-            await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-
-            this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: this.$accessor.search.search_criterion.title})
-        }
+  @Component({
+    components: {
+      Icon
     }
+  })
+  export default class Tag extends Vue {
+    @Prop({type: String, required: true}) readonly title!: string;
+    @Prop({type: Number, default: 0}) readonly state!: DEACTIVATED | ACTIVE;
+    @Prop({type: Number, required: true}) readonly category!: number;
+    @Prop({type: Number, required: true}) readonly id!: number;
+    @Prop({type: String, default: "default"}) readonly mode!: "default" | "strict";
+
+    get theme() {
+      if (this.state === 0) {
+        return 'theme--secondary-color'
+      }
+
+      if (this.state === 1) {
+        return 'theme--white'
+      }
+    }
+
+    async deleteTag() {
+      await this.$accessor.tags.addOrRemoveTag({
+        tag_id: this.id,
+        tag_text: this.title,
+        state: 0,
+        category: this.category
+      });
+      await this.$accessor.tags.apply(this.mode);
+      await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+
+      this.$accessor.historical.addHistorical({
+        tags: this.$accessor.tags.selectedTags,
+        title: this.$accessor.search.search_criterion.title
+      })
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -75,7 +84,7 @@
     &.tag--deactivated {
       background-color: transparent;
       border-color: $RED;
-      color:$RED;
+      color: $RED;
     }
   }
 </style>
