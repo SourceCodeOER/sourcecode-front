@@ -7,6 +7,11 @@ export interface Tag {
   tag_text: string
 }
 
+export interface TagProposal {
+  text:string,
+  category_id:number
+}
+
 export interface Category {
   category_id: number,
   category_text: string
@@ -76,12 +81,21 @@ export type SearchResponse = {
 
 export type SearchCriterion = {
   title?: string,
-  tags?: (number | number[])[]
+  tags?: (number | number[])[],
+  state?: "default"|"validated"|"pending",
+  user_ids?: number[]
 }
 
 export type SearchRequest = {
   metadata?: MetadataRequest,
   data?: SearchCriterion
+}
+
+export interface ExerciseBuild {
+  title:string,
+  description:string,
+  tags: (number|TagProposal)[],
+  url?:string|null
 }
 
 /**
