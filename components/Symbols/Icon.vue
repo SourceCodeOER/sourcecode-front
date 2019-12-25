@@ -33,6 +33,7 @@
       history: () => import('./library/HistorySymbol.vue'),
       user: () => import('./library/UserSymbol.vue'),
       off: () => import('./library/OffSymbol.vue'),
+      archive: () => import('./library/ArchiveSymbol.vue')
     }
   })
   export default class Icon extends Vue {
