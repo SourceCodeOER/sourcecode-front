@@ -3,15 +3,11 @@
   import {Component, Vue} from "vue-property-decorator";
   import {BusEvent} from "../Event/BusEvent";
 
-  const FILTER_PANEL = 0;
-  const HISTORICAL_PANEL = 1;
-  const FAVORITE_PANEL = 2;
-
   @Component
   export default class FilterPanelMixins extends Vue {
-    currentAsidePanel: 0 | 1 | 2 = FILTER_PANEL;
+    currentAsidePanel: number = 0;
 
-    private changePanel(id: 0 | 1 | 2) {
+    private changePanel(id: number) {
       this.currentAsidePanel = id
     }
 
