@@ -18,7 +18,7 @@ textarea {
 
 input, textarea, select {
   padding: 0 25px;
-  @include border-radius(0);
+  @include border-radius(4px);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -27,7 +27,6 @@ input, textarea, select {
   font-family: $Montserrat;
   font-weight: lighter;
   font-size: 0.75em;
-  border-radius: 4px;
 
   &::placeholder {
     font-size: 1em;
@@ -48,6 +47,24 @@ input, textarea, select {
 
 }
 
+input[type=file] {
+  display: none;
+
+  + label {
+    color:white;
+    border-radius: 4px;
+    padding: 10px 15px;
+    display: inline-block;
+    cursor:pointer;
+
+    img, svg {
+      vertical-align: sub;
+      width: 20px;
+      margin-right: 10px;
+    }
+  }
+}
+
 .input-wrapper--with-icon {
   position: relative;
   input {
@@ -60,6 +77,10 @@ input, textarea, select {
     left: 20px;
     transform: translateY(-50%);
   }
+}
+
+.error-message {
+  font-style: italic;
 }
 
 /**

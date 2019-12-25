@@ -133,6 +133,13 @@
     }
   }
 
+  input[type=file].input--#{$name} {
+    + label {
+      background-color:$color1;
+      border:1px solid $color1;
+    }
+  }
+
   @keyframes autofill--#{$name} {
     100% {
       background: transparent;
