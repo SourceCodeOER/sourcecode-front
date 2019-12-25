@@ -12,7 +12,7 @@
 
     <div class="wrapper wrapper--with-panel">
       <transition name="fade" mode="out-in" duration="400">
-        <FilterPanel @reset="resetInput" v-if="currentAsidePanel === 0"/>
+        <FilterPanel :search-mode="true" :historical-mode="true" @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
       </transition>
 
@@ -92,10 +92,10 @@
       FavoritePanel,
       Icon
     },
-    async fetch({app: {$accessor}}) {
+    async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply();
-      await $accessor.search.fetch({metadata: {size: 50}} as SearchRequest);
+      await $accessor.search.fetch({metadata: {size: 50}, data: {user_ids: [$auth.user.id]}} as SearchRequest);
       await $accessor.favorites.fetch()
     },
     auth: true,
