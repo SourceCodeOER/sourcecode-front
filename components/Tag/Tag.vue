@@ -1,7 +1,7 @@
 <template>
   <div class="tag" :class="{'tag--confirmed' : state === 1, 'tag--deactivated': state === 0}">
     {{title}}
-    <Icon type="arrow" @click.native.stop="deleteTag" :theme="theme"/>
+    <Icon type="cross" @click.native.stop="deleteTag" :theme="theme"/>
   </div>
 </template>
 
