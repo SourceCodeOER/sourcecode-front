@@ -64,7 +64,9 @@ export const mutations = mutationTree(state, {
    */
   RESET_SEARCH_CRITERION(state) {
     state.search_criterion.tags = [];
-    state.search_criterion.title = ''
+    state.search_criterion.title = '';
+    delete state.search_criterion.user_ids;
+    delete state.search_criterion.state;
   },
   /**
    * Set a new metadata object to replace the old one
@@ -93,7 +95,9 @@ export const mutations = mutationTree(state, {
   SET_SEARCH_CRITERION(state, searchCriterion: SearchCriterion | undefined) {
     if (!!searchCriterion) {
       if (!!searchCriterion.title || searchCriterion.title === '') state.search_criterion.title = searchCriterion.title;
-      if (!!searchCriterion.tags) state.search_criterion.tags = searchCriterion.tags
+      if (!!searchCriterion.tags) state.search_criterion.tags = searchCriterion.tags;
+      if (!!searchCriterion.state) state.search_criterion.state = searchCriterion.state;
+      if (!!searchCriterion.user_ids) state.search_criterion.user_ids = searchCriterion.user_ids;
     }
   }
 });
