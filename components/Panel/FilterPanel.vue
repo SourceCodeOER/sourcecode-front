@@ -3,7 +3,7 @@
 
     <h3>
       {{title}}
-      <template v-if="searchMode">
+      <template v-if="favorite">
         <br>
         <span v-if="$auth.loggedIn" class="secondary-color">Ajouter aux favoris
         <Icon type="starHalf" theme="theme--secondary-color"/>
@@ -11,7 +11,7 @@
       </template>
     </h3>
 
-    <div class="cta-wrapper" v-if="searchMode">
+    <div class="cta-wrapper" v-if="resetButton">
       <Icon type="return" @click.native="reset" class="return" theme="theme--secondary-color"/>
     </div>
     <div class="panel-wrapper">
@@ -45,6 +45,8 @@
 
     @Prop({type: Boolean, default: false}) searchMode!: boolean;
     @Prop({type: Boolean, default: false}) historicalMode!: boolean;
+    @Prop({type: Boolean, default: false}) resetButton!: boolean;
+    @Prop({type: Boolean, default: false}) favorite!: boolean;
     @Prop({type: String, default: 'Filtres'}) title!: boolean;
     @Prop({type: String, default: 'default'}) mode!: "strict" | "default";
 
