@@ -1,5 +1,6 @@
-import {ExtendedTag, SelectedTag, Tag, TagsCategory} from '~/types'
-import {mutationTree, actionTree} from 'nuxt-typed-vuex'
+import {Category, ExtendedTag, SelectedTag, Tag, TagsCategory} from '~/types'
+import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
+import {GetterTree} from "~/node_modules/vuex";
 
 const cloneDeep = require('lodash.clonedeep');
 
@@ -147,7 +148,7 @@ export const actions = actionTree({state, mutations}, {
    * @param payload
    * @param confirmedTags
    */
-  applyConfirmedTags({commit, state}, payload: {confirmedTags: SelectedTag[], mode: "strict" | "default"}) {
+  applyConfirmedTags({commit, state}, payload: { confirmedTags: SelectedTag[], mode: "strict" | "default" }) {
 
     commit('CLEAR');
 
@@ -217,4 +218,14 @@ export const actions = actionTree({state, mutations}, {
 
   }
 
+})
+
+
+export const getters = getterTree(state, {
+  categories: (state): Category[] => state.tags.map(tag => {
+    return {
+      category_id: tag.id,
+      category_text: tag.category
+    }
+  })
 })
