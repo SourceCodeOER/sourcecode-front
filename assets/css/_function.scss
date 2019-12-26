@@ -97,7 +97,7 @@
 }
 
 @mixin input-theme($name, $color1, $color2) {
-  input, textarea, select {
+  input, textarea {
     &.input--#{$name} {
       border: 1px solid $color1;
       color: $color1;
@@ -138,6 +138,62 @@
       background-color:$color1;
       border:1px solid $color1;
     }
+  }
+
+  .custom-select--#{$name} {
+    background-color: $color1;
+    color: white;
+    //border: 1px solid $color1;
+
+    &:after {
+      border-color: transparent white white transparent;
+    }
+
+    ul {
+      background-color: $color1;
+      @include box-shadow(inset $SHADOW);
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.6);
+      }
+
+      /* Handle on hover */
+      &::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+  }
+
+  .custom-select-focus--#{$name} {
+    &:after {
+      border-color: transparent white white transparent;
+    }
+
+    ul {
+      background-color: $color1;
+      color: white;
+      border-radius: 4px;
+
+
+      li {
+        border-top: 1px solid $color1;
+      }
+
+      li:hover {
+        background-color: $color2;
+        color: white;
+      }
+
+    }
+
+    & > li {
+      //border: 1px solid $color1;
+      background-color: $color1;
+      color: white;
+      border-radius: 4px;
+    }
+
   }
 
   @keyframes autofill--#{$name} {
