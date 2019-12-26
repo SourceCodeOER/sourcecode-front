@@ -2,7 +2,7 @@ import {localize} from 'vee-validate';
 import fr from 'vee-validate/dist/locale/fr.json'
 
 import {extend} from 'vee-validate';
-import {required, email, alpha_spaces, max, min, numeric, regex, mimes} from 'vee-validate/dist/rules';
+import {required, email, alpha_spaces, max, min, numeric, regex, mimes, oneOf} from 'vee-validate/dist/rules';
 
 extend('required', required);
 extend('email', email);
@@ -12,6 +12,7 @@ extend('min', min);
 extend('numeric', numeric);
 extend('regex', regex);
 extend('mimes', mimes);
+extend('oneOf', oneOf);
 
 
 export default function ({app}) {
