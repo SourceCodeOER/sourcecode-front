@@ -46,7 +46,7 @@
     async fetchFilter(historical: { tags?: SelectedTag[], title?: string }) {
       let tagsRequest: (number | number[])[] = [];
       if (historical.tags) {
-        await this.$accessor.tags.applyConfirmedTags(historical.tags);
+        await this.$accessor.tags.applyConfirmedTags({confirmedTags:historical.tags, mode:"default"});
         tagsRequest = this.$accessor.tags.tagsRequest;
       } else {
         this.$accessor.tags.CLEAR()
@@ -103,6 +103,7 @@
     .historical {
       padding: 20px;
       cursor: pointer;
+      border-bottom: 1px solid rgba($GREY, .1);
 
       .title {
         margin-bottom: 20px;
