@@ -10,7 +10,7 @@
 
     <div class="wrapper wrapper--with-panel">
       <transition name="fade" mode="out-in" duration="400">
-        <FilterPanel :search-mode="true" :historical-mode="true" @reset="resetInput" v-if="currentAsidePanel === 0"/>
+        <FilterPanel :reset-button="true" :favorite="true" :search-mode="true" :historical-mode="true" @reset="resetInput" v-if="currentAsidePanel === 0"/>
         <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
         <FavoritePanel v-else-if="currentAsidePanel === 2"/>
       </transition>
