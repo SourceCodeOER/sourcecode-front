@@ -21,10 +21,13 @@
     @Prop({type: Number, required: true}) readonly category!: number;
     @Prop({type: Number, required: true}) readonly id!: number;
     @Prop({type: String, default: "default"}) readonly mode!: "default" | "strict";
+    @Prop({type:Boolean, default:false}) readonly historicalMode!:boolean;
+    @Prop({type:Boolean, default:false}) readonly storeMode!:boolean;
+    @Prop({type:Boolean, default:false}) readonly searchMode!:boolean;
 
     get theme() {
       if (this.state === 0) {
-        return 'theme--secondary-color'
+        return 'theme--white'
       }
 
       if (this.state === 1) {
@@ -33,6 +36,23 @@
     }
 
     async deleteTag() {
+      if(this.storeMode) {
+        await this.deleteTagWithStore()
+      } else {
+        this.deleteTagAndEmit()
+      }
+    }
+
+    deleteTagAndEmit() {
+      this.$emit('deleteTag', {
+        id:this.id,
+        title:this.title,
+        category:this.category,
+        state:this.state
+      })
+    }
+
+    async deleteTagWithStore() {
       await this.$accessor.tags.addOrRemoveTag({
         tag_id: this.id,
         tag_text: this.title,
@@ -40,12 +60,18 @@
         category: this.category
       });
       await this.$accessor.tags.apply(this.mode);
-      await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
 
-      this.$accessor.historical.addHistorical({
-        tags: this.$accessor.tags.selectedTags,
-        title: this.$accessor.search.search_criterion.title
-      })
+      if(this.searchMode) {
+        await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+      }
+
+      if(this.historicalMode) {
+        await this.$accessor.historical.addHistorical({
+          tags: this.$accessor.tags.selectedTags,
+          title: this.$accessor.search.search_criterion.title
+        })
+      }
+
     }
   }
 </script>
@@ -82,9 +108,9 @@
     }
 
     &.tag--deactivated {
-      background-color: transparent;
-      border-color: $RED;
-      color: $RED;
+      background-color:  lighten($TERNARY_COLOR, 10);
+      border: 0;
+      color: white;
     }
   }
 </style>
