@@ -150,8 +150,8 @@
   import ExercisesCheckPanel from "~/components/Panel/ExercisesCheckPanel.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import {BusEvent} from "~/components/Event/BusEvent";
-  import CustomSelect from "~/components/Input/CustomSelect.vue"
-
+  import CustomSelect from "~/components/Input/CustomSelect.vue";
+  import jsonFormData from 'json-form-data';
   const debounce = require('lodash.debounce');
 
 
@@ -399,7 +399,23 @@
             exerciseBuild.url = this.form.url;
           }
 
-          await this.$axios.$post('/api/create_exercise', exerciseBuild);
+          const file: File | null = this.file();
+
+          if(file !== null) {
+
+            exerciseBuild.exerciseFile = file;
+
+            const formData: FormData = jsonFormData(exerciseBuild);
+
+            await this.$axios.$post('/api/create_exercise', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+          } else {
+            await this.$axios.$post('/api/create_exercise', exerciseBuild);
+          }
 
           BusEvent.$emit('displayNotification', {
             mode: "success",
