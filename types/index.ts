@@ -96,7 +96,7 @@ export interface ExerciseBuild {
   description:string,
   tags: (number|TagProposal)[],
   url?:string|null,
-  file?:File
+  exerciseFile?:File
 }
 
 /**
