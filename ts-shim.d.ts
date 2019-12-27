@@ -11,3 +11,4 @@ declare module 'highlight.js/lib/languages/java';
 declare module 'highlight.js/lib/languages/python';
 declare module 'highlight.js/lib/languages/cmake';
 declare module 'highlight.js/lib/languages/cs';
+declare module 'json-form-data'
