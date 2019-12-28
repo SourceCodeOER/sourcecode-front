@@ -75,7 +75,7 @@
 
           <ul>
 
-            <li @click="changePanel(0)" class="cta-link cta-link-with-arrow">
+            <li @click="changePanel(0)" class="cta-link cta-link-with-arrow" :class="{'cta-animate': animateCta}">
               <div class="logo-link-wrapper">
                 <Icon type="album" theme="theme--white"/>
               </div>
@@ -89,12 +89,15 @@
               Tags
             </li>
 
+            <!--
+
             <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
                 <Icon type="eye" theme="theme--white"/>
               </div>
               Preview
             </li>
+            -->
 
           </ul>
         </template>
@@ -139,7 +142,7 @@
 </template>
 
 <script lang="ts">
-  import {Vue, Component} from "vue-property-decorator";
+  import {Vue, Component, Watch} from "vue-property-decorator";
   import Icon from "~/components/Symbols/Icon.vue";
   import {BusEvent} from '~/components/Event/BusEvent'
 
@@ -149,6 +152,9 @@
     }
   })
   export default class Menu extends Vue {
+    animateCta: boolean = false;
+    timer: number | null = null;
+
     changePanel(id: number) {
       BusEvent.$emit('changePanel', id)
     }
@@ -179,6 +185,22 @@
 
     get role() {
       return this.$auth.user.role
+    }
+
+    get nbExercises() {
+      return this.$accessor.search.metadata.totalItems
+    }
+
+    @Watch('nbExercises')
+    animateSimilarExercisesLink() {
+      if (this.timer === null && this.displayCreationPanel) {
+        this.animateCta = true;
+
+        this.timer = window.setTimeout(() => {
+          this.animateCta = false;
+          this.timer = null;
+        }, 1500)
+      }
     }
 
     async logout() {
@@ -268,6 +290,10 @@
         position: absolute;
         right: $PADDING_MENU/1.5;
 
+      }
+
+      &.cta-animate {
+        @include animation(blink-background 1.5s linear)
       }
 
       &:hover {
