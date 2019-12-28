@@ -5,7 +5,7 @@
         Exercices > {{exercise.title}}
       </span>
       <nuxt-link to="/exercices" tag="span">
-        <Icon type="arrow" class="reversed-arrow" theme="theme--secondary-color"/>
+        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
         Retour à la recherche
       </nuxt-link>
     </div>
@@ -49,7 +49,7 @@
 
         <h2>Description</h2>
 
-        <article v-html="$md.render(exercise.description)" class="exercise-article"></article>
+        <article v-html="exercise.description" class="exercise-article"></article>
       </section>
     </div>
   </div>
@@ -59,6 +59,20 @@
   import {Component, Vue} from "vue-property-decorator";
   import {Exercise, TagExercise} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
+  import hljs from 'highlight.js/lib/highlight';
+  import javascript from 'highlight.js/lib/languages/javascript';
+  import css from 'highlight.js/lib/languages/css'
+  import java from 'highlight.js/lib/languages/java'
+  import python from 'highlight.js/lib/languages/python'
+  import cmake from 'highlight.js/lib/languages/cmake'
+  import cs from 'highlight.js/lib/languages/cs'
+
+  hljs.registerLanguage('javascript', javascript);
+  hljs.registerLanguage('css', css);
+  hljs.registerLanguage('java', java);
+  hljs.registerLanguage('python', python);
+  hljs.registerLanguage('cmake', cmake);
+  hljs.registerLanguage('cs', cs);
 
   @Component({
     components: {
@@ -107,6 +121,19 @@
       }
 
       return arrayOfTagByCategories
+    }
+
+    mounted() {
+      if(process.client) {
+        const exercise: Element | null = document.querySelector("#Exercise");
+
+        if(exercise) {
+            exercise.querySelectorAll('pre code').forEach((block) => {
+              console.log(block);
+              hljs.highlightBlock(block);
+            });
+        }
+      }
     }
 
     created() {
