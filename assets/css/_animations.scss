@@ -38,3 +38,23 @@
     width: 100%;
   }
 }
+
+@keyframes blink-background {
+  from, 50%, to {
+    background-color:transparent;
+  }
+
+  25%, 75% {
+    background-color: rgba(white, .2);
+  }
+}
+
+@-webkit-keyframes blink-background {
+  from, 50%, to {
+    background-color:transparent;
+  }
+
+  25%, 75% {
+    background-color: rgba(white, .2);
+  }
+}
