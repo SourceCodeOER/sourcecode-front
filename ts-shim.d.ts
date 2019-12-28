@@ -5,6 +5,7 @@ declare module "*.vue" {
 
 declare module 'tiptap';
 declare module 'tiptap-extensions';
+declare module 'highlight.js/lib/highlight';
 declare module 'highlight.js/lib/languages/javascript';
 declare module 'highlight.js/lib/languages/css';
 declare module 'highlight.js/lib/languages/java';
