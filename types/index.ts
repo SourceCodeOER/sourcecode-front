@@ -8,8 +8,8 @@ export interface Tag {
 }
 
 export interface TagProposal {
-  text:string,
-  category_id:number
+  text: string,
+  category_id: number
 }
 
 export interface Category {
@@ -44,7 +44,7 @@ export type Metric = {
   avg_vote: number
 }
 
-export interface TagExercise extends Tag  {
+export interface TagExercise extends Tag {
   category: Category
 }
 
@@ -57,9 +57,9 @@ export type Exercise = {
   updatedAt: string,
   metrics: Metric,
   tags: TagExercise[],
-  url?: string|null,
-  isValidated:boolean,
-  file?: string|null,
+  url?: string | null,
+  isValidated: boolean,
+  file?: string | null,
 }
 
 export type MetadataResponse = {
@@ -82,7 +82,7 @@ export type SearchResponse = {
 export type SearchCriterion = {
   title?: string,
   tags?: (number | number[])[],
-  state?: "default"|"validated"|"pending",
+  state?: "default" | "validated" | "pending",
   user_ids?: number[]
 }
 
@@ -92,11 +92,11 @@ export type SearchRequest = {
 }
 
 export interface ExerciseBuild {
-  title:string,
-  description:string,
-  tags: (number|TagProposal)[],
-  url?:string|null,
-  exerciseFile?:File
+  title: string,
+  description: string,
+  tags: (number | TagProposal)[],
+  url?: string | null,
+  exerciseFile?: File
 }
 
 /**
@@ -104,7 +104,7 @@ export interface ExerciseBuild {
  */
 export interface Historical {
   datetime: string,
-  title?:string
+  title?: string
   tags?: SelectedTag[]
 }
 
@@ -117,11 +117,12 @@ export interface Historical {
 export type UserRole = 'admin' | 'user' | 'guest'
 
 export interface User {
-  fullName:string,
+  fullName: string,
   role: UserRole
 }
+
 export interface UserInfo {
-  token:string,
+  token: string,
   user: User
 }
 
@@ -130,8 +131,8 @@ export interface UserInfo {
  * Favorites
  */
 export interface Configuration {
-  name:string,
-  title?:string,
+  name: string,
+  title?: string,
   tags: number[],
-  id:number
+  id: number
 }
