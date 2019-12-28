@@ -306,10 +306,7 @@
      */
     debounceInput = debounce((e: any) => {
       const value = e.target.value;
-
-      if (value.length >= 3) {
-        this.$accessor.search.fetch({data: {title: value}});
-      }
+      this.$accessor.search.fetch({data: {title: value}});
     }, 300);
 
     /**
@@ -603,6 +600,7 @@
 
     .validation__tag {
       grid-row-gap: 0;
+      margin-bottom: 30px;
 
       button {
         max-width: 250px;
