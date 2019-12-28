@@ -5,7 +5,7 @@
         Gestion > Mes exercices > Créer un exercice
       </span>
       <nuxt-link to="/gestion/mes-exercices" tag="span">
-        <Icon type="arrow" class="reversed-arrow" theme="theme--secondary-color"/>
+        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
         Mes exercices
       </nuxt-link>
     </div>
@@ -35,36 +35,11 @@
             <span class="error-message">{{errors[0]}}</span>
           </ValidationProvider>
 
-          <ValidationProvider tag="label"
-                              name="url"
-                              :rules="{regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/}"
-                              v-slot="{ errors }">
-            <span class="label__name">
-              Url vers l'exercice
-            </span>
-            <input id="Url" placeholder="Entrez l'url absolue vers votre exercice" name="url" v-model="form.url"
-                   class="input--grey" type="text">
-            <span class="error-message">{{errors[0]}}</span>
-          </ValidationProvider>
-
         </ValidationObserver>
 
-        <h2>Uploadez votre archive (zip)</h2>
+        <h2>Description *</h2>
 
-        <ValidationObserver class="validation__archive" ref="observer2" tag="form"
-                            @submit.prevent="validateBeforeSubmit()">
-          <ValidationProvider tag="div"
-                              name="archive zip"
-                              rules="mimes:application/zip"
-                              v-slot="{ errors, validate }">
-            <input id="Archive" name="archive" @change="validate" class="input--ternary-color"
-                   type="file">
-            <label for="Archive">
-              <Icon type="archive" theme="theme--white"/>
-              Choisir un fichier...</label>
-            <span class="error-message">{{errors[0]}}</span>
-          </ValidationProvider>
-        </ValidationObserver>
+        <RichTextEditor ref="richTextEditor"/>
 
         <h2>Tags *</h2>
         <button class="button--ternary-color-reverse" v-show="isEmptyTags" @click="changePanel(1)">
@@ -123,9 +98,37 @@
           </ValidationObserver>
         </transition>
 
-        <h2>Description *</h2>
+        <ValidationObserver ref="observer2" tag="form"
+                            @submit.prevent="validateBeforeSubmit()">
+          <ValidationProvider tag="div"
+                              name="archive zip"
+                              rules="mimes:application/zip"
+                              ref="fileObserver"
+                              v-slot="{ errors, validate }">
+            <span class="label__name">
+              Uploadez votre archive (zip)
+            </span>
+            <input id="Archive" name="archive" @change="selectedFile" class="input--ternary-color"
+                   type="file">
+            <label for="Archive">
+              <Icon type="archive" theme="theme--white"/>
+              {{labelFileText}}</label>
+            <span class="error-message">{{errors[0]}}</span>
+          </ValidationProvider>
 
-        <RichTextEditor ref="richTextEditor"/>
+          <ValidationProvider tag="label"
+                              name="url"
+                              :rules="{regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/}"
+                              v-slot="{ errors }">
+            <span class="label__name">
+              Url vers l'exercice
+            </span>
+            <input id="Url" placeholder="Entrez l'url absolue vers votre exercice" name="url" v-model="form.url"
+                   class="input--grey" type="text">
+            <span class="error-message">{{errors[0]}}</span>
+          </ValidationProvider>
+        </ValidationObserver>
+
 
         <p class="disclaimer">* champs obligatoires</p>
         <button @click="validateBeforeSubmit" class="button--ternary-color-reverse">
@@ -152,6 +155,7 @@
   import {BusEvent} from "~/components/Event/BusEvent";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import jsonFormData from 'json-form-data';
+
   const debounce = require('lodash.debounce');
 
 
@@ -177,13 +181,17 @@
   })
   export default class extends Mixins(FilterPanelMixins) {
     /**
-     * ValidationObserver for the title, and url
+     * ValidationObserver for the title
      */
     @Ref() observer1!: InstanceType<typeof ValidationObserver>;
     /**
-     * Validation Observer for the zip archive
+     * Validation Observer for the zip archive and the url
      */
     @Ref() observer2!: InstanceType<typeof ValidationObserver>;
+    /**
+     * Validation Observer for the zip archive and the url
+     */
+    @Ref() fileObserver!: InstanceType<typeof ValidationProvider>;
     /**
      * ValidationObserver for the Tag section
      */
@@ -226,6 +234,12 @@
     };
 
     /**
+     * The name of the uplodaded file
+     * Default is null
+     */
+    filename: string | null = null;
+
+    /**
      * Returns true if either the tags selected in the tags panel is empty or the array of new tags added
      */
     private get isEmptyTags(): boolean {
@@ -251,6 +265,21 @@
      */
     private get selectedTags() {
       return this.$accessor.tags.selectedTags
+    }
+
+    /**
+     * Returns the name of the uploaded file or a default message instead
+     */
+    private get labelFileText() {
+      if (this.filename !== null) {
+        if (this.filename.length > 18) {
+          return this.filename.slice(0, 18) + '...'
+        }
+
+        return this.filename
+      }
+
+      return 'Choisir un fichier...'
     }
 
     /**
@@ -282,6 +311,22 @@
         this.$accessor.search.fetch({data: {title: value}});
       }
     }, 300);
+
+    /**
+     * Event for the changed state of the input file (archive)
+     */
+    async selectedFile(event: Event) {
+      const inputElement: HTMLInputElement | null = event.target as HTMLInputElement | null;
+
+      if (inputElement !== null) {
+        const files = inputElement.files;
+        if (files !== null) {
+          const file: File | null = files.item(0);
+          this.filename = file !== null ? file.name : null;
+          await this.fileObserver.validate(file);
+        }
+      }
+    }
 
     /**
      * Select handler for the customSelect reference
@@ -401,7 +446,7 @@
 
           const file: File | null = this.file();
 
-          if(file !== null) {
+          if (file !== null) {
 
             exerciseBuild.exerciseFile = file;
 
@@ -562,22 +607,6 @@
       button {
         max-width: 250px;
         margin-top: 0;
-      }
-    }
-
-    .validation__archive {
-      grid-template-columns: 1fr;
-
-      div {
-        min-height: auto;
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .error-message {
-        margin-top: 0;
-        max-width: 300px;
-        margin-left: 40px;
       }
     }
   }
