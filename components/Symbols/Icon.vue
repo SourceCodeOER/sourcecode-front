@@ -8,7 +8,8 @@
   @Component({
     components: {
       album: () => import('./library/AlbumSymbol.vue'),
-      arrow: () => import('./library/ArrowSymbol.vue'),
+      arrowLeft: () => import('./library/ArrowLeftSymbol.vue'),
+      arrowRight: () => import('./library/ArrowRightSymbol.vue'),
       check: () => import('./library/CheckSymbol.vue'),
       close: () => import('./library/CloseSymbol.vue'),
       codeBlock: () => import('./library/CodeBlockSymbol.vue'),
