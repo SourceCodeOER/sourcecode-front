@@ -5,7 +5,7 @@
         Gestion > Mes exercices
       </span>
       <nuxt-link to="/exercices" tag="span">
-        <Icon type="arrow" class="reversed-arrow" theme="theme--secondary-color"/>
+        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
         Retour
       </nuxt-link>
     </div>

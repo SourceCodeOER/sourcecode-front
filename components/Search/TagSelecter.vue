@@ -1,7 +1,7 @@
 <template>
   <li class="tag-selecter">
     <span @click="toggleList">
-      <Icon type="arrow" class="arrow" :class="{'arrow-rotate': active}"/>
+      <Icon type="arrowRight" class="arrow" :class="{'arrow-rotate': active}"/>
       <slot></slot>
     </span>
     <ul :class="{active}">
@@ -105,6 +105,12 @@
   input {
     padding-left: 20px;
     width: 100%;
+  }
+
+
+  svg {
+    width: 19px;
+    vertical-align: text-top;
   }
 
   .arrow {
