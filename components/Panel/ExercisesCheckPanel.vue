@@ -2,11 +2,16 @@
   <div id="ExercisesCheckPanel" class="panel scroll-bar--grey">
     <h3>{{title}}</h3>
 
-    <div class="disclaimer" v-if="exercises.length === 0">
+    <div class="disclaimer" v-show="!searched">
       Commencez par remplir <b>le titre</b> de votre exercice ou <b>ajoutez des tags</b> depuis le panneau Tags
     </div>
 
-    <div class="panel-wrapper" v-else>
+    <div class="disclaimer" v-show="searched && exercises.length === 0">
+      Aucun exercice ne semble correspondre au vôtre !
+    </div>
+
+    <div class="panel-wrapper" v-show="searched && exercises.length !== 0">
+      <div class="results">{{nbResults}} résultat(s)</div>
 
       <ul>
         <li v-for="exercise in exercises" :key="exercise.id">
@@ -15,27 +20,61 @@
           <span><i>Moyenne</i> : {{exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</span>
           <a :href="`/exercices/${exercise.id}`" target="_blank" class="cta-link">
             Voir
-            <Icon type="arrow" theme="theme--secondary-color"/>
+            <Icon type="arrowRight" theme="theme--secondary-color"/>
           </a>
         </li>
       </ul>
+
+      <div ref="anchor" id="Anchor"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import {Component, Prop, Vue} from "vue-property-decorator";
+  import {Component, Prop, Vue, Ref, Mixins} from "vue-property-decorator";
   import {Exercise} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
+  import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
+
+  const ratio = .2;
 
   @Component({
     components: {Icon}
   })
-  export default class ExercisesCheckPanel extends Vue {
+  export default class ExercisesCheckPanel extends Mixins(IntersectMixins) {
     @Prop({type: String, default: "Exercices"}) title!: string;
+    @Ref() anchor!: Element;
+
+    intersectionObserverOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '0px',
+      threshold: ratio
+    };
+
 
     get exercises(): Exercise[] {
       return this.$accessor.search.exercises
+    }
+
+    get nbResults(): number {
+      return this.$accessor.search.metadata.totalItems
+    }
+
+    get searched(): boolean {
+      const tags = this.$accessor.search.search_criterion.tags;
+      return (tags && tags.length !== 0) || this.$accessor.search.search_criterion.title !== ''
+    }
+
+    handleIntersect(entries: IntersectionObserverEntry[]) {
+      entries.forEach((entry: IntersectionObserverEntry) => {
+        if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
+          this.$accessor.search.next()
+        }
+      });
+    }
+
+    targets(): Element[] {
+      return [this.anchor]
     }
 
   }
@@ -47,6 +86,12 @@
 
   #ExercisesCheckPanel {
     padding: 20px 0;
+
+    .results {
+      padding: 0 20px;
+      font-weight: bold;
+      color:$SECONDARY_COLOR
+    }
 
     .disclaimer {
       padding: 0 20px;
@@ -63,6 +108,7 @@
 
     h3 {
       padding: 0 20px;
+      margin-bottom: 5px;
     }
 
     h4 {
@@ -99,8 +145,8 @@
           font-weight: bold;
           @include transitionHelper(opacity .4s ease);
           svg, img {
-            margin-left: 3px;
             width: 20px;
+            vertical-align: sub;
           }
         }
 
