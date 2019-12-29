@@ -1,8 +1,8 @@
 <template>
   <div id="HistoricalPanel" class="panel">
 
-    <h3>Historique <span @click="close" class="secondary-color"><Icon type="arrow" class="reversed-arrow"
-                                                                             theme="theme--secondary-color"/> Retour</span>
+    <h3>Historique <span @click="close" class="secondary-color"><Icon type="arrowLeft" class="reversed-arrow"
+                                                                      theme="theme--secondary-color"/> Retour</span>
     </h3>
 
     <div class="panel-wrapper">
@@ -46,7 +46,7 @@
     async fetchFilter(historical: { tags?: SelectedTag[], title?: string }) {
       let tagsRequest: (number | number[])[] = [];
       if (historical.tags) {
-        await this.$accessor.tags.applyConfirmedTags({confirmedTags:historical.tags, mode:"default"});
+        await this.$accessor.tags.applyConfirmedTags({confirmedTags: historical.tags, mode: "default"});
         tagsRequest = this.$accessor.tags.tagsRequest;
       } else {
         this.$accessor.tags.CLEAR()
@@ -80,17 +80,23 @@
       display: flex;
 
       .reversed-arrow {
-        @include transformHelper(rotate(180deg));
-        @include transformOriginHelper(center center);
-        height: 15px;
-        width: 8px;
+        width: 20px;
         margin-bottom: -1px;
         margin-right: 2px;
       }
 
       span {
-        margin-left: auto;
+        color: $SECONDARY_COLOR;
+        display: flex;
+        align-items: center;
+        position: relative;
         cursor: pointer;
+        margin-left: auto;
+
+        svg {
+          width: 20px;
+          margin-right: 2px;
+        }
       }
 
     }
