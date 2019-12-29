@@ -15,7 +15,7 @@
       <div class="tags-wrapper" v-if="confirmedTags.length > 0">
         <Tag v-for="(tag, id) in confirmedTags" :search-mode="true" :historical-mode="true" :store-mode="true" :state="tag.state" :title="tag.tag_text"
              :key="tag.tag_text + '_' + tag.category + '_'+ id"
-             :category="tag.category" :id="tag.tag_id"/>
+             :category="tag.category_id" :id="tag.tag_id"/>
       </div>
     </header>
 
@@ -37,6 +37,7 @@
   import Tag from "~/components/Tag/Tag.vue";
   import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
+  import {SelectedTag} from "~/types";
 
   const ratio = .2;
 
@@ -62,7 +63,7 @@
       return this.$accessor.tags.selectedTags.length
     }
 
-    get confirmedTags() {
+    get confirmedTags(): SelectedTag[] {
       return this.$accessor.tags.selectedTags
     }
 
