@@ -15,14 +15,14 @@
 
         checked:boolean = false;
 
-        @Prop(String) readonly title!: string;
-        @Prop(Boolean) readonly state!: boolean;
+        @Prop({type:String, default:''}) readonly title!: string;
+        @Prop({type:Boolean, default:false}) readonly state!: boolean;
         @Prop({type: [String, Number], default: 'none'}) readonly id!: number;
 
         @Emit()
         check(): CheckBoxObjectEmitted {
             this.checked = !this.checked;
-            return {tag_text: this.title, state: this.checked, tag_id: this.id}
+            return {title: this.title, state: this.checked, id: this.id}
         }
 
         @Watch('state')
