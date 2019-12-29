@@ -53,8 +53,8 @@
       return this
     }
 
-    check({tag_id, state, tag_text}: CheckBoxObjectEmitted) {
-      this.$accessor.tags.addOrRemoveTag({tag_id, tag_text, state: state ? 1 : 0, category: this.category});
+    check({id, state, title}: CheckBoxObjectEmitted) {
+      this.$accessor.tags.addOrRemoveTag({tag_id:id, tag_text:title, state: state ? 1 : 0, category_id: this.category});
       this.$emit('apply')
     }
 
