@@ -14,16 +14,16 @@ const ACTIVE = 1;
  */
 const arrayToMapOfArray = (map: Map<number, number | number[]>, tags: SelectedTag[]) => {
   for (let tag of tags) {
-    const array: number | number[] | undefined = map.get(tag.category);
+    const array: number | number[] | undefined = map.get(tag.category_id);
 
     if (array !== undefined) {
       if (typeof array === "number") {
-        map.set(tag.category, [array, tag.tag_id])
+        map.set(tag.category_id, [array, tag.tag_id])
       } else {
-        map.set(tag.category, [...array, tag.tag_id])
+        map.set(tag.category_id, [...array, tag.tag_id])
       }
     } else {
-      map.set(tag.category, tag.tag_id)
+      map.set(tag.category_id, tag.tag_id)
     }
   }
 };
@@ -57,7 +57,7 @@ export const mutations = mutationTree(state, {
    */
   ADD_TAG(state, selectedTag: SelectedTag) {
     state.selectedTags.push(selectedTag);
-    const i = state.tags.findIndex((el) => el.id === selectedTag.category);
+    const i = state.tags.findIndex((el) => el.id === selectedTag.category_id);
     const j = state.tags[i].tags.findIndex((el) => el.tag_id === selectedTag.tag_id);
 
     state.tags[i].tags[j].state = ACTIVE;
@@ -70,11 +70,11 @@ export const mutations = mutationTree(state, {
    * @param category
    * @constructor
    */
-  REMOVE_TAG(state, {tag_id, category}: SelectedTag) {
+  REMOVE_TAG(state, {tag_id, category_id}: SelectedTag) {
     const index = state.selectedTags.findIndex((el) => el.tag_id === tag_id);
     state.selectedTags.splice(index, 1);
 
-    const i = state.tags.findIndex((el) => el.id === category);
+    const i = state.tags.findIndex((el) => el.id === category_id);
     const j = state.tags[i].tags.findIndex((el) => el.tag_id === tag_id);
     state.tags[i].tags[j].state = DEACTIVATED;
 
@@ -153,8 +153,8 @@ export const actions = actionTree({state, mutations}, {
     commit('CLEAR');
 
     payload.confirmedTags.forEach(el => {
+      el.state = 1;
       commit('ADD_TAG', el)
-
     });
 
     if (payload.mode === "strict") {
@@ -185,7 +185,7 @@ export const actions = actionTree({state, mutations}, {
         const {id, category, tags} = data[i];
 
         const selectedTags: SelectedTag[] = tags.map((el: Tag) => {
-          const selectedTag: SelectedTag = {...el, category: id, state: DEACTIVATED};
+          const selectedTag: SelectedTag = {...el, category_id: id, state: DEACTIVATED};
           return selectedTag
         });
 
@@ -200,7 +200,7 @@ export const actions = actionTree({state, mutations}, {
 
       selectedTags.forEach((tag: SelectedTag) => {
 
-        const tagsCategory: ExtendedTag | undefined = array.find(el => el.id === tag.category);
+        const tagsCategory: ExtendedTag | undefined = array.find(el => el.id === tag.category_id);
 
         if (tagsCategory !== undefined) {
           const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el) => el.tag_id === tag.tag_id);
