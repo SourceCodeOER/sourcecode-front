@@ -57,7 +57,7 @@
         tag_id: this.id,
         tag_text: this.title,
         state: 0,
-        category: this.category
+        category_id: this.category
       });
       await this.$accessor.tags.apply(this.mode);
 
