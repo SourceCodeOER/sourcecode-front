@@ -171,7 +171,7 @@
     History,
     CodeBlockHighlight
   } from 'tiptap-extensions'
-  import {Component, Ref, Vue} from "vue-property-decorator";
+  import {Component, Prop, Ref, Vue} from "vue-property-decorator";
 
   @Component({
     components: {
@@ -183,9 +183,10 @@
   export default class RichTextEditor extends Vue {
     editor: null | any = null;
     @Ref() editorContent!: InstanceType<typeof EditorContent>;
+    @Prop({type:String, default: ''}) defaultContent!:string;
 
     mounted() {
-      this.editor = new Editor({
+      const obj: { extensions: any[], content?: string } = {
         extensions: [
           new Blockquote(),
           new BulletList(),
@@ -215,7 +216,13 @@
             }
           })
         ]
-      })
+      };
+
+      if(this.defaultContent !== '') {
+        obj.content = this.defaultContent
+      }
+
+      this.editor = new Editor(obj)
     }
 
     beforeDestroy() {
