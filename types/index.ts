@@ -1,10 +1,14 @@
-export interface CheckBoxObjectEmitted extends Tag {
-  state: boolean,
+export interface CheckBoxObjectEmitted {
+  title:string,
+  id:number,
+  state: boolean
 }
 
 export interface Tag {
   tag_id: number,
-  tag_text: string
+  tag_text: string,
+  version?:number,
+  isValidated?:boolean
 }
 
 export interface TagProposal {
@@ -22,7 +26,7 @@ export type ACTIVE = 1
 
 export interface SelectedTag extends Tag {
   state: DEACTIVATED | ACTIVE
-  category: number
+  category_id: number
 }
 
 export type TagsCategory = {
@@ -48,7 +52,7 @@ export interface TagExercise extends Tag {
   category: Category
 }
 
-export type Exercise = {
+export interface Exercise {
   title: string,
   description: string,
   id: number,
@@ -60,6 +64,10 @@ export type Exercise = {
   url?: string | null,
   isValidated: boolean,
   file?: string | null,
+}
+
+export interface ExerciseWithSelection extends Exercise{
+  isSelected:boolean
 }
 
 export type MetadataResponse = {
@@ -97,6 +105,10 @@ export interface ExerciseBuild {
   tags: (number | TagProposal)[],
   url?: string | null,
   exerciseFile?: File
+}
+
+export interface ExerciseModify extends ExerciseBuild{
+  version:number
 }
 
 /**
