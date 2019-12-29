@@ -169,7 +169,8 @@
 
     get displayCreationPanel() {
       if (this.$route.name !== undefined) {
-        return this.$route.name === "gestion-mes-exercices-creer-exercice"
+        const routeName = this.$route.name;
+        return routeName === "gestion-mes-exercices-creer-exercice" || routeName === 'gestion-mes-exercices-id'
       }
 
       return false;
