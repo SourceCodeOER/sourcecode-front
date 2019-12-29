@@ -29,7 +29,9 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@types/nuxtjs__auth",
-      "@types/highlightjs"
+      "@types/highlightjs",
+      "@types/qs",
+      "@types/lodash.sortedindex"
     ]
   },
   "include": ["**/*.ts", "**/*.vue"],
