@@ -3,13 +3,25 @@
 
     <h3>
       {{title}}
-      <template v-if="favorite">
-        <br>
-        <span v-if="$auth.loggedIn" class="secondary-color">Ajouter aux favoris
-        <Icon type="starHalf" theme="theme--secondary-color"/>
-        </span>
-      </template>
     </h3>
+
+    <transition name="fade">
+      <div class="cta-favorite" v-if="favorite && $auth.loggedIn && !createFavoriteInput" @click="displayFavoriteInput">
+        Ajouter aux favoris
+        <Icon type="starHalf" theme="theme--secondary-color"/>
+      </div>
+
+      <div class="input-favorite-wrapper" v-else-if="favorite && $auth.loggedIn && createFavoriteInput">
+        <ValidationObserver v-slot="{valid}">
+          <ValidationProvider name="email" rules="required">
+            <input v-model="favoriteName" type="text" placeholder="Entrez un nom" class="input--secondary-color">
+          </ValidationProvider>
+          <button :disabled="!valid" type="submit" @click="validateBeforeSubmit" :class="{'button--secondary-color': !valid, 'button--secondary-color-reverse': valid}"
+                  class="button--secondary-color">OK
+          </button>
+        </ValidationObserver>
+      </div>
+    </transition>
 
     <div class="cta-wrapper" v-if="resetButton">
       <Icon type="return" @click.native="reset" class="return" theme="theme--secondary-color"/>
@@ -31,17 +43,24 @@
   import TagSelecter from "~/components/Search/TagSelecter.vue";
   import {Component, Vue, Emit, Prop} from 'vue-property-decorator';
   import Icon from "~/components/Symbols/Icon.vue";
+  import {ValidationProvider, ValidationObserver} from "vee-validate";
+  import {BusEvent} from "~/components/Event/BusEvent";
+  import {CreateConfigurationRequest} from "~/types";
 
   @Component({
     components: {
       Tag,
       TagSelecter,
-      Icon
+      Icon,
+      ValidationProvider,
+      ValidationObserver
     }
   })
   export default class FilterPanel extends Vue {
 
     selectedTagSelecter: TagSelecter | undefined = undefined;
+    createFavoriteInput: boolean = false;
+    favoriteName:string = ''
 
     @Prop({type: Boolean, default: false}) searchMode!: boolean;
     @Prop({type: Boolean, default: false}) historicalMode!: boolean;
@@ -58,6 +77,11 @@
       return this.$accessor.tags.tags
     }
 
+    displayFavoriteInput() {
+      this.createFavoriteInput = true;
+      //BusEvent.$emit('changePanel', 2)
+    }
+
     async apply() {
       await this.$accessor.tags.apply(this.mode);
 
@@ -70,6 +94,33 @@
           tags: this.confirmedTags,
           title: this.$accessor.search.search_criterion.title
         });
+      }
+    }
+
+    async validateBeforeSubmit() {
+      if(this.confirmedTags.length !== 0) {
+        const tags_id: number[] = this.confirmedTags.map(tag => tag.tag_id);
+        const title:string|undefined = this.$accessor.search.search_criterion.title;
+
+        const configurationBuild:CreateConfigurationRequest = {
+          tags:tags_id,
+          name: this.favoriteName
+        };
+
+        if(title !== '' && title !== undefined) {
+          configurationBuild.title = title
+        }
+
+        try {
+          await this.$accessor.favorites.createFavorite(configurationBuild)
+        } catch (e) {
+          console.log('hello')
+        }
+      } else {
+        BusEvent.$emit('displayNotification', {
+          mode:'warning',
+          message: 'Vous devez ajouter au moins un tag afin de créer votre favori'
+        })
       }
     }
 
@@ -144,17 +195,37 @@
     }
 
     h3 {
+      margin-bottom: 0;
+    }
+
+    .cta-favorite {
+      display: flex;
+      align-items: center;
+      color: $SECONDARY_COLOR;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 5px;
+      margin-bottom: 15px;
+
+
       svg {
         width: 23px;
-        margin-left: 5px;
-        height: 23px;
-        vertical-align: sub;
+        margin-left: 8px;
       }
 
       span {
         display: block;
-        cursor: pointer;
-        margin-top: 10px;
+      }
+    }
+
+    .input-favorite-wrapper {
+      margin-top: 5px;
+      margin-bottom: 15px;
+
+      button {
+        padding: 8px 14px;
+        height: 100%;
+        margin-top: 0;
       }
     }
 

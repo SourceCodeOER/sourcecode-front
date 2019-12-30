@@ -28,7 +28,7 @@
 <script lang="ts">
 
     import {Vue, Component, Prop} from 'vue-property-decorator'
-    import {Exercise, TagExercise} from "~/types";
+    import {Exercise, ExerciseTag} from "~/types";
 
     @Component
     export default class PreviewExercise extends Vue {
@@ -43,7 +43,7 @@
         }
 
         get tagsFormatted() {
-            const tags: TagExercise[] = this.exercise.tags;
+            const tags: ExerciseTag[] = this.exercise.tags;
 
             // 1) Difficulty, 2) language, 3) type of exercise, 4) theme
 
@@ -87,7 +87,7 @@
         }
 
         get rating() {
-            const avg: number = this.exercise.metrics.avg_vote;
+            const avg: number = this.exercise.metrics.avg_score;
 
             if(this.exercise.metrics.votes === 0) return 0;
 

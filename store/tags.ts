@@ -1,6 +1,11 @@
-import {Category, ExtendedTag, SelectedTag, Tag, TagsCategory} from '~/types'
+import {
+  Category,
+  SelectedTag,
+  Tag,
+  CategoryWithTags,
+  CategoryWithSelectedTags
+} from '~/types'
 import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
-import {GetterTree} from "~/node_modules/vuex";
 
 const cloneDeep = require('lodash.clonedeep');
 
@@ -32,7 +37,7 @@ export const state = () => ({
   /**
    * The default tags fetched
    */
-  defaultTags: [] as ExtendedTag[],
+  defaultTags: [] as CategoryWithSelectedTags[],
   /**
    * All the tags selected in the filter section
    */
@@ -40,7 +45,7 @@ export const state = () => ({
   /**
    * The defaultTags array with modification of state for tags
    */
-  tags: [] as ExtendedTag[],
+  tags: [] as CategoryWithSelectedTags[],
   /**
    * The tag id's that are selected (CNF form)
    * example : [1, [2, 3]] = 1 n (2 v 3)
@@ -86,7 +91,7 @@ export const mutations = mutationTree(state, {
    * @param tags
    * @constructor
    */
-  INIT(state, tags) {
+  INIT(state, tags: CategoryWithSelectedTags[]) {
     state.defaultTags = cloneDeep(tags);
     state.tags = tags;
   },
@@ -178,11 +183,11 @@ export const actions = actionTree({state, mutations}, {
   async fetch({commit, state}) {
 
     try {
-      const data: TagsCategory[] = await this.$axios.$get('api/tags_by_categories');
-      const array: ExtendedTag[] = [];
+      const data: CategoryWithTags[] = await this.$axios.$get('api/tags_by_categories');
+      const array: CategoryWithSelectedTags[] = [];
 
       for (let i in data) {
-        const {id, category, tags} = data[i];
+        const {id, category, tags}: CategoryWithTags = data[i];
 
         const selectedTags: SelectedTag[] = tags.map((el: Tag) => {
           const selectedTag: SelectedTag = {...el, category_id: id, state: DEACTIVATED};
@@ -200,10 +205,10 @@ export const actions = actionTree({state, mutations}, {
 
       selectedTags.forEach((tag: SelectedTag) => {
 
-        const tagsCategory: ExtendedTag | undefined = array.find(el => el.id === tag.category_id);
+        const tagsCategory: CategoryWithSelectedTags | undefined = array.find((el: CategoryWithSelectedTags) => el.id === tag.category_id);
 
         if (tagsCategory !== undefined) {
-          const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el) => el.tag_id === tag.tag_id);
+          const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el: SelectedTag) => el.tag_id === tag.tag_id);
 
           if (selectedTag !== undefined) {
             selectedTag.state = ACTIVE
@@ -218,14 +223,16 @@ export const actions = actionTree({state, mutations}, {
 
   }
 
-})
+});
 
 
 export const getters = getterTree(state, {
-  categories: (state): Category[] => state.tags.map(tag => {
-    return {
-      category_id: tag.id,
-      category_text: tag.category
-    }
-  })
-})
+  categories: (state): Category[] => {
+    return state.tags.map(tag => {
+      return {
+        id: tag.id,
+        category: tag.category
+      }
+    })
+  }
+});

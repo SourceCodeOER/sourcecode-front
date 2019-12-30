@@ -1,7 +1,7 @@
 <template>
   <div id="HistoricalPanel" class="panel">
 
-    <h3>Historique <span @click="close" class="secondary-color"><Icon type="arrowLeft" class="reversed-arrow"
+    <h3>Historique <span @click="close" class="secondary-color"><Icon type="arrowLeft"
                                                                       theme="theme--secondary-color"/> Retour</span>
     </h3>
 
@@ -78,12 +78,6 @@
       padding-right: 20px;
       padding-bottom: 0;
       display: flex;
-
-      .reversed-arrow {
-        width: 20px;
-        margin-bottom: -1px;
-        margin-right: 2px;
-      }
 
       span {
         color: $SECONDARY_COLOR;

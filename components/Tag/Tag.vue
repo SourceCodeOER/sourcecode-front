@@ -7,7 +7,6 @@
 
 <script lang="ts">
   import {Vue, Component, Prop} from 'vue-property-decorator'
-  import {ACTIVE, DEACTIVATED} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
@@ -17,7 +16,7 @@
   })
   export default class Tag extends Vue {
     @Prop({type: String, required: true}) readonly title!: string;
-    @Prop({type: Number, default: 0}) readonly state!: DEACTIVATED | ACTIVE;
+    @Prop({type: Number, default: 0}) readonly state!: 1 | 0;
     @Prop({type: Number, required: true}) readonly category!: number;
     @Prop({type: Number, required: true}) readonly id!: number;
     @Prop({type: String, default: "default"}) readonly mode!: "default" | "strict";

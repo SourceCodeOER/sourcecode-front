@@ -152,7 +152,7 @@
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import ExerciseFormMixins from "~/components/Mixins/ExerciseFormMixins";
   import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
-  import {ExerciseBuild, SelectedTag, TagProposal} from "~/types";
+  import {PostExerciseRequest, PostExerciseRequestWithFile, SelectedTag, TagProposal} from "~/types";
   import {BusEvent} from "~/components/Event/BusEvent";
   import {AxiosError} from "~/node_modules/axios";
   import jsonFormData from 'json-form-data';
@@ -200,7 +200,7 @@
       if (isValid1 && isValid2 && isHTMLValid && isTagsValid) {
 
         try {
-          const exerciseBuild: ExerciseBuild = {
+          const exerciseBuild: PostExerciseRequest|PostExerciseRequestWithFile = {
             title: this.form.title,
             description,
             tags
@@ -214,8 +214,7 @@
 
           if (file !== null) {
 
-            exerciseBuild.exerciseFile = file;
-            console.log(file);
+            (exerciseBuild as PostExerciseRequestWithFile).exerciseFile = file;
 
             const formData: FormData = jsonFormData(exerciseBuild);
 

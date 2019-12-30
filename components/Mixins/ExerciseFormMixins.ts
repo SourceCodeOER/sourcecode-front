@@ -1,6 +1,12 @@
 import {Component, Ref, Vue} from "vue-property-decorator";
 import {ValidationProvider, ValidationObserver} from 'vee-validate';
-import {ACTIVE, Category, DEACTIVATED, ExerciseBuild, SelectedTag, TagProposal} from "~/types";
+import {
+  Category,
+  PostExerciseRequest,
+  PostExerciseRequestWithFile,
+  SelectedTag,
+  TagProposal, UpdateExerciseRequest, UpdateExerciseRequestWithFile
+} from "~/types";
 import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
 import {BusEvent} from "~/components/Event/BusEvent";
 import CustomSelect from "~/components/Input/CustomSelect.vue";
@@ -55,7 +61,7 @@ export default class ExerciseFormMixins extends Vue {
   /**
    * The main form to build a new exercise
    */
-  form: ExerciseBuild = {
+  form: PostExerciseRequestWithFile | PostExerciseRequest | UpdateExerciseRequestWithFile | UpdateExerciseRequest = {
     title: '',
     description: '',
     tags: [],
@@ -86,13 +92,13 @@ export default class ExerciseFormMixins extends Vue {
    * Only get the names of each categories
    */
   protected get categoriesName(): string[] {
-    return this.categories.map(el => el.category_text)
+    return this.categories.map(el => el.category)
   }
 
   /**
    * Get the selected tags from the tags store
    */
-  protected get selectedTags():SelectedTag[] {
+  protected get selectedTags(): SelectedTag[] {
     return this.$accessor.tags.selectedTags
   }
 
@@ -161,7 +167,7 @@ export default class ExerciseFormMixins extends Vue {
    * Deletes a tag proposal
    * @param event
    */
-  deleteTag(event: { id: number, title: string, category: number, state: ACTIVE | DEACTIVATED }) {
+  deleteTag(event: { id: number, title: string, category: number, state: 1 | 0 }) {
     const index = this.newTags.findIndex((el) => el.text === event.title);
 
     if (index !== -1) {
@@ -176,7 +182,7 @@ export default class ExerciseFormMixins extends Vue {
     const isValid = await this.observer3.validate();
 
     if (isValid) {
-      const category_id = this.categories[this.selectedNewTag.category_id].category_id;
+      const category_id = this.categories[this.selectedNewTag.category_id].id;
 
       let isDuplicate = false;
 

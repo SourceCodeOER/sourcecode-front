@@ -89,7 +89,7 @@
 
 <script lang="ts">
   import {Component, Mixins, Ref} from 'vue-property-decorator'
-  import {CheckBoxObjectEmitted, Exercise, ExerciseWithSelection, SearchRequest} from "~/types";
+  import {CheckBoxObjectEmitted, Exercise, ExerciseWithSelection, SearchExerciseRequest} from "~/types";
   import FilterPanel from "~/components/Panel/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/HistoricalPanel.vue";
   import FavoritePanel from "~/components/Panel/FavoritePanel.vue";
@@ -116,7 +116,7 @@
     async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply("default");
-      await $accessor.search.fetch({metadata: {size: 50}, data: {user_ids: [$auth.user.id]}} as SearchRequest);
+      await $accessor.search.fetch({metadata: {size: 50}, data: {user_ids: [$auth.user.id]}} as SearchExerciseRequest);
       await $accessor.favorites.fetch()
     },
     auth: true,

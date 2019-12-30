@@ -25,7 +25,7 @@
   import FavoritePanel from '~/components/Panel/FavoritePanel.vue';
   import ExercisesPanel from "~/components/Panel/ExercisesPanel.vue";
   import {Component, Ref, Mixins} from "vue-property-decorator";
-  import {SearchRequest} from "~/types";
+  import {SearchExerciseRequest} from "~/types";
   import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
   import Icon from "~/components/Symbols/Icon.vue";
 
@@ -42,7 +42,7 @@
     async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply("default");
-      await $accessor.search.fetch({metadata: {size: 20}} as SearchRequest);
+      await $accessor.search.fetch({metadata: {size: 20}} as SearchExerciseRequest);
 
       if($auth.loggedIn) {
         await $accessor.favorites.fetch()

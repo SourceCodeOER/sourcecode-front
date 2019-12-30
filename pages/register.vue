@@ -50,6 +50,7 @@
   import {Component, Ref, Vue} from "vue-property-decorator";
   import {AxiosError} from "~/node_modules/axios";
   import {BusEvent} from "~/components/Event/BusEvent";
+  import {RegisterRequest} from "~/types";
 
   @Component({
     layout: 'authentication',
@@ -60,7 +61,7 @@
     auth: 'guest'
   })
   export default class extends Vue {
-    form: { password: string; fullName: string; email: string } = {
+    form: RegisterRequest = {
       email: '',
       password: '',
       fullName: ''

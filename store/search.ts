@@ -1,4 +1,11 @@
-import {Exercise, MetadataRequest, MetadataResponse, SearchCriterion, SearchRequest, SearchResponse} from "~/types";
+import {
+  Exercise,
+  MetadataSearchExerciseRequest,
+  MetadataSearchExerciseResponse,
+  DataSearchExerciseRequest,
+  SearchExerciseRequest,
+  SearchExerciseResponse
+} from "~/types";
 import {actionTree, getterTree, mutationTree} from "nuxt-typed-vuex";
 
 export const state = () => ({
@@ -14,14 +21,14 @@ export const state = () => ({
     totalItems: 0,
     totalPages: 0,
     pageSize: 20
-  } as MetadataResponse,
+  } as MetadataSearchExerciseResponse,
   /**
    * The search criterion composed by a title and tags id
    */
   search_criterion: {
     title: "",
     tags: []
-  } as SearchCriterion
+  } as DataSearchExerciseRequest
 });
 
 export const getters = getterTree(state, {
@@ -39,7 +46,7 @@ export const mutations = mutationTree(state, {
    * @param data
    * @constructor
    */
-  INIT(state, data: SearchResponse) {
+  INIT(state, data: SearchExerciseResponse) {
     state.metadata = data.metadata;
     state.exercises = data.data
   },
@@ -74,7 +81,7 @@ export const mutations = mutationTree(state, {
    * @param metadata
    * @constructor
    */
-  SET_METADATA(state, metadata: MetadataResponse) {
+  SET_METADATA(state, metadata: MetadataSearchExerciseResponse) {
     state.metadata = metadata
   },
   /**
@@ -92,7 +99,7 @@ export const mutations = mutationTree(state, {
    * @param searchCriterion
    * @constructor
    */
-  SET_SEARCH_CRITERION(state, searchCriterion: SearchCriterion | undefined) {
+  SET_SEARCH_CRITERION(state, searchCriterion: DataSearchExerciseRequest | undefined) {
     if (!!searchCriterion) {
       if (!!searchCriterion.title || searchCriterion.title === '') state.search_criterion.title = searchCriterion.title;
       if (!!searchCriterion.tags) state.search_criterion.tags = searchCriterion.tags;
@@ -109,20 +116,23 @@ export const actions = actionTree({state, mutations, getters}, {
    * @param state
    * @param searchRequest
    */
-  async fetch({commit, state}, searchRequest: SearchRequest) {
-    const metadata: MetadataRequest = {};
+  async fetch({commit, state}, searchRequest: SearchExerciseRequest) {
+    const metadata: MetadataSearchExerciseRequest = {};
 
     if (searchRequest.metadata) {
-        metadata.size = !!searchRequest.metadata.size ? searchRequest.metadata.size : state.metadata.pageSize;
-        metadata.page = !!searchRequest.metadata.page ? searchRequest.metadata.page : 1;
+      metadata.size = !!searchRequest.metadata.size ? searchRequest.metadata.size : state.metadata.pageSize;
+      metadata.page = !!searchRequest.metadata.page ? searchRequest.metadata.page : 1;
     } else {
       metadata.page = 1;
       metadata.size = state.metadata.pageSize
     }
 
-    const newSearchRequest: SearchRequest = {data: {...state.search_criterion, ...searchRequest.data}, metadata};
+    const newSearchRequest: SearchExerciseRequest = {
+      data: {...state.search_criterion, ...searchRequest.data},
+      metadata
+    };
     try {
-      const response: SearchResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
+      const response: SearchExerciseResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
       commit('INIT', response);
       commit('SET_SEARCH_CRITERION', searchRequest.data)
     } catch (e) {
@@ -136,7 +146,7 @@ export const actions = actionTree({state, mutations, getters}, {
    */
   async next({commit, state}) {
 
-    const request: SearchRequest = {
+    const request: SearchExerciseRequest = {
       metadata: {
         page: state.metadata.currentPage + 1,
         size: state.metadata.pageSize
@@ -147,7 +157,7 @@ export const actions = actionTree({state, mutations, getters}, {
     };
 
     try {
-      const response: SearchResponse = await this.app.$axios.$post('/api/search', request);
+      const response: SearchExerciseResponse = await this.app.$axios.$post('/api/search', request);
       commit('ADD_EXERCISES', response.data);
       commit('SET_METADATA', response.metadata);
     } catch (e) {

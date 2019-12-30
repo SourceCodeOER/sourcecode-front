@@ -40,8 +40,9 @@
 <script lang="ts">
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {Component, Ref, Vue} from "vue-property-decorator";
-  import {AxiosError} from "~/node_modules/axios";
+  import {AxiosError} from "axios";
   import {BusEvent} from "~/components/Event/BusEvent";
+  import {AuthRequest} from "~/types";
 
   @Component({
     layout: 'authentication',
@@ -53,7 +54,7 @@
   })
   export default class extends Vue {
 
-    form: { password: string; email: string } = {
+    form: AuthRequest = {
       email: '',
       password: ''
     };

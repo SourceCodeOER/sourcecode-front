@@ -57,7 +57,7 @@
 
 <script lang="ts">
   import {Component, Vue} from "vue-property-decorator";
-  import {Exercise, TagExercise} from "~/types";
+  import {Exercise, ExerciseTag} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import hljs from 'highlight.js/lib/highlight';
   import javascript from 'highlight.js/lib/languages/javascript';
@@ -100,7 +100,7 @@
     get tag_by_categories() {
       const map: Map<string, string[]> = new Map();
 
-      this.exercise.tags.forEach((tag: TagExercise) => {
+      this.exercise.tags.forEach((tag: ExerciseTag) => {
         const el: string[] | undefined = map.get(tag.category.category_text);
         if (el !== undefined) {
           el.push(tag.tag_text)

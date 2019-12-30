@@ -147,7 +147,8 @@
   import {AxiosError} from "axios";
   import {
     Exercise,
-    ExerciseModify,
+    UpdateExerciseRequest,
+    UpdateExerciseRequestWithFile,
     SelectedTag,
     TagProposal
   } from "~/types";
@@ -230,7 +231,7 @@
       if (isValid1 && isValid2 && isHTMLValid && isTagsValid) {
 
         try {
-          const exerciseBuild: ExerciseModify = {
+          const exerciseBuild: UpdateExerciseRequest|UpdateExerciseRequestWithFile = {
             title: this.form.title,
             description,
             tags,
@@ -245,7 +246,7 @@
 
           if (file !== null) {
 
-            exerciseBuild.exerciseFile = file;
+            (exerciseBuild as UpdateExerciseRequestWithFile).exerciseFile = file;
 
             const formData: FormData = jsonFormData(exerciseBuild);
 
