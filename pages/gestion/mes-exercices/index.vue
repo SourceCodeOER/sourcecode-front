@@ -1,13 +1,9 @@
 <template>
   <div class="container--with-menu" id="MyExercises">
-    <div class="banner banner--with-shadow-bottom banner--nav">
+    <div class="banner banner--with-shadow-bottom banner__nav">
       <span>
         Gestion > Mes exercices
       </span>
-      <nuxt-link to="/exercices" tag="span">
-        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
-        Retour
-      </nuxt-link>
     </div>
 
     <div class="wrapper wrapper--with-panel">
