@@ -39,6 +39,10 @@ export default class ExerciseFormMixins extends Vue {
    * The component containing the description with the editor
    */
   @Ref() richTextEditor!: RichTextEditor;
+  /**
+   * Observer for the input file element
+   */
+  @Ref() inputFile!:HTMLInputElement;
 
   /**
    * A new tag proposal
@@ -138,6 +142,16 @@ export default class ExerciseFormMixins extends Vue {
     const value = e.target.value;
     this.$accessor.search.fetch({data: {title: value}});
   }, 300);
+
+
+  /**
+   * Delete file from input and reset the filename
+   */
+  deleteFile() {
+    this.filename = null;
+    this.inputFile.files = null;
+    this.fileObserver.reset();
+  }
 
   /**
    * Event for the changed state of the input file (archive)
