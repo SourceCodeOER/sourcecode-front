@@ -61,7 +61,7 @@
 
             <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
               <div class="logo-link-wrapper">
-                <Icon type="star" theme="theme--white"/>
+                <Icon type="starHalf" theme="theme--white"/>
               </div>
               Favoris
             </li>
@@ -111,6 +111,12 @@
                 <Icon type="document" theme="theme--white"/>
               </div>
               Mes exercices
+            </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/mes-favoris">
+              <div class="logo-link-wrapper">
+                <Icon type="star" theme="theme--white"/>
+              </div>
+              Mes favoris
             </nuxt-link>
             <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/profil">
               <div class="logo-link-wrapper">
