@@ -112,9 +112,18 @@
         }
 
         try {
-          await this.$accessor.favorites.createFavorite(configurationBuild)
+          await this.$accessor.favorites.createFavorite(configurationBuild);
+          this.favoriteName = '';
+          this.createFavoriteInput = false;
+          BusEvent.$emit('displayNotification', {
+            mode:'success',
+            message: "Votre favori a bien été créé."
+          })
         } catch (e) {
-          console.log('hello')
+          BusEvent.$emit('displayNotification', {
+            mode:'error',
+            message: "Vos favoris n'ont pas pu être chargé"
+          })
         }
       } else {
         BusEvent.$emit('displayNotification', {
