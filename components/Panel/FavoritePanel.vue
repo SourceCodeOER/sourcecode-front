@@ -9,6 +9,15 @@
       <div class="historical" @click="fetch(configuration)" v-for="configuration in configurations"
            :key="configuration.id">
         <h4>{{configuration.name}}</h4>
+        <div class="cta-wrapper">
+          <span @click.stop="editFavorite(configuration.id)">
+            <Icon type="edit"  theme="theme--secondary-color"/>
+          </span>
+
+          <span @click.stop="deleteFavorite(configuration.id)">
+            <Icon type="trash" theme="theme--secondary-color"/>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -17,7 +26,13 @@
 <script lang="ts">
   import {BusEvent} from '~/components/Event/BusEvent'
   import {Component, Vue} from "vue-property-decorator";
-  import {Configuration, DataSearchExerciseRequest, SearchExerciseRequest, SelectedTag, TagExtended} from "~/types";
+  import {
+    Configuration,
+    DataSearchExerciseRequest,
+    SearchExerciseRequest,
+    SelectedTag,
+    TagExtended
+  } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
@@ -36,6 +51,14 @@
 
     get configurations(): Configuration[] {
       return this.$accessor.favorites.favorites
+    }
+
+    deleteFavorite(id:number) {
+      alert("delete")
+    }
+
+    editFavorite(id:number) {
+      alert("edit favorite")
     }
 
     async fetch(configuration: Configuration) {
@@ -97,13 +120,28 @@
     }
 
     h4 {
-      margin-bottom: 10px;
+      margin-bottom: 0;
       margin-top: 0;
+      padding: 20px;
+    }
+
+    .cta-wrapper {
+      margin-left: auto;
+      text-align: right;
+      padding: 0 10px 10px 0;
+
+      svg {
+        width: 22px;
+        margin-left: 5px;
+        opacity: 0;
+        @include transitionHelper(opacity .4s ease);
+      }
     }
 
     .historical {
-      padding: 20px;
       cursor: pointer;
+      border-bottom: 1px solid rgba($GREY, .1);
+
 
       .title {
         margin-bottom: 20px;
@@ -117,6 +155,10 @@
 
       &:hover {
         background-color: rgba($GREY, .1);
+
+        .cta-wrapper svg {
+          opacity: 1;
+        }
       }
     }
   }
