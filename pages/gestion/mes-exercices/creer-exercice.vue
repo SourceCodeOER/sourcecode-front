@@ -1,6 +1,6 @@
 <template>
   <div class="container--with-menu" id="CreateExercise">
-    <div class="banner banner--with-shadow-bottom banner--nav">
+    <div class="banner banner--with-shadow-bottom banner__nav banner__nav--with-link">
       <span>
         Gestion > Mes exercices > Créer un exercice
       </span>
@@ -289,92 +289,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../assets/css/_variables';
-  @import '../../../assets/css/_function';
-
-  #CreateExercise {
-
-    h1 {
-      margin-bottom: 35px;
-    }
-
-    .wrapper {
-      margin-bottom: 40px;
-    }
-
-    .disclaimer {
-      margin-top: 30px;
-      font-style: italic;
-      margin-bottom: 30px;
-      font-size: .8em;
-
-      span.link {
-        text-decoration: underline;
-        font-weight: bold;
-        color: $TERNARY_COLOR;
-        cursor: pointer;
-      }
-    }
-
-    .content {
-      background-color: white;
-      border-radius: 4px;
-      @include box-shadow($SHADOW);
-      padding: 20px;
-    }
-
-    button {
-      font-size: .7em;
-    }
-
-    h2 {
-      margin-top: 30px;
-      margin-bottom: 15px;
-      color: $SECONDARY_COLOR
-    }
-
-    blockquote {
-      margin-top: 0;
-      max-width: 800px;
-    }
-
-    form {
-      display: grid;
-      max-width: 800px;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 30px 15px;
-      margin-top: 0;
-      margin-bottom: 0;
-
-      > label, > div {
-        display: flex;
-        flex-direction: column;
-        min-height: 90px;
-      }
-
-      .label__name {
-        margin-bottom: 10px;
-        color: $SECONDARY_COLOR;
-        font-weight: bold;
-      }
-
-      label[for=Archive] {
-        align-self: flex-start;
-      }
-
-      .error-message {
-        margin-top: 10px;
-      }
-    }
-
-    .validation__tag {
-      grid-row-gap: 0;
-      margin-bottom: 30px;
-
-      button {
-        max-width: 250px;
-        margin-top: 0;
-      }
-    }
-  }
+  @import "../../../assets/css/exercise-gestion";
 </style>
