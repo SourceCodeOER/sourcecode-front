@@ -232,6 +232,11 @@ export default class ExerciseFormMixins extends Vue {
     this.form.tags = [];
     this.form.url = '';
 
+    // @ts-ignore
+    this.richTextEditor.reset();
+
+    this.newTags = [];
+
     this.$accessor.search.RESET_SEARCH_CRITERION();
     this.$accessor.search.RESET();
     this.$accessor.tags.CLEAR();
