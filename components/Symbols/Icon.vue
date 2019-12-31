@@ -34,6 +34,7 @@
       history: () => import('./library/HistorySymbol.vue'),
       user: () => import('./library/UserSymbol.vue'),
       off: () => import('./library/OffSymbol.vue'),
+      edit: () => import('./library/EditSymbol.vue'),
       archive: () => import('./library/ArchiveSymbol.vue')
     }
   })
