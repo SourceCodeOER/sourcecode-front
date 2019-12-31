@@ -55,15 +55,6 @@
 
           <button
             class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.heading({ level: 1 }), 'button--ternary-color': !isActive.heading({ level: 1 }) }"
-
-            @click="commands.heading({ level: 1 })"
-          >
-            H1
-          </button>
-
-          <button
-            class="menubar__button"
             :class="{ 'button--ternary-color-reverse': isActive.heading({ level: 2 }), 'button--ternary-color': !isActive.heading({ level: 2 }) }"
             @click="commands.heading({ level: 2 })"
           >
@@ -192,7 +183,7 @@
           new BulletList(),
           new CodeBlock(),
           new HardBreak(),
-          new Heading({levels: [1, 2, 3]}),
+          new Heading({levels: [2, 3]}),
           new HorizontalRule(),
           new ListItem(),
           new OrderedList(),
@@ -229,6 +220,10 @@
       if (this.editor !== null) {
         this.editor.destroy()
       }
+    }
+
+    reset(content:string='<p></p>') {
+      this.editor.setContent(content);
     }
 
     content() {
