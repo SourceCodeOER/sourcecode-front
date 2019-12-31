@@ -108,12 +108,14 @@
             <span class="label__name">
               Uploadez votre archive (zip)
             </span>
-            <input id="Archive" name="archive" @change="selectedFile" class="input--ternary-color"
+            <input id="Archive" name="archive" ref="inputFile" @change="selectedFile" class="input--ternary-color"
                    type="file">
             <label for="Archive">
               <Icon type="archive" theme="theme--white"/>
               {{labelFileText}}</label>
             <span class="error-message">{{errors[0]}}</span>
+            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;" @click="deleteFile">Supprimer le fichier</span>
+
           </ValidationProvider>
 
           <ValidationProvider tag="label"

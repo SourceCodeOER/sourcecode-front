@@ -108,12 +108,13 @@
             <span class="label__name">
               Uploadez votre archive (zip)
             </span>
-            <input id="Archive" name="archive" @change="selectedFile" class="input--ternary-color"
+            <input id="Archive" name="archive" ref="inputFile" @change="selectedFile" class="input--ternary-color"
                    type="file">
             <label for="Archive">
               <Icon type="archive" theme="theme--white"/>
               {{labelFileText}}</label>
             <span class="error-message">{{errors[0]}}</span>
+            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;" @click="deleteFile">Supprimer le fichier</span>
           </ValidationProvider>
 
           <ValidationProvider tag="label"
@@ -257,6 +258,7 @@
             });
 
           } else {
+            if(this.exercise.file !== null) exerciseBuild.removePreviousFile = true;
             await this.$axios.$put('/api/exercises/' + this.exercise.id, exerciseBuild);
           }
 
@@ -265,7 +267,6 @@
             message: "Votre exercice a été publié ! Notre équipe le validera très prochainement."
           });
 
-          //await this.resetGeneralForm();
           await this.resetTagForm();
 
           requestAnimationFrame(() => {
@@ -323,6 +324,8 @@
       if(process.client) {
         this.form.title = this.exercise.title;
         const file: string | null | undefined = this.exercise.file;
+        if(file) this.filename = file;
+
         this.form.url = this.exercise.url;
         this.form.description = this.exercise.description;
         this.form.tags = this.exercise.tags.map((tag) => tag.tag_id)
