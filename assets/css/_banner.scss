@@ -28,32 +28,37 @@
 
   }
 
-  &.banner--nav {
+  &.banner__nav {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 
-
     span:first-child {
       display: block;
-      margin-bottom: 5px;
       font-weight: bold;
     }
 
-    span:last-child {
-      color: $SECONDARY_COLOR;
-      display: flex;
-      align-items: center;
-      position: relative;
-      cursor: pointer;
-    }
+    &--with-link {
 
-    span {
-      svg {
-        width: 20px;
-        margin-right: 2px;
+      span:first-child {
+        margin-bottom: 5px;
+      }
+
+      span:last-child {
+        color: $SECONDARY_COLOR;
+        display: flex;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+
+        svg {
+          width: 20px;
+          margin-right: 2px;
+        }
+
       }
     }
+
 
   }
 }
