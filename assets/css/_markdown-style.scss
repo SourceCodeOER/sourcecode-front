@@ -36,31 +36,53 @@
     background-color: lighten($GREY, 63);
     padding: 20px;
 
-
-    .kw, .hljs-keyword {
-      color: $TERNARY_COLOR;
+    code {
+      .hljs-comment,
+      .hljs-quote {
+        color: $NIGHT_BLUE
+      }
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-attribute,
+      .hljs-tag,
+      .hljs-name,
+      .hljs-regexp,
+      .hljs-link,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: $LIGHT_RED
+      }
+      .hljs-number,
+      .hljs-meta,
+      .hljs-built_in,
+      .hljs-builtin-name,
+      .hljs-literal,
+      .hljs-type,
+      .hljs-params {
+        color: lighten($RED, 20)
+      }
+      .hljs-string,
+      .hljs-symbol,
+      .hljs-bullet {
+        color: darken(#99cc99, 10);
+      }
+      .hljs-title,
+      .hljs-section {
+        color: darken($TERNARY_COLOR, 12)
+      }
+      .hljs-keyword,
+      .hljs-selector-tag {
+        color: $TERNARY_COLOR;
+      }
+      .hljs-emphasis {
+        font-style: italic;
+      }
+      .hljs-strong {
+        font-weight: 700;
+      }
     }
 
-    .hljs-title {
-      color: darken($TERNARY_COLOR, 12)
-    }
-
-    .dt {
-      color: $TERNARY_COLOR
-    }
-
-    .co, .hljs-comment {
-      color: $NIGHT_BLUE
-    }
-
-    .hljs-meta, .bash {
-      color: $LIGHT_RED
-    }
-
-    .fu {
-      color: $NIGHT_BLUE
-
-    }
   }
 
   code, .title-ref {
