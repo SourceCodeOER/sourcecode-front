@@ -87,7 +87,8 @@ export interface PostExerciseRequestWithFile extends PostExerciseRequest {
 }
 
 export interface UpdateExerciseRequest extends PostExerciseRequest {
-  version:number
+  version:number,
+  removePreviousFile?:boolean
 }
 
 export interface UpdateExerciseRequestWithFile extends PostExerciseRequestWithFile {
