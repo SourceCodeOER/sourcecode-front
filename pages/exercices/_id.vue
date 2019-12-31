@@ -1,6 +1,6 @@
 <template>
   <div class="container--with-menu" id="Exercise">
-    <div class="banner banner--with-shadow-bottom banner--nav">
+    <div class="banner banner--with-shadow-bottom banner__nav banner__nav--with-link">
       <span>
         Exercices > {{exercise.title}}
       </span>
