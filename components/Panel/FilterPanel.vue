@@ -24,12 +24,15 @@
     </transition>
 
     <div class="cta-wrapper" v-if="resetButton">
-      <Icon type="return" @click.native="reset" class="return" theme="theme--secondary-color"/>
+      <span @click="reset">
+        <Icon type="return" class="return" theme="theme--secondary-color"/>
+      </span>
     </div>
     <div class="panel-wrapper">
       <ul class="selectable-tags">
-        <TagSelecter v-for="tag in tags" @apply="apply" @toggle-list="toggleList" :tags="tag.tags"
+        <TagSelecter v-for="tag in tags" ref="tagSelecter" @apply="apply" @toggle-list="toggleList" :tags="tag.tags"
                      :category="tag.id"
+                     :select-all-option="mode === 'default'"
                      :key="tag.id">
           {{tag.category}}
         </TagSelecter>
@@ -41,7 +44,7 @@
 <script lang="ts">
   import Tag from "~/components/Tag/Tag.vue";
   import TagSelecter from "~/components/Search/TagSelecter.vue";
-  import {Component, Vue, Emit, Prop} from 'vue-property-decorator';
+  import {Component, Vue, Emit, Prop, Ref} from 'vue-property-decorator';
   import Icon from "~/components/Symbols/Icon.vue";
   import {ValidationProvider, ValidationObserver} from "vee-validate";
   import {BusEvent} from "~/components/Event/BusEvent";
@@ -68,6 +71,8 @@
     @Prop({type: Boolean, default: false}) favorite!: boolean;
     @Prop({type: String, default: 'Filtres'}) title!: boolean;
     @Prop({type: String, default: 'default'}) mode!: "strict" | "default";
+
+    @Ref() tagSelecter!:TagSelecter[]
 
     get confirmedTags() {
       return this.$accessor.tags.selectedTags
@@ -139,6 +144,10 @@
 
       if (this.searchMode) {
         await this.$accessor.search.fetch({data: {tags: [], title: ''}});
+      }
+
+      if(this.mode === 'default') {
+        this.tagSelecter.forEach(selecter => selecter.$data.selectAllState = false)
       }
 
       this.resetFilterPanel()
