@@ -160,7 +160,8 @@
     Strike,
     Underline,
     History,
-    CodeBlockHighlight
+    CodeBlockHighlight,
+    Placeholder
   } from 'tiptap-extensions'
   import {Component, Prop, Ref, Vue} from "vue-property-decorator";
 
@@ -196,6 +197,12 @@
           new Strike(),
           new Underline(),
           new History(),
+          new Placeholder({
+            showOnlyCurrent: false,
+            emptyNodeText: () => {
+              return 'Entrez votre description...'
+            },
+          }),
           new CodeBlockHighlight({
             languages: {
               javascript,
