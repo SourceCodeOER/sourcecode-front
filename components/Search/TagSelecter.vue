@@ -8,6 +8,9 @@
       <li>
         <input type="text" class="input--primary-color" v-model="filter" placeholder="Filtrer">
       </li>
+      <li v-if="selectAllOption">
+        <CheckBox title="Tout sélectionner" :state="selectAllState" :id="-1" @check="check"/>
+      </li>
       <li v-for="el in filteredTags" :key="el.id">
         <CheckBox :title="el.tag_text" :state="el.state === 2 || el.state === 1" :id="el.tag_id" @check="check"/>
       </li>
@@ -31,12 +34,15 @@
   export default class TagSelecter extends Vue {
     filter: string = "";
     active: boolean = false;
+    selectAllState: boolean = false;
 
     @Prop({
       type: Array, default() {
         return []
       }
     }) readonly tags!: SelectedTag[];
+
+    @Prop({type: Boolean, default: false}) readonly selectAllOption!: boolean;
 
     @Prop({
       type: Number,
@@ -54,8 +60,25 @@
     }
 
     check({id, state, title}: CheckBoxObjectEmitted) {
-      this.$accessor.tags.addOrRemoveTag({tag_id:id, tag_text:title, state: state ? 1 : 0, category_id: this.category});
-      this.$emit('apply')
+      if (id !== -1) {
+        this.$accessor.tags.addOrRemoveTag({
+          tag_id: id,
+          tag_text: title,
+          state: state ? 1 : 0,
+          category_id: this.category
+        });
+      } else {
+        this.selectAllState = state;
+        this.tags.forEach(tag => {
+          if (tag.state === 0 && state) {
+            this.$accessor.tags.ADD_TAG(tag)
+          } else if (tag.state === 1 && !state) {
+            this.$accessor.tags.REMOVE_TAG(tag)
+          }
+        });
+
+      }
+      this.$emit('apply');
     }
 
   }
