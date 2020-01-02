@@ -222,7 +222,6 @@
   @import "./../assets/css/_function";
   @import "./../assets/css/_font";
 
-  $PADDING_MENU: 28px;
 
   #Menu {
     width: $MENU_WIDTH;
