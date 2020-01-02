@@ -39,6 +39,12 @@
 
         <h2>Description *</h2>
 
+        <blockquote>
+          <p>Décrivez l'énoncé de votre exercice et expliquez ce que contient votre archive zip (si présente). Un énoncé
+            bien écrit aura bien plus de retours positifs qu'un descriptif vide et sans explication
+            pour utiliser le contenu de votre archive.</p>
+        </blockquote>
+
         <RichTextEditor ref="richTextEditor" :default-content="exercise.description"/>
 
         <h2>Tags *</h2>
@@ -114,7 +120,8 @@
               <Icon type="archive" theme="theme--white"/>
               {{labelFileText}}</label>
             <span class="error-message">{{errors[0]}}</span>
-            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;" @click="deleteFile">Supprimer le fichier</span>
+            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;"
+                  @click="deleteFile">Supprimer le fichier</span>
           </ValidationProvider>
 
           <ValidationProvider tag="label"
@@ -131,10 +138,10 @@
         </ValidationObserver>
 
 
-        <p class="disclaimer">* champs obligatoires</p>
-        <button @click="validateBeforeSubmit" class="button--ternary-color-reverse">
+        <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
           Publier l'exercice
         </button>
+        <p class="disclaimer">* champs obligatoires</p>
 
       </section>
     </div>
@@ -189,13 +196,13 @@
 
         const queryString: string = qs.stringify(queryObject);
 
-        const tags:SelectedTag[] = await $axios.$get(`api/tags?${queryString}`);
+        const tags: SelectedTag[] = await $axios.$get(`api/tags?${queryString}`);
 
         $accessor.search.RESET_SEARCH_CRITERION();
         $accessor.search.RESET();
 
         await $accessor.tags.fetch();
-        await $accessor.tags.applyConfirmedTags({confirmedTags: tags, mode:'strict'});
+        await $accessor.tags.applyConfirmedTags({confirmedTags: tags, mode: 'strict'});
 
         return {exercise}
       } catch (e) {
@@ -232,11 +239,11 @@
       if (isValid1 && isValid2 && isHTMLValid && isTagsValid) {
 
         try {
-          const exerciseBuild: UpdateExerciseRequest|UpdateExerciseRequestWithFile = {
+          const exerciseBuild: UpdateExerciseRequest | UpdateExerciseRequestWithFile = {
             title: this.form.title,
             description,
             tags,
-            version:this.exercise.version
+            version: this.exercise.version
           };
 
           if (!!this.form.url) {
@@ -251,14 +258,14 @@
 
             const formData: FormData = jsonFormData(exerciseBuild);
 
-            await this.$axios.$put('/api/exercises/' + this.exercise.id , formData, {
+            await this.$axios.$put('/api/exercises/' + this.exercise.id, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               }
             });
 
           } else {
-            if(this.exercise.file !== null) exerciseBuild.removePreviousFile = true;
+            if (this.exercise.file !== null) exerciseBuild.removePreviousFile = true;
             await this.$axios.$put('/api/exercises/' + this.exercise.id, exerciseBuild);
           }
 
@@ -321,10 +328,10 @@
     }
 
     mounted() {
-      if(process.client) {
+      if (process.client) {
         this.form.title = this.exercise.title;
         const file: string | null | undefined = this.exercise.file;
-        if(file) this.filename = file;
+        if (file) this.filename = file;
 
         this.form.url = this.exercise.url;
         this.form.description = this.exercise.description;

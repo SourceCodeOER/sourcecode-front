@@ -39,6 +39,12 @@
 
         <h2>Description *</h2>
 
+        <blockquote>
+          <p>Décrivez l'énoncé de votre exercice et expliquez ce que contient votre archive zip (si présente). Un énoncé
+            bien écrit aura bien plus de retours positifs qu'un descriptif vide et sans explication
+            pour utiliser le contenu de votre archive.</p>
+        </blockquote>
+
         <RichTextEditor ref="richTextEditor"/>
 
         <h2>Tags *</h2>
@@ -114,7 +120,8 @@
               <Icon type="archive" theme="theme--white"/>
               {{labelFileText}}</label>
             <span class="error-message">{{errors[0]}}</span>
-            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;" @click="deleteFile">Supprimer le fichier</span>
+            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;"
+                  @click="deleteFile">Supprimer le fichier</span>
 
           </ValidationProvider>
 
@@ -132,10 +139,10 @@
         </ValidationObserver>
 
 
-        <p class="disclaimer">* champs obligatoires</p>
-        <button @click="validateBeforeSubmit" class="button--ternary-color-reverse">
+        <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
           Publier l'exercice
         </button>
+        <p class="disclaimer">* champs obligatoires</p>
 
       </section>
     </div>
@@ -202,7 +209,7 @@
       if (isValid1 && isValid2 && isHTMLValid && isTagsValid) {
 
         try {
-          const exerciseBuild: PostExerciseRequest|PostExerciseRequestWithFile = {
+          const exerciseBuild: PostExerciseRequest | PostExerciseRequestWithFile = {
             title: this.form.title,
             description,
             tags
