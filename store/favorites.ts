@@ -21,7 +21,6 @@ export const actions = actionTree({state, mutations}, {
   async fetch({commit}) {
     try {
       const response: Configuration[] = await this.app.$axios.$get('/api/configurations');
-      console.log(response);
       commit('INIT', response)
     } catch (e) {
       commit('RESET')
