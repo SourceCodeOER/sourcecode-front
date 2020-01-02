@@ -6,8 +6,11 @@
 
   margin-top: 30px;
   margin-bottom: 30px;
+  border: 1px solid $TERNARY_COLOR;
+  border-radius: 4px;
 
   .menubar {
+    padding: 10px;
 
   }
 
@@ -32,22 +35,27 @@
   }
 
   .editor__content {
-    margin-top: 30px;
+    //margin-top: 30px;
 
     .ProseMirror {
-      border: 1px solid lighten($TERNARY_COLOR, 20);
-      border-radius: 4px;
       padding: 10px 20px;
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
       outline: none;
+      border-top: 1px solid $TERNARY_COLOR;
 
-      &:focus {
-        outline: none;
-        border: 1px solid $TERNARY_COLOR;
-      }
     }
 
   }
+}
+
+.editor *.is-empty:nth-child(1)::before,
+.editor *.is-empty:nth-child(2)::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: lighten($GREY, 20);
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
 }
