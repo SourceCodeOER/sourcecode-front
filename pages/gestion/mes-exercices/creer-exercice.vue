@@ -1,13 +1,15 @@
 <template>
   <div class="container--with-menu" id="CreateExercise">
-    <div class="banner banner--with-shadow-bottom banner__nav banner__nav--with-link">
-      <span>
-        Gestion > Mes exercices > Créer un exercice
-      </span>
-      <nuxt-link to="/gestion/mes-exercices" tag="span">
-        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
-        Mes exercices
-      </nuxt-link>
+    <div class="banner banner--with-shadow-bottom">
+      <div class="banner__nav banner__nav--with-link">
+        <span>
+          Gestion > Mes exercices > Créer un exercice
+        </span>
+        <nuxt-link to="/gestion/mes-exercices" tag="span">
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          Mes exercices
+        </nuxt-link>
+      </div>
     </div>
 
     <div class="wrapper wrapper--with-panel">
@@ -37,7 +39,7 @@
 
         </ValidationObserver>
 
-        <h2>Description *</h2>
+        <h2 class="title--primary-color__light">Description *</h2>
 
         <blockquote>
           <p>Décrivez l'énoncé de votre exercice et expliquez ce que contient votre archive zip (si présente). Un énoncé
@@ -47,8 +49,8 @@
 
         <RichTextEditor ref="richTextEditor"/>
 
-        <h2>Tags *</h2>
-        <button class="button--ternary-color-reverse" v-show="isEmptyTags" @click="changePanel(1)">
+        <h2 class="title--primary-color__light">Tags *</h2>
+        <button class="button--secondary-color-reverse" v-show="isEmptyTags" @click="changePanel(1)">
           Commencer la sélection
         </button>
 
@@ -83,7 +85,7 @@
                 <option :value="i" v-for="(category, i) in categoriesName">{{category}}</option>
               </select>
               <CustomSelect ref="customSelect" legend="choisir une catégorie" @change="chooseCategory"
-                            class="custom-select--ternary-color custom-select-focus--ternary-color"
+                            class="custom-select--secondary-color custom-select-focus--secondary-color"
                             :options="categoriesName" name="newTags"/>
               <span class="error-message">{{errors[0]}}</span>
             </ValidationProvider>
@@ -114,7 +116,7 @@
             <span class="label__name">
               Uploadez votre archive (zip)
             </span>
-            <input id="Archive" name="archive" ref="inputFile" @change="selectedFile" class="input--ternary-color"
+            <input id="Archive" name="archive" ref="inputFile" @change="selectedFile" class="input--secondary-color"
                    type="file">
             <label for="Archive">
               <Icon type="archive" theme="theme--white"/>
@@ -138,11 +140,11 @@
           </ValidationProvider>
         </ValidationObserver>
 
-
         <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
           Publier l'exercice
         </button>
         <p class="disclaimer">* champs obligatoires</p>
+
 
       </section>
     </div>

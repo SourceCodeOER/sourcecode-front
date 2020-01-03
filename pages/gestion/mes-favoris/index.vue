@@ -1,9 +1,11 @@
 <template>
   <div class="container--with-menu" id="MyFavorites">
-    <div class="banner banner__nav banner--with-shadow-bottom">
-      <span>
-        Gestion > Mes Favoris
-      </span>
+    <div class="banner banner--with-shadow-bottom">
+      <div class="banner__nav">
+        <span>
+          Gestion > Mes Favoris
+        </span>
+      </div>
     </div>
 
     <div class="wrapper">

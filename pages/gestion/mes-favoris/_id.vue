@@ -1,13 +1,15 @@
 <template>
   <div class="container--with-menu" id="MyFavorite">
-    <div class="banner banner--with-shadow-bottom banner__nav banner__nav--with-link">
-      <span>
-        Gestion > Mes Favoris > {{configuration.name}}
-      </span>
-      <nuxt-link to="/gestion/mes-favoris" tag="span">
-        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
-        Mes favoris
-      </nuxt-link>
+    <div class="banner banner--with-shadow-bottom">
+      <div class="banner__nav banner__nav--with-link">
+        <span>
+          Gestion > Mes Favoris > {{configuration.name}}
+        </span>
+        <nuxt-link to="/gestion/mes-favoris" tag="span">
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          Mes favoris
+        </nuxt-link>
+      </div>
     </div>
 
     <div class="wrapper wrapper--with-panel">

@@ -28,7 +28,19 @@
 
   }
 
-  &.banner__nav {
+  &.banner--2-col {
+    justify-content: space-between;
+
+  }
+
+  .banner__button__wrapper {
+    button {
+      margin-top: 0;
+    }
+  }
+
+  .banner__nav {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -45,7 +57,7 @@
       }
 
       span:last-child {
-        color: $SECONDARY_COLOR;
+        color: $PRIMARY_COLOR_LIGHT;
         display: flex;
         align-items: center;
         position: relative;
@@ -58,7 +70,6 @@
 
       }
     }
-
-
   }
+
 }

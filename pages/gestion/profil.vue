@@ -1,9 +1,11 @@
 <template>
   <div class="container--with-menu" id="Profile">
     <div class="banner banner__nav banner--with-shadow-bottom">
-      <span>
-        Gestion > Mon profil
-      </span>
+      <div class="banner__nav">
+        <span>
+          Gestion > Mon profil
+        </span>
+      </div>
     </div>
 
     <div class="wrapper">

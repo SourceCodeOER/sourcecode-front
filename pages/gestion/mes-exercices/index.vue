@@ -1,9 +1,12 @@
 <template>
   <div class="container--with-menu" id="MyExercises">
-    <div class="banner banner--with-shadow-bottom banner__nav">
+    <div class="banner banner--with-shadow-bottom">
+
+      <div class="banner__nav">
       <span>
         Gestion > Mes exercices
       </span>
+      </div>
     </div>
 
     <div class="wrapper wrapper--with-panel">

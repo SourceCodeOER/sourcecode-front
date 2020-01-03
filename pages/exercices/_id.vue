@@ -1,13 +1,16 @@
 <template>
   <div class="container--with-menu" id="Exercise">
-    <div class="banner banner--with-shadow-bottom banner__nav banner__nav--with-link">
-      <span>
-        Exercices > {{exercise.title}}
-      </span>
-      <nuxt-link to="/exercices" tag="span">
-        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--secondary-color"/>
-        Retour à la recherche
-      </nuxt-link>
+    <div class="banner banner--with-shadow-bottom">
+
+      <div class="banner__nav banner__nav--with-link">
+        <span>
+          Exercices > {{exercise.title}}
+        </span>
+        <nuxt-link to="/exercices" tag="span">
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          Retour à la recherche
+        </nuxt-link>
+      </div>
     </div>
 
     <div class="wrapper wrapper--with-panel">
@@ -47,7 +50,7 @@
         <h1>{{exercise.title}}</h1>
         <span>Créé le {{$moment(exercise.createdAt).format("DD/MM/YY à H:mm")}}</span> | <span>Mis à jour le {{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</span>
 
-        <h2>Description</h2>
+        <h2 class="title--primary-color__light">Description</h2>
 
         <article v-html="exercise.description" class="exercise-article"></article>
       </section>
@@ -156,7 +159,7 @@
 
       h4 {
         text-transform: capitalize;
-        color: $TERNARY_COLOR;
+        color: $PRIMARY_COLOR_LIGHT;
         font-family: $CircularStd;
         margin-top: 10px;
         margin-bottom: 10px;
@@ -198,7 +201,6 @@
       }
 
       h2 {
-        color: $SECONDARY_COLOR;
         margin-bottom: 10px;
         margin-top: 30px;
       }
