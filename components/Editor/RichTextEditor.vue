@@ -1,131 +1,160 @@
 <template>
   <div class="editor">
     <client-only>
+
+      <editor-content ref="editorContent" class="editor__content exercise-article" :editor="editor"/>
+
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.bold(), 'button--ternary-color': !isActive.bold() }"
-            @click="commands.bold"
-          >
-            <b>B</b>
-          </button>
+          <div class="menubar__button__wrapper">
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.italic(), 'button--ternary-color': !isActive.italic() }"
-            @click="commands.italic"
-          >
-            <i>i</i>
-          </button>
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.bold(), 'button--grey-light': !isActive.bold() }"
+              @click="commands.bold"
+            >
+              <b>B</b>
+            </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.strike(), 'button--ternary-color': !isActive.strike() }"
-            @click="commands.strike"
-          >
-            <del>S</del>
-          </button>
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.italic(), 'button--grey-light': !isActive.italic() }"
+              @click="commands.italic"
+            >
+              <i>i</i>
+            </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.underline(), 'button--ternary-color': !isActive.underline() }"
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.strike(), 'button--grey-light': !isActive.strike() }"
+              @click="commands.strike"
+            >
+              <del>S</del>
+            </button>
 
-            @click="commands.underline"
-          >
-            <u>u</u>
-          </button>
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.underline(), 'button--grey-light': !isActive.underline() }"
 
-          <button
-            class="menubar__button menubar__button--with-icon"
-            :class="{ 'button--ternary-color-reverse': isActive.code(), 'button--ternary-color': !isActive.code() }"
-            @click="commands.code"
-          >
-            <Icon type="codeBasic" :theme="isActive.code() ? 'theme--white' : 'theme--ternary-color'"/>
-          </button>
+              @click="commands.underline"
+            >
+              <u>u</u>
+            </button>
+          </div>
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.paragraph(), 'button--ternary-color': !isActive.paragraph() }"
-            @click="commands.paragraph"
-          >
-            p
-          </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.heading({ level: 2 }), 'button--ternary-color': !isActive.heading({ level: 2 }) }"
-            @click="commands.heading({ level: 2 })"
-          >
-            H2
-          </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.heading({ level: 3 }), 'button--ternary-color': !isActive.heading({ level: 3 }) }"
-            @click="commands.heading({ level: 3 })"
-          >
-            H3
-          </button>
+          <div class="menubar__button__wrapper">
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.bullet_list(), 'button--ternary-color': !isActive.bullet_list() }"
-            @click="commands.bullet_list"
-          >
-            ul
-          </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'button--ternary-color-reverse': isActive.ordered_list(), 'button--ternary-color': !isActive.ordered_list() }"
-            @click="commands.ordered_list"
-          >
-            ol
-          </button>
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.paragraph(), 'button--grey-light': !isActive.paragraph() }"
+              @click="commands.paragraph"
+            >
+              p
+            </button>
 
-          <button
-            class="menubar__button menubar__button--with-icon"
-            :class="{ 'button--ternary-color-reverse': isActive.blockquote(), 'button--ternary-color': !isActive.blockquote() }"
-            @click="commands.blockquote"
-          >
-            <Icon type="quote" :theme="isActive.blockquote() ? 'theme--white' : 'theme--ternary-color'"/>
-          </button>
+            <button
+              class="menubar__button menubar__button--with-icon"
+              :class="{ 'button--grey-light-reverse': isActive.blockquote(), 'button--grey-light': !isActive.blockquote() }"
+              @click="commands.blockquote"
+            >
+              <Icon type="quote" :theme="isActive.blockquote() ? 'theme--white' : 'theme--grey-light'"/>
+            </button>
 
-          <button
-            class="menubar__button menubar__button--with-icon"
-            :class="{ 'button--ternary-color-reverse': isActive.code_block(), 'button--ternary-color': !isActive.code_block() }"
-            @click="commands.code_block"
-          >
-            <Icon type="codeBlock" :theme="isActive.code_block() ? 'theme--white' : 'theme--ternary-color'"/>
-          </button>
+            <button
+              class="menubar__button menubar__button--with-icon button--grey-light"
+              @click="commands.horizontal_rule"
+            >
+              <Icon type="lineH" theme="theme--grey-light"/>
+            </button>
 
-          <button
-            class="menubar__button menubar__button--with-icon button--ternary-color"
-            @click="commands.horizontal_rule"
-          >
-            <Icon type="lineH" theme="theme--ternary-color"/>
-          </button>
+          </div>
+          <div class="menubar__button__wrapper">
 
-          <button
-            class="menubar__button menubar__button--with-icon button--ternary-color"
-            @click="commands.undo"
-          >
-            <Icon type="undo" theme="theme--ternary-color"/>
 
-          </button>
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.heading({ level: 2 }), 'button--grey-light': !isActive.heading({ level: 2 }) }"
+              @click="commands.heading({ level: 2 })"
+            >
+              H2
+            </button>
 
-          <button
-            class="menubar__button menubar__button--with-icon button--ternary-color"
-            @click="commands.redo"
-          >
-            <Icon type="redo" theme="theme--ternary-color"/>
-          </button>
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.heading({ level: 3 }), 'button--grey-light': !isActive.heading({ level: 3 }) }"
+              @click="commands.heading({ level: 3 })"
+            >
+              H3
+            </button>
+          </div>
+
+          <div class="menubar__button__wrapper">
+
+
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.bullet_list(), 'button--grey-light': !isActive.bullet_list() }"
+              @click="commands.bullet_list"
+            >
+              ul
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'button--grey-light-reverse': isActive.ordered_list(), 'button--grey-light': !isActive.ordered_list() }"
+              @click="commands.ordered_list"
+            >
+              ol
+            </button>
+
+          </div>
+
+          <div class="menubar__button__wrapper">
+
+
+            <button
+              class="menubar__button menubar__button--with-icon"
+              :class="{ 'button--grey-light-reverse': isActive.code(), 'button--grey-light': !isActive.code() }"
+              @click="commands.code"
+            >
+              <Icon type="codeBasic" :theme="isActive.code() ? 'theme--white' : 'theme--grey-light'"/>
+            </button>
+
+            <button
+              class="menubar__button menubar__button--with-icon"
+              :class="{ 'button--grey-light-reverse': isActive.code_block(), 'button--grey-light': !isActive.code_block() }"
+              @click="commands.code_block"
+            >
+              <Icon type="codeBlock" :theme="isActive.code_block() ? 'theme--white' : 'theme--grey-light'"/>
+            </button>
+
+          </div>
+
+          <div class="menubar__button__wrapper">
+
+            <button
+              class="menubar__button menubar__button--with-icon button--grey-light"
+              @click="commands.undo"
+            >
+              <Icon type="undo" theme="theme--grey-light"/>
+
+            </button>
+
+            <button
+              class="menubar__button menubar__button--with-icon button--grey-light"
+              @click="commands.redo"
+            >
+              <Icon type="redo" theme="theme--grey-light"/>
+            </button>
+          </div>
+
 
         </div>
       </editor-menu-bar>
-      <editor-content ref="editorContent" class="editor__content exercise-article" :editor="editor"/>
 
     </client-only>
 
