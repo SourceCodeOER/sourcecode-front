@@ -2,18 +2,34 @@ import {actionTree, mutationTree} from "nuxt-typed-vuex";
 import {Configuration, CreateConfigurationRequest} from "~/types";
 
 export const state = () => ({
-  favorites: [] as Configuration[]
+  favorites: [] as Configuration[],
+  loaded:false
 });
 
 export const mutations = mutationTree(state, {
   INIT(state, configurations: Configuration[]) {
-    state.favorites = configurations
+    state.favorites = configurations;
+    state.loaded = true;
   },
   RESET(state) {
     state.favorites = []
   },
   ADD_CONFIGURATION(state, configuration:Configuration) {
+    state.favorites.push(configuration)
+  },
+  REMOVE_CONFIGURATION(state, id:number) {
+    const index = state.favorites.findIndex(config => config.id === id);
 
+    if(index !== -1) {
+      state.favorites.splice(index, 1)
+    }
+  },
+  UPDATE_CONFIGURATION(state, configuration:Configuration) {
+    const index = state.favorites.findIndex(config => config.id === configuration.id);
+
+    if(index !== -1) {
+      state.favorites[index] = configuration;
+    }
   }
 });
 
