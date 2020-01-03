@@ -101,7 +101,7 @@
       margin-top:80px;
 
       b{
-        color:$TERNARY_COLOR;
+        color:$PRIMARY_COLOR_LIGHT;
       }
     }
 
