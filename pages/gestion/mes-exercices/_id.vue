@@ -20,7 +20,7 @@
 
       <section class="content">
 
-        <h1>Créer un exercice</h1>
+        <h1>Modifier mon exercice</h1>
 
         <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit()">
           <ValidationProvider tag="label"
