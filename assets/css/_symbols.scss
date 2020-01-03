@@ -32,6 +32,10 @@
   fill: $GREY;
 }
 
+.theme--grey-light {
+  fill:lighten($GREY, 20);
+}
+
 .theme--red-light {
   fill:$LIGHT_RED;
 }

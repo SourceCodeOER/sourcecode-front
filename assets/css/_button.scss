@@ -42,6 +42,42 @@ button {
     outline: none;
   }
 
+  &.button--green {
+    border: 1px solid $GREEN;
+    background-color: transparent;
+    color: $GREEN;
+  }
+
+  &.button--green-reverse {
+    border: 1px solid $GREEN;
+    background-color: $GREEN;
+    color: white;
+  }
+
+  &.button--grey {
+    border: 1px solid $GREY;
+    background-color: transparent;
+    color: $GREY;
+  }
+
+  &.button--grey-reverse {
+    border: 1px solid $GREY;
+    background-color: $GREY;
+    color: white;
+  }
+
+  &.button--grey-light {
+    border: 1px solid lighten($GREY, 20);
+    background-color: transparent;
+    color: lighten($GREY, 20);
+  }
+
+  &.button--grey-light-reverse {
+    border: 1px solid lighten($GREY, 20);
+    background-color: lighten($GREY, 20);
+    color: white;
+  }
+
   &.button--ternary-color-reverse {
     border: 1px solid $TERNARY_COLOR;
     background-color: $TERNARY_COLOR;
@@ -66,10 +102,23 @@ button {
     color: $PRIMARY_COLOR;
   }
 
+  &.button--primary-color-reverse {
+    border: 1px solid $PRIMARY_COLOR;
+    background-color: $PRIMARY_COLOR;
+    color: white;
+  }
+
   &.button--primary-color-light {
     border: 1px solid $PRIMARY_COLOR_LIGHT;
     background-color: transparent;
     color: $PRIMARY_COLOR_LIGHT;
+  }
+
+
+  &.button--primary-color-light-reverse {
+    border: 1px solid $PRIMARY_COLOR_LIGHT;
+    background-color: $PRIMARY_COLOR_LIGHT;
+    color: white;
   }
 
   &.button--secondary-color {
