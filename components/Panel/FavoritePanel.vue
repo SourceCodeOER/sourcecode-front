@@ -53,12 +53,28 @@
       return this.$accessor.favorites.favorites
     }
 
-    deleteFavorite(id:number) {
-      alert("delete")
+    async deleteFavorite(id:number) {
+      try {
+        await this.$axios.$delete('/api/configurations', {
+          data: {id}
+        });
+
+        await this.$accessor.favorites.REMOVE_CONFIGURATION(id);
+
+        BusEvent.$emit('displayNotification', {
+          mode:'success',
+          message: 'Votre favori a bien été supprimé.'
+        })
+      } catch (e) {
+        BusEvent.$emit('displayNotification', {
+          mode:'error',
+          message: 'Une erreur est survenue lors de la suppression du favori.'
+        })
+      }
     }
 
     editFavorite(id:number) {
-      alert("edit favorite")
+      this.$router.push('/gestion/mes-favoris/' + id);
     }
 
     async fetch(configuration: Configuration) {
@@ -69,13 +85,9 @@
         searchCriterion.title = configuration.title
       }
 
-      console.log(configuration)
-
       const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
         return {...tag, state: 1}
       });
-
-      console.log(confirmedTags);
 
       this.$accessor.tags.applyConfirmedTags({confirmedTags, mode: "default"});
 
