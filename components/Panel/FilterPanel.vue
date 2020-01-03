@@ -13,11 +13,11 @@
 
       <div class="input-favorite-wrapper" v-else-if="favorite && $auth.loggedIn && createFavoriteInput">
         <ValidationObserver v-slot="{valid}">
-          <ValidationProvider name="email" rules="required">
-            <input v-model="favoriteName" type="text" placeholder="Entrez un nom" class="input--secondary-color">
+          <ValidationProvider name="name" rules="required">
+            <input v-model="favoriteName" type="text" placeholder="Nommer le favori" class="input--grey">
           </ValidationProvider>
-          <button :disabled="!valid" type="submit" @click="validateBeforeSubmit" :class="{'button--secondary-color': !valid, 'button--secondary-color-reverse': valid}"
-                  class="button--secondary-color">OK
+          <button :disabled="!valid" type="submit" @click="validateBeforeSubmit"
+                  :class="{'button--grey-light': !valid, 'button--grey-light-reverse': valid}">OK
           </button>
         </ValidationObserver>
       </div>
@@ -63,7 +63,7 @@
 
     selectedTagSelecter: TagSelecter | undefined = undefined;
     createFavoriteInput: boolean = false;
-    favoriteName:string = ''
+    favoriteName: string = ''
 
     @Prop({type: Boolean, default: false}) searchMode!: boolean;
     @Prop({type: Boolean, default: false}) historicalMode!: boolean;
@@ -72,7 +72,7 @@
     @Prop({type: String, default: 'Filtres'}) title!: boolean;
     @Prop({type: String, default: 'default'}) mode!: "strict" | "default";
 
-    @Ref() tagSelecter!:TagSelecter[]
+    @Ref() tagSelecter!: TagSelecter[]
 
     get confirmedTags() {
       return this.$accessor.tags.selectedTags
@@ -103,16 +103,16 @@
     }
 
     async validateBeforeSubmit() {
-      if(this.confirmedTags.length !== 0) {
+      if (this.confirmedTags.length !== 0) {
         const tags_id: number[] = this.confirmedTags.map(tag => tag.tag_id);
-        const title:string|undefined = this.$accessor.search.search_criterion.title;
+        const title: string | undefined = this.$accessor.search.search_criterion.title;
 
-        const configurationBuild:CreateConfigurationRequest = {
-          tags:tags_id,
+        const configurationBuild: CreateConfigurationRequest = {
+          tags: tags_id,
           name: this.favoriteName
         };
 
-        if(title !== '' && title !== undefined) {
+        if (title !== '' && title !== undefined) {
           configurationBuild.title = title
         }
 
@@ -121,18 +121,18 @@
           this.favoriteName = '';
           this.createFavoriteInput = false;
           BusEvent.$emit('displayNotification', {
-            mode:'success',
+            mode: 'success',
             message: "Votre favori a bien été créé."
           })
         } catch (e) {
           BusEvent.$emit('displayNotification', {
-            mode:'error',
+            mode: 'error',
             message: "Vos favoris n'ont pas pu être chargé"
           })
         }
       } else {
         BusEvent.$emit('displayNotification', {
-          mode:'warning',
+          mode: 'warning',
           message: 'Vous devez ajouter au moins un tag afin de créer votre favori'
         })
       }
@@ -146,7 +146,7 @@
         await this.$accessor.search.fetch({data: {tags: [], title: ''}});
       }
 
-      if(this.mode === 'default') {
+      if (this.mode === 'default') {
         this.tagSelecter.forEach(selecter => selecter.$data.selectAllState = false)
       }
 
