@@ -13,11 +13,16 @@
     </div>
 
     <div class="wrapper wrapper--with-panel">
-      <transition name="fade" mode="out-in" duration="400">
-        <ExercisesCheckPanel title="Exercices similaires" v-if="currentAsidePanel === 0"/>
-        <FilterPanel :reset-button="true" :search-mode="true" mode="strict" title="Choix des tags"
-                     v-if="currentAsidePanel === 1"/>
-      </transition>
+
+      <Panel>
+        <PanelItem>
+          <ExercisesCheckPanel title="Exercices"/>
+        </PanelItem>
+
+        <PanelItem>
+          <FilterPanel :reset-button="true" :search-mode="true" mode="strict" title="Tags"/>
+        </PanelItem>
+      </Panel>
 
       <section class="content">
         <h1>Modifier mon favori</h1>
@@ -86,10 +91,14 @@
   import Tag from "~/components/Tag/Tag.vue";
   import {ValidationObserver, ValidationProvider} from "vee-validate";
   import {BusEvent} from "~/components/Event/BusEvent";
+  import Panel from "~/components/Panel/Panel.vue";
+  import PanelItem from "~/components/Panel/PanelItem.vue";
   const debounce = require('lodash.debounce');
 
   @Component({
     components: {
+      PanelItem,
+      Panel,
       ExercisesCheckPanel,
       FilterPanel,
       Icon,
