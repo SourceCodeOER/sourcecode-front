@@ -39,70 +39,6 @@
           </nuxt-link>
         </ul>
 
-        <template v-if="displayFilterPanel">
-
-          <span>Panneaux</span>
-
-          <ul>
-
-            <li @click="changePanel(0)" class="cta-link cta-link-with-arrow">
-              <div class="logo-link-wrapper">
-                <Icon type="filterBasic" theme="theme--white"/>
-              </div>
-              Filtres
-            </li>
-
-            <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
-              <div class="logo-link-wrapper">
-                <Icon type="history" theme="theme--white"/>
-              </div>
-              Historique
-            </li>
-
-            <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
-              <div class="logo-link-wrapper">
-                <Icon type="starHalf" theme="theme--white"/>
-              </div>
-              Favoris
-            </li>
-
-          </ul>
-        </template>
-
-        <template v-if="displayCreationPanel">
-
-          <span>Panneaux</span>
-
-          <ul>
-
-            <li @click="changePanel(0)" class="cta-link cta-link-with-arrow" :class="{'cta-animate': animateCta}">
-              <div class="logo-link-wrapper">
-                <Icon type="album" theme="theme--white"/>
-              </div>
-              Similarités
-            </li>
-
-            <li @click="changePanel(1)" class="cta-link cta-link-with-arrow">
-              <div class="logo-link-wrapper">
-                <Icon type="tags" theme="theme--white"/>
-              </div>
-              Tags
-            </li>
-
-            <!--
-
-            <li v-if="isAuthenticated" @click="changePanel(2)" class="cta-link cta-link-with-arrow">
-              <div class="logo-link-wrapper">
-                <Icon type="eye" theme="theme--white"/>
-              </div>
-              Preview
-            </li>
-            -->
-
-          </ul>
-        </template>
-
-
         <template v-if="isAuthenticated">
           <span>Gestion</span>
           <ul>
@@ -158,29 +94,6 @@
     }
   })
   export default class Menu extends Vue {
-    animateCta: boolean = false;
-    timer: number | null = null;
-
-    changePanel(id: number) {
-      BusEvent.$emit('changePanel', id)
-    }
-
-    get displayFilterPanel() {
-      if (this.$route.name !== undefined) {
-        return this.$route.name === "exercices" || this.$route.name === "gestion-mes-exercices"
-      }
-
-      return false;
-    }
-
-    get displayCreationPanel() {
-      if (this.$route.name !== undefined) {
-        const routeName = this.$route.name;
-        return routeName === "gestion-mes-exercices-creer-exercice" || routeName === 'gestion-mes-exercices-id'
-      }
-
-      return false;
-    }
 
     get isAuthenticated() {
       return this.$auth.loggedIn;
@@ -192,22 +105,6 @@
 
     get role() {
       return this.$auth.user.role
-    }
-
-    get nbExercises() {
-      return this.$accessor.search.metadata.totalItems
-    }
-
-    @Watch('nbExercises')
-    animateSimilarExercisesLink() {
-      if (this.timer === null && this.displayCreationPanel) {
-        this.animateCta = true;
-
-        this.timer = window.setTimeout(() => {
-          this.animateCta = false;
-          this.timer = null;
-        }, 1500)
-      }
     }
 
     async logout() {
