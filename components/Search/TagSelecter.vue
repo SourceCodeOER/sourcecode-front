@@ -1,7 +1,7 @@
 <template>
   <li class="tag-selecter">
-    <span @click="toggleList">
-      <Icon type="arrowRight" class="arrow" :class="{'arrow-rotate': active}"/>
+    <span @click="toggleList" class="arrow" :class="{'arrow-rotate': active}">
+      <Icon type="arrowRight"/>
       <slot></slot>
     </span>
     <ul :class="{active}">
@@ -118,6 +118,22 @@
       -webkit-user-select: none;
       margin-bottom: 10px;
       text-transform: capitalize;
+      &.arrow {
+        svg {
+          @include transitionHelper(transform .3s ease);
+          margin-right: 10px;
+        }
+
+        &.arrow-rotate {
+          svg {
+            @include transformHelper(translateX(2px) rotate(90deg))
+          }
+        }
+      }
+      svg {
+        width: 19px;
+        vertical-align: text-top;
+      }
     }
   }
 
@@ -131,17 +147,5 @@
   }
 
 
-  svg {
-    width: 19px;
-    vertical-align: text-top;
-  }
 
-  .arrow {
-    @include transitionHelper(transform .3s ease);
-    margin-right: 10px;
-
-    &.arrow-rotate {
-      @include transformHelper(translateX(2px) rotate(90deg))
-    }
-  }
 </style>
