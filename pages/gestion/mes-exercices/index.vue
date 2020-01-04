@@ -10,12 +10,20 @@
     </div>
 
     <div class="wrapper wrapper--with-panel">
-      <transition name="fade" mode="out-in" duration="400">
-        <FilterPanel :reset-button="true" :favorite="true" :search-mode="true" :historical-mode="true"
-                     @reset="resetInput" v-if="currentAsidePanel === 0"/>
-        <HistoricalPanel v-else-if="currentAsidePanel === 1"/>
-        <FavoritePanel v-else-if="currentAsidePanel === 2"/>
-      </transition>
+
+      <Panel>
+        <PanelItem>
+          <FilterPanel :reset-button="true" :favorite="true" :search-mode="true" :historical-mode="true"
+                       @reset="resetInput"/>
+        </PanelItem>
+        <PanelItem>
+          <HistoricalPanel/>
+        </PanelItem>
+
+        <PanelItem>
+          <FavoritePanel/>
+        </PanelItem>
+      </Panel>
 
       <section>
 
@@ -90,9 +98,9 @@
 <script lang="ts">
   import {Component, Mixins, Ref} from 'vue-property-decorator'
   import {CheckBoxObjectEmitted, Exercise, ExerciseWithSelection, SearchExerciseRequest} from "~/types";
-  import FilterPanel from "~/components/Panel/FilterPanel.vue";
-  import HistoricalPanel from "~/components/Panel/HistoricalPanel.vue";
-  import FavoritePanel from "~/components/Panel/FavoritePanel.vue";
+  import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
+  import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
+  import FavoritePanel from "~/components/Panel/Item/FavoritePanel.vue";
   import FilterPanelMixins from '~/components/Mixins/FilterPanelMixins.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
   import Icon from "~/components/Symbols/Icon.vue";
@@ -100,6 +108,8 @@
   import sortedIndex from 'lodash.sortedindex'
   import {BusEvent} from "~/components/Event/BusEvent";
   import binarySearch from "~/assets/js/array/binarySearch";
+  import Panel from "~/components/Panel/Panel.vue";
+  import PanelItem from "~/components/Panel/PanelItem.vue";
 
   const debounce = require('lodash.debounce');
 
@@ -107,6 +117,8 @@
 
   @Component({
     components: {
+      PanelItem,
+      Panel,
       FilterPanel,
       HistoricalPanel,
       FavoritePanel,

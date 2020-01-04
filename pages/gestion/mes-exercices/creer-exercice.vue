@@ -14,11 +14,16 @@
 
     <div class="wrapper wrapper--with-panel">
 
-      <transition name="fade" mode="out-in" duration="400">
-        <ExercisesCheckPanel title="Exercices similaires" v-if="currentAsidePanel === 0"/>
-        <FilterPanel :reset-button="true" :search-mode="true" mode="strict" title="Choix des tags"
-                     v-if="currentAsidePanel === 1"/>
-      </transition>
+      <Panel>
+        <PanelItem>
+          <ExercisesCheckPanel title="Exercices"/>
+        </PanelItem>
+
+        <PanelItem>
+          <FilterPanel :reset-button="true" :search-mode="true" mode="strict" title="Tags"/>
+        </PanelItem>
+      </Panel>
+
 
       <section class="content">
 
@@ -122,7 +127,7 @@
               <Icon type="archive" theme="theme--white"/>
               {{labelFileText}}</label>
             <span class="error-message">{{errors[0]}}</span>
-            <span class="error-message" v-if="filename" style="text-decoration: underline; cursor: pointer;"
+            <span class="error-message error-message--red" v-if="filename" style="text-decoration: underline; cursor: pointer;"
                   @click="deleteFile">Supprimer le fichier</span>
 
           </ValidationProvider>
@@ -157,8 +162,8 @@
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
   import Icon from "~/components/Symbols/Icon.vue";
-  import FilterPanel from "~/components/Panel/FilterPanel.vue";
-  import ExercisesCheckPanel from "~/components/Panel/ExercisesCheckPanel.vue";
+  import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
+  import ExercisesCheckPanel from "~/components/Panel/Item/ExercisesCheckPanel.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import ExerciseFormMixins from "~/components/Mixins/ExerciseFormMixins";
@@ -167,9 +172,13 @@
   import {BusEvent} from "~/components/Event/BusEvent";
   import {AxiosError} from "~/node_modules/axios";
   import jsonFormData from 'json-form-data';
+  import Panel from "~/components/Panel/Panel.vue";
+  import PanelItem from "~/components/Panel/PanelItem.vue";
 
   @Component({
     components: {
+      PanelItem,
+      Panel,
       ValidationObserver,
       ValidationProvider,
       RichTextEditor,

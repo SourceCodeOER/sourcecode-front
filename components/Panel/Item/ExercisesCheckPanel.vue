@@ -1,9 +1,8 @@
 <template>
-  <div id="ExercisesCheckPanel" class="panel scroll-bar--grey">
-    <h3>{{title}}</h3>
+  <div id="ExercisesCheckPanel" class="scroll-bar--grey">
 
     <div class="disclaimer" v-show="!searched">
-      Commencez par remplir <b>le titre</b> de votre exercice ou <b>ajoutez des tags</b> depuis le panneau Tags
+      Commencez par remplir <b>le titre</b> de votre exercice ou <b>ajoutez des tags</b> depuis l'onglet tags
     </div>
 
     <div class="disclaimer" v-show="searched && exercises.length === 0">
@@ -42,7 +41,20 @@
     components: {Icon}
   })
   export default class ExercisesCheckPanel extends Mixins(IntersectMixins) {
+    name = 'exercises-check-panel';
+
+    /**
+     * The default title of this panel
+     */
     @Prop({type: String, default: "Exercices"}) title!: string;
+    /**
+     * The default icon of this panel (see Icon component)
+     */
+    @Prop({type: String, default: "album"}) icon!: string;
+
+    /**
+     * A reference to the anchor HTML element to use the intersector event
+     */
     @Ref() anchor!: Element;
 
     intersectionObserverOptions: IntersectionObserverInit = {
@@ -51,15 +63,23 @@
       threshold: ratio
     };
 
-
+    /**
+     * Get the search exercises
+     */
     get exercises(): Exercise[] {
       return this.$accessor.search.exercises
     }
 
+    /**
+     * Count the total number of exercises
+     */
     get nbResults(): number {
       return this.$accessor.search.metadata.totalItems
     }
 
+    /**
+     * check if a search criteria is used or not. Check if the user searches for something
+     */
     get searched(): boolean {
       const tags = this.$accessor.search.search_criterion.tags;
       return (tags && tags.length !== 0) || this.$accessor.search.search_criterion.title !== ''
@@ -81,8 +101,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/css/_variables.scss";
-  @import "../../assets/css/_function.scss";
+  @import "assets/css/variables";
+  @import "assets/css/function";
 
   #ExercisesCheckPanel {
     padding: 20px 0;
@@ -90,7 +110,7 @@
     .results {
       padding: 0 20px;
       font-weight: bold;
-      color:$SECONDARY_COLOR
+      color: $SECONDARY_COLOR
     }
 
     .disclaimer {
@@ -98,10 +118,10 @@
       font-weight: lighter;
       font-style: italic;
       text-align: center;
-      margin-top:80px;
+      margin-top: 80px;
 
-      b{
-        color:$PRIMARY_COLOR_LIGHT;
+      b {
+        color: $PRIMARY_COLOR_LIGHT;
       }
     }
 
@@ -117,7 +137,7 @@
       margin-top: 0;
 
       &:after {
-        content:"";
+        content: "";
         display: block;
         width: 60px;
         height: 2px;
@@ -140,10 +160,11 @@
           opacity: 0;
           bottom: 5px;
           right: 5px;
-          color:$SECONDARY_COLOR;
+          color: $SECONDARY_COLOR;
           text-decoration: none;
           font-weight: bold;
           @include transitionHelper(opacity .4s ease);
+
           svg, img {
             width: 20px;
             vertical-align: sub;

@@ -1,11 +1,12 @@
 <template>
-  <div id="HistoricalPanel" class="panel">
+  <div id="HistoricalPanel">
 
-    <h3>Historique <span @click="close" class="secondary-color"><Icon type="arrowLeft"
-                                                                      theme="theme--secondary-color"/> Retour</span>
-    </h3>
+    <div v-show="isHistoricalEmpty" class="disclaimer">
+      Choisissez quelques <b>filtres</b> et/ou un <b>titre</b> de recherche pour remplir cette
+      section
+    </div>
 
-    <div class="panel-wrapper">
+    <div v-show="!isHistoricalEmpty" class="panel-wrapper">
       <div class="historical" v-for="(el, id) in historical" @click="fetchFilter({tags: el.tags, title: el.title})"
            :key="el.datetime + '_' + id">
         <h4>{{el.datetime}}</h4>
@@ -28,6 +29,7 @@
   import {Component, Vue} from "vue-property-decorator";
   import {SelectedTag} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
+  import {Prop} from "~/node_modules/vue-property-decorator";
 
   @Component({
     components: {
@@ -35,14 +37,36 @@
     }
   })
   export default class HistoricalPanel extends Vue {
+    name = "historical-panel";
+
+    /**
+     * The default title of this panel
+     */
+    @Prop({type: String, default: "Historique"}) title!: string;
+
+    /**
+     * The default icon of this panel (see Icon component)
+     */
+    @Prop({type: String, default: "history"}) icon!: string;
+
+    /**
+     * Get the historical of the user from the store
+     */
     get historical() {
       return this.$accessor.historical.historical
     }
 
-    close() {
-      BusEvent.$emit('changePanel', 0)
+    /**
+     * Check if the historical is empty
+     */
+    get isHistoricalEmpty() {
+      return this.historical.length === 0;
     }
 
+    /**
+     * Make a search request for a selected historical
+     * @param historical
+     */
     async fetchFilter(historical: { tags?: SelectedTag[], title?: string }) {
       let tagsRequest: (number | number[])[] = [];
       if (historical.tags) {
@@ -58,16 +82,15 @@
       }
 
       await this.$accessor.search.fetch({data: {tags: tagsRequest, title: title}});
-      BusEvent.$emit('changePanel', 0)
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  @import "./../../assets/css/_variables";
-  @import "./../../assets/css/_function";
-  @import "./../../assets/css/_font";
-  @import "./../../assets/css/_panel";
+  @import "assets/css/variables";
+  @import "assets/css/function";
+  @import "assets/css/font";
+  @import "assets/css/panel";
 
 
   #HistoricalPanel {
@@ -93,6 +116,18 @@
         }
       }
 
+    }
+
+    .disclaimer {
+      padding: 0 20px;
+      font-weight: lighter;
+      font-style: italic;
+      text-align: center;
+      margin-top: 80px;
+
+      b {
+        color: $PRIMARY_COLOR_LIGHT;
+      }
     }
 
     h4 {

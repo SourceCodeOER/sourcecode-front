@@ -1,9 +1,5 @@
 <template>
-  <div id="FilterPanel" class="panel scroll-bar--grey">
-
-    <h3>
-      {{title}}
-    </h3>
+  <div id="FilterPanel" class="scroll-bar--grey">
 
     <transition name="fade">
       <div class="cta-favorite" v-if="favorite && $auth.loggedIn && !createFavoriteInput" @click="displayFavoriteInput">
@@ -61,32 +57,79 @@
   })
   export default class FilterPanel extends Vue {
 
-    selectedTagSelecter: TagSelecter | undefined = undefined;
-    createFavoriteInput: boolean = false;
-    favoriteName: string = ''
+    name = "filter-panel";
 
+    /**
+     * If activated, when clicking on one checkbox, a search request to the database will be triggered
+     */
     @Prop({type: Boolean, default: false}) searchMode!: boolean;
+    /**
+     * If activated, every action in this component will be save in the historical store
+     */
     @Prop({type: Boolean, default: false}) historicalMode!: boolean;
+    /**
+     * If activated, the reset button will be displayed on the panel
+     */
     @Prop({type: Boolean, default: false}) resetButton!: boolean;
+    /**
+     * If activated, add the possibility to create a favorite in this panel
+     */
     @Prop({type: Boolean, default: false}) favorite!: boolean;
-    @Prop({type: String, default: 'Filtres'}) title!: boolean;
+    /**
+     * The default title of this panel
+     */
+    @Prop({type: String, default: 'Filtres'}) title!: string;
+    /**
+     * The default icon of this panel (see Icon component)
+     */
+    @Prop({type: String, default: 'filterBasic'}) icon!: string;
+    /**
+     * If set to strict, the search request will only consider exercises with the exact match of tags and title
+     */
     @Prop({type: String, default: 'default'}) mode!: "strict" | "default";
 
+    /**
+     * A reference to each TagSelecter components
+     */
     @Ref() tagSelecter!: TagSelecter[]
 
+    /**
+     * The current opened tag selecter component
+     */
+    selectedTagSelecter: TagSelecter | undefined = undefined;
+    /**
+     * If active, the input form is displayed to let the user enters the name of the favorite
+     */
+    createFavoriteInput: boolean = false;
+    /**
+     * The name of the favorite entered by the user
+     */
+    favoriteName: string = '';
+
+    /**
+     * get the current selected tags from the store
+     */
     get confirmedTags() {
       return this.$accessor.tags.selectedTags
     }
 
+    /**
+     * get all the existing tags from the store
+     */
     get tags() {
       return this.$accessor.tags.tags
     }
 
+    /**
+     * Display the favorite input form
+     */
     displayFavoriteInput() {
       this.createFavoriteInput = true;
-      //BusEvent.$emit('changePanel', 2)
     }
 
+    /**
+     * Apply the search request of the user
+     */
     async apply() {
       await this.$accessor.tags.apply(this.mode);
 
@@ -102,6 +145,9 @@
       }
     }
 
+    /**
+     * Validating part for the favorite input
+     */
     async validateBeforeSubmit() {
       if (this.confirmedTags.length !== 0) {
         const tags_id: number[] = this.confirmedTags.map(tag => tag.tag_id);
@@ -138,6 +184,9 @@
       }
     }
 
+    /**
+     * reset the form and restore the default panel
+     */
     @Emit()
     async reset() {
       this.$accessor.tags.CLEAR();
@@ -153,6 +202,10 @@
       this.resetFilterPanel()
     }
 
+    /**
+     * Save the current tagSelecter or close a tag selecter if previously activated
+     * @param tagSelecter
+     */
     toggleList(tagSelecter: TagSelecter) {
       if (this.selectedTagSelecter !== undefined) {
         this.selectedTagSelecter.$data.active = false;
@@ -164,6 +217,9 @@
       }
     }
 
+    /**
+     * Reset all the panel scroll position and close the current tag selecter opened
+     */
     private resetFilterPanel() {
       const filterPanel = document.getElementById('FilterPanel');
 
@@ -181,14 +237,16 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "./../../assets/css/_variables";
-  @import "./../../assets/css/_function";
-  @import "./../../assets/css/_font";
+  @import "assets/css/variables";
+  @import "assets/css/function";
+  @import "assets/css/font";
 
   #FilterPanel {
     display: flex;
     flex-direction: column;
     justify-content: stretch;
+    position: relative;
+    padding: 20px 20px 0;
 
     .panel-wrapper {
       height: calc(100% - 80px);
@@ -222,7 +280,6 @@
       color: $SECONDARY_COLOR;
       cursor: pointer;
       font-weight: bold;
-      margin-top: 5px;
       margin-bottom: 15px;
 
 

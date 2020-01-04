@@ -111,9 +111,9 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "./../../assets/css/_variables";
-  @import "./../../assets/css/_function";
-  @import "./../../assets/css/_font";
+  @import "assets/css/variables";
+  @import "assets/css/function";
+  @import "assets/css/font";
 
   #ExercisesPanel {
     display: flex;

@@ -79,8 +79,8 @@
     SelectedTag,
     TagExtended, TagProposal, UpdateConfigurationRequest,
   } from "~/types";
-  import ExercisesCheckPanel from "~/components/Panel/ExercisesCheckPanel.vue";
-  import FilterPanel from "~/components/Panel/FilterPanel.vue";
+  import ExercisesCheckPanel from "~/components/Panel/Item/ExercisesCheckPanel.vue";
+  import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
   import Icon from "~/components/Symbols/Icon.vue";
   import Tag from "~/components/Tag/Tag.vue";
