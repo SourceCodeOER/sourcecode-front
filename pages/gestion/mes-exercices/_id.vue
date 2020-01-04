@@ -157,7 +157,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Ref, Mixins} from "vue-property-decorator";
+  import {Component, Mixins} from "vue-property-decorator";
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {AxiosError} from "axios";
   import {

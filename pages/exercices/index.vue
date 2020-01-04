@@ -31,9 +31,8 @@
   import HistoricalPanel from '~/components/Panel/Item/HistoricalPanel.vue';
   import FavoritePanel from '~/components/Panel/Item/FavoritePanel.vue';
   import ExercisesPanel from "~/components/Exercise/ExercisesPanel.vue";
-  import {Component, Ref, Mixins} from "vue-property-decorator";
+  import {Component, Ref, Vue} from "vue-property-decorator";
   import {SearchExerciseRequest} from "~/types";
-  import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
   import Icon from "~/components/Symbols/Icon.vue";
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
@@ -62,7 +61,7 @@
     auth: false,
     middleware: 'exercises-store'
   })
-  export default class extends Mixins(FilterPanelMixins) {
+  export default class extends Vue {
     @Ref() inputText!: HTMLInputElement;
 
     debounceInput = debounce((e: any) => {

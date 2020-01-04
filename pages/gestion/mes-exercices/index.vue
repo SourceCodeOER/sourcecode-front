@@ -101,7 +101,6 @@
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
   import FavoritePanel from "~/components/Panel/Item/FavoritePanel.vue";
-  import FilterPanelMixins from '~/components/Mixins/FilterPanelMixins.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
   import Icon from "~/components/Symbols/Icon.vue";
   import CheckBox from "~/components/Input/CheckBox.vue";
@@ -134,7 +133,7 @@
     auth: true,
     middleware: ['auth', 'gestion-store']
   })
-  export default class extends Mixins(FilterPanelMixins, IntersectMixins) {
+  export default class extends Mixins(IntersectMixins) {
     /**
      * A reference to the input html element for the search
      */
