@@ -90,11 +90,16 @@
             this.currentIndex = panel
           }
         }
+      });
+
+      BusEvent.$on('changePanel', (id:number) => {
+        this.changePanel(id)
       })
     }
 
     beforeDestroy() {
       BusEvent.$off('panelActivity');
+      BusEvent.$off('changePanel');
     }
   }
 </script>
