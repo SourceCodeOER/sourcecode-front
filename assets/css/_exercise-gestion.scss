@@ -71,6 +71,10 @@ form {
 
   .error-message {
     margin-top: 10px;
+
+    &.error-message--red {
+      color:$RED;
+    }
   }
 }
 
