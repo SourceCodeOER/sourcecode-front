@@ -10,10 +10,10 @@
       <div class="input-favorite-wrapper" v-else-if="favorite && $auth.loggedIn && createFavoriteInput">
         <ValidationObserver v-slot="{valid}">
           <ValidationProvider name="name" rules="required">
-            <input v-model="favoriteName" type="text" placeholder="Nommer le favori" class="input--grey">
+            <input v-model="favoriteName" type="text" placeholder="Nommer le favori" class="input--primary-color">
           </ValidationProvider>
           <button :disabled="!valid" type="submit" @click="validateBeforeSubmit"
-                  :class="{'button--grey-light': !valid, 'button--grey-light-reverse': valid}">OK
+                  :class="{'button--primary-color': !valid, 'button--primary-color-reverse': valid}">OK
           </button>
         </ValidationObserver>
       </div>
@@ -294,12 +294,18 @@
     }
 
     .input-favorite-wrapper {
-      margin-top: 5px;
+      margin-top: 30px;
       margin-bottom: 15px;
+
+      > span {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
       button {
         padding: 8px 14px;
-        height: 100%;
+        height: 40px;
         margin-top: 0;
       }
     }
