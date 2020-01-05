@@ -14,7 +14,7 @@
 
         <article>
           <section @click="gotoFavorite(configuration.id)" v-for="configuration in configurations" :key="configuration.id">
-            <h2 class="title--ternary-color">{{configuration.name}}</h2>
+            <h2 class="title--primary-color__light">{{configuration.name}}</h2>
             <h3 class="title--normal">Titre de la sélection : {{configuration.title ? configuration.title: '-'}}</h3>
             <h3 class="title--normal">Nombre de tags sélectionnés : {{configuration.tags.length}}</h3>
             <hr>
@@ -127,7 +127,7 @@
       }
 
       .see-more {
-        color:$SECONDARY_COLOR;
+        color:$TERNARY_COLOR;
         text-decoration: underline;
       }
     }
