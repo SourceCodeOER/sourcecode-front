@@ -2,6 +2,7 @@
  * Exercise Single
  */
 import {Tag, TagProposal} from "~/types/tags";
+import {User} from "~/types/user";
 
 
 export type ExerciseState = "CREATED" | "PENDING" | "VALIDATED" | "NOT_VALIDATED";
@@ -30,8 +31,10 @@ export interface Exercise {
   state: ExerciseState,
   file: null | string,
   url: null | string,
-  metrics: ExerciseMetrics,
-  tags: ExerciseTag[]
+  metrics?: ExerciseMetrics,
+  tags: ExerciseTag[],
+  vote?:number,
+  creator?:User
 }
 
 export interface ExerciseWithSelection extends Exercise{
