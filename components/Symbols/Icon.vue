@@ -26,6 +26,7 @@
       search: () => import('./library/SearchSymbol.vue'),
       starHalf: () => import('./library/StarHalfSymbol.vue'),
       star: () => import('./library/StarSymbol.vue'),
+      starEmpty: () => import('./library/StarEmptySymbol.vue'),
       tags: () => import('./library/TagsSymbol.vue'),
       trash: () => import('./library/TrashSymbol.vue'),
       undo: () => import('./library/UndoSymbol.vue'),
