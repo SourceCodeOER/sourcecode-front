@@ -14,7 +14,7 @@
 
       <ul>
         <li v-for="exercise in exercises" :key="exercise.id">
-          <h4>{{exercise.title}}</h4>
+          <h4 class="title--primary-color__light">{{exercise.title}}</h4>
           <span><i>Nb de votes</i> : {{exercise.metrics.votes}}</span>
           <span><i>Moyenne</i> : {{exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</span>
           <a :href="`/exercices/${exercise.id}`" target="_blank" class="cta-link">
@@ -142,7 +142,7 @@
         width: 60px;
         height: 2px;
         margin-top: 10px;
-        background-color: $TERNARY_COLOR;
+        background-color: $PRIMARY_COLOR;
       }
     }
 
