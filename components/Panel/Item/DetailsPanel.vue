@@ -2,6 +2,7 @@
   <div id="DetailsPanel">
 
     <div class="panel-wrapper">
+
       <div>
         <div v-for="item in tag_by_categories" :key="item.category">
           <h4>{{item.category}}</h4>
@@ -9,6 +10,29 @@
             <li v-for="tag in item.tags" :key="tag + '_' + item.category">{{tag}}</li>
           </ul>
         </div>
+      </div>
+
+      <div>
+        <h3>Notes</h3>
+        <h4>Moyenne</h4>
+        <div class="avg-score" v-if="nbVotes !== 0">
+          <span>{{avgVote}}</span>
+          <Icon theme="theme--primary-color" type="star"/>
+        </div>
+        <div v-else>
+          <span>Pas encore évalué</span>
+        </div>
+        <h4>Nombre de votes</h4>
+        <div>
+          <span>{{nbVotes}}</span>
+        </div>
+        <template v-if="$auth.loggedIn">
+
+          <h4>Votre note</h4>
+
+          <Rating :rating="rating" @rating="rate"/>
+        </template>
+
       </div>
 
       <div v-if="!!exercise.url || !!exercise.file" class="sources">
@@ -33,9 +57,14 @@
 
 <script lang="ts">
   import {Component, Prop, Vue} from "vue-property-decorator";
-  import {Exercise, ExerciseTag} from "../../../types";
+  import {Exercise, ExerciseMetrics, ExerciseTag} from "../../../types";
+  import Icon from "~/components/Symbols/Icon.vue";
+  import Rating from "~/components/Rating/Rating.vue";
+  import {BusEvent} from "~/components/Event/BusEvent";
 
-  @Component
+  @Component({
+    components: {Rating, Icon}
+  })
   export default class DetailsPanel extends Vue {
     name = "details-panel";
 
@@ -83,6 +112,42 @@
       return arrayOfTagByCategories
     }
 
+    get rating() {
+      return this.exercise.vote ? this.exercise.vote : 0
+    }
+
+    get avgVote() {
+
+      const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
+
+      if(metrics) {
+        return metrics.avg_score
+      }
+
+      return '-'
+    }
+
+    get nbVotes() {
+      const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
+
+      if(metrics) {
+        return metrics.votes
+      }
+
+      return 0
+    }
+
+    private async rate(i:number) {
+      if(this.$auth.loggedIn) {
+        try {
+          await this.$axios.$post('/api/vote_for_exercise', {exercise_id: this.exercise.id, score: i});
+          BusEvent.$emit('displayNotification', {mode:'success', message:'Merci pour votre retour !'})
+        } catch (e) {
+          BusEvent.$emit('displayNotification', {mode:'error', message:'Une erreur est survenue...'})
+        }
+      }
+    }
+
     created() {
       const link: string | undefined = process.env.CDN_SERVER;
       this.cdnLink = link ? link : ''
@@ -108,6 +173,10 @@
       margin-bottom: 10px;
     }
 
+    h3 {
+      margin-top: 20px;
+    }
+
     > div:not(:first-of-type) {
       margin-top: 20px
     }
@@ -128,6 +197,19 @@
       button {
         font-size: .725em;
         width: 100%;
+      }
+    }
+
+
+    .avg-score {
+      display: inline-block;
+      span {
+        display: inline-block;
+      }
+
+      svg {
+        width: 25px;
+        vertical-align: -6px;
       }
     }
 
