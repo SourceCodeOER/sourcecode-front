@@ -14,6 +14,10 @@
 
       <div>
         <h3>Notes</h3>
+        <template v-if="$auth.loggedIn">
+          <h4>Votre note</h4>
+          <Rating :rating="rating" @rating="rate"/>
+        </template>
         <h4>Moyenne</h4>
         <div class="avg-score" v-if="nbVotes !== 0">
           <span>{{avgVote}}</span>
@@ -26,12 +30,6 @@
         <div>
           <span>{{nbVotes}}</span>
         </div>
-        <template v-if="$auth.loggedIn">
-
-          <h4>Votre note</h4>
-
-          <Rating :rating="rating" @rating="rate"/>
-        </template>
 
       </div>
 
