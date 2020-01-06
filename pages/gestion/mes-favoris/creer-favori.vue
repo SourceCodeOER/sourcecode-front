@@ -3,7 +3,7 @@
     <div class="banner banner--with-shadow-bottom">
       <div class="banner__nav banner__nav--with-link">
         <span>
-          Gestion > Mes Favoris > {{configuration.name}}
+          Gestion > Mes Favoris > Créer un favori
         </span>
         <nuxt-link to="/gestion/mes-favoris" tag="span">
           <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
@@ -25,7 +25,7 @@
       </Panel>
 
       <section class="content">
-        <h1>Modifier mon favori</h1>
+        <h1>Créer un favori</h1>
 
         <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit()">
           <ValidationProvider tag="label"
@@ -79,11 +79,8 @@
 <script lang="ts">
   import {Component, Mixins} from "vue-property-decorator";
   import {
-    Configuration,
-    SearchExerciseRequest,
+    CreateConfigurationRequest,
     SelectedTag,
-    TagExtended,
-    UpdateConfigurationRequest
   } from "~/types";
   import ExercisesCheckPanel from "~/components/Panel/Item/ExercisesCheckPanel.vue";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
@@ -95,7 +92,6 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import FavoriteFormMixins from "~/components/Mixins/FavoriteFormMixins";
-  import qs from 'qs'
 
   @Component({
     components: {
@@ -108,43 +104,12 @@
       ValidationProvider,
       Tag
     },
-    async asyncData({params, error, app: {$accessor}}) {
-      if (!$accessor.favorites.loaded) {
-        await $accessor.favorites.fetch()
-      }
-
-      const id: number = parseInt(params.id);
-      const configuration: Configuration | undefined = $accessor.favorites.favorites.find(config => config.id === id);
-
-      if (!configuration) {
-        error({statusCode: 404, message: "Ce favori est introuvable"});
-      } else {
-        const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
-          return {...tag, state: 1}
-        });
-
-        await $accessor.tags.fetch();
-        await $accessor.tags.applyConfirmedTags({confirmedTags, mode: "default"});
-
-        const searchRequest: SearchExerciseRequest = {
-          data: {
-            title: configuration.title,
-            tags: $accessor.tags.tagsRequest
-          }
-        };
-
-        await $accessor.search.fetch(searchRequest);
-
-        return {configuration}
-
-      }
-
+    async fetch({app: {$accessor}}) {
+      await $accessor.tags.fetch();
     },
     middleware: ['reset-search-request']
   })
   export default class extends Mixins(FilterPanelMixins, FavoriteFormMixins) {
-    configuration!: Configuration;
-
     async validateBeforeSubmit() {
       // Basic validation form
       const isValid = await this.observer1.validate();
@@ -155,34 +120,30 @@
 
       if (isValid && isTagsValid) {
 
-        const config: UpdateConfigurationRequest = {
-          id: this.configuration.id,
-          name: this.form.name,
-          tags,
-          title: this.form.title
-        };
-
         try {
-          await this.$axios.$put('api/configurations', config);
 
-          const query = {
-            ids: [this.configuration.id]
+          const request: CreateConfigurationRequest = {
+            name: this.form.name,
+            tags
           };
 
-          const queryString = qs.stringify(query);
-          const refreshConfig: Configuration[] = await this.$axios.$get('api/configurations?' + queryString);
+          if (this.form.title !== '') {
+            request.title = this.form.title
+          }
 
-          this.$accessor.favorites.UPDATE_CONFIGURATION(refreshConfig[0]);
+          await this.$axios.$post('api/configurations', request);
+
+          await this.$accessor.favorites.fetch();
 
           BusEvent.$emit('displayNotification', {
             mode: 'success',
-            message: 'Votre favori a bien été mis à jour !'
+            message: 'Votre favori a bien été créé !'
           })
 
         } catch (e) {
           BusEvent.$emit('displayNotification', {
             mode: 'error',
-            message: 'Une erreur est survenue lors de la modification du favori.'
+            message: 'Une erreur est survenue lors de la création du favori.'
           })
         }
       } else {
@@ -193,12 +154,6 @@
       }
     }
 
-    mounted() {
-      if (process.client) {
-        this.form.title = this.configuration.title;
-        this.form.name = this.configuration.name;
-      }
-    }
   }
 </script>
 

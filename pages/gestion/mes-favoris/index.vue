@@ -12,8 +12,12 @@
       <div class="content">
         <h1>Mes favoris</h1>
 
+        <nuxt-link to="/gestion/mes-favoris/creer-favori">
+          <button class="button--ternary-color-reverse button--with-symbol">Créer un favori <Icon type="plus" theme="theme--white"/></button>
+        </nuxt-link>
+
         <article>
-          <section @click="gotoFavorite(configuration.id)" v-for="configuration in configurations" :key="configuration.id">
+          <section v-for="configuration in configurations" :key="configuration.id">
             <h2 class="title--primary-color__light">{{configuration.name}}</h2>
             <h3 class="title--normal">Titre de la sélection : {{configuration.title ? configuration.title: '-'}}</h3>
             <h3 class="title--normal">Nombre de tags sélectionnés : {{configuration.tags.length}}</h3>
@@ -23,8 +27,22 @@
               <li v-for="(tag, index) in configuration.tags" :key="tag.tag_text + tag.tag_id" v-if="index < 10">
                 {{tag.tag_text}}
               </li>
-              <li class="see-more" v-if="configuration.tags.length > 10">Cliquez pour voir plus</li>
+              <li class="see-more" v-if="configuration.tags.length > 10">
+                <nuxt-link :to="'/gestion/mes-favoris/' + configuration.id">
+                  Cliquez pour voir plus
+                </nuxt-link>
+              </li>
             </ul>
+            <div class="icon-modifiers">
+
+              <span @click="editFavorite(configuration.id)">
+                <Icon type="edit" theme="theme--primary-color-light"/>
+              </span>
+
+              <span @click="deleteFavorite(configuration.id)">
+                <Icon type="trash" theme="theme--red"/>
+              </span>
+            </div>
           </section>
         </article>
 
@@ -36,8 +54,11 @@
 
   import {Component, Vue} from "vue-property-decorator";
   import {Configuration} from "~/types";
+  import Icon from "~/components/Symbols/Icon.vue";
+  import {BusEvent} from "~/components/Event/BusEvent";
 
   @Component({
+    components: {Icon},
     async asyncData({app: {$accessor}}) {
       if(!$accessor.favorites.loaded) {
         await $accessor.favorites.fetch()
@@ -49,8 +70,36 @@
   export default class extends Vue {
     configurations!:Configuration[];
 
-    gotoFavorite(id:number) {
+    /**
+     * Go to the modify page for the specific favorite
+     * @param id
+     */
+    editFavorite(id:number) {
       this.$router.push('/gestion/mes-favoris/' + id)
+    }
+
+    /**
+     * Delete a favorite from the database and updates the store
+     * @param id
+     */
+    async deleteFavorite(id: number) {
+      try {
+        await this.$axios.$delete('/api/configurations', {
+          data: {id}
+        });
+
+        await this.$accessor.favorites.REMOVE_CONFIGURATION(id);
+
+        BusEvent.$emit('displayNotification', {
+          mode: 'success',
+          message: 'Votre favori a bien été supprimé.'
+        })
+      } catch (e) {
+        BusEvent.$emit('displayNotification', {
+          mode: 'error',
+          message: 'Une erreur est survenue lors de la suppression du favori.'
+        })
+      }
     }
 
   }
@@ -69,6 +118,10 @@
       margin-top: 40px;
     }
 
+    h1 {
+      margin-bottom: 10px;
+    }
+
     section {
       background-color: white;
       border-radius: 4px;
@@ -78,7 +131,6 @@
       width: 100%;
       max-height: 450px;
       position: relative;
-      cursor: pointer;
 
       &::after {
         content:'';
@@ -95,6 +147,12 @@
 
       &:hover::after {
         opacity: 1;
+      }
+
+      &:hover {
+        .icon-modifiers {
+          opacity: 1;
+        }
       }
 
       h2 {
@@ -129,6 +187,20 @@
       .see-more {
         color:$TERNARY_COLOR;
         text-decoration: underline;
+      }
+
+      .icon-modifiers {
+        display: inline-block;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        opacity: 0;
+        @include transitionHelper(opacity .4s ease);
+
+        svg {
+          width: 23px;
+          cursor: pointer;
+        }
       }
     }
   }
