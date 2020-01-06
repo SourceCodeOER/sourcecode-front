@@ -6,10 +6,10 @@
       <span>
       Gestion > Mes exercices > {{exercise.title}}
       </span>
-      <nuxt-link to="/gestion/mes-exercices" tag="span">
-        <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
-        Mes exercices
-      </nuxt-link>
+        <nuxt-link to="/gestion/mes-exercices" tag="span">
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          Mes exercices
+        </nuxt-link>
       </div>
     </div>
 
@@ -127,7 +127,8 @@
               <Icon type="archive" theme="theme--white"/>
               {{labelFileText}}</label>
             <span class="error-message">{{errors[0]}}</span>
-            <span class="error-message error-message--red" v-if="filename" style="text-decoration: underline; cursor: pointer;"
+            <span class="error-message error-message--red" v-if="filename"
+                  style="text-decoration: underline; cursor: pointer;"
                   @click="deleteFile">Supprimer le fichier</span>
           </ValidationProvider>
 
@@ -165,7 +166,7 @@
     UpdateExerciseRequest,
     UpdateExerciseRequestWithFile,
     SelectedTag,
-    TagProposal
+    TagProposal, SearchExerciseRequest
   } from "~/types";
   import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
   import Icon from "~/components/Symbols/Icon.vue";
@@ -214,6 +215,15 @@
 
         await $accessor.tags.fetch();
         await $accessor.tags.applyConfirmedTags({confirmedTags: tags, mode: 'strict'});
+
+        const searchRequest: SearchExerciseRequest = {
+          data: {
+            title: exercise.title,
+            tags: $accessor.tags.tagsRequest
+          }
+        };
+
+        await $accessor.search.fetch(searchRequest);
 
         return {exercise}
       } catch (e) {
