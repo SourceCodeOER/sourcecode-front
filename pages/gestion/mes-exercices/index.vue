@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="wrapper wrapper--with-panel">
+    <div class="wrapper wrapper--with-panel wrapper--with-table">
 
       <Panel>
         <PanelItem>
@@ -273,47 +273,6 @@
 
 
   #MyExercises {
-
-    section {
-      background-color: white;
-      @include box-shadow($SHADOW);
-      border-radius: 4px;
-      margin-bottom: 30px;
-      padding: 20px;
-
-      .header-wrapper {
-        position: sticky;
-        padding: 48px 0 10px 0;
-        top: 72px;
-        width: 100%;
-        background-color: white;
-        display: flex;
-        justify-content: space-between;
-        z-index: 100;
-
-        button {
-          margin: 0;
-        }
-      }
-
-      .header-wrapper__buttons {
-        button {
-          margin-left: 5px;
-        }
-      }
-
-      .input-wrapper--with-icon {
-        position: relative;
-        height: 40px;
-        width: 100%;
-        max-width: 400px;
-
-        input {
-          max-width: 400px;
-          width: 100%;
-        }
-      }
-    }
 
     table {
       width: 100%;
