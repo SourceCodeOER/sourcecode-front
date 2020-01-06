@@ -75,7 +75,7 @@
             </td>
             <td class="item-left" @click="gotoExercise(exercise.id)">{{exercise.title}}</td>
             <td @click="gotoExercise(exercise.id)">{{exercise.metrics.votes}}</td>
-            <td @click="gotoExercise(exercise.id)">{{!!exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}
+            <td @click="gotoExercise(exercise.id)">{{!!exercise.metrics.avg_score ? exercise.metrics.avg_score : '-'}}
             </td>
             <td @click="gotoExercise(exercise.id)">{{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</td>
             <td @click="gotoExercise(exercise.id)" class="item-centered td--with-icon">
