@@ -22,6 +22,18 @@ To make **Source Code** works, you must enable the databases and run the applica
 
 ## Build Setup
 
+First, you have to create a .env file in the root of the project with these variables :
+
+``` .env
+# change the api server
+API_SERVER=http://127.0.0.1:3000
+
+# change the cdn server to search for files
+CDN_SERVER=http://127.0.0.1:3000/files
+```
+
+### Installation
+
 ``` bash
 # install dependencies
 $ npm run install
