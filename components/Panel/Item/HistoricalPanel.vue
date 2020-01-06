@@ -142,7 +142,7 @@
 
       .title {
         margin-bottom: 20px;
-        color: $TERNARY_COLOR;
+        color: $PRIMARY_COLOR_LIGHT;
         font-family: $CircularStd;
       }
 
