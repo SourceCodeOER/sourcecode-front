@@ -11,7 +11,8 @@
     <div class="wrapper wrapper--with-panel">
       <Panel>
         <PanelItem>
-          <FilterPanel :reset-button="true" :favorite="true" :search-mode="true" :historical-mode="true" @reset="resetInput"/>
+          <FilterPanel :reset-button="true" :radio-button-rating="true" :favorite="true" :search-mode="true" :historical-mode="true"
+                       @reset="resetInput"/>
         </PanelItem>
         <PanelItem>
           <HistoricalPanel/>
@@ -36,11 +37,13 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
+  import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
 
   const debounce = require('lodash.debounce');
 
   @Component({
     components: {
+      RadioButtonSelecter,
       PanelItem,
       Panel,
       FilterPanel,
@@ -52,9 +55,13 @@
     async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply("default");
-      await $accessor.search.fetch({metadata: {size: 20}} as SearchExerciseRequest);
+      await $accessor.search.fetch({
+        metadata: {size: 50},
+        includeOptions: {includeDescription: false},
+        orderBy: [{field: "date", value: "DESC"}, {field:'id', value:'ASC'}]
+      } as SearchExerciseRequest);
 
-      if($auth.loggedIn) {
+      if ($auth.loggedIn) {
         await $accessor.favorites.fetch()
       }
     },
@@ -67,7 +74,11 @@
     debounceInput = debounce((e: any) => {
       const value = e.target.value;
       this.$accessor.search.fetch({data: {title: value}});
-      this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: value})
+      this.$accessor.historical.addHistorical({
+        tags: this.$accessor.tags.selectedTags,
+        title: value,
+        vote: this.$accessor.search.search_criterion.vote
+      })
     }, 300);
 
     resetInput() {
