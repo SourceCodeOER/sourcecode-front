@@ -13,7 +13,8 @@
 
       <Panel>
         <PanelItem>
-          <FilterPanel :reset-button="true" :favorite="true" :search-mode="true" :historical-mode="true"
+          <FilterPanel :radio-button-rating="true" :reset-button="true" :favorite="true" :search-mode="true"
+                       :historical-mode="true"
                        @reset="resetInput"/>
         </PanelItem>
         <PanelItem>
@@ -39,12 +40,22 @@
           <div class="header-wrapper__buttons">
 
             <transition name="fade">
+              <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
+                            name="moreActions" legend="Plus d'actions"
+                            class="custom-select--primary-color custom-select-focus--primary-color"
+                            :options="['Publier', 'Brouillon', 'Supprimer']"/>
+            </transition>
+
+            <!-- In case you only want a delete button -->
+            <!--
+            <transition name="fade">
               <button v-show="!isSelectedExercisesEmpty" @click="deleteSelectedExercises"
                       class="button--red-reverse button--with-symbol">
                 Supprimer
                 <Icon type="trash" theme="theme--white"/>
               </button>
             </transition>
+            -->
 
             <nuxt-link to="/gestion/mes-exercices/creer-exercice">
               <button class="button--ternary-color-reverse button--with-symbol">Créer un exercice
@@ -64,7 +75,7 @@
             <th>Moyenne</th>
             <th>Mis à jour</th>
             <th class="item-centered">Fichier(s)</th>
-            <th class="item-centered">Validé</th>
+            <th class="item-centered">Etat</th>
           </tr>
           </thead>
 
@@ -83,8 +94,21 @@
               <Icon type="close" theme="theme--red-light" v-else/>
             </td>
             <td @click="gotoExercise(exercise.id)" class="item-centered td--with-icon">
-              <Icon type="check" theme="theme--green" v-if="exercise.isValidated"/>
-              <Icon type="close" theme="theme--red-light" v-else/>
+              <i title="Valide" v-if="exercise.state === 'VALIDATED'">
+                <Icon type="check" theme="theme--green"/>
+              </i>
+
+              <i title="Invalide" v-else-if="exercise.state === 'NOT_VALIDATED'">
+                <Icon type="close" theme="theme--red-light"/>
+              </i>
+
+              <i title="Traitement en cours" v-else-if="exercise.state === 'PENDING'">
+                <Icon type="search" theme="theme--yellow"/>
+              </i>
+
+              <i title="Envoyé" v-else-if="exercise.state === 'CREATED'">
+                <Icon title="Créé" type="send" theme="theme--primary-color-light"/>
+              </i>
             </td>
           </tr>
           <tr ref="anchor" id="Anchor"/>
@@ -97,7 +121,7 @@
 
 <script lang="ts">
   import {Component, Mixins, Ref} from 'vue-property-decorator'
-  import {CheckBoxObjectEmitted, Exercise, ExerciseWithSelection, SearchExerciseRequest} from "~/types";
+  import {CheckBoxObjectEmitted, Exercise, ExerciseState, ExerciseWithSelection, SearchExerciseRequest} from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
   import FavoritePanel from "~/components/Panel/Item/FavoritePanel.vue";
@@ -109,6 +133,7 @@
   import binarySearch from "~/assets/js/array/binarySearch";
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
+  import CustomSelect from "~/components/Input/CustomSelect.vue";
 
   const debounce = require('lodash.debounce');
 
@@ -116,6 +141,7 @@
 
   @Component({
     components: {
+      CustomSelect,
       PanelItem,
       Panel,
       FilterPanel,
@@ -127,11 +153,18 @@
     async fetch({app: {$accessor}, $auth}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply("default");
-      await $accessor.search.fetch({metadata: {size: 50}, data: {user_ids: [$auth.user.id]}} as SearchExerciseRequest);
+      await $accessor.search.fetch({
+        metadata: {size: 50},
+        data: {user_ids: [$auth.user.id]},
+        orderBy: [{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}],
+        includeOptions: {
+          includeTags: false,
+          includeDescription: false
+        }
+      } as SearchExerciseRequest);
       await $accessor.favorites.fetch()
     },
-    auth: true,
-    middleware: ['auth', 'gestion-store']
+    middleware: ['auth', 'reset-search-request']
   })
   export default class extends Mixins(IntersectMixins) {
     /**
@@ -214,6 +247,42 @@
     }
 
     /**
+     * Remove from the databases the exercises and update the search store
+     */
+    async updateStateOfExercises(state: ExerciseState) {
+      let message: string;
+      const nbOfExercises = this.selectedExercises.length;
+
+      if (state === 'PENDING') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement envoyé${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'} pour inspection.`
+      } else if (state === 'VALIDATED') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} bien été publié${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'}.`
+
+      } else if (state === 'NOT_VALIDATED') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'} comme invalide${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'}.`
+
+      } else {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement dépublié${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'}.`
+      }
+
+      try {
+        await this.$axios.$put('/api/bulk/modify_exercises_status', {data: {exercises: this.selectedExercises, state}});
+        BusEvent.$emit('displayNotification', {
+          mode: "success",
+          message
+        });
+
+        this.selectedExercises = [];
+        this.$accessor.search.fetch({})
+      } catch (e) {
+        BusEvent.$emit('displayNotification', {
+          mode: "error",
+          message: `Une erreur est survenue lors du changement d'état.`
+        });
+      }
+    }
+
+    /**
      * Event for the input html element
      * Search with the title entered and update the store
      */
@@ -255,6 +324,16 @@
      */
     targets(): Element[] {
       return [this.anchor]
+    }
+
+    selectAction(action: { content: string, index: number }) {
+      if (action.index === 0) {
+        this.updateStateOfExercises('PENDING')
+      } else if (action.index === 1) {
+        this.updateStateOfExercises('CREATED')
+      } else if (action.index === 2) {
+        this.deleteSelectedExercises()
+      }
     }
 
     mounted() {
