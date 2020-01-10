@@ -65,7 +65,8 @@
       }
 
       return {configurations: $accessor.favorites.favorites}
-    }
+    },
+    middleware: 'auth'
   })
   export default class extends Vue {
     configurations!:Configuration[];
