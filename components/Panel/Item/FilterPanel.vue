@@ -26,12 +26,24 @@
     </div>
     <div class="panel-wrapper">
       <ul class="selectable-tags">
-        <TagSelecter v-for="tag in tags" ref="tagSelecter" @apply="apply" @toggle-list="toggleList" :tags="tag.tags"
-                     :category="tag.id"
-                     :select-all-option="mode === 'default'"
-                     :key="tag.id">
-          {{tag.category}}
-        </TagSelecter>
+        <CheckBoxSelecter v-for="(categoryWithTags, index) in categoryWithSelectedTags" ref="tagSelecter"
+                          @change="apply($event, index)" @toggle-list="toggleList"
+                          :default-options="categoryWithTags.tags"
+                          :select-all-option="mode === 'default'"
+                          :key="categoryWithTags.category + '_' + index">
+          {{categoryWithTags.category}}
+        </CheckBoxSelecter>
+
+        <RadioButtonSelecter v-if="radioButtonRating" @toggle-list="toggleList" @change="setRatingCriteria"
+                             :default-value="voteCriteria"
+                             :select-default-option="true" :default-options="[
+              {title:'Plus de 4 étoiles', value:{operator: '>=', value: 4}},
+              {title:'Plus de 3 étoiles', value:{operator: '>=', value: 3}},
+              {title:'Plus de 2 étoiles', value:{operator: '>=', value: 2}},
+              {title:'Moins de 2 étoiles', value:{operator: '<=', value: 2}}
+              ]">
+          Evaluation
+        </RadioButtonSelecter>
       </ul>
     </div>
   </div>
@@ -39,17 +51,24 @@
 
 <script lang="ts">
   import Tag from "~/components/Tag/Tag.vue";
-  import TagSelecter from "~/components/Search/TagSelecter.vue";
+  import CheckBoxSelecter from "~/components/Search/CheckBoxSelecter.vue";
   import {Component, Vue, Emit, Prop, Ref} from 'vue-property-decorator';
   import Icon from "~/components/Symbols/Icon.vue";
   import {ValidationProvider, ValidationObserver} from "vee-validate";
   import {BusEvent} from "~/components/Event/BusEvent";
-  import {CreateConfigurationRequest} from "~/types";
+  import {
+    CategoryWithSelectedTags, CheckboxObject,
+    CheckboxSelecterObjectEmitted,
+    CreateConfigurationRequest, RadiobuttonSelecterObjectEmitted,
+    SelectedTag, VoteExerciseRequest
+  } from "~/types";
+  import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
 
   @Component({
     components: {
+      CheckBoxSelecter,
+      RadioButtonSelecter,
       Tag,
-      TagSelecter,
       Icon,
       ValidationProvider,
       ValidationObserver
@@ -87,16 +106,21 @@
      * If set to strict, the search request will only consider exercises with the exact match of tags and title
      */
     @Prop({type: String, default: 'default'}) mode!: "strict" | "default";
+    /**
+     * If activated, the radio button selecter for the rating filter is available
+     */
+    @Prop({type: Boolean, default: false}) radioButtonRating!: boolean;
+
 
     /**
      * A reference to each TagSelecter components
      */
-    @Ref() tagSelecter!: TagSelecter[]
+    @Ref() tagSelecter!: CheckBoxSelecter[];
 
     /**
      * The current opened tag selecter component
      */
-    selectedTagSelecter: TagSelecter | undefined = undefined;
+    selectedTagSelecter: CheckBoxSelecter | undefined = undefined;
     /**
      * If active, the input form is displayed to let the user enters the name of the favorite
      */
@@ -120,6 +144,45 @@
       return this.$accessor.tags.tags
     }
 
+    get voteCriteria() {
+      const vote = this.$accessor.search.search_criterion.vote;
+      return vote ? vote : 'default';
+    }
+
+    /**
+     * get all the existing tags from the store
+     */
+    get categoryWithSelectedTags(): { category: string, tags: CheckboxObject[] }[] {
+      return this.$accessor.tags.tags.map((tag: CategoryWithSelectedTags) => {
+        const tags: { title: string, state: boolean }[] = tag.tags.map(tagSelecter => {
+          return {title: tagSelecter.tag_text, state: tagSelecter.state}
+        });
+        return {category: tag.category, tags}
+      })
+    }
+
+    setRatingCriteria(event: RadiobuttonSelecterObjectEmitted) {
+
+      if (this.searchMode) {
+        if (event.index === -1) {
+          this.$accessor.search.RESET_VOTE();
+          this.$accessor.search.fetch({});
+        } else {
+          const value: VoteExerciseRequest = event.data.value as VoteExerciseRequest;
+          this.$accessor.search.fetch({data: {vote: value}})
+        }
+      }
+
+      if (this.historicalMode) {
+        console.log(this.$accessor.search.search_criterion.vote);
+        this.$accessor.historical.addHistorical({
+          tags: this.confirmedTags,
+          title: this.$accessor.search.search_criterion.title,
+          vote: this.$accessor.search.search_criterion.vote
+        });
+      }
+    }
+
     /**
      * Display the favorite input form
      */
@@ -130,7 +193,14 @@
     /**
      * Apply the search request of the user
      */
-    async apply() {
+    async apply(selectedOptions: CheckboxSelecterObjectEmitted[], index: number) {
+      selectedOptions.forEach(selectOption => {
+        this.$accessor.tags.addOrRemoveTag({
+          ...this.tags[index].tags[selectOption.index],
+          state: selectOption.data.state
+        });
+      });
+
       await this.$accessor.tags.apply(this.mode);
 
       if (this.searchMode) {
@@ -140,7 +210,8 @@
       if (this.historicalMode) {
         this.$accessor.historical.addHistorical({
           tags: this.confirmedTags,
-          title: this.$accessor.search.search_criterion.title
+          title: this.$accessor.search.search_criterion.title,
+          vote: this.$accessor.search.search_criterion.vote
         });
       }
     }
@@ -192,7 +263,8 @@
       this.$accessor.tags.CLEAR();
 
       if (this.searchMode) {
-        await this.$accessor.search.fetch({data: {tags: [], title: ''}});
+        this.$accessor.search.RESET_SEARCH_CRITERION();
+        await this.$accessor.search.fetch({});
       }
 
       if (this.mode === 'default') {
@@ -206,7 +278,7 @@
      * Save the current tagSelecter or close a tag selecter if previously activated
      * @param tagSelecter
      */
-    toggleList(tagSelecter: TagSelecter) {
+    toggleList(tagSelecter: CheckBoxSelecter) {
       if (this.selectedTagSelecter !== undefined) {
         this.selectedTagSelecter.$data.active = false;
         this.selectedTagSelecter = undefined;
@@ -326,9 +398,12 @@
       height: 100%;
       margin-bottom: 0;
 
+      /*
       .tag-selecter {
         margin-bottom: 20px;
       }
+
+       */
     }
 
   }
