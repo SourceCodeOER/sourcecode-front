@@ -37,7 +37,7 @@
           background-color: white;
           display: flex;
           justify-content: space-between;
-          z-index: 100;
+          z-index: 200;
 
           button {
             margin: 0;
@@ -45,6 +45,12 @@
         }
 
         .header-wrapper__buttons {
+          display: flex;
+          .custom-select {
+            font-size: .875em;
+            line-height: 3.4em;
+            max-height: 3.4em;
+          }
           button {
             margin-left: 5px;
           }
