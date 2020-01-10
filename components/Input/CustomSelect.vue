@@ -21,6 +21,7 @@
     @Prop({type: Array, required: true}) options!: string[];
     @Prop({type: String, default: "Choisir"}) legend!: string;
     @Prop({type: String, default: ""}) defaultValue!: string;
+    @Prop({type: Boolean, default: false}) stateless!: boolean;
 
     optionSelected: string | null = null;
     isFocus: boolean = false;
@@ -31,7 +32,7 @@
      */
     toggleDropdown(option: null | { content: string, index: number }) {
       if (option !== null) {
-        this.optionSelected = option.content;
+        if (!this.stateless) this.optionSelected = option.content;
         this.$emit('change', option);
       }
       this.isFocus = !this.isFocus;
@@ -82,7 +83,7 @@
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 2px;
-    margin:0;
+    margin: 0;
 
     //line-height: 2.7em;
     overflow-y: unset;
@@ -102,7 +103,7 @@
     }
 
     div {
-      padding: 0 25px;
+      padding: 0 50px 0 25px;
       position: relative;
       z-index: 1;
     }
