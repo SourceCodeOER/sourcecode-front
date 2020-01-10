@@ -4,7 +4,7 @@ import {
   MetadataSearchExerciseResponse,
   DataSearchExerciseRequest,
   SearchExerciseRequest,
-  SearchExerciseResponse
+  SearchExerciseResponse, IncludeOptionsExerciseRequest, VoteExerciseRequest, OrderByExerciseRequest, Category
 } from "~/types";
 import {actionTree, getterTree, mutationTree} from "nuxt-typed-vuex";
 
@@ -28,7 +28,9 @@ export const state = () => ({
   search_criterion: {
     title: "",
     tags: []
-  } as DataSearchExerciseRequest
+  } as DataSearchExerciseRequest,
+  includeOptions: {} as IncludeOptionsExerciseRequest,
+  orderBy: [] as OrderByExerciseRequest[]
 });
 
 export const getters = getterTree(state, {
@@ -48,7 +50,7 @@ export const mutations = mutationTree(state, {
    */
   INIT(state, data: SearchExerciseResponse) {
     state.metadata = data.metadata;
-    state.exercises = data.data
+    state.exercises = data.data;
   },
   /**
    * Reset the parameters of the search request
@@ -62,7 +64,13 @@ export const mutations = mutationTree(state, {
       totalItems: 0,
       totalPages: 0,
       pageSize: state.metadata.pageSize
-    }
+    };
+    state.includeOptions = {};
+    state.orderBy = [];
+    state.search_criterion = {
+      title: "",
+      tags: []
+    };
   },
   /**
    * Reset the search criterion with default values
@@ -70,10 +78,13 @@ export const mutations = mutationTree(state, {
    * @constructor
    */
   RESET_SEARCH_CRITERION(state) {
-    state.search_criterion.tags = [];
-    state.search_criterion.title = '';
-    delete state.search_criterion.user_ids;
-    delete state.search_criterion.state;
+    state.search_criterion = {
+      tags: [],
+      title: ''
+    };
+  },
+  RESET_VOTE(state) {
+    delete state.search_criterion.vote
   },
   /**
    * Set a new metadata object to replace the old one
@@ -85,13 +96,22 @@ export const mutations = mutationTree(state, {
     state.metadata = metadata
   },
   /**
+   * Set a new search criterion
+   * @param state
+   * @param search_criterion
+   * @constructor
+   */
+  SET_SEARCH_CRITERION(state, search_criterion: DataSearchExerciseRequest) {
+    state.search_criterion = search_criterion
+  },
+  /**
    * Add a list of exercises to the previous one
    * @param state
    * @param exercises
    * @constructor
    */
   ADD_EXERCISES(state, exercises: Exercise[]) {
-    exercises.forEach(exercise => state.exercises.push(exercise))
+    exercises.forEach(exercise => state.exercises.push(exercise));
   },
   /**
    * Set the new search criterion based on the new value of the title or of new tags
@@ -99,12 +119,35 @@ export const mutations = mutationTree(state, {
    * @param searchCriterion
    * @constructor
    */
-  SET_SEARCH_CRITERION(state, searchCriterion: DataSearchExerciseRequest | undefined) {
-    if (!!searchCriterion) {
-      if (!!searchCriterion.title || searchCriterion.title === '') state.search_criterion.title = searchCriterion.title;
-      if (!!searchCriterion.tags) state.search_criterion.tags = searchCriterion.tags;
-      if (!!searchCriterion.state) state.search_criterion.state = searchCriterion.state;
-      if (!!searchCriterion.user_ids) state.search_criterion.user_ids = searchCriterion.user_ids;
+  UPDATE_SEARCH_CRITERION(state, searchCriterion: DataSearchExerciseRequest | undefined) {
+    state.search_criterion = {...state.search_criterion, ...searchCriterion};
+  },
+  UPDATE_INCLUDE_OPTIONS(state, includeOptions: IncludeOptionsExerciseRequest | undefined) {
+    state.includeOptions = {...state.includeOptions, ...includeOptions}
+  },
+  UPDATE_ORDER_BY(state, orderBy: OrderByExerciseRequest[] | undefined) {
+
+    if (orderBy) {
+      const stateOrderBy: OrderByExerciseRequest[] = state.orderBy;
+      const notOverwriteOrderBy: OrderByExerciseRequest[] = [];
+
+      for (let n = 0; n < orderBy.length; n++) {
+        let overwrite = false;
+        const element: OrderByExerciseRequest = orderBy[n];
+
+        for (let m = 0; m < stateOrderBy.length && !overwrite; m++) {
+          if (element.field === stateOrderBy[m].field) {
+            stateOrderBy[m] = element;
+            overwrite = true;
+          }
+        }
+
+        if (!overwrite) {
+          notOverwriteOrderBy.push(element)
+        }
+      }
+
+      state.orderBy = [...state.orderBy, ...notOverwriteOrderBy]
     }
   }
 });
@@ -127,14 +170,20 @@ export const actions = actionTree({state, mutations, getters}, {
       metadata.size = state.metadata.pageSize
     }
 
+    commit('UPDATE_INCLUDE_OPTIONS', searchRequest.includeOptions);
+    commit('UPDATE_ORDER_BY', searchRequest.orderBy);
+    commit('UPDATE_SEARCH_CRITERION', searchRequest.data);
+
     const newSearchRequest: SearchExerciseRequest = {
-      data: {...state.search_criterion, ...searchRequest.data},
+      data: state.search_criterion,
+      includeOptions: state.includeOptions,
+      orderBy: state.orderBy,
       metadata
     };
+
     try {
       const response: SearchExerciseResponse = await this.app.$axios.$post('/api/search', newSearchRequest);
       commit('INIT', response);
-      commit('SET_SEARCH_CRITERION', searchRequest.data)
     } catch (e) {
       commit('RESET')
     }
@@ -153,8 +202,18 @@ export const actions = actionTree({state, mutations, getters}, {
       },
       data: {
         ...state.search_criterion
-      }
+      },
+      includeOptions: state.includeOptions,
+      orderBy: state.orderBy
     };
+
+    if (state.search_criterion.vote) {
+      if (request.data) {
+        request.data.vote = state.search_criterion.vote
+      } else {
+        request.data = {vote: state.search_criterion.vote}
+      }
+    }
 
     try {
       const response: SearchExerciseResponse = await this.app.$axios.$post('/api/search', request);
