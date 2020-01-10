@@ -1,16 +1,15 @@
 import {
   Category,
   SelectedTag,
-  Tag,
   CategoryWithTags,
-  CategoryWithSelectedTags
+  CategoryWithSelectedTags, TagExtended
 } from '~/types'
 import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
 
 const cloneDeep = require('lodash.clonedeep');
 
-const DEACTIVATED = 0;
-const ACTIVE = 1;
+const DEACTIVATED = false;
+const ACTIVE = true;
 
 /**
  * helper function to map an array of TagSelecter into a map containing array or number of id's of a category
@@ -94,6 +93,20 @@ export const mutations = mutationTree(state, {
   INIT(state, tags: CategoryWithSelectedTags[]) {
     state.defaultTags = cloneDeep(tags);
     state.tags = tags;
+    const selectedTags: SelectedTag[] = state.selectedTags;
+
+    selectedTags.forEach((tag: SelectedTag) => {
+
+      const tagsCategory: CategoryWithSelectedTags | undefined = tags.find((el: CategoryWithSelectedTags) => el.id === tag.category_id);
+
+      if (tagsCategory !== undefined) {
+        const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el: SelectedTag) => el.tag_id === tag.tag_id);
+
+        if (selectedTag !== undefined) {
+          selectedTag.state = ACTIVE
+        }
+      }
+    });
   },
   /**
    * Enable to clear the data in the selected array and get the default copy of defaultTags for tags
@@ -158,7 +171,7 @@ export const actions = actionTree({state, mutations}, {
     commit('CLEAR');
 
     payload.confirmedTags.forEach(el => {
-      el.state = 1;
+      el.state = true;
       commit('ADD_TAG', el)
     });
 
@@ -189,8 +202,8 @@ export const actions = actionTree({state, mutations}, {
       for (let i in data) {
         const {id, category, tags}: CategoryWithTags = data[i];
 
-        const selectedTags: SelectedTag[] = tags.map((el: Tag) => {
-          const selectedTag: SelectedTag = {...el, category_id: id, state: DEACTIVATED};
+        const selectedTags: SelectedTag[] = tags.map((el: TagExtended) => {
+          const selectedTag: SelectedTag = {...el, state: DEACTIVATED};
           return selectedTag
         });
 
@@ -200,21 +213,6 @@ export const actions = actionTree({state, mutations}, {
           tags: selectedTags
         })
       }
-
-      const selectedTags: SelectedTag[] = state.selectedTags;
-
-      selectedTags.forEach((tag: SelectedTag) => {
-
-        const tagsCategory: CategoryWithSelectedTags | undefined = array.find((el: CategoryWithSelectedTags) => el.id === tag.category_id);
-
-        if (tagsCategory !== undefined) {
-          const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el: SelectedTag) => el.tag_id === tag.tag_id);
-
-          if (selectedTag !== undefined) {
-            selectedTag.state = ACTIVE
-          }
-        }
-      });
 
       commit('INIT', array)
     } catch (e) {
