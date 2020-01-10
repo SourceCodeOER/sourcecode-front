@@ -16,7 +16,7 @@
         <li v-for="exercise in exercises" :key="exercise.id">
           <h4 class="title--primary-color__light">{{exercise.title}}</h4>
           <span><i>Nb de votes</i> : {{exercise.metrics.votes}}</span>
-          <span><i>Moyenne</i> : {{exercise.metrics.avg_vote ? exercise.metrics.avg_vote : '-'}}</span>
+          <span><i>Moyenne</i> : {{exercise.metrics.avg_score ? exercise.metrics.avg_score : '-'}}</span>
           <a :href="`/exercices/${exercise.id}`" target="_blank" class="cta-link">
             Voir
             <Icon type="arrowRight" theme="theme--secondary-color"/>
@@ -82,7 +82,8 @@
      */
     get searched(): boolean {
       const tags = this.$accessor.search.search_criterion.tags;
-      return (tags && tags.length !== 0) || this.$accessor.search.search_criterion.title !== ''
+      const vote = this.$accessor.search.search_criterion.vote;
+      return(tags && tags.length !== 0) || this.$accessor.search.search_criterion.title !== '' || !!vote
     }
 
     handleIntersect(entries: IntersectionObserverEntry[]) {

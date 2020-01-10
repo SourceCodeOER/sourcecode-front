@@ -17,10 +17,6 @@
     name: string = "panel-item";
 
     /**
-     * The default index of this panel item
-     */
-    @Prop({type: Number, default: 0}) readonly defaultIndex!: number;
-    /**
      * is this panel made available in the interface ?
      */
     @Prop({type: Boolean, default: true}) readonly isActive!: boolean;
@@ -29,7 +25,7 @@
     /**
      * The index of this panel
      */
-    index: number = this.defaultIndex;
+    index: number = 0;
 
     /**
      * emit a panelActivity event when the default index change
@@ -41,7 +37,7 @@
       if (oldVal !== newVal) {
         BusEvent.$emit('panelActivity', {
           state: newVal,
-          index: this.defaultIndex
+          index: this.index
         })
       }
     }

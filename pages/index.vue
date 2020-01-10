@@ -55,9 +55,9 @@
   import {Component, Vue} from "vue-property-decorator";
 
   @Component({
-    auth:false
+    auth: false
   })
-  export default class extends Vue{}
+  export default class extends Vue {}
 </script>
 
 <style lang="scss" scoped>

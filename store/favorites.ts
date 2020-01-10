@@ -12,7 +12,8 @@ export const mutations = mutationTree(state, {
     state.loaded = true;
   },
   RESET(state) {
-    state.favorites = []
+    state.favorites = [];
+    state.loaded = false;
   },
   ADD_CONFIGURATION(state, configuration:Configuration) {
     state.favorites.push(configuration)

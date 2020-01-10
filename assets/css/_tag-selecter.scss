@@ -1,0 +1,57 @@
+@import "_variables";
+@import "_function";
+@import "_font";
+
+
+.tag-selecter {
+  margin-bottom: 20px;
+
+  > ul {
+    list-style-type: none;
+    padding: 0 20px 0 20px;
+    max-height: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    @include transitionHelper(max-height .4s ease);
+
+    &.active {
+      max-height: 300px;
+    }
+
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  ul > li {
+    margin-bottom: 15px;
+  }
+
+  > span {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+
+    &.arrow {
+      svg {
+        @include transitionHelper(transform .3s ease);
+        margin-right: 10px;
+      }
+
+      &.arrow-rotate {
+        svg {
+          @include transformHelper(translateX(2px) rotate(90deg))
+        }
+      }
+    }
+
+    svg {
+      width: 19px;
+      vertical-align: text-top;
+    }
+  }
+}

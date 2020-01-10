@@ -63,6 +63,18 @@
           </ul>
         </template>
 
+        <template v-if="isAuthenticated && role === 'admin'">
+          <span>Administration</span>
+          <ul>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/exercices">
+              <div class="logo-link-wrapper">
+                <Icon type="document" theme="theme--white"/>
+              </div>
+              Exercices
+            </nuxt-link>
+          </ul>
+        </template>
+
       </nav>
 
       <div v-if="isAuthenticated" class="cta-link bottom" @click="logout">
@@ -87,6 +99,7 @@
   import {Vue, Component, Watch} from "vue-property-decorator";
   import Icon from "~/components/Symbols/Icon.vue";
   import {BusEvent} from '~/components/Event/BusEvent'
+  import {UserRole} from "~/types";
 
   @Component({
     components: {
@@ -103,11 +116,13 @@
       return this.$auth.user.fullName
     }
 
-    get role() {
+    get role(): UserRole {
       return this.$auth.user.role
     }
 
     async logout() {
+      this.$accessor.favorites.RESET();
+      this.$accessor.historical.RESET();
       await this.$auth.logout();
     }
   }

@@ -7,33 +7,33 @@
 </template>
 
 <script lang="ts">
-    import {Vue, Component, Prop, Emit, Watch} from 'vue-property-decorator'
-    import {CheckBoxObjectEmitted} from "@/types";
+  import {Vue, Component, Prop, Emit, Watch} from 'vue-property-decorator'
+  import {CheckBoxObjectEmitted} from "@/types";
 
-    @Component
-    export default class CheckBox extends Vue {
+  @Component
+  export default class CheckBox extends Vue {
 
-        checked:boolean = false;
+    checked: boolean = false;
 
-        @Prop({type:String, default:''}) readonly title!: string;
-        @Prop({type:Boolean, default:false}) readonly state!: boolean;
-        @Prop({type: [String, Number], default: 'none'}) readonly id!: number;
+    @Prop({type: String, default: ''}) readonly title!: string;
+    @Prop({type: Boolean, default: false}) readonly state!: boolean;
+    @Prop({type: [String, Number], default: 'none'}) readonly id!: number;
 
-        @Emit()
-        check(): CheckBoxObjectEmitted {
-            this.checked = !this.checked;
-            return {title: this.title, state: this.checked, id: this.id}
-        }
-
-        @Watch('state')
-        onStatePropChanged(val:boolean) {
-            this.checked = val
-        }
-
-        created() {
-            this.checked = this.state;
-        }
+    @Emit()
+    check(): CheckBoxObjectEmitted {
+      this.checked = !this.checked;
+      return {title: this.title, state: this.checked, id: this.id}
     }
+
+    @Watch('state')
+    onStatePropChanged(val: boolean) {
+      this.checked = val
+    }
+
+    created() {
+      this.checked = this.state;
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

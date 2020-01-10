@@ -1,4 +1,4 @@
-import {Historical, SelectedTag} from "~/types";
+import {Historical, SelectedTag, VoteExerciseRequest} from "~/types";
 import {actionTree, mutationTree} from "nuxt-typed-vuex";
 
 const cloneDeep = require('lodash.clonedeep');
@@ -20,6 +20,9 @@ export const mutations = mutationTree(state, {
    */
   ADD_HISTORICAL(state, historical: Historical) {
     state.historical.push(historical)
+  },
+  RESET(state) {
+    state.historical = []
   }
 });
 
@@ -29,10 +32,15 @@ export const actions = actionTree({state, mutations}, {
    * @param commit
    * @param historical
    */
-  addHistorical({commit}, historical: { tags?: SelectedTag[], title?: string }) {
-    if (historical.tags && historical.tags.length !== 0 || historical.title) {
+  addHistorical({commit}, historical: { tags?: SelectedTag[], title?: string, vote?:VoteExerciseRequest}) {
+    if (historical.tags && historical.tags.length !== 0 || historical.title || historical.vote) {
       const moment: string = this.app.$moment().format(this.app.$moment.HTML5_FMT.TIME_SECONDS);
-      commit('ADD_HISTORICAL', {tags: cloneDeep(historical.tags), datetime: moment, title: historical.title})
+      commit('ADD_HISTORICAL', {
+        tags: cloneDeep(historical.tags),
+        datetime: moment,
+        title: historical.title,
+        vote: historical.vote
+      })
     }
   }
 });

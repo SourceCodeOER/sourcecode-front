@@ -36,7 +36,8 @@
       user: () => import('./library/UserSymbol.vue'),
       off: () => import('./library/OffSymbol.vue'),
       edit: () => import('./library/EditSymbol.vue'),
-      archive: () => import('./library/ArchiveSymbol.vue')
+      archive: () => import('./library/ArchiveSymbol.vue'),
+      send: () => import('./library/SendSymbol.vue')
     }
   })
   export default class Icon extends Vue {

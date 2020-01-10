@@ -1,13 +1,14 @@
 <template>
-  <div class="tag" :class="{'tag--confirmed' : state === 1, 'tag--deactivated': state === 0}">
+  <div class="tag" :class="{'tag--confirmed' : state, 'tag--deactivated': !state}">
     {{title}}
-    <Icon type="cross" @click.native.stop="deleteTag" :theme="theme"/>
+    <Icon type="cross" @click.native.stop="deleteTag" theme="theme--white"/>
   </div>
 </template>
 
 <script lang="ts">
-  import {Vue, Component, Prop} from 'vue-property-decorator'
+  import {Vue, Component, Prop, Emit} from 'vue-property-decorator'
   import Icon from "~/components/Symbols/Icon.vue";
+  import {TagLabelObjectEmitted} from "~/types";
 
   @Component({
     components: {
@@ -16,61 +17,15 @@
   })
   export default class Tag extends Vue {
     @Prop({type: String, required: true}) readonly title!: string;
-    @Prop({type: Number, default: 0}) readonly state!: 1 | 0;
-    @Prop({type: Number, required: true}) readonly category!: number;
+    @Prop({type: Boolean, default: false}) readonly state!: boolean;
     @Prop({type: Number, required: true}) readonly id!: number;
-    @Prop({type: String, default: "default"}) readonly mode!: "default" | "strict";
-    @Prop({type:Boolean, default:false}) readonly historicalMode!:boolean;
-    @Prop({type:Boolean, default:false}) readonly storeMode!:boolean;
-    @Prop({type:Boolean, default:false}) readonly searchMode!:boolean;
 
-    get theme() {
-      if (this.state === 0) {
-        return 'theme--white'
-      }
+    currentState: boolean = this.state;
 
-      if (this.state === 1) {
-        return 'theme--white'
-      }
-    }
-
-    async deleteTag() {
-      if(this.storeMode) {
-        await this.deleteTagWithStore()
-      } else {
-        this.deleteTagAndEmit()
-      }
-    }
-
-    deleteTagAndEmit() {
-      this.$emit('deleteTag', {
-        id:this.id,
-        title:this.title,
-        category:this.category,
-        state:this.state
-      })
-    }
-
-    async deleteTagWithStore() {
-      await this.$accessor.tags.addOrRemoveTag({
-        tag_id: this.id,
-        tag_text: this.title,
-        state: 0,
-        category_id: this.category
-      });
-      await this.$accessor.tags.apply(this.mode);
-
-      if(this.searchMode) {
-        await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
-      }
-
-      if(this.historicalMode) {
-        await this.$accessor.historical.addHistorical({
-          tags: this.$accessor.tags.selectedTags,
-          title: this.$accessor.search.search_criterion.title
-        })
-      }
-
+    @Emit('deleteTag')
+    deleteTag(): TagLabelObjectEmitted {
+      this.currentState = !this.currentState;
+      return {title: this.title, state: this.currentState, id: this.id}
     }
   }
 </script>
@@ -107,7 +62,7 @@
     }
 
     &.tag--deactivated {
-      background-color:  lighten($TERNARY_COLOR, 10);
+      background-color: lighten($TERNARY_COLOR, 10);
       border: 0;
       color: white;
     }

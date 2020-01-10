@@ -21,9 +21,8 @@ export interface TagExtended extends Tag {
   version: number
 }
 
-export interface SelectedTag extends Tag {
-  state: 0 | 1,
-  category_id: number
+export interface SelectedTag extends TagExtended {
+  state: boolean
 }
 
 export interface TagProposal {
@@ -36,4 +35,11 @@ export type TagsSettingsResponse = TagExtended[];
 export interface UpdateTagCategory {
   id: number,
   category: string
+}
+
+
+export interface TagLabelObjectEmitted {
+  title: string,
+  state: boolean,
+  id: number
 }

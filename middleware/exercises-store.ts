@@ -5,8 +5,8 @@ const allowedRoutesName:string[] = ['exercices', 'exercices-id'];
 const middleware: Middleware = ({from, app}) => {
 
   if (process.client && allowedRoutesName.findIndex((el) => el === from.name) === -1) {
-    app.$accessor.search.RESET_SEARCH_CRITERION();
-    app.$accessor.tags.CLEAR()
+    app.$accessor.search.RESET();
+    app.$accessor.tags.CLEAR();
   }
 };
 

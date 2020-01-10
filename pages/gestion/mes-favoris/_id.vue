@@ -16,97 +16,43 @@
 
       <Panel>
         <PanelItem>
-          <ExercisesCheckPanel title="Exercices"/>
+          <ExercisesCheckPanel icon="search" title="Exercices"/>
         </PanelItem>
 
         <PanelItem>
-          <FilterPanel :reset-button="true" :search-mode="true" mode="strict" title="Tags"/>
+          <FilterPanel :radio-button-rating="true" :reset-button="true" :search-mode="true" title="Tags"/>
         </PanelItem>
       </Panel>
 
-      <section class="content">
-        <h1>Modifier mon favori</h1>
+      <FavoriteForm title="Modifier mon favori" :configuration="configuration"/>
 
-        <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit()">
-          <ValidationProvider tag="label"
-                              name="favori"
-                              rules="required|max:200"
-                              v-slot="{ errors }">
-            <span class="label__name">
-              Nom du favori *
-            </span>
-            <input id="Name" placeholder="Entrez le nom de votre favori" name="name" v-model="form.name"
-                   class="input--grey" type="text">
-            <span class="error-message">{{errors[0]}}</span>
-          </ValidationProvider>
-
-          <ValidationProvider tag="label"
-                              name="titre"
-                              rules="max:100"
-                              v-slot="{ errors }">
-            <span class="label__name">
-              Titre de la sélection
-            </span>
-            <input id="Title" placeholder="Entrez le titre de votre recherche" name="title" v-model="form.title"
-                   v-on:input="debounceInput" class="input--grey" type="text">
-            <span class="error-message">{{errors[0]}}</span>
-          </ValidationProvider>
-
-        </ValidationObserver>
-
-        <h2 class="title--primary-color__light">Tags *</h2>
-        <button class="button--secondary-color-reverse" v-show="selectedTags.length === 0" @click="changePanel(1)">
-          Commencer la sélection
-        </button>
-
-
-        <Tag v-for="(tag, id) in selectedTags" :store-mode="true" :search-mode="true" mode="strict" :state="tag.state"
-             :title="tag.tag_text"
-             :key="tag.tag_text + '_' + tag.category + '_'+ id"
-             :category="tag.category_id" :id="tag.tag_id"/>
-
-        <br>
-
-        <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
-          sauver le favori
-        </button>
-        <p class="disclaimer">* champs obligatoires</p>
-      </section>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import {Component, Mixins} from "vue-property-decorator";
+  import {Component, Vue} from "vue-property-decorator";
   import {
     Configuration,
     SearchExerciseRequest,
     SelectedTag,
     TagExtended,
-    UpdateConfigurationRequest
   } from "~/types";
   import ExercisesCheckPanel from "~/components/Panel/Item/ExercisesCheckPanel.vue";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
-  import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
   import Icon from "~/components/Symbols/Icon.vue";
-  import Tag from "~/components/Tag/Tag.vue";
-  import {ValidationObserver, ValidationProvider} from "vee-validate";
-  import {BusEvent} from "~/components/Event/BusEvent";
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
-  import FavoriteFormMixins from "~/components/Mixins/FavoriteFormMixins";
-  import qs from 'qs'
+  import FavoriteForm from "~/components/Gestion/FavoriteForm.vue";
 
   @Component({
     components: {
+      FavoriteForm,
       PanelItem,
       Panel,
       ExercisesCheckPanel,
       FilterPanel,
-      Icon,
-      ValidationObserver,
-      ValidationProvider,
-      Tag
+      Icon
     },
     async asyncData({params, error, app: {$accessor}}) {
       if (!$accessor.favorites.loaded) {
@@ -120,7 +66,7 @@
         error({statusCode: 404, message: "Ce favori est introuvable"});
       } else {
         const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
-          return {...tag, state: 1}
+          return {...tag, state: true}
         });
 
         await $accessor.tags.fetch();
@@ -130,7 +76,9 @@
           data: {
             title: configuration.title,
             tags: $accessor.tags.tagsRequest
-          }
+          },
+          includeOptions: {includeDescription: false, includeTags: false},
+          orderBy: [{field: 'date', value: 'DESC'}, {field: 'id', value: 'ASC'}]
         };
 
         await $accessor.search.fetch(searchRequest);
@@ -138,70 +86,10 @@
         return {configuration}
 
       }
-
     },
-    middleware: ['reset-search-request']
+    middleware: ['auth', 'reset-search-request']
   })
-  export default class extends Mixins(FilterPanelMixins, FavoriteFormMixins) {
+  export default class extends Vue {
     configuration!: Configuration;
-
-    async validateBeforeSubmit() {
-      // Basic validation form
-      const isValid = await this.observer1.validate();
-
-      // Tags validation
-      const tags: number[] = this.selectedTags.map((tag: SelectedTag) => tag.tag_id);
-      const isTagsValid = tags.length !== 0;
-
-      if (isValid && isTagsValid) {
-
-        const config: UpdateConfigurationRequest = {
-          id: this.configuration.id,
-          name: this.form.name,
-          tags,
-          title: this.form.title
-        };
-
-        try {
-          await this.$axios.$put('api/configurations', config);
-
-          const query = {
-            ids: [this.configuration.id]
-          };
-
-          const queryString = qs.stringify(query);
-          const refreshConfig: Configuration[] = await this.$axios.$get('api/configurations?' + queryString);
-
-          this.$accessor.favorites.UPDATE_CONFIGURATION(refreshConfig[0]);
-
-          BusEvent.$emit('displayNotification', {
-            mode: 'success',
-            message: 'Votre favori a bien été mis à jour !'
-          })
-
-        } catch (e) {
-          BusEvent.$emit('displayNotification', {
-            mode: 'error',
-            message: 'Une erreur est survenue lors de la modification du favori.'
-          })
-        }
-      } else {
-        BusEvent.$emit('displayNotification', {
-          mode: 'warning',
-          message: 'Vous ne respectez pas les conditions pour ajouter votre favori.'
-        })
-      }
-    }
-
-    mounted() {
-      if (process.client) {
-        this.form.title = this.configuration.title;
-        this.form.name = this.configuration.name;
-      }
-    }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import "../../../assets/css/_exercise-gestion.scss";
-</style>

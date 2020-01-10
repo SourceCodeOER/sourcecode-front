@@ -5,7 +5,7 @@
 /**
   Base for input, select and textarea
  */
-input {
+input:not([type=radio]) {
   line-height: 3.2em;
 }
 
@@ -16,7 +16,7 @@ textarea {
   height: 100px;
 }
 
-input, textarea, .custom-select {
+input:not([type=radio]), textarea, .custom-select {
   padding: 0 25px;
   @include border-radius(4px);
   -webkit-appearance: none;
@@ -29,7 +29,7 @@ input, textarea, .custom-select {
   font-size: 0.75em;
 }
 
-input, textarea {
+input:not([type=radio]), textarea {
 
   &::placeholder {
     font-size: 1em;
@@ -79,7 +79,7 @@ input[type=file] {
 
 .input-wrapper--with-icon {
   position: relative;
-  input {
+  input:not([type=radio]) {
     padding-left: 50px;
   }
   svg {

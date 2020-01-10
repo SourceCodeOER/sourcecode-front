@@ -7,7 +7,7 @@
     </div>
 
     <div v-show="!isHistoricalEmpty" class="panel-wrapper">
-      <div class="historical" v-for="(el, id) in historical" @click="fetchFilter({tags: el.tags, title: el.title})"
+      <div class="historical" v-for="(el, id) in historical" @click="fetchFilter(el)"
            :key="el.datetime + '_' + id">
         <h4>{{el.datetime}}</h4>
         <div v-if="el.title" class="title">
@@ -17,6 +17,8 @@
           <span v-if="i === 0" :key="tag.tag_id">{{tag.tag_text}}</span>
           <span v-else :key="tag.tag_id"><span class="separator"> |</span> {{tag.tag_text}}</span>
         </template>
+
+        <span v-if="el.vote"><span v-if="el.tags && el.tags.length > 0" class="separator"> | </span>{{formattedVote(el.vote)}}</span>
       </div>
 
     </div>
@@ -25,9 +27,8 @@
 </template>
 
 <script lang="ts">
-  import {BusEvent} from '~/components/Event/BusEvent'
   import {Component, Vue} from "vue-property-decorator";
-  import {SelectedTag} from "~/types";
+  import {Historical, SelectedTag, VoteExerciseRequest} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import {Prop} from "~/node_modules/vue-property-decorator";
 
@@ -47,7 +48,7 @@
     /**
      * The default icon of this panel (see Icon component)
      */
-    @Prop({type: String, default: "history"}) icon!: string;
+    @Prop({type: String, default: "search"}) icon!: string;
 
     /**
      * Get the historical of the user from the store
@@ -63,11 +64,27 @@
       return this.historical.length === 0;
     }
 
+    formattedVote(vote: VoteExerciseRequest) {
+      let message = '';
+      if (vote) {
+        if (vote.operator === '>=' || vote.operator === '>') {
+          message += 'Plus de '
+        } else if (vote.operator === '<=' || vote.operator === '<') {
+          message += 'Moins de '
+        }
+
+        message += vote.value + ' étoiles';
+
+      }
+
+      return message
+    }
+
     /**
      * Make a search request for a selected historical
      * @param historical
      */
-    async fetchFilter(historical: { tags?: SelectedTag[], title?: string }) {
+    async fetchFilter(historical: Historical) {
       let tagsRequest: (number | number[])[] = [];
       if (historical.tags) {
         await this.$accessor.tags.applyConfirmedTags({confirmedTags: historical.tags, mode: "default"});
@@ -81,7 +98,7 @@
         title = historical.title
       }
 
-      await this.$accessor.search.fetch({data: {tags: tagsRequest, title: title}});
+      await this.$accessor.search.fetch({data: {tags: tagsRequest, title: title, vote: historical.vote}});
     }
   }
 </script>

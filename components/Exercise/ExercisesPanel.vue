@@ -12,10 +12,12 @@
         </div>
       </div>
       <hr>
-      <div class="tags-wrapper" v-if="confirmedTags.length > 0">
-        <Tag v-for="(tag, id) in confirmedTags" :search-mode="true" :historical-mode="true" :store-mode="true" :state="tag.state" :title="tag.tag_text"
-             :key="tag.tag_text + '_' + tag.category + '_'+ id"
-             :category="tag.category_id" :id="tag.tag_id"/>
+      <div class="tags-wrapper" v-if="confirmedTags.length > 0 || voteTag">
+        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text"
+             :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)"/>
+
+        <Tag v-if="voteTag" :id="voteTag.id" :title="voteTag.title" :state="voteTag.state"
+             @deleteTag="removeRatingCriteria"/>
       </div>
     </header>
 
@@ -37,7 +39,7 @@
   import Tag from "~/components/Tag/Tag.vue";
   import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
-  import {SelectedTag} from "~/types";
+  import {Exercise, SelectedTag, TagLabelObjectEmitted} from "~/types";
 
   const ratio = .2;
 
@@ -71,16 +73,34 @@
       return this.$accessor.search.search_criterion.title
     }
 
-    get isEmptySearchModel() {
+    get isEmptySearchModel(): boolean {
       return this.$accessor.search.search_criterion.title === ""
     }
 
-    get nbOfResults() {
+    get nbOfResults(): number {
       return this.$accessor.search.metadata.totalItems
     }
 
-    get exercises() {
+    get exercises(): Exercise[] {
       return this.$accessor.search.exercises
+    }
+
+    get voteTag(): TagLabelObjectEmitted | undefined {
+      const vote = this.$accessor.search.search_criterion.vote;
+      let title = '';
+
+      if (vote) {
+        if (vote.operator === '>=' || vote.operator === '>') {
+          title += 'Plus de '
+        } else if (vote.operator === '<=' || vote.operator === '<') {
+          title += 'Moins de '
+        }
+
+        title += vote.value + ' étoiles'
+
+        return {title, id: 0, state: true}
+      }
+      return undefined
     }
 
     @Watch('numberOfFilter')
@@ -93,6 +113,35 @@
         if (!!parent) {
           this.bodyExercise.style.height = (parent.offsetHeight - headerHeight) + 'px';
         }
+      })
+    }
+
+    async removeRatingCriteria() {
+      await this.$accessor.search.RESET_VOTE();
+      await this.$accessor.search.fetch({});
+
+      const search_criterion = this.$accessor.search.search_criterion;
+      const selectedTags = this.$accessor.tags.selectedTags;
+
+      await this.$accessor.historical.addHistorical({
+        title: search_criterion.title,
+        tags: selectedTags,
+        vote: search_criterion.vote
+      })
+    }
+
+    async deleteTag(event: { title: string, id: number, state: boolean }, tag: SelectedTag) {
+      await this.$accessor.tags.addOrRemoveTag({...tag, state: event.state});
+      await this.$accessor.tags.apply('default');
+      await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+
+      const search_criterion = this.$accessor.search.search_criterion;
+      const selectedTags = this.$accessor.tags.selectedTags;
+
+      await this.$accessor.historical.addHistorical({
+        title: search_criterion.title,
+        tags: selectedTags,
+        vote: search_criterion.vote
       })
     }
 
@@ -124,8 +173,10 @@
     header {
       padding-bottom: 20px;
 
-      .tags-wrapper {
+      .tags__wrapper {
         margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
       }
 
       hr {

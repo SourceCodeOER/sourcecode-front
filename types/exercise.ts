@@ -33,12 +33,12 @@ export interface Exercise {
   url: null | string,
   metrics?: ExerciseMetrics,
   tags: ExerciseTag[],
-  vote?:number,
-  creator?:User
+  vote?: number,
+  creator?: User
 }
 
-export interface ExerciseWithSelection extends Exercise{
-  isSelected:boolean
+export interface ExerciseWithSelection extends Exercise {
+  isSelected: boolean
 }
 
 /**
@@ -54,12 +54,32 @@ export interface DataSearchExerciseRequest {
   title?: string,
   tags?: (number | number[])[],
   state?: ExerciseState,
-  user_ids?: number[]
+  user_ids?: number[],
+  vote?: VoteExerciseRequest
+}
+
+export interface IncludeOptionsExerciseRequest {
+  includeCreator?: boolean,
+  includeMetrics?: boolean,
+  includeDescription?: boolean,
+  includeTags?: boolean
+}
+
+export interface VoteExerciseRequest {
+  operator: "<=" | "<" | ">=" | ">",
+  value: number
+}
+
+export interface OrderByExerciseRequest {
+  field: "state" | "id" | "title" | "date" | "avg_score" | "vote_count",
+  value: "ASC" | "DESC"
 }
 
 export interface SearchExerciseRequest {
   metadata?: MetadataSearchExerciseRequest,
-  data?: DataSearchExerciseRequest
+  includeOptions?: IncludeOptionsExerciseRequest,
+  data?: DataSearchExerciseRequest,
+  orderBy?: OrderByExerciseRequest[]
 }
 
 export interface MetadataSearchExerciseResponse {
@@ -68,6 +88,7 @@ export interface MetadataSearchExerciseResponse {
   totalPages: number,
   pageSize: number
 }
+
 
 export interface SearchExerciseResponse {
   metadata: MetadataSearchExerciseResponse,
@@ -90,12 +111,12 @@ export interface PostExerciseRequestWithFile extends PostExerciseRequest {
 }
 
 export interface UpdateExerciseRequest extends PostExerciseRequest {
-  version:number,
-  removePreviousFile?:boolean
+  version: number,
+  removePreviousFile?: boolean
 }
 
 export interface UpdateExerciseRequestWithFile extends PostExerciseRequestWithFile {
-  version:number
+  version: number
 }
 
 /**

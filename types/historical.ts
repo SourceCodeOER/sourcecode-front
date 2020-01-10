@@ -1,7 +1,9 @@
 import {SelectedTag} from "~/types/tags";
+import {VoteExerciseRequest} from "~/types/exercise";
 
 export interface Historical {
   datetime: string,
   title?: string
-  tags?: SelectedTag[]
+  tags?: SelectedTag[],
+  vote?: VoteExerciseRequest
 }

@@ -4,7 +4,7 @@ import {
   Category,
   PostExerciseRequest,
   PostExerciseRequestWithFile,
-  SelectedTag,
+  SelectedTag, TagLabelObjectEmitted,
   TagProposal, UpdateExerciseRequest, UpdateExerciseRequestWithFile
 } from "~/types";
 import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
@@ -181,12 +181,18 @@ export default class ExerciseFormMixins extends Vue {
    * Deletes a tag proposal
    * @param event
    */
-  deleteTag(event: { id: number, title: string, category: number, state: 1 | 0 }) {
+  deleteTagProposal(event: { id: number, title: string, state: boolean }) {
     const index = this.newTags.findIndex((el) => el.text === event.title);
 
     if (index !== -1) {
       this.newTags.splice(index, 1)
     }
+  }
+
+  async deleteTag(event: { title: string, id: number, state: boolean }, tag: SelectedTag) {
+    await this.$accessor.tags.addOrRemoveTag({...tag, state: event.state});
+    await this.$accessor.tags.apply('strict');
+    await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
   }
 
   /**

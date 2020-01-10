@@ -106,12 +106,10 @@
       const searchRequest: SearchExerciseRequest = {};
       const searchCriterion: DataSearchExerciseRequest = {};
 
-      if (configuration.title) {
-        searchCriterion.title = configuration.title
-      }
+      searchCriterion.title = configuration.title ? configuration.title : "";
 
       const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
-        return {...tag, state: 1}
+        return {...tag, state: true}
       });
 
       this.$accessor.tags.applyConfirmedTags({confirmedTags, mode: "default"});
@@ -181,7 +179,7 @@
 
       svg {
         width: 22px;
-        margin-left: 5px;
+        margin-left: 0;
         opacity: 0;
         @include transitionHelper(opacity .4s ease);
       }

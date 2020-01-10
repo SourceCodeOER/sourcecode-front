@@ -41,14 +41,11 @@
     },
     async asyncData({$auth}) {
       return {user: $auth.user}
-    }
+    },
+    middleware: 'auth'
   })
   export default class extends Vue {
     user!: UserInfo;
-
-    mounted() {
-      console.log(this.user)
-    }
   }
 </script>
 
