@@ -97,7 +97,7 @@
 }
 
 @mixin input-theme($name, $color1, $color2) {
-  input, textarea {
+  input:not([type=radio]), textarea {
     &.input--#{$name} {
       border: 1px solid $color1;
       color: $color1;
