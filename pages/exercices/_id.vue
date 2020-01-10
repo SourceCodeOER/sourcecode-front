@@ -74,20 +74,20 @@
 
 
     },
+    auth: false,
     middleware: ['exercises-store']
-
   })
   export default class extends Vue {
     exercise!: Exercise;
 
     mounted() {
-      if(process.client) {
+      if (process.client) {
         const exercise: Element | null = document.querySelector("#Exercise");
 
-        if(exercise) {
-            exercise.querySelectorAll('pre code').forEach((block) => {
-              hljs.highlightBlock(block);
-            });
+        if (exercise) {
+          exercise.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
         }
       }
     }
