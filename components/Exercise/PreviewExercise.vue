@@ -42,8 +42,10 @@
             return `/exercices/${this.exercise.id}`
         }
 
-        get tagsFormatted() {
+        get tagsFormatted(): string {
             const tags: ExerciseTag[] = this.exercise.tags;
+
+            if(!tags) return '';
 
             // 1) Difficulty, 2) language, 3) type of exercise, 4) theme
 
