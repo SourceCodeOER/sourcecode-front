@@ -21,8 +21,6 @@
 
       <nav class="menu-nav-list">
 
-        <span>Pages</span>
-
         <ul>
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/">
             <div class="logo-link-wrapper">
