@@ -34,6 +34,7 @@
           {{categoryWithTags.category}}
         </CheckBoxSelecter>
 
+
         <RadioButtonSelecter v-if="radioButtonRating" @toggle-list="toggleList" @change="setRatingCriteria"
                              :default-value="voteCriteria"
                              :select-default-option="true" :default-options="[
@@ -42,7 +43,19 @@
               {title:'Plus de 2 étoiles', value:{operator: '>=', value: 2}},
               {title:'Moins de 2 étoiles', value:{operator: '<=', value: 2}}
               ]">
-          Evaluation
+          Cotation
+        </RadioButtonSelecter>
+
+        <RadioButtonSelecter v-if="radioButtonState" @change="setStateCriteria" @toggle-list="toggleList"
+                             :default-value="stateCriteria"
+                          :select-default-option="true"
+                          :default-options="[
+              {title:'Non répertorié', value:'CREATED'},
+              {title:'En attente', value: 'PENDING'},
+              {title:'Valide', value:'VALIDATED'},
+              {title:'Invalide', value:'NOT_VALIDATED'}
+              ]">
+          Status
         </RadioButtonSelecter>
       </ul>
     </div>
@@ -59,7 +72,7 @@
   import {
     CategoryWithSelectedTags, CheckboxObject,
     CheckboxSelecterObjectEmitted,
-    CreateConfigurationRequest, RadiobuttonSelecterObjectEmitted,
+    CreateConfigurationRequest, ExerciseState, RadiobuttonObject, RadiobuttonSelecterObjectEmitted,
     SelectedTag, VoteExerciseRequest
   } from "~/types";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
@@ -110,6 +123,10 @@
      * If activated, the radio button selecter for the rating filter is available
      */
     @Prop({type: Boolean, default: false}) radioButtonRating!: boolean;
+    /**
+     * If activated, the radio button selecter for the rating filter is available
+     */
+    @Prop({type: Boolean, default: false}) radioButtonState!: boolean;
 
 
     /**
@@ -129,6 +146,15 @@
      * The name of the favorite entered by the user
      */
     favoriteName: string = '';
+    /**
+     * The different types of state for an exercise
+     */
+    private arrayOfStates: RadiobuttonObject[] = ["Non répertorié", "En attente", "Valide", "invalide"].map(title => {
+      return {
+        title,
+        value: title
+      }
+    });
 
     /**
      * get the current selected tags from the store
@@ -147,6 +173,11 @@
     get voteCriteria() {
       const vote = this.$accessor.search.search_criterion.vote;
       return vote ? vote : 'default';
+    }
+
+    get stateCriteria() {
+      const state: ExerciseState | undefined = this.$accessor.search.search_criterion.state;
+      return state ? state : 'default';
     }
 
     /**
@@ -180,6 +211,18 @@
           title: this.$accessor.search.search_criterion.title,
           vote: this.$accessor.search.search_criterion.vote
         });
+      }
+    }
+
+    setStateCriteria(event: RadiobuttonSelecterObjectEmitted) {
+      if(this.searchMode) {
+        if(event.index === -1) {
+          this.$accessor.search.RESET_STATE();
+          this.$accessor.search.fetch({});
+        } else {
+          const state:ExerciseState = event.data.value;
+          this.$accessor.search.fetch({data: {state}});
+        }
       }
     }
 
