@@ -56,9 +56,12 @@
       await $accessor.tags.fetch();
       await $accessor.tags.apply("default");
       await $accessor.search.fetch({
-        metadata: {size: 50},
+        metadata: {size: 30},
         includeOptions: {includeDescription: false},
-        orderBy: [{field: "date", value: "DESC"}, {field:'id', value:'ASC'}]
+        orderBy: [{field: "date", value: "DESC"}, {field:'id', value:'ASC'}],
+        data: {
+          state:'VALIDATED'
+        }
       } as SearchExerciseRequest);
 
       if ($auth.loggedIn) {
