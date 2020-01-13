@@ -96,7 +96,7 @@ export default class ExerciseFormMixins extends Vue {
    * Only get the names of each categories
    */
   protected get categoriesName(): string[] {
-    return this.categories.map(el => el.category)
+    return this.categories.map(el => el.category).filter(el => el !== 'licence');
   }
 
   /**
