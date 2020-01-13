@@ -72,3 +72,20 @@
   }
 
 }
+
+.container--with-table {
+  table {
+    width: 100%;
+
+    .item-checkbox {
+      max-width: 35px;
+      min-width: 35px;
+    }
+
+    &.table--with-sticky-header {
+      thead th {
+        top: 168px;
+      }
+    }
+  }
+}
