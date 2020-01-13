@@ -1,5 +1,5 @@
 <template>
-  <div class="container--with-menu" id="MyExercises">
+  <div class="container--with-menu container--with-table">
     <div class="banner banner--with-shadow-bottom">
 
       <div class="banner__nav">
@@ -13,7 +13,11 @@
 
       <Panel>
         <PanelItem>
-          <FilterPanel :radio-button-rating="true" :reset-button="true" :favorite="true" :search-mode="true"
+          <FilterPanel :radio-button-rating="true"
+                       :radio-button-state="true"
+                       :reset-button="true"
+                       :favorite="true"
+                       :search-mode="true"
                        :historical-mode="true"
                        @reset="resetInput"/>
         </PanelItem>
@@ -43,7 +47,7 @@
               <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Publier', 'Brouillon', 'Supprimer']"/>
+                            :options="['Publier', 'Dépublier', 'Supprimer']"/>
             </transition>
 
             <!-- In case you only want a delete button -->
@@ -75,7 +79,7 @@
             <th>Moyenne</th>
             <th>Mis à jour</th>
             <th class="item-centered">Fichier(s)</th>
-            <th class="item-centered">Etat</th>
+            <th class="item-centered">Status</th>
           </tr>
           </thead>
 
@@ -103,11 +107,11 @@
               </i>
 
               <i title="Traitement en cours" v-else-if="exercise.state === 'PENDING'">
-                <Icon type="search" theme="theme--yellow"/>
+                <Icon type="send" theme="theme--yellow"/>
               </i>
 
               <i title="Envoyé" v-else-if="exercise.state === 'CREATED'">
-                <Icon title="Créé" type="send" theme="theme--primary-color-light"/>
+                <Icon type="paper" theme="theme--primary-color-light"/>
               </i>
             </td>
           </tr>
@@ -231,9 +235,11 @@
     async deleteSelectedExercises() {
       try {
         await this.$axios.$delete('api/bulk/delete_exercises', {data: this.selectedExercises});
+        const nbSelectedExercises = this.selectedExercises.length;
+
         BusEvent.$emit('displayNotification', {
           mode: "success",
-          message: `${this.selectedExercises.length} ${this.selectedExercises.length === 1 ? 'exercice a' : 'exercices ont'} été correctement supprimé.`
+          message: `${nbSelectedExercises} ${nbSelectedExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement supprimé${nbSelectedExercises === 1 ? '' : 's'}.`
         });
 
         this.selectedExercises = [];
@@ -254,19 +260,19 @@
       const nbOfExercises = this.selectedExercises.length;
 
       if (state === 'PENDING') {
-        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement envoyé${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'} pour inspection.`
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement envoyé${nbOfExercises === 1 ? '' : 's'} pour inspection.`
       } else if (state === 'VALIDATED') {
-        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} bien été publié${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'}.`
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} bien été publié${nbOfExercises === 1 ? '' : 's'}.`
 
       } else if (state === 'NOT_VALIDATED') {
-        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'} comme invalide${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'}.`
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme invalide${nbOfExercises === 1 ? '' : 's'}.`
 
       } else {
-        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement dépublié${nbOfExercises} ${nbOfExercises === 1 ? '' : 's'}.`
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement dépublié${nbOfExercises === 1 ? '' : 's'}.`
       }
 
       try {
-        await this.$axios.$put('/api/bulk/modify_exercises_status', {data: {exercises: this.selectedExercises, state}});
+        await this.$axios.$put('/api/bulk/modify_exercises_status', {exercises: this.selectedExercises, state});
         BusEvent.$emit('displayNotification', {
           mode: "success",
           message
@@ -350,23 +356,5 @@
   @import "../../../assets/css/font";
   @import "../../../assets/css/table";
 
-
-  #MyExercises {
-
-    table {
-      width: 100%;
-
-      .item-checkbox {
-        max-width: 35px;
-        min-width: 35px;
-      }
-
-      &.table--with-sticky-header {
-        thead th {
-          top: 168px;
-        }
-      }
-    }
-  }
 </style>
 
