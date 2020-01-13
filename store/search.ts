@@ -86,6 +86,9 @@ export const mutations = mutationTree(state, {
   RESET_VOTE(state) {
     delete state.search_criterion.vote
   },
+  RESET_STATE(state) {
+    delete state.search_criterion.state
+  },
   /**
    * Set a new metadata object to replace the old one
    * @param state
