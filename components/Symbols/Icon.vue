@@ -37,7 +37,9 @@
       off: () => import('./library/OffSymbol.vue'),
       edit: () => import('./library/EditSymbol.vue'),
       archive: () => import('./library/ArchiveSymbol.vue'),
-      send: () => import('./library/SendSymbol.vue')
+      send: () => import('./library/SendSymbol.vue'),
+      paper: () => import('./library/PaperSymbol.vue'),
+      mail: () => import('./library/MailSymbol.vue')
     }
   })
   export default class Icon extends Vue {
