@@ -50,7 +50,14 @@
       let nbPanel = 0;
 
       // Place here all the allowed components for the navigation
-      const allowedPanelName: string[] = ['favorite-panel', 'filter-panel', 'historical-panel', 'exercises-check-panel', 'details-panel'];
+      const allowedPanelName: string[] = [
+        'favorite-panel',
+        'filter-panel',
+        'historical-panel',
+        'exercises-check-panel',
+        'details-panel',
+        'tag-filter-panel'
+      ];
 
       // Search for every added panel
       this.$children.forEach((panelItem) => {
@@ -92,7 +99,7 @@
         }
       });
 
-      BusEvent.$on('changePanel', (id:number) => {
+      BusEvent.$on('changePanel', (id: number) => {
         this.changePanel(id)
       })
     }
