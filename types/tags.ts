@@ -7,7 +7,8 @@ export type TagState = "default" | "validated" | "pending";
 export interface TagsSettingsRequest {
   tags_ids?: number[],
   categories_ids?: number[],
-  state?: TagState
+  state?: TagState,
+  title?: string
 }
 
 export interface Tag {
@@ -43,3 +44,11 @@ export interface TagLabelObjectEmitted {
   state: boolean,
   id: number
 }
+
+export interface TagRequest {
+  text: string,
+  category_id: number,
+  isValidated?: boolean
+}
+
+export type CreateTagRequest = TagRequest[]

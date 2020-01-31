@@ -5,7 +5,7 @@ import {Tag, TagProposal} from "~/types/tags";
 import {User} from "~/types/user";
 
 
-export type ExerciseState = "CREATED" | "PENDING" | "VALIDATED" | "NOT_VALIDATED";
+export type ExerciseState = "DRAFT" | "PENDING" | "VALIDATED" | "NOT_VALIDATED" | "ARCHIVED";
 
 export interface ExerciseMetrics {
   votes: number,
@@ -103,7 +103,8 @@ export interface PostExerciseRequest {
   title: string,
   description: string,
   tags: (number | TagProposal)[],
-  url?: string | null
+  url?: string | null,
+  state?: ExerciseState
 }
 
 export interface PostExerciseRequestWithFile extends PostExerciseRequest {

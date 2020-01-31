@@ -1,7 +1,7 @@
 /**
  * Categories
  */
-import {SelectedTag, Tag, TagExtended, TagState} from "~/types/tags";
+import {SelectedTag, TagExtended, TagState} from "~/types/tags";
 
 export interface Category {
   id: number,
@@ -20,9 +20,7 @@ export interface CategoryWithTags {
   tags: TagExtended[]
 }
 
-export interface CategoryWithSelectedTags {
-  id: number,
-  category: string,
+export interface CategoryWithSelectedTags extends Category{
   tags: SelectedTag[]
 }
 
