@@ -70,6 +70,12 @@
               </div>
               Exercices
             </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/tags">
+              <div class="logo-link-wrapper">
+                <Icon type="tags" theme="theme--white"/>
+              </div>
+              Tags
+            </nuxt-link>
           </ul>
         </template>
 
