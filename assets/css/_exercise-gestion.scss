@@ -69,7 +69,7 @@ form {
     margin-top: 10px;
 
     &.error-message--red {
-      color:$RED;
+      color: $RED;
     }
   }
 }
@@ -84,11 +84,19 @@ form {
   }
 }
 
-.button__validate {
+.cta__validate--wrapper {
   margin-top: 20px;
   position: absolute;
   right: 20px;
   top: 0;
+
+  .cta__validate {
+    &:not(:first-child) {
+      margin-left: 5px;
+    }
+    margin-top: 0;
+  }
+
 }
 
 .tags__wrapper {
