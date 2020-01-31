@@ -2,7 +2,7 @@ import {
   Category,
   SelectedTag,
   CategoryWithTags,
-  CategoryWithSelectedTags, TagExtended
+  CategoryWithSelectedTags, TagExtended, TagsSettingsRequest, TagState
 } from '~/types'
 import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
 
@@ -49,7 +49,9 @@ export const state = () => ({
    * The tag id's that are selected (CNF form)
    * example : [1, [2, 3]] = 1 n (2 v 3)
    */
-  tagsRequest: [] as (number | number[])[]
+  tagsRequest: [] as (number | number[])[],
+  selectedCategories: [] as number[],
+  selectedTagState: 'default' as TagState
 });
 
 export const mutations = mutationTree(state, {
@@ -93,6 +95,7 @@ export const mutations = mutationTree(state, {
   INIT(state, tags: CategoryWithSelectedTags[]) {
     state.defaultTags = cloneDeep(tags);
     state.tags = tags;
+    state.selectedCategories = [];
     const selectedTags: SelectedTag[] = state.selectedTags;
 
     selectedTags.forEach((tag: SelectedTag) => {
@@ -117,9 +120,37 @@ export const mutations = mutationTree(state, {
     state.selectedTags = [];
     state.tags = cloneDeep(state.defaultTags);
     state.tagsRequest = [];
+    state.selectedCategories = [];
+    state.selectedTagState = 'default'
+  },
+  RESET_SETTINGS(state) {
+    state.selectedCategories = [];
+    state.selectedTagState = 'default';
+  },
+  RESET_SELECTED_TAG_STATE(state) {
+    state.selectedTagState = 'default';
+  },
+  SET_SELECTED_TAG_STATE(state, tagState: TagState) {
+    state.selectedTagState = tagState;
   },
   SET_TAGS_REQUEST(state, tagsRequest: (number | number[])[]) {
     state.tagsRequest = tagsRequest
+  },
+  ADD_CATEGORY(state, index: number) {
+    const indexOfId = state.selectedCategories.findIndex(id => index === id);
+
+    if (indexOfId === -1) {
+      state.selectedCategories.push(index)
+    }
+  },
+  REMOVE_CATEGORY(state, index: number) {
+
+    const indexOfId = state.selectedCategories.findIndex(id => index === id);
+
+    if (indexOfId !== -1) {
+      state.selectedCategories.splice(indexOfId, 1);
+    }
+
   }
 });
 
@@ -219,18 +250,53 @@ export const actions = actionTree({state, mutations}, {
       commit('CLEAR')
     }
 
+  },
+  addOrRemoveCategory({commit, state}, payload: { index: number, state: boolean }) {
+    if (payload.state) {
+      commit('ADD_CATEGORY', payload.index)
+    } else {
+      commit('REMOVE_CATEGORY', payload.index)
+    }
   }
+
 
 });
 
 
 export const getters = getterTree(state, {
   categories: (state): Category[] => {
-    return state.tags.map(tag => {
+    return state.tags.map((categoryWithSelectedTags: CategoryWithSelectedTags) => {
       return {
-        id: tag.id,
-        category: tag.category
+        id: categoryWithSelectedTags.id,
+        category: categoryWithSelectedTags.category
       }
     })
+  },
+  filteredTagByCategories: (state) => {
+
+    const tagState: boolean | undefined = state.selectedTagState === 'validated' ? true : state.selectedTagState === 'pending' ? false : undefined;
+
+    let categoriesWithTags:CategoryWithSelectedTags[];
+
+    if (state.selectedCategories.length > 0) {
+      categoriesWithTags = state.tags.filter(categoryWithSelectedTag => {
+        return state.selectedCategories.findIndex(id => categoryWithSelectedTag.id === id) !== -1
+      })
+
+
+    } else {
+      categoriesWithTags = state.tags;
+    }
+
+    if(tagState !== undefined) {
+      return categoriesWithTags.map(cat => {
+          return {
+            ...cat,
+            tags: cat.tags.filter(el => el.isValidated === tagState)
+          }
+        })
+    } else {
+      return categoriesWithTags
+    }
   }
 });
