@@ -50,7 +50,7 @@
                              :default-value="stateCriteria"
                           :select-default-option="true"
                           :default-options="[
-              {title:'Non répertorié', value:'CREATED'},
+              {title:'Non répertorié', value:'DRAFT'},
               {title:'En attente', value: 'PENDING'},
               {title:'Valide', value:'VALIDATED'},
               {title:'Invalide', value:'NOT_VALIDATED'}

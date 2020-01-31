@@ -110,7 +110,7 @@
                 <Icon type="send" theme="theme--yellow"/>
               </i>
 
-              <i title="Envoyé" v-else-if="exercise.state === 'CREATED'">
+              <i title="Envoyé" v-else-if="exercise.state === 'DRAFT'">
                 <Icon type="paper" theme="theme--primary-color-light"/>
               </i>
             </td>
@@ -336,7 +336,7 @@
       if (action.index === 0) {
         this.updateStateOfExercises('PENDING')
       } else if (action.index === 1) {
-        this.updateStateOfExercises('CREATED')
+        this.updateStateOfExercises('DRAFT')
       } else if (action.index === 2) {
         this.deleteSelectedExercises()
       }
