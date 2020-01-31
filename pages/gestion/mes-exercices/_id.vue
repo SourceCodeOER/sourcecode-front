@@ -66,7 +66,7 @@
         } as IncludeOptionsExerciseRequest
       };
 
-      const includeOptionsStringify: string = qs.stringify(includeOptions);
+      const includeOptionsStringify: string = qs.stringify(includeOptions, {arrayFormat: 'repeat'});
 
       try {
         const exercise: Exercise = await $axios.$get(`api/exercises/${id}?${includeOptionsStringify}`);
@@ -81,7 +81,7 @@
 
         const queryObject: { tags_ids: number[] } = {tags_ids: exercise.tags.map(tag => tag.tag_id)};
 
-        const queryString: string = qs.stringify(queryObject);
+        const queryString: string = qs.stringify(queryObject, {arrayFormat: 'repeat'});
 
         const tags: SelectedTag[] = await $axios.$get(`api/tags?${queryString}`);
 
