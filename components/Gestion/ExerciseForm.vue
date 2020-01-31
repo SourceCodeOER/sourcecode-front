@@ -120,9 +120,25 @@
     </ValidationObserver>
 
 
-    <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
-      Publier l'exercice
-    </button>
+    <div class="cta__validate--wrapper">
+      <template v-if="userRole === 'admin'">
+        <button @click="validateBeforeSubmit('NOT_VALIDATED')" class="button--red-reverse cta__validate">
+          Invalider
+        </button>
+        <button @click="validateBeforeSubmit('PENDING')" class="button--yellow-reverse cta__validate">
+          Mettre en attente
+        </button>
+      </template>
+      <button @click="validateBeforeSubmit('DRAFT')" class="button--ternary-color cta__validate">
+        Brouillon
+      </button>
+      <button v-if="userRole === 'admin'" @click="validateBeforeSubmit('VALIDATED')" class="button--ternary-color-reverse cta__validate">
+        Valider
+      </button>
+      <button v-if="userRole === 'user'" @click="validateBeforeSubmit('PENDING')" class="button--ternary-color-reverse cta__validate">
+        Soumettre
+      </button>
+    </div>
     <p class="disclaimer">* champs obligatoires</p>
 
   </section>
@@ -141,7 +157,7 @@
     SelectedTag,
     TagProposal,
     PostExerciseRequestWithFile,
-    PostExerciseRequest
+    PostExerciseRequest, ExerciseState, UserRole
   } from "~/types";
   import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
   import Icon from "~/components/Symbols/Icon.vue";
@@ -160,10 +176,14 @@
     @Prop({type: Object, default: undefined}) exercise!: Exercise | undefined;
     @Prop({type: String, required: true}) title!: string;
 
+    get userRole(): UserRole {
+      return this.$auth.user.role
+    }
+
     /**
      * Validate the entire page and send the new exercise
      */
-    async validateBeforeSubmit() {
+    async validateBeforeSubmit(exerciseState: ExerciseState) {
 
       // Basic validation form
       const isValid1 = await this.observer1.validate();
@@ -187,6 +207,8 @@
             tags
           };
 
+          exerciseBuild.state = exerciseState;
+
           if (this.exercise !== undefined) {
             (exerciseBuild as UpdateExerciseRequest | UpdateExerciseRequestWithFile).version = this.exercise.version
           }
@@ -199,13 +221,12 @@
           const file: File | null = this.file();
 
           if (file !== null) {
-            console.log('fichier');
 
             (exerciseBuild as UpdateExerciseRequestWithFile | PostExerciseRequestWithFile).exerciseFile = file;
 
             const formData: FormData = jsonFormData(exerciseBuild);
 
-            if(this.exercise !== undefined) {
+            if (this.exercise !== undefined) {
 
               await this.$axios.$put('/api/exercises/' + this.exercise.id, formData, {
                 headers: {
@@ -221,11 +242,9 @@
             }
 
           } else {
-            console.log('pas de fichier');
 
-            if(this.exercise !== undefined) {
+            if (this.exercise !== undefined) {
               if (this.filename === null) (exerciseBuild as UpdateExerciseRequest).removePreviousFile = true;
-              console.log(exerciseBuild);
               await this.$axios.$put('/api/exercises/' + this.exercise.id, exerciseBuild);
             } else {
               await this.$axios.$post('/api/create_exercise', exerciseBuild);
@@ -237,7 +256,7 @@
             message: "Votre exercice a été publié ! Notre équipe le validera très prochainement."
           });
 
-          if(this.exercise !== undefined) {
+          if (this.exercise !== undefined) {
             await this.resetTagForm();
           } else {
             await this.resetGeneralForm();
