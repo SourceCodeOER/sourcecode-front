@@ -59,8 +59,8 @@
         metadata: {size: 30},
         includeOptions: {includeDescription: false},
         orderBy: [{field: "date", value: "DESC"}, {field:'id', value:'ASC'}],
-        data: {
-          state:'VALIDATED'
+        filterOptions: {
+          state: ["VALIDATED"]
         }
       } as SearchExerciseRequest);
 
