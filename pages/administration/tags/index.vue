@@ -257,7 +257,7 @@
      * @param id
      */
     gotoExercise(id: number) {
-      this.$router.push('/administration/exercices/' + id)
+      this.$router.push('/administration/tags/' + id)
     }
 
 
