@@ -1,7 +1,7 @@
 /**
  * Exercise Single
  */
-import {Tag, TagProposal} from "~/types/tags";
+import {Tag, TagProposal, TagState} from "~/types/tags";
 import {User} from "~/types/user";
 
 
@@ -53,9 +53,13 @@ export interface MetadataSearchExerciseRequest {
 export interface DataSearchExerciseRequest {
   title?: string,
   tags?: (number | number[])[],
-  state?: ExerciseState,
   user_ids?: number[],
   vote?: VoteExerciseRequest
+}
+
+export interface FilterOptionsExerciseRequest {
+  state?: ExerciseState[],
+  tags?:TagState
 }
 
 export interface IncludeOptionsExerciseRequest {
@@ -78,6 +82,7 @@ export interface OrderByExerciseRequest {
 export interface SearchExerciseRequest {
   metadata?: MetadataSearchExerciseRequest,
   includeOptions?: IncludeOptionsExerciseRequest,
+  filterOptions?: FilterOptionsExerciseRequest
   data?: DataSearchExerciseRequest,
   orderBy?: OrderByExerciseRequest[]
 }

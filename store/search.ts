@@ -4,7 +4,12 @@ import {
   MetadataSearchExerciseResponse,
   DataSearchExerciseRequest,
   SearchExerciseRequest,
-  SearchExerciseResponse, IncludeOptionsExerciseRequest, VoteExerciseRequest, OrderByExerciseRequest, Category
+  SearchExerciseResponse,
+  IncludeOptionsExerciseRequest,
+  VoteExerciseRequest,
+  OrderByExerciseRequest,
+  Category,
+  FilterOptionsExerciseRequest
 } from "~/types";
 import {actionTree, getterTree, mutationTree} from "nuxt-typed-vuex";
 
@@ -30,6 +35,7 @@ export const state = () => ({
     tags: []
   } as DataSearchExerciseRequest,
   includeOptions: {} as IncludeOptionsExerciseRequest,
+  filterOptions: {} as FilterOptionsExerciseRequest,
   orderBy: [] as OrderByExerciseRequest[]
 });
 
@@ -66,6 +72,7 @@ export const mutations = mutationTree(state, {
       pageSize: state.metadata.pageSize
     };
     state.includeOptions = {};
+    state.filterOptions = {}
     state.orderBy = [];
     state.search_criterion = {
       title: "",
@@ -87,7 +94,7 @@ export const mutations = mutationTree(state, {
     delete state.search_criterion.vote
   },
   RESET_STATE(state) {
-    delete state.search_criterion.state
+    delete state.filterOptions.state
   },
   /**
    * Set a new metadata object to replace the old one
@@ -127,6 +134,9 @@ export const mutations = mutationTree(state, {
   },
   UPDATE_INCLUDE_OPTIONS(state, includeOptions: IncludeOptionsExerciseRequest | undefined) {
     state.includeOptions = {...state.includeOptions, ...includeOptions}
+  },
+  UPDATE_FILTER_OPTIONS(state, filterOptions: FilterOptionsExerciseRequest | undefined) {
+    state.filterOptions = {...state.filterOptions, ...filterOptions}
   },
   UPDATE_ORDER_BY(state, orderBy: OrderByExerciseRequest[] | undefined) {
 
@@ -176,11 +186,13 @@ export const actions = actionTree({state, mutations, getters}, {
     commit('UPDATE_INCLUDE_OPTIONS', searchRequest.includeOptions);
     commit('UPDATE_ORDER_BY', searchRequest.orderBy);
     commit('UPDATE_SEARCH_CRITERION', searchRequest.data);
+    commit('UPDATE_FILTER_OPTIONS', searchRequest.filterOptions);
 
     const newSearchRequest: SearchExerciseRequest = {
       data: state.search_criterion,
       includeOptions: state.includeOptions,
       orderBy: state.orderBy,
+      filterOptions: state.filterOptions,
       metadata
     };
 
@@ -207,7 +219,8 @@ export const actions = actionTree({state, mutations, getters}, {
         ...state.search_criterion
       },
       includeOptions: state.includeOptions,
-      orderBy: state.orderBy
+      orderBy: state.orderBy,
+      filterOptions: state.filterOptions
     };
 
     if (state.search_criterion.vote) {
