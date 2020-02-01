@@ -46,17 +46,15 @@
           Cotation
         </RadioButtonSelecter>
 
-        <RadioButtonSelecter v-if="radioButtonState" @change="setStateCriteria" @toggle-list="toggleList"
-                             :default-value="stateCriteria"
-                          :select-default-option="true"
-                          :default-options="[
-              {title:'Non répertorié', value:'DRAFT'},
-              {title:'En attente', value: 'PENDING'},
-              {title:'Valide', value:'VALIDATED'},
-              {title:'Invalide', value:'NOT_VALIDATED'}
-              ]">
+        <CheckBoxSelecter v-if="radioButtonState"
+                          :select-all-option="true"
+                          :default-options="stateDefaultOptions"
+                          @toggle-list="toggleList"
+                          @change="setStateCriteria"
+        >
           Status
-        </RadioButtonSelecter>
+        </CheckBoxSelecter>
+
       </ul>
     </div>
   </div>
@@ -175,9 +173,49 @@
       return vote ? vote : 'default';
     }
 
-    get stateCriteria() {
-      const state: ExerciseState | undefined = this.$accessor.search.search_criterion.state;
-      return state ? state : 'default';
+    get stateCriteria(): ExerciseState[] {
+      const state: ExerciseState[] | undefined = this.$accessor.search.filterOptions.state;
+      return state ? state : [];
+    }
+
+    get stateDefaultOptions() {
+      const defaultOptions: CheckboxObject[] = [
+        {
+          title: 'Non répertorié',
+          state: false,
+        },
+        {
+          title: 'En attente',
+          state: false,
+        },
+        {
+          title: 'Valide',
+          state: false,
+        },
+        {
+          title: 'Invalide',
+          state: false,
+        }
+      ];
+
+      for (let state of this.stateCriteria) {
+        switch (state) {
+          case 'DRAFT':
+            defaultOptions[0].state = true;
+            break;
+          case 'PENDING':
+            defaultOptions[1].state = true;
+            break;
+          case 'VALIDATED':
+            defaultOptions[2].state = true;
+            break;
+          case 'NOT_VALIDATED':
+            defaultOptions[3].state = true;
+            break;
+        }
+      }
+
+      return defaultOptions
     }
 
     /**
@@ -205,7 +243,6 @@
       }
 
       if (this.historicalMode) {
-        console.log(this.$accessor.search.search_criterion.vote);
         this.$accessor.historical.addHistorical({
           tags: this.confirmedTags,
           title: this.$accessor.search.search_criterion.title,
@@ -214,16 +251,50 @@
       }
     }
 
-    setStateCriteria(event: RadiobuttonSelecterObjectEmitted) {
-      if(this.searchMode) {
-        if(event.index === -1) {
-          this.$accessor.search.RESET_STATE();
-          this.$accessor.search.fetch({});
-        } else {
-          const state:ExerciseState = event.data.value;
-          this.$accessor.search.fetch({data: {state}});
-        }
-      }
+    async setStateCriteria(event: CheckboxSelecterObjectEmitted[]) {
+
+      const deletedStates: ExerciseState[] = event
+        .filter(el => !el.data.state)
+        .map(el => {
+          const i = el.index;
+
+          if (i == 0) {
+            return 'DRAFT'
+          } else if (i == 1) {
+            return 'PENDING'
+          } else if (i == 2) {
+            return 'VALIDATED'
+          } else {
+            return 'NOT_VALIDATED'
+          }
+        });
+
+      const selectedStates: ExerciseState[] = event
+        .filter(el => el.data.state)
+        .map(el => {
+          const i = el.index;
+
+          if (i == 0) {
+            return 'DRAFT'
+          } else if (i == 1) {
+            return 'PENDING'
+          } else if (i == 2) {
+            return 'VALIDATED'
+          } else {
+            return 'NOT_VALIDATED'
+          }
+        });
+
+      const remainingStateCriteria: ExerciseState[] = this.stateCriteria
+        .filter(el =>
+          deletedStates.findIndex(state => state === el) === -1
+          &&
+          selectedStates.findIndex(state => state === el) === -1);
+
+      const states: ExerciseState[] = [...remainingStateCriteria, ...selectedStates];
+
+      await this.$accessor.search.fetch({filterOptions: {state: states.length > 0 ? states : undefined}})
+
     }
 
     /**
@@ -307,6 +378,7 @@
 
       if (this.searchMode) {
         this.$accessor.search.RESET_SEARCH_CRITERION();
+        this.$accessor.search.RESET_STATE();
         await this.$accessor.search.fetch({});
       }
 
