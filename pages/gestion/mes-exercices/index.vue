@@ -47,7 +47,7 @@
               <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Publier', 'Dépublier', 'Supprimer']"/>
+                            :options="['Publier', 'Dépublier', 'Archiver']"/>
             </transition>
 
             <!-- In case you only want a delete button -->
