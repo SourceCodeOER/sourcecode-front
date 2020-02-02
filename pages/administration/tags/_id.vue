@@ -3,7 +3,7 @@
     <div class="banner banner--with-shadow-bottom">
       <div class="banner__nav banner__nav--with-link">
         <span>
-          Administration > Gestion des tags > Créer un tag
+          Administration > Gestion des tags > {{tag.tag_text}}
         </span>
         <nuxt-link to="/administration/tags" tag="span">
           <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
@@ -23,6 +23,7 @@
   import {Component, Vue} from 'vue-property-decorator'
   import TagForm from "~/components/Gestion/TagForm.vue";
   import Icon from "~/components/Symbols/Icon.vue";
+  import {TagExtended} from "~/types";
 
   @Component({
     middleware: ['auth', 'admin', 'reset-search-request'],
@@ -38,6 +39,7 @@
     }
   })
   export default class extends Vue {
+    tag!:TagExtended
 
   }
 </script>

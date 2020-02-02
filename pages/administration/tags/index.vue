@@ -67,12 +67,12 @@
               <td class="item-centered item-checkbox">
                 <CheckBox :state="tag.state" :id="tag.tag_id" @check="addOrRemoveTags($event, tag)"/>
               </td>
-              <td class="item-left" @click="gotoExercise(1)">{{tag.tag_text}}</td>
+              <td class="item-left" @click="gotoExercise(tag.tag_id)">{{tag.tag_text}}</td>
               <td>
                 {{categoryWithTags.category}}
               </td>
-              <td @click="gotoExercise(1)">{{tag.version}}</td>
-              <td @click="gotoExercise(1)" class="item-centered">
+              <td @click="gotoExercise(tag.tag_id)">{{tag.version}}</td>
+              <td @click="gotoExercise(tag.tag_id)" class="item-centered">
                 <i title="Valide" v-if="tag.isValidated">
                   <Icon type="check" theme="theme--green"/>
                 </i>

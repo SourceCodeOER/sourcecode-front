@@ -22,7 +22,7 @@
             <span class="label__name">
               Catégorie *
             </span>
-        <select id="CategoryID" name="categoryID" v-model="selectedNewTag.category_id"
+        <select id="CategoryID" name="categoryID" v-model="selectedNewTag.index"
                 class="input--grey">
           <option :value="i" v-for="(category, i) in categoriesName">{{category}}</option>
         </select>
@@ -86,9 +86,8 @@
     /**
      * A new tag proposal
      */
-    selectedNewTag: TagProposal = {
-      category_id: -1,
-      text: ""
+    selectedNewTag: { index: number } = {
+      index: -1
     };
 
     /**
@@ -115,15 +114,17 @@
      * @param event
      */
     chooseCategory(event: { content: string, index: number }) {
-      this.selectedNewTag.category_id = this.categories[event.index].id;
+      console.log(this.categories);
+      console.log(event);
+      this.selectedNewTag.index = event.index;
+      console.log(this.selectedNewTag)
     }
 
     /**
      * Reset the form for tag proposal
      */
     resetTagForm() {
-      this.selectedNewTag.text = "";
-      this.selectedNewTag.category_id = -1;
+      this.selectedNewTag.index = -1;
       (this.customSelect as any).reset();
     }
 
@@ -150,16 +151,28 @@
 
         const tagsSettingsRequest: CreateTagRequest = [{
           text: this.form.title,
-          category_id: this.selectedNewTag.category_id,
+          category_id: this.categories[this.selectedNewTag.index].id,
           isValidated: tagState
         }];
 
         try {
 
-          console.log(tagsSettingsRequest)
-          await this.$axios.$post('/api/bulk/create_tags', tagsSettingsRequest);
+          if (this.tag) {
 
-          this.$displaySuccess("Le tag a bien été créé.");
+            const tag: TagExtended = {
+              tag_id: this.tag.tag_id,
+              tag_text: this.form.title,
+              category_id: this.categories[this.selectedNewTag.index].id,
+              isValidated: tagState,
+              version: this.tag.version
+            };
+
+            await this.$axios.$put('/api/tags', tag);
+            this.$displaySuccess("Le tag a bien été modifié.");
+          } else {
+            await this.$axios.$post('/api/bulk/create_tags', tagsSettingsRequest);
+            this.$displaySuccess("Le tag a bien été créé.");
+          }
 
           requestAnimationFrame(() => {
             this.observer.reset();
@@ -197,8 +210,10 @@
       if (process.client && this.tag !== undefined) {
         this.form.title = this.tag.tag_text;
         const cat_ID = this.tag.category_id;
+        const index: number = this.categories.findIndex(cat => cat.id === cat_ID);
+        this.selectedNewTag.index = index;
 
-        const categoryObject = this.categories.find(cat => cat.id === cat_ID);
+        const categoryObject: Category = this.categories[index];
         this.form.category = categoryObject ? categoryObject.category : "";
 
       }
