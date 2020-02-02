@@ -36,11 +36,11 @@
             <div class="icon-modifiers">
 
               <span @click="editFavorite(configuration.id)">
-                <Icon type="edit" theme="theme--primary-color-light"/>
+                <Icon type="edit" theme="theme--grey"/>
               </span>
 
               <span @click="deleteFavorite(configuration.id)">
-                <Icon type="trash" theme="theme--red"/>
+                <Icon type="trash" theme="theme--grey"/>
               </span>
             </div>
           </section>

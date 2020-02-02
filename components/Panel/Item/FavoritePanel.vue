@@ -10,11 +10,11 @@
         <h4>{{configuration.name}}</h4>
         <div class="cta-wrapper">
           <span @click.stop="editFavorite(configuration.id)">
-            <Icon type="edit" theme="theme--primary-color-light"/>
+            <Icon type="edit" theme="theme--grey"/>
           </span>
 
           <span @click.stop="deleteFavorite(configuration.id)">
-            <Icon type="trash" theme="theme--red"/>
+            <Icon type="trash" theme="theme--grey"/>
           </span>
         </div>
       </div>
