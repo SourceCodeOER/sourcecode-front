@@ -107,7 +107,6 @@
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import TagFilterPanel from "~/components/Panel/Item/TagFilterPanel.vue";
   import {AxiosError} from "~/node_modules/axios";
-  import {BusEvent} from "~/components/Event/BusEvent";
 
   @Component({
     components: {
@@ -180,19 +179,11 @@
     async deleteSelectedTags() {
       try {
         await this.$axios.$delete('/api/bulk/delete_tags', {data: this.selectedTags.map(tag => tag.tag_id)});
-        BusEvent.$emit('displayNotification', {
-          mode: "success",
-          message: `${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement supprimé${this.selectedTags.length === 1 ? '' : 's'}.`
-        });
+        this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement supprimé${this.selectedTags.length === 1 ? '' : 's'}.`);
         this.$accessor.tags.CLEAR();
         this.$accessor.tags.fetch();
       } catch (e) {
-        const error = e as AxiosError;
-
-        BusEvent.$emit('displayNotification', {
-          mode: "error",
-          message: `Une erreur est survenue lors de la suppression.`
-        });
+        this.$displayError(`Une erreur est survenue lors de la suppression.`);
       }
     }
 
@@ -216,10 +207,7 @@
       Promise
         .all(this.selectedTags.map(tag => updateState(tag, state)))
         .then((response) => {
-          BusEvent.$emit('displayNotification', {
-            mode: "success",
-            message: `${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${state ? 'validé' : 'invalidé'}${this.selectedTags.length === 1 ? '' : 's'}.`
-          });
+          this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${state ? 'validé' : 'invalidé'}${this.selectedTags.length === 1 ? '' : 's'}.`)
           this.$accessor.tags.CLEAR();
           this.$accessor.tags.fetch();
 
@@ -228,16 +216,10 @@
           const status: number = error.response.status;
 
           if (status === 409) {
-            BusEvent.$emit('displayNotification', {
-              mode: "error",
-              message: `Conflit ! Un tag a déjà été modifié entre temps, vous devez rafraîchir la page.`
-            });
+            this.$displayError(`Conflit ! Un tag a déjà été modifié entre temps, vous devez rafraîchir la page.`)
           }
         } else {
-          BusEvent.$emit('displayNotification', {
-            mode: "error",
-            message: `Une erreur est survenue. Veuillez-nous en excuser.`
-          });
+          this.$displayError(`Une erreur est survenue. Veuillez-nous en excuser.`)
         }
 
       });

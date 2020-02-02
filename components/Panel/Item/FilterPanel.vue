@@ -66,12 +66,11 @@
   import {Component, Vue, Emit, Prop, Ref} from 'vue-property-decorator';
   import Icon from "~/components/Symbols/Icon.vue";
   import {ValidationProvider, ValidationObserver} from "vee-validate";
-  import {BusEvent} from "~/components/Event/BusEvent";
   import {
     CategoryWithSelectedTags, CheckboxObject,
     CheckboxSelecterObjectEmitted,
     CreateConfigurationRequest, ExerciseState, RadiobuttonObject, RadiobuttonSelecterObjectEmitted,
-    SelectedTag, VoteExerciseRequest
+    VoteExerciseRequest
   } from "~/types";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
 
@@ -351,21 +350,12 @@
           await this.$accessor.favorites.createFavorite(configurationBuild);
           this.favoriteName = '';
           this.createFavoriteInput = false;
-          BusEvent.$emit('displayNotification', {
-            mode: 'success',
-            message: "Votre favori a bien été créé."
-          })
+          this.$displaySuccess("Votre favori a bien été créé.");
         } catch (e) {
-          BusEvent.$emit('displayNotification', {
-            mode: 'error',
-            message: "Vos favoris n'ont pas pu être chargé"
-          })
+          this.$displayError("Vos favoris n'ont pas pu être chargé");
         }
       } else {
-        BusEvent.$emit('displayNotification', {
-          mode: 'warning',
-          message: 'Vous devez ajouter au moins un tag afin de créer votre favori'
-        })
+        this.$displayWarning('Vous devez ajouter au moins un tag afin de créer votre favori')
       }
     }
 

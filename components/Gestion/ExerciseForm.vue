@@ -132,10 +132,12 @@
       <button @click="validateBeforeSubmit('DRAFT')" class="button--ternary-color cta__validate">
         Brouillon
       </button>
-      <button v-if="userRole === 'admin'" @click="validateBeforeSubmit('VALIDATED')" class="button--ternary-color-reverse cta__validate">
+      <button v-if="userRole === 'admin'" @click="validateBeforeSubmit('VALIDATED')"
+              class="button--ternary-color-reverse cta__validate">
         Valider
       </button>
-      <button v-if="userRole === 'user'" @click="validateBeforeSubmit('PENDING')" class="button--ternary-color-reverse cta__validate">
+      <button v-if="userRole === 'user'" @click="validateBeforeSubmit('PENDING')"
+              class="button--ternary-color-reverse cta__validate">
         Soumettre
       </button>
     </div>
@@ -163,7 +165,6 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
   import Tag from "~/components/Tag/Tag.vue";
-  import {BusEvent} from "~/components/Event/BusEvent";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import jsonFormData from 'json-form-data';
   import ExerciseFormMixins from "~/components/Mixins/ExerciseFormMixins";
@@ -251,10 +252,7 @@
             }
           }
 
-          BusEvent.$emit('displayNotification', {
-            mode: "success",
-            message: "Votre exercice a été publié ! Notre équipe le validera très prochainement."
-          });
+          this.$displaySuccess("Votre exercice a été publié ! Notre équipe le validera très prochainement.")
 
           if (this.exercise !== undefined) {
             await this.resetTagForm();
@@ -274,42 +272,25 @@
           const response = error.response;
 
           if (!response) {
-            BusEvent.$emit('displayNotification', {
-              mode: "error",
-              message: "Une erreur est survenue depuis nos serveurs :("
-            })
+
+            this.$displayError("Une erreur est survenue depuis nos serveurs :(")
+
           } else {
             const status = response.status;
             if (status >= 500 && status < 600) {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "Une erreur est survenue depuis nos serveurs :("
-              })
+              this.$displayError("Une erreur est survenue depuis nos serveurs :(")
             } else if (status === 401) {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "Vous n'êtes pas autorisé à publier cette exercice. Reconnectez-vous !"
-              })
+              this.$displayError("Vous n'êtes pas autorisé à publier cette exercice. Reconnectez-vous !")
             } else if (status === 409) {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "Vous ne pouvez pas ajouter plusieurs fois le même tag !"
-              })
+              this.$displayError("Vous ne pouvez pas ajouter plusieurs fois le même tag !")
             } else {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "La publication de votre exercice à échoué. Vérifiez le formulaire ou contactez notre support."
-              })
+              this.$displayError("La publication de votre exercice à échoué. Vérifiez le formulaire ou contactez notre support.")
             }
           }
         }
 
       } else {
-        BusEvent.$emit('displayNotification', {
-          mode: "warning",
-          message: "Vous ne respectez pas les conditions pour la publication de votre exercice.",
-          time: 5000
-        })
+        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de votre exercice.", 5000)
       }
     }
 

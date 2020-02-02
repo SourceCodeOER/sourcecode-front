@@ -133,7 +133,6 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import CheckBox from "~/components/Input/CheckBox.vue";
   import sortedIndex from 'lodash.sortedindex'
-  import {BusEvent} from "~/components/Event/BusEvent";
   import binarySearch from "~/assets/js/array/binarySearch";
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
@@ -237,18 +236,12 @@
         await this.$axios.$delete('api/bulk/delete_exercises', {data: this.selectedExercises});
         const nbSelectedExercises = this.selectedExercises.length;
 
-        BusEvent.$emit('displayNotification', {
-          mode: "success",
-          message: `${nbSelectedExercises} ${nbSelectedExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement supprimé${nbSelectedExercises === 1 ? '' : 's'}.`
-        });
+        this.$displaySuccess(`${nbSelectedExercises} ${nbSelectedExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement supprimé${nbSelectedExercises === 1 ? '' : 's'}.`)
 
         this.selectedExercises = [];
         this.$accessor.search.fetch({})
       } catch (e) {
-        BusEvent.$emit('displayNotification', {
-          mode: "error",
-          message: `Une erreur est survenue lors de la suppression.`
-        });
+        this.$displayError(`Une erreur est survenue lors de la suppression.`)
       }
     }
 
@@ -273,18 +266,12 @@
 
       try {
         await this.$axios.$put('/api/bulk/modify_exercises_status', {exercises: this.selectedExercises, state});
-        BusEvent.$emit('displayNotification', {
-          mode: "success",
-          message
-        });
+        this.$displaySuccess(message);
 
         this.selectedExercises = [];
         this.$accessor.search.fetch({})
       } catch (e) {
-        BusEvent.$emit('displayNotification', {
-          mode: "error",
-          message: `Une erreur est survenue lors du changement d'état.`
-        });
+        this.$displayError(`Une erreur est survenue lors du changement d'état.`);
       }
     }
 

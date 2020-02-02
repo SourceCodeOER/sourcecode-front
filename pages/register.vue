@@ -49,7 +49,6 @@
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {Component, Ref, Vue} from "vue-property-decorator";
   import {AxiosError} from "~/node_modules/axios";
-  import {BusEvent} from "~/components/Event/BusEvent";
   import {RegisterRequest} from "~/types";
 
   @Component({
@@ -100,19 +99,13 @@
           if (error.response) {
             switch (error.response.status) {
               case 409:
-                BusEvent.$emit('displayNotification', {mode: "error", message: "Cette adresse email existe déjà !"});
+                this.$displayError("Cette adresse email existe déjà !");
                 break;
               case 400:
-                BusEvent.$emit('displayNotification', {
-                  mode: "error",
-                  message: "Un ou plusieurs champs semblent incorrectes."
-                });
+                this.$displayError("Un ou plusieurs champs semblent incorrectes.");
                 break;
               default:
-                BusEvent.$emit('displayNotification', {
-                  mode: "error",
-                  message: "Une erreur est survenue depuis notre serveur :("
-                });
+                this.$displayError("Une erreur est survenue depuis notre serveur :(");
                 break;
             }
 

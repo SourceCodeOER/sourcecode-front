@@ -88,22 +88,13 @@
           if (error.response) {
             switch (error.response.status) {
               case 401:
-                BusEvent.$emit('displayNotification', {
-                  mode: "error",
-                  message: "La combinaison adresse email / mot de passe est incorrecte."
-                });
+                this.$displayError("La combinaison adresse email / mot de passe est incorrecte.");
                 break;
               case 400:
-                BusEvent.$emit('displayNotification', {
-                  mode: "error",
-                  message: "Un ou plusieurs champs semblent incorrectes."
-                });
+                this.$displayError("Un ou plusieurs champs semblent incorrectes.");
                 break;
               default:
-                BusEvent.$emit('displayNotification', {
-                  mode: "error",
-                  message: "Une erreur est survenue depuis notre serveur :("
-                });
+                this.$displayError("Une erreur est survenue depuis notre serveur :(");
                 break;
             }
 

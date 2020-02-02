@@ -60,7 +60,6 @@
   import {Configuration, CreateConfigurationRequest, SelectedTag, UpdateConfigurationRequest} from "../../types";
   import {ValidationObserver, ValidationProvider} from "vee-validate";
   import qs from "qs";
-  import {BusEvent} from "../Event/BusEvent";
   import Tag from "../Tag/Tag.vue";
 
   @Component({
@@ -105,33 +104,20 @@
 
             this.$accessor.favorites.UPDATE_CONFIGURATION(refreshConfig[0]);
 
-            BusEvent.$emit('displayNotification', {
-              mode: 'success',
-              message: 'Votre favori a bien été mis à jour !'
-            })
-
+            this.$displaySuccess('Votre favori a bien été mis à jour !')
           } else {
             await this.$axios.$post('api/configurations', request);
 
             await this.$accessor.favorites.fetch();
 
-            BusEvent.$emit('displayNotification', {
-              mode: 'success',
-              message: 'Votre favori a bien été créé !'
-            })
+            this.$displaySuccess('Votre favori a bien été créé !')
           }
 
         } catch (e) {
-          BusEvent.$emit('displayNotification', {
-            mode: 'error',
-            message: 'Une erreur est survenue lors de la modification du favori.'
-          })
+          this.$displayError('Une erreur est survenue lors de la modification du favori.')
         }
       } else {
-        BusEvent.$emit('displayNotification', {
-          mode: 'warning',
-          message: 'Vous ne respectez pas les conditions pour ajouter votre favori.'
-        })
+        this.$displayError('Vous ne respectez pas les conditions pour ajouter votre favori.')
       }
     }
 

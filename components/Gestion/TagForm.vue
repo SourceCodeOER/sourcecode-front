@@ -58,7 +58,6 @@
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import Tag from "~/components/Tag/Tag.vue";
-  import {BusEvent} from "~/components/Event/BusEvent";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
 
   @Component({
@@ -160,10 +159,7 @@
           console.log(tagsSettingsRequest)
           await this.$axios.$post('/api/bulk/create_tags', tagsSettingsRequest);
 
-          BusEvent.$emit('displayNotification', {
-            mode: "success",
-            message: "Le tag a bien été créé."
-          });
+          this.$displaySuccess("Le tag a bien été créé.");
 
           requestAnimationFrame(() => {
             this.observer.reset();
@@ -175,42 +171,25 @@
           const response = error.response;
 
           if (!response) {
-            BusEvent.$emit('displayNotification', {
-              mode: "error",
-              message: "Une erreur est survenue depuis nos serveurs :("
-            })
+            this.$displayError("Une erreur est survenue depuis nos serveurs :(");
           } else {
             const status = response.status;
             if (status >= 500 && status < 600) {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "Une erreur est survenue depuis nos serveurs :("
-              })
+
+              this.$displayError("Une erreur est survenue depuis nos serveurs :(");
+
             } else if (status === 401) {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "Vous n'êtes pas autorisé à publier ce tag. Reconnectez-vous !"
-              })
+              this.$displayError("Vous n'êtes pas autorisé à publier ce tag. Reconnectez-vous !")
             } else if (status === 409) {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "ce tag a déjà été créé !"
-              })
+              this.$displayError("ce tag a déjà été créé !")
             } else {
-              BusEvent.$emit('displayNotification', {
-                mode: "error",
-                message: "La publication du tag à échoué. Vérifiez le formulaire ou contactez notre support."
-              })
+              this.$displayError("La publication du tag à échoué. Vérifiez le formulaire ou contactez notre support.")
             }
           }
         }
 
       } else {
-        BusEvent.$emit('displayNotification', {
-          mode: "warning",
-          message: "Vous ne respectez pas les conditions pour la publication de votre exercice.",
-          time: 5000
-        })
+        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de votre exercice.", 5000)
       }
     }
 

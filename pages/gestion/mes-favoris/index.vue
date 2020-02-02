@@ -55,7 +55,6 @@
   import {Component, Vue} from "vue-property-decorator";
   import {Configuration} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
-  import {BusEvent} from "~/components/Event/BusEvent";
 
   @Component({
     components: {Icon},
@@ -91,15 +90,9 @@
 
         await this.$accessor.favorites.REMOVE_CONFIGURATION(id);
 
-        BusEvent.$emit('displayNotification', {
-          mode: 'success',
-          message: 'Votre favori a bien été supprimé.'
-        })
+        this.$displaySuccess('Votre favori a bien été supprimé.');
       } catch (e) {
-        BusEvent.$emit('displayNotification', {
-          mode: 'error',
-          message: 'Une erreur est survenue lors de la suppression du favori.'
-        })
+        this.$displayError('Une erreur est survenue lors de la suppression du favori.');
       }
     }
 
