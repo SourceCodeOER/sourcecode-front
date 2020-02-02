@@ -70,6 +70,7 @@ export default {
   */
   plugins: [
     '~/plugins/axios',
+    '~/plugins/notifications',
     '~/plugins/validator'
   ],
   /*
