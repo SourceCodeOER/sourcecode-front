@@ -24,7 +24,7 @@
         </PanelItem>
       </Panel>
 
-      <ExerciseForm title="Créer un exercice"/>
+      <ExerciseForm title="Créer un exercice" admin/>
     </div>
   </div>
 

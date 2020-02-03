@@ -258,7 +258,28 @@
             }
           }
 
-          this.$displaySuccess("Votre exercice a été publié ! Notre équipe le validera très prochainement.")
+            let message = "";
+            if(exerciseState === "PENDING") {
+              message += "mis en attente"
+            } else if(exerciseState === "VALIDATED") {
+              message += "validé"
+            } else if(exerciseState === "NOT_VALIDATED") {
+              message += "marqué comme invalide"
+            } else if(exerciseState === "DRAFT") {
+              message += "marqué comme brouillon"
+            } else if(exerciseState === "ARCHIVED") {
+              message += "archivé"
+            }
+
+          if(this.admin) {
+            this.$displaySuccess("L'exercice a bien été " + message + " !")
+          } else {
+            if(exerciseState === "PENDING") {
+              this.$displaySuccess("Votre exercice a été publié ! Notre équipe le validera très prochainement.")
+            } else {
+              this.$displaySuccess("L'exercice a bien été " + message + " !")
+            }
+          }
 
           if (this.exercise !== undefined) {
             if(this.admin) {
@@ -300,7 +321,7 @@
         }
 
       } else {
-        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de votre exercice.", 5000)
+        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de cet exercice.", 5000)
       }
     }
 

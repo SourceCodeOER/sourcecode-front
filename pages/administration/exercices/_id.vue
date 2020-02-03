@@ -24,7 +24,7 @@
         </PanelItem>
       </Panel>
 
-      <ExerciseForm title="Modifier l'exercice" :exercise="exercise"/>
+      <ExerciseForm title="Modifier l'exercice" :exercise="exercise" admin back-to-parent-page/>
 
     </div>
   </div>
@@ -71,14 +71,6 @@
 
       try {
         const exercise: Exercise = await $axios.$get(`api/exercises/${id}?${includeOptionsStringify}`);
-        console.log(`api/exercises/${id}?${includeOptionsStringify}`);
-        console.log($auth.user);
-        console.log(exercise);
-        const isTheRightCreator = exercise.creator && exercise.creator.email === $auth.user.email;
-
-        if (!isTheRightCreator) {
-          redirect('/')
-        }
 
         const queryObject: { tags_ids: number[] } = {tags_ids: exercise.tags.map(tag => tag.tag_id)};
 
