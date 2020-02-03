@@ -41,6 +41,8 @@
         </div>
       </ValidationObserver>
 
+      <a class="terms-of-use" href="/terms-of-use.pdf" target="_blank">Conditions d'utilisation</a>
+
     </div>
   </div>
 </template>
@@ -118,4 +120,11 @@
 
 <style lang="scss" scoped>
   @import "../assets/css/_auth";
+  @import "../assets/css/_variables";
+
+  .terms-of-use {
+    display: inline-block;
+    margin-top: 25px;
+    color: $TERNARY_COLOR;
+  }
 </style>
