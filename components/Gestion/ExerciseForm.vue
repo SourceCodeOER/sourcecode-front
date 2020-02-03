@@ -101,7 +101,9 @@
           <Icon type="archive" theme="theme--white"/>
           {{labelFileText}}</label>
         <span class="error-message">{{errors[0]}}</span>
-        <span class="error-message error-message--red" v-if="filename"
+        <a v-if="exercise && exercise.file && filename" :href="`${cdnLink}/${exercise.file}`" target="_blank" class="message message--primary-color"
+              style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</a>
+        <span class="message message--red" v-if="filename"
               style="text-decoration: underline; cursor: pointer;"
               @click="deleteFile">Supprimer le fichier</span>
       </ValidationProvider>
@@ -176,6 +178,10 @@
   export default class ExerciseForm extends Mixins(FilterPanelMixins, ExerciseFormMixins) {
     @Prop({type: Object, default: undefined}) exercise!: Exercise | undefined;
     @Prop({type: String, required: true}) title!: string;
+    @Prop({type: Boolean, default: false}) admin!: boolean;
+    @Prop({type: Boolean, default: false}) backToParentPage!: boolean;
+
+    private cdnLink!: string;
 
     get userRole(): UserRole {
       return this.$auth.user.role
@@ -255,7 +261,11 @@
           this.$displaySuccess("Votre exercice a été publié ! Notre équipe le validera très prochainement.")
 
           if (this.exercise !== undefined) {
-            await this.resetTagForm();
+            if(this.admin) {
+              this.$router.push('/administration/exercices')
+            } else {
+              this.$router.push('/gestion/mes-exercices')
+            }
           } else {
             await this.resetGeneralForm();
           }
@@ -304,6 +314,11 @@
         this.form.description = this.exercise.description;
         this.form.tags = this.exercise.tags.map((tag) => tag.tag_id)
       }
+    }
+
+    created() {
+      const link: string | undefined = process.env.CDN_SERVER;
+      this.cdnLink = link ? link : ''
     }
   }
 
