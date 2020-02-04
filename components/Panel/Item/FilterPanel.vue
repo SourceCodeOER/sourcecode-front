@@ -67,9 +67,15 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import {ValidationProvider, ValidationObserver} from "vee-validate";
   import {
-    CategoryWithSelectedTags, CheckboxObject,
+    CategoryWithSelectedTags,
+    CheckboxObject,
     CheckboxSelecterObjectEmitted,
-    CreateConfigurationRequest, ExerciseState, RadiobuttonObject, RadiobuttonSelecterObjectEmitted,
+    CreateConfigurationRequest,
+    ExerciseState,
+    RadiobuttonObject,
+    RadiobuttonSelecterObjectEmitted,
+    UserRole,
+    UserRoleWithGuest,
     VoteExerciseRequest
   } from "~/types";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
@@ -124,7 +130,11 @@
      * If activated, the radio button selecter for the rating filter is available
      */
     @Prop({type: Boolean, default: false}) radioButtonState!: boolean;
-
+    /**
+     * The strategy option gives more flexibility whether we are guest, user, admin
+     * resetting the filter panel as a guest will only retrieve validated exercises
+     */
+    @Prop({type: String, default: 'guest'}) strategy!: UserRoleWithGuest;
 
     /**
      * A reference to each TagSelecter components
@@ -369,7 +379,17 @@
       if (this.searchMode) {
         this.$accessor.search.RESET_SEARCH_CRITERION();
         this.$accessor.search.RESET_STATE();
-        await this.$accessor.search.fetch({});
+
+        if (this.strategy === 'guest') {
+          await this.$accessor.search.fetch({
+            filterOptions: {
+              state: ["VALIDATED"]
+            }
+          });
+
+        } else {
+          await this.$accessor.search.fetch({});
+        }
       }
 
       if (this.mode === 'default') {

@@ -20,7 +20,7 @@
         </PanelItem>
 
         <PanelItem>
-          <FilterPanel :radio-button-rating="true" :reset-button="true" :search-mode="true" title="Tags"/>
+          <FilterPanel strategy="user" :radio-button-rating="true" :reset-button="true" :search-mode="true" title="Tags"/>
         </PanelItem>
       </Panel>
 

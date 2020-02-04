@@ -8,7 +8,7 @@
         </h1>
 
         <div class="results">
-          {{nbOfResults}} résultats
+          {{nbOfResults}} résultats - <span @click.self="reset" class="init">Réinitialiser</span>
         </div>
       </div>
       <hr>
@@ -145,6 +145,17 @@
       })
     }
 
+    async reset() {
+      this.$accessor.tags.CLEAR();
+      this.$accessor.search.RESET_SEARCH_CRITERION();
+      this.$accessor.search.RESET_STATE();
+      await this.$accessor.search.fetch({
+        filterOptions: {
+          state: ["VALIDATED"]
+        }
+      });
+    }
+
     handleIntersect(entries: IntersectionObserverEntry[]) {
       entries.forEach((entry: IntersectionObserverEntry) => {
         if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
@@ -169,6 +180,11 @@
     flex-direction: column;
     justify-content: stretch;
 
+    .init {
+      color: $TERNARY_COLOR;
+      text-decoration: underline;
+      cursor: pointer;
+    }
 
     header {
       padding-bottom: 20px;

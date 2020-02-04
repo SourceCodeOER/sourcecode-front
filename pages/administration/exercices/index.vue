@@ -13,7 +13,7 @@
 
       <Panel>
         <PanelItem>
-          <FilterPanel :radio-button-rating="true"
+          <FilterPanel strategy="admin" :radio-button-rating="true"
                        :radio-button-state="true"
                        :reset-button="true"
                        :favorite="true"
@@ -33,6 +33,9 @@
       <section>
 
         <h1>Gestion des exercices</h1>
+
+        <div>Nombre de résultat(s) : {{nbExercises}} - <span @click.self="reset" class="init">réinitialiser</span></div>
+
 
         <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
@@ -223,6 +226,10 @@
       return this.selectedExercises.length === 0;
     }
 
+    get nbExercises(): number {
+      return this.$accessor.search.metadata.totalItems
+    }
+
     /**
      * Add or remove an id from the selected exercises array
      * Add if state of the checkbox is true and the item is not in the array
@@ -343,9 +350,16 @@
         this.updateStateOfExercises('NOT_VALIDATED')
       } else if (action.index === 4) {
 
-      } else if(action.index === 5) {
+      } else if (action.index === 5) {
         this.deleteSelectedExercises()
       }
+    }
+
+    async reset() {
+      this.$accessor.tags.CLEAR();
+      this.$accessor.search.RESET_SEARCH_CRITERION();
+      this.$accessor.search.RESET_STATE();
+      await this.$accessor.search.fetch({});
     }
 
     mounted() {
