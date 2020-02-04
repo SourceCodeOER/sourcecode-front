@@ -87,7 +87,8 @@ export const mutations = mutationTree(state, {
   RESET_SEARCH_CRITERION(state) {
     state.search_criterion = {
       tags: [],
-      title: ''
+      title: '',
+      user_ids: state.search_criterion.user_ids
     };
   },
   RESET_VOTE(state) {
