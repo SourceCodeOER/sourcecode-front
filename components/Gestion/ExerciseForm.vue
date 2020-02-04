@@ -281,7 +281,7 @@
             }
           }
 
-          if (this.exercise !== undefined) {
+          if (this.backToParentPage) {
             if(this.admin) {
               this.$router.push('/administration/exercices')
             } else {

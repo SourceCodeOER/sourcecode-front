@@ -13,7 +13,7 @@
     </div>
 
     <div class="wrapper">
-      <CategoryForm :category="category" title="Modifier une catégorie"/>
+      <CategoryForm :category="category" title="Modifier une catégorie" back-to-parent-page/>
     </div>
 
   </div>

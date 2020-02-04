@@ -67,6 +67,7 @@
 
     @Prop({type: Object, default: undefined}) tag!: TagExtended | undefined;
     @Prop({type: String, required: true}) title!: string;
+    @Prop({type: Boolean, default: false}) backToParentPage!: boolean;
 
     /**
      * ValidationObserver for the title
@@ -89,12 +90,7 @@
     selectedNewTag: { index: number } = {
       index: -1
     };
-
-    /**
-     * Contains all the new tags proposal
-     */
-    newTags: TagProposal[] = [];
-
+    
     categories: Category[] = [];
 
     /**
@@ -134,8 +130,6 @@
       this.resetTagForm();
 
       this.form.title = "";
-
-      this.newTags = [];
     }
 
     /**
@@ -173,7 +167,12 @@
             this.$displaySuccess("Le tag a bien été créé.");
           }
 
+          if(this.backToParentPage) {
+            this.$router.push('/administration/tags')
+          }
+
           requestAnimationFrame(() => {
+            this.resetGeneralForm()
             this.observer.reset();
           });
 

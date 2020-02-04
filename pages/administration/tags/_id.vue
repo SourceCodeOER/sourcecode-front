@@ -13,7 +13,7 @@
     </div>
 
     <div class="wrapper">
-      <TagForm :tag="tag" title="Modifier un tag"/>
+      <TagForm :tag="tag" title="Modifier un tag" back-to-parent-page/>
     </div>
 
   </div>
