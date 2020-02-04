@@ -228,9 +228,7 @@
           new History(),
           new Placeholder({
             showOnlyCurrent: false,
-            emptyNodeText: () => {
-              return 'Entrez votre description...'
-            },
+            emptyNodeText: 'Entrez votre description...'
           }),
           new CodeBlockHighlight({
             languages: {
