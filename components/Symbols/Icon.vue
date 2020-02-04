@@ -39,6 +39,7 @@
       archive: () => import('./library/ArchiveSymbol.vue'),
       send: () => import('./library/SendSymbol.vue'),
       paper: () => import('./library/PaperSymbol.vue'),
+      bookmark: () => import('./library/BookmarkSymbol.vue'),
       mail: () => import('./library/MailSymbol.vue')
     }
   })
