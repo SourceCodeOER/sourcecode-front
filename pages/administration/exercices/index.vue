@@ -92,9 +92,10 @@
             <td class="item-centered item-checkbox">
               <CheckBox :state="exercise.isSelected" :id="exercise.id" @check="addOrRemoveExercise"/>
             </td>
-            <td class="item-left" @click="gotoExercise(exercise.id)">{{exercise.title}}</td>
+            <td class="item-left" style="max-width: 350px;" @click="gotoExercise(exercise.id)">{{exercise.title}}</td>
             <td class="td--with-icon">
-              <template v-if="exercise.creator">{{exercise.creator.fullName}}
+              <template v-if="exercise.creator">
+                  {{exercise.creator.fullName}}
                 <Icon theme="theme--primary-color-light" type="mail"/>
               </template>
               <template v-else>-</template>
