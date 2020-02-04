@@ -37,6 +37,30 @@
           </nuxt-link>
         </ul>
 
+        <template v-if="isAuthenticated && role === 'admin'">
+          <span>Administration</span>
+          <ul>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/exercices">
+              <div class="logo-link-wrapper">
+                <Icon type="document" theme="theme--white"/>
+              </div>
+              Exercices
+            </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/categories">
+              <div class="logo-link-wrapper">
+                <Icon type="bookmark" theme="theme--white"/>
+              </div>
+              Catégories
+            </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/tags">
+              <div class="logo-link-wrapper">
+                <Icon type="tags" theme="theme--white"/>
+              </div>
+              Tags
+            </nuxt-link>
+          </ul>
+        </template>
+
         <template v-if="isAuthenticated">
           <span>Gestion</span>
           <ul>
@@ -61,23 +85,7 @@
           </ul>
         </template>
 
-        <template v-if="isAuthenticated && role === 'admin'">
-          <span>Administration</span>
-          <ul>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/exercices">
-              <div class="logo-link-wrapper">
-                <Icon type="document" theme="theme--white"/>
-              </div>
-              Exercices
-            </nuxt-link>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/tags">
-              <div class="logo-link-wrapper">
-                <Icon type="tags" theme="theme--white"/>
-              </div>
-              Tags
-            </nuxt-link>
-          </ul>
-        </template>
+
 
       </nav>
 
