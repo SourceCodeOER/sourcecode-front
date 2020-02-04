@@ -31,9 +31,9 @@
 
           <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/exercices">
             <div class="logo-link-wrapper">
-              <Icon type="exercises" theme="theme--white"/>
+              <Icon type="book" theme="theme--white"/>
             </div>
-            Exercices
+            Bibliothèque
           </nuxt-link>
         </ul>
 
