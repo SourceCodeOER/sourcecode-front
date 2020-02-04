@@ -40,7 +40,8 @@
       send: () => import('./library/SendSymbol.vue'),
       paper: () => import('./library/PaperSymbol.vue'),
       bookmark: () => import('./library/BookmarkSymbol.vue'),
-      mail: () => import('./library/MailSymbol.vue')
+      mail: () => import('./library/MailSymbol.vue'),
+      book: () => import('./library/BookSymbol.vue')
     }
   })
   export default class Icon extends Vue {
