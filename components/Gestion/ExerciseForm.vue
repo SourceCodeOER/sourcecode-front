@@ -86,7 +86,7 @@
     </transition>
 
     <ValidationObserver ref="observer2" tag="form"
-                        @submit.prevent="validateBeforeSubmit()">
+                        @submit.prevent="validateBeforeSubmit">
       <ValidationProvider tag="div"
                           name="archive zip"
                           rules="mimes:application/zip"

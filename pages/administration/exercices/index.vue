@@ -47,7 +47,7 @@
               <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Valider', 'Dépublier', 'Mettre en attente', 'Invalider', 'Supprimer']"/>
+                            :options="['Valider', 'Brouillon', 'Mettre en attente', 'Invalider', 'Exporter', 'Supprimer']"/>
             </transition>
 
             <!-- In case you only want a delete button -->
@@ -120,6 +120,10 @@
 
               <i title="Non répertorié" v-else-if="exercise.state === 'DRAFT'">
                 <Icon title="Créé" type="paper" theme="theme--primary-color-light"/>
+              </i>
+
+              <i title="Archivé" v-else-if="exercise.state === 'ARCHIVED'">
+                <Icon type="archive" theme="theme--red-light"/>
               </i>
             </td>
           </tr>
@@ -252,7 +256,7 @@
     }
 
     /**
-     * update the state of exercises and notifies the user
+     * Remove from the databases the exercises and update the search store
      */
     async updateStateOfExercises(state: ExerciseState) {
       let message: string;
@@ -261,10 +265,13 @@
       if (state === 'PENDING') {
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement envoyé${nbOfExercises === 1 ? '' : 's'} pour inspection.`
       } else if (state === 'VALIDATED') {
-        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} bien été validé${nbOfExercises === 1 ? '' : 's'}.`
-
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} bien été publié${nbOfExercises === 1 ? '' : 's'}.`
       } else if (state === 'NOT_VALIDATED') {
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme invalide${nbOfExercises === 1 ? '' : 's'}.`
+      } else if (state === 'DRAFT') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme brouillon${nbOfExercises === 1 ? '' : 's'}.`
+      } else if (state === 'ARCHIVED') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme archivé${nbOfExercises === 1 ? '' : 's'}.`
 
       } else {
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement dépublié${nbOfExercises === 1 ? '' : 's'}.`
@@ -272,13 +279,12 @@
 
       try {
         await this.$axios.$put('/api/bulk/modify_exercises_status', {exercises: this.selectedExercises, state});
-
         this.$displaySuccess(message);
 
         this.selectedExercises = [];
         this.$accessor.search.fetch({})
       } catch (e) {
-        this.$displayError(`L'action n'a pas pu se réaliser.`);
+        this.$displayError(`Une erreur est survenue lors du changement d'état.`);
       }
     }
 
@@ -336,6 +342,8 @@
       } else if (action.index === 3) {
         this.updateStateOfExercises('NOT_VALIDATED')
       } else if (action.index === 4) {
+
+      } else if(action.index === 5) {
         this.deleteSelectedExercises()
       }
     }

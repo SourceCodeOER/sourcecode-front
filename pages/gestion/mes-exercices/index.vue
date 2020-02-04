@@ -47,7 +47,7 @@
               <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Publier', 'Dépublier', 'Archiver']"/>
+                            :options="['Publier', 'Brouillon', 'Archiver']"/>
             </transition>
 
             <!-- In case you only want a delete button -->
@@ -112,6 +112,9 @@
 
               <i title="Envoyé" v-else-if="exercise.state === 'DRAFT'">
                 <Icon type="paper" theme="theme--primary-color-light"/>
+              </i>
+              <i title="Archivé" v-else-if="exercise.state === 'ARCHIVED'">
+                <Icon type="archive" theme="theme--red-light"/>
               </i>
             </td>
           </tr>
@@ -231,23 +234,6 @@
     /**
      * Remove from the databases the exercises and update the search store
      */
-    async deleteSelectedExercises() {
-      try {
-        await this.$axios.$delete('api/bulk/delete_exercises', {data: this.selectedExercises});
-        const nbSelectedExercises = this.selectedExercises.length;
-
-        this.$displaySuccess(`${nbSelectedExercises} ${nbSelectedExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement supprimé${nbSelectedExercises === 1 ? '' : 's'}.`)
-
-        this.selectedExercises = [];
-        this.$accessor.search.fetch({})
-      } catch (e) {
-        this.$displayError(`Une erreur est survenue lors de la suppression.`)
-      }
-    }
-
-    /**
-     * Remove from the databases the exercises and update the search store
-     */
     async updateStateOfExercises(state: ExerciseState) {
       let message: string;
       const nbOfExercises = this.selectedExercises.length;
@@ -256,9 +242,12 @@
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement envoyé${nbOfExercises === 1 ? '' : 's'} pour inspection.`
       } else if (state === 'VALIDATED') {
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} bien été publié${nbOfExercises === 1 ? '' : 's'}.`
-
       } else if (state === 'NOT_VALIDATED') {
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme invalide${nbOfExercises === 1 ? '' : 's'}.`
+      } else if (state === 'DRAFT') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme brouillon${nbOfExercises === 1 ? '' : 's'}.`
+      } else if (state === 'ARCHIVED') {
+        message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été marqué${nbOfExercises === 1 ? '' : 's'} comme archivé${nbOfExercises === 1 ? '' : 's'}.`
 
       } else {
         message = `${nbOfExercises} ${nbOfExercises === 1 ? 'exercice a' : 'exercices ont'} été correctement dépublié${nbOfExercises === 1 ? '' : 's'}.`
@@ -325,7 +314,7 @@
       } else if (action.index === 1) {
         this.updateStateOfExercises('DRAFT')
       } else if (action.index === 2) {
-        this.deleteSelectedExercises()
+        this.updateStateOfExercises('ARCHIVED')
       }
     }
 
