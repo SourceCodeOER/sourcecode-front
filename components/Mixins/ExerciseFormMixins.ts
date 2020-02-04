@@ -1,11 +1,13 @@
 import {Component, Ref, Vue} from "vue-property-decorator";
-import {ValidationProvider, ValidationObserver} from 'vee-validate';
+import {ValidationObserver, ValidationProvider} from 'vee-validate';
 import {
   Category,
   PostExerciseRequest,
   PostExerciseRequestWithFile,
-  SelectedTag, TagLabelObjectEmitted,
-  TagProposal, UpdateExerciseRequest, UpdateExerciseRequestWithFile
+  SelectedTag,
+  TagProposal,
+  UpdateExerciseRequest,
+  UpdateExerciseRequestWithFile
 } from "~/types";
 import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
 import {BusEvent} from "~/components/Event/BusEvent";
@@ -42,7 +44,7 @@ export default class ExerciseFormMixins extends Vue {
   /**
    * Observer for the input file element
    */
-  @Ref() inputFile!:HTMLInputElement;
+  @Ref() inputFile!: HTMLInputElement;
 
   /**
    * A new tag proposal
@@ -51,6 +53,8 @@ export default class ExerciseFormMixins extends Vue {
     category_id: -1,
     text: ""
   };
+
+  categories: Category[] = [];
 
   /**
    * Contains all the new tags proposal
@@ -86,17 +90,17 @@ export default class ExerciseFormMixins extends Vue {
   }
 
   /**
-   * Get categories from the tags store
-   */
-  protected get categories(): Category[] {
-    return this.$accessor.tags.categories
-  }
-
-  /**
    * Only get the names of each categories
    */
   protected get categoriesName(): string[] {
     return this.categories.map(el => el.category).filter(el => el !== 'licence');
+  }
+
+  /**
+   * Only get categories without licence
+   */
+  protected get categoriesWithoutLicense(): Category[] {
+    return this.categories.filter(el => el.category !== 'licence');
   }
 
   /**
@@ -202,7 +206,7 @@ export default class ExerciseFormMixins extends Vue {
     const isValid = await this.observer3.validate();
 
     if (isValid) {
-      const category_id = this.categories[this.selectedNewTag.category_id].id;
+      const category_id = this.categoriesWithoutLicense[this.selectedNewTag.category_id].id;
 
       let isDuplicate = false;
 
@@ -265,5 +269,13 @@ export default class ExerciseFormMixins extends Vue {
     await this.$accessor.tags.apply("strict");
   }
 
+  created() {
+    this.$axios.$get('/api/tags_categories').then(categories => {
+      this.categories = categories
+    }).catch(err => {
+      this.categories = [];
+      this.$displayError('Une erreur est survenue lors de la récupération des catégories.')
+    })
+  }
 
 }

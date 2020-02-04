@@ -95,12 +95,7 @@
      */
     newTags: TagProposal[] = [];
 
-    /**
-     * Get categories from the tags store
-     */
-    protected get categories(): Category[] {
-      return this.$accessor.tags.categories
-    }
+    categories: Category[] = [];
 
     /**
      * Only get the names of each categories
@@ -110,14 +105,18 @@
     }
 
     /**
+     * Only get categories without licence
+     */
+    protected get categoriesWithoutLicense(): Category[] {
+      return this.categories.filter(el => el.category !== 'licence');
+    }
+
+    /**
      * Select handler for the customSelect reference
      * @param event
      */
     chooseCategory(event: { content: string, index: number }) {
-      console.log(this.categories);
-      console.log(event);
       this.selectedNewTag.index = event.index;
-      console.log(this.selectedNewTag)
     }
 
     /**
@@ -151,7 +150,7 @@
 
         const tagsSettingsRequest: CreateTagRequest = [{
           text: this.form.title,
-          category_id: this.categories[this.selectedNewTag.index].id,
+          category_id: this.categoriesWithoutLicense[this.selectedNewTag.index].id,
           isValidated: tagState
         }];
 
@@ -162,7 +161,7 @@
             const tag: TagExtended = {
               tag_id: this.tag.tag_id,
               tag_text: this.form.title,
-              category_id: this.categories[this.selectedNewTag.index].id,
+              category_id: this.categoriesWithoutLicense[this.selectedNewTag.index].id,
               isValidated: tagState,
               version: this.tag.version
             };
@@ -207,16 +206,22 @@
     }
 
     mounted() {
-      if (process.client && this.tag !== undefined) {
-        this.form.title = this.tag.tag_text;
-        const cat_ID = this.tag.category_id;
-        const index: number = this.categories.findIndex(cat => cat.id === cat_ID);
-        this.selectedNewTag.index = index;
+      this.$axios.$get('/api/tags_categories').then(categories => {
+        this.categories = categories
+        if (this.tag !== undefined) {
+          this.form.title = this.tag.tag_text;
+          const cat_ID = this.tag.category_id;
+          const index: number = this.categories.findIndex(cat => cat.id === cat_ID);
+          this.selectedNewTag.index = index;
 
-        const categoryObject: Category = this.categories[index];
-        this.form.category = categoryObject ? categoryObject.category : "";
+          const categoryObject: Category = this.categories[index];
+          this.form.category = categoryObject ? categoryObject.category : "";
+        }
+      }).catch(err => {
+        this.categories = [];
+        this.$displayError('Une erreur est survenue lors de la récupération des catégories.')
+      });
 
-      }
     }
   }
 
