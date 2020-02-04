@@ -8,6 +8,16 @@ export interface Category {
   category: string
 }
 
+export interface CategoryExtended extends Category {
+  total:number,
+  total_validated:number,
+  total_unvalidated:number
+}
+
+export interface CategoryExtendedWithState extends CategoryExtended {
+  state:boolean
+}
+
 export interface CategoryWithTagsSettings {
   state?: TagState,
   onlySelected?: number[]
