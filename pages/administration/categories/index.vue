@@ -172,7 +172,7 @@
         const n = this.selectedCategories.length;
         await this.$axios.$delete('/api/bulk/delete_tags_categories', {data: this.selectedCategories.map(cat => cat.id)});
 
-        this.$displaySuccess(`${n} catégorie${n > 1 ? 's ont' : 'a'} bien été supprimée${n > 1 ? 's' : ''}`);
+        this.$displaySuccess(`${n} catégorie${n > 1 ? 's ont ' : 'a '} bien été supprimée${n > 1 ? 's' : ''}`);
 
         const data: CategoryExtended[] = await this.$axios.$get('/api/tags_categories?fetchStats=1');
 
