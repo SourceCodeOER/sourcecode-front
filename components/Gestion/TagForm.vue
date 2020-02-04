@@ -90,7 +90,7 @@
     selectedNewTag: { index: number } = {
       index: -1
     };
-    
+
     categories: Category[] = [];
 
     /**

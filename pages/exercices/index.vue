@@ -53,7 +53,7 @@
       Icon
     },
     async fetch({app: {$accessor}, $auth}) {
-      await $accessor.tags.fetch();
+      await $accessor.tags.fetch("validated");
       await $accessor.tags.apply("default");
       await $accessor.search.fetch({
         metadata: {size: 30},

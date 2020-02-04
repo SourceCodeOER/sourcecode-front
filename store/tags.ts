@@ -223,11 +223,14 @@ export const actions = actionTree({state, mutations}, {
    * Fetch all the tags with categories on the database
    * @param commit
    * @param state
+   * @param stateOfTags
    */
-  async fetch({commit, state}) {
+  async fetch({commit, state}, stateOfTags:TagState="default") {
 
     try {
-      const data: CategoryWithTags[] = await this.$axios.$get('api/tags_by_categories');
+      const data: CategoryWithTags[] = await this.$axios.$get('api/tags_by_categories', {params: {
+        state:stateOfTags
+        }});
       const array: CategoryWithSelectedTags[] = [];
 
       for (let i in data) {
