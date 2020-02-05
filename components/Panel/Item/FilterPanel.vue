@@ -72,9 +72,7 @@
     CheckboxSelecterObjectEmitted,
     CreateConfigurationRequest,
     ExerciseState,
-    RadiobuttonObject,
     RadiobuttonSelecterObjectEmitted,
-    UserRole,
     UserRoleWithGuest,
     VoteExerciseRequest
   } from "~/types";
@@ -153,15 +151,7 @@
      * The name of the favorite entered by the user
      */
     favoriteName: string = '';
-    /**
-     * The different types of state for an exercise
-     */
-    private arrayOfStates: RadiobuttonObject[] = ["Non répertorié", "En attente", "Valide", "invalide"].map(title => {
-      return {
-        title,
-        value: title
-      }
-    });
+
 
     /**
      * get the current selected tags from the store
@@ -204,6 +194,10 @@
         {
           title: 'Invalide',
           state: false,
+        },
+        {
+          title: 'Archivé',
+          state:false
         }
       ];
 
@@ -273,8 +267,10 @@
             return 'PENDING'
           } else if (i == 2) {
             return 'VALIDATED'
-          } else {
+          } else if(i == 3) {
             return 'NOT_VALIDATED'
+          } else {
+            return 'ARCHIVED'
           }
         });
 
@@ -289,8 +285,10 @@
             return 'PENDING'
           } else if (i == 2) {
             return 'VALIDATED'
-          } else {
+          } else if(i == 3) {
             return 'NOT_VALIDATED'
+          } else {
+            return 'ARCHIVED'
           }
         });
 
