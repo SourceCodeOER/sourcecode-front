@@ -34,7 +34,8 @@
 
         <h1>Gestion des exercices</h1>
 
-        <div>Nombre de résultat(s) : {{nbExercises}} - <span @click.self="reset" class="init">réinitialiser</span></div>
+        <div>Nombre de résultat(s) : {{nbExercises}}</div>
+        <div class="subheader"><span @click.self="exportAll" class="export">Exporter les résultats</span> - <span @click.self="reset" class="init">réinitialiser la recherche</span></div>
 
 
         <div class="header-wrapper">
@@ -141,7 +142,14 @@
 
 <script lang="ts">
   import {Component, Mixins, Ref} from 'vue-property-decorator'
-  import {CheckBoxObjectEmitted, Exercise, ExerciseState, ExerciseWithSelection, SearchExerciseRequest} from "~/types";
+  import {
+    CheckBoxObjectEmitted,
+    Exercise,
+    ExerciseState,
+    ExerciseWithSelection,
+    ExportExerciseRequest,
+    SearchExerciseRequest
+  } from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
   import FavoritePanel from "~/components/Panel/Item/FavoritePanel.vue";
@@ -371,7 +379,32 @@
         this.selectedExercises = [];
 
       } catch (e) {
-        console.log(e);
+        this.$displayError(`Une erreur est survenue lors de l'export.`);
+      }
+    }
+
+    async exportAll() {
+      try {
+        const data = this.$accessor.search.search_criterion;
+        const filterOptions = this.$accessor.search.filterOptions;
+        const orderBy = this.$accessor.search.orderBy;
+        const includeOptions = this.$accessor.search.includeOptions;
+
+        const exportExerciseRequest:ExportExerciseRequest = {
+          data,
+          filterOptions,
+          orderBy,
+          includeOptions
+        };
+
+        const result = await this.$axios.$post('/api/export', exportExerciseRequest);
+
+        download(JSON.stringify(result), "export.json", 'application/json');
+
+        this.$displaySuccess("L'export a bien été effectué.");
+        this.selectedExercises = [];
+
+      } catch (e) {
         this.$displayError(`Une erreur est survenue lors de l'export.`);
       }
     }

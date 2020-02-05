@@ -54,6 +54,7 @@ export interface DataSearchExerciseRequest {
   title?: string,
   tags?: (number | number[])[],
   user_ids?: number[],
+  exercise_ids?:number[]
   vote?: VoteExerciseRequest
 }
 
@@ -81,6 +82,13 @@ export interface OrderByExerciseRequest {
 
 export interface SearchExerciseRequest {
   metadata?: MetadataSearchExerciseRequest,
+  includeOptions?: IncludeOptionsExerciseRequest,
+  filterOptions?: FilterOptionsExerciseRequest
+  data?: DataSearchExerciseRequest,
+  orderBy?: OrderByExerciseRequest[]
+}
+
+export interface ExportExerciseRequest {
   includeOptions?: IncludeOptionsExerciseRequest,
   filterOptions?: FilterOptionsExerciseRequest
   data?: DataSearchExerciseRequest,

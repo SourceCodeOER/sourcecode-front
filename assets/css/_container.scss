@@ -35,6 +35,16 @@
           cursor: pointer;
         }
 
+        .export {
+          color:$PRIMARY_COLOR;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        .subheader {
+          margin-top: 5px;
+        }
+
         .header-wrapper {
           position: sticky;
           padding: 48px 0 10px 0;
