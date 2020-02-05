@@ -50,7 +50,7 @@
               <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Valider', 'Brouillon', 'Mettre en attente', 'Invalider', 'Exporter', 'Supprimer']"/>
+                            :options="['Valider', 'Brouillon', 'Mettre en attente', 'Invalider', 'Exporter', 'Archiver', 'Supprimer']"/>
             </transition>
 
             <!-- In case you only want a delete button -->
@@ -95,7 +95,7 @@
             <td class="item-left" style="max-width: 350px;" @click="gotoExercise(exercise.id)">{{exercise.title}}</td>
             <td class="td--with-icon">
               <template v-if="exercise.creator">
-                  {{exercise.creator.fullName}}
+                {{exercise.creator.fullName}}
                 <Icon theme="theme--primary-color-light" type="mail"/>
               </template>
               <template v-else>-</template>
@@ -157,6 +157,9 @@
   const debounce = require('lodash.debounce');
 
   const ratio = .2;
+
+  const download = require('downloadjs');
+
 
   @Component({
     components: {
@@ -350,9 +353,26 @@
       } else if (action.index === 3) {
         this.updateStateOfExercises('NOT_VALIDATED')
       } else if (action.index === 4) {
-
+        this.exportExercises()
       } else if (action.index === 5) {
+        this.updateStateOfExercises('ARCHIVED')
+      } else if (action.index === 6) {
         this.deleteSelectedExercises()
+      }
+    }
+
+    async exportExercises() {
+      try {
+        const result = await this.$axios.$post('/api/export', {data: {exercise_ids: this.selectedExercises}});
+
+        download(JSON.stringify(result), "export.json", 'application/json');
+
+        this.$displaySuccess("L'export a bien été effectué.");
+        this.selectedExercises = [];
+
+      } catch (e) {
+        console.log(e);
+        this.$displayError(`Une erreur est survenue lors de l'export.`);
       }
     }
 
