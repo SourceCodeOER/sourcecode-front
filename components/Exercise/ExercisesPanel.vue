@@ -8,7 +8,7 @@
         </h1>
 
         <div class="results">
-          {{nbOfResults}} résultats - <span @click.self="reset" class="init">réinitialiser</span>
+          {{nbOfResults}} résultats - <span @click.self="reset" class="init">Réinitialiser la recherche</span>
         </div>
       </div>
       <hr>

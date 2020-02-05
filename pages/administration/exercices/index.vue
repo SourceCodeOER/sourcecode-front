@@ -35,7 +35,7 @@
         <h1>Gestion des exercices</h1>
 
         <div>Nombre de résultat(s) : {{nbExercises}}</div>
-        <div class="subheader"><span @click.self="exportAll" class="export">Exporter les résultats</span> - <span @click.self="reset" class="init">réinitialiser la recherche</span></div>
+        <div class="subheader"><span @click.self="exportAll" class="export">Exporter les résultats</span> - <span @click.self="reset" class="init">Réinitialiser la recherche</span></div>
 
 
         <div class="header-wrapper">

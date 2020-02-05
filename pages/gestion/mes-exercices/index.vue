@@ -34,7 +34,7 @@
 
         <h1>Mes exercices</h1>
 
-        <div>Nombre de résultat(s) : {{nbExercises}} - <span @click.self="reset" class="init">réinitialiser la recherche</span></div>
+        <div>Nombre de résultat(s) : {{nbExercises}} - <span @click.self="reset" class="init">Réinitialiser la recherche</span></div>
 
         <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
