@@ -14,23 +14,23 @@
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.2.4",
     "@nuxtjs/auth": "^4.8.4",
-    "@nuxtjs/axios": "^5.7.1",
+    "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/markdownit": "^1.2.7",
     "downloadjs": "^1.4.7",
-    "highlight.js": "^9.16.2",
+    "highlight.js": "^9.18.1",
     "json-form-data": "^1.6.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "lodash.sortedindex": "^4.1.0",
     "markdown-it-highlightjs": "^3.0.0",
     "nuxt": "^2.0.0",
-    "nuxt-i18n": "^6.3.0",
+    "nuxt-i18n": "^6.5.0",
     "nuxt-typed-vuex": "^0.1.10",
     "qs": "^6.9.1",
     "tiptap": "^1.26.6",
     "tiptap-extensions": "^1.28.6",
-    "vee-validate": "^3.0.11",
-    "vue-property-decorator": "^8.3.0",
+    "vee-validate": "^3.2.3",
+    "vue-property-decorator": "^8.4.0",
     "vuex-class-component": "^2.1.1"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "@types/lodash.sortedindex": "^4.1.6",
     "@types/nuxtjs__auth": "^4.8.3",
     "@types/qs": "^6.9.0",
-    "cypress": "^3.7.0",
+    "cypress": "^3.8.3",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0"
   }
