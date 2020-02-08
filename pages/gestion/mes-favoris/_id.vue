@@ -20,7 +20,7 @@
         </PanelItem>
 
         <PanelItem>
-          <FilterPanel strategy="user" :radio-button-rating="true" :reset-button="true" :search-mode="true" title="Tags"/>
+          <FilterPanel strategy="user" :reset-button="true" :search-mode="true" title="Tags"/>
         </PanelItem>
       </Panel>
 
@@ -76,6 +76,9 @@
           data: {
             title: configuration.title,
             tags: $accessor.tags.tagsRequest
+          },
+          filterOptions: {
+            state: ['VALIDATED']
           },
           includeOptions: {includeDescription: false, includeTags: false},
           orderBy: [{field: 'date', value: 'DESC'}, {field: 'id', value: 'ASC'}]

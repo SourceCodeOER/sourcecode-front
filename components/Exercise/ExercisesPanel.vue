@@ -13,11 +13,11 @@
       </div>
       <hr>
       <div class="tags-wrapper" v-if="confirmedTags.length > 0 || voteTag">
-        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text"
+        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text" :validated="true"
              :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)"/>
 
         <Tag v-if="voteTag" :id="voteTag.id" :title="voteTag.title" :state="voteTag.state"
-             @deleteTag="removeRatingCriteria"/>
+             @deleteTag="removeRatingCriteria" :validated="true"/>
       </div>
     </header>
 

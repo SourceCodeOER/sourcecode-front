@@ -24,24 +24,6 @@ export default class extends Vue {
     await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
   }
 
-  get voteTag(): TagLabelObjectEmitted | undefined {
-    const vote = this.$accessor.search.search_criterion.vote;
-    let title = '';
-
-    if (vote) {
-      if (vote.operator === '>=' || vote.operator === '>') {
-        title += 'Plus de '
-      } else if (vote.operator === '<=' || vote.operator === '<') {
-        title += 'Moins de '
-      }
-
-      title += vote.value + ' étoiles'
-
-      return {title, id: 0, state: true}
-    }
-    return undefined
-  }
-
   async removeRatingCriteria() {
     await this.$accessor.search.RESET_VOTE();
     await this.$accessor.search.fetch({});

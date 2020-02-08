@@ -37,7 +37,7 @@
     <div class="tags__wrapper">
       <Tag v-for="(tag, id) in selectedTags" :state="tag.state"
            :title="tag.tag_text"
-           :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)"/>
+           :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)" :validated="tag.isValidated"/>
 
       <Tag v-for="(tag, id) in newTags" @deleteTag="deleteTagProposal" :title="tag.text"
            :key="tag.tag_text + '_'+ id" :id="id"/>

@@ -52,6 +52,7 @@
       await $accessor.tags.fetch();
       $accessor.search.UPDATE_INCLUDE_OPTIONS({includeDescription: false, includeTags: false});
       $accessor.search.UPDATE_ORDER_BY([{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}])
+      $accessor.search.UPDATE_FILTER_OPTIONS({state:['VALIDATED']})
     },
     middleware: ['auth', 'reset-search-request']
   })

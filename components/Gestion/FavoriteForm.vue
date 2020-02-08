@@ -37,11 +37,9 @@
 
 
     <div class="tags__wrapper">
-      <Tag v-for="(tag, id) in selectedTags" :state="tag.state"
+      <Tag v-for="(tag, id) in selectedTags" :state="tag.state" :validated="tag.isValidated"
            :title="tag.tag_text"
            :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)"/>
-      <Tag v-if="voteTag" :id="voteTag.id" :title="voteTag.title" :state="voteTag.state"
-           @deleteTag="removeRatingCriteria"/>
     </div>
     <br>
 
@@ -101,8 +99,7 @@
               ids: [this.configuration.id]
             };
 
-            const queryString = qs.stringify(query);
-            const refreshConfig: Configuration[] = await this.$axios.$get('api/configurations?' + queryString);
+            const refreshConfig: Configuration[] = await this.$axios.$get('api/configurations', {params: query});
 
             this.$accessor.favorites.UPDATE_CONFIGURATION(refreshConfig[0]);
 
