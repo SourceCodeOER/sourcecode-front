@@ -1,5 +1,5 @@
 <template>
-  <div class="tag" :class="{'tag--confirmed' : state, 'tag--deactivated': !state}">
+  <div class="tag" :class="{'tag--confirmed' : validated, 'tag--deactivated': !validated}">
     {{title}}
     <Icon type="cross" @click.native.stop="deleteTag" theme="theme--white"/>
   </div>
@@ -18,6 +18,7 @@
   export default class Tag extends Vue {
     @Prop({type: String, required: true}) readonly title!: string;
     @Prop({type: Boolean, default: false}) readonly state!: boolean;
+    @Prop({type: Boolean, default: false}) readonly validated!: boolean;
     @Prop({type: Number, required: true}) readonly id!: number;
 
     currentState: boolean = this.state;
