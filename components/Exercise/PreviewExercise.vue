@@ -3,7 +3,10 @@
     <div class="rating" :class="{'rating--empty': exercise.metrics.votes === 0}">
         {{rating}}
         <div @click="gotoExercise" class="overlay">
-          <span>
+          <span v-if="!$auth.loggedIn">
+            Connectez-vous pour côter cet exercice !
+          </span>
+          <span v-else>
             Soyez le premier à côter cet exercice !
           </span>
         </div>
@@ -101,7 +104,11 @@
         }
 
         gotoExercise() {
-          this.$router.push(this.metaLink)
+          if(this.$auth.loggedIn) {
+            this.$router.push(this.metaLink)
+          } else {
+            this.$router.push('/login')
+          }
         }
     }
 </script>
@@ -172,12 +179,12 @@
       -moz-user-select: none;
       -ms-user-select: none;
       -webkit-user-select: none;
-      cursor:pointer;
       height: 100%;
       display: flex;
       align-items: center;
 
       &.rating--empty {
+        cursor:pointer;
         color:lighten($GREY, 30);
       }
     }
