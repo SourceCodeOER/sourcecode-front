@@ -16,7 +16,9 @@
 
       <Panel>
         <PanelItem>
-          <ExercisesCheckPanel icon="search" title="Exercices"/>
+          <ExercisesCheckPanel icon="search" title="Exercices">
+            Aucun exercice ne semble correspondre au vôtre !
+          </ExercisesCheckPanel>
         </PanelItem>
 
         <PanelItem>

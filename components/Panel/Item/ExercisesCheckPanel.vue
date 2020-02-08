@@ -6,7 +6,7 @@
     </div>
 
     <div class="disclaimer" v-show="searched && exercises.length === 0">
-      Aucun exercice ne semble correspondre au vôtre !
+      <slot></slot>
     </div>
 
     <div class="panel-wrapper" v-show="searched && exercises.length !== 0">
