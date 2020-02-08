@@ -9,6 +9,12 @@ h1 {
   font-family: $Montserrat;
 }
 
+.link {
+  display: inline-block;
+  margin-top: 25px;
+  color: $TERNARY_COLOR;
+}
+
 .container {
   background: $MAIN_GRADIENT_V;
   min-height: 100vh;

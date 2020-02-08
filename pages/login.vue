@@ -31,7 +31,7 @@
           </button>
         </div>
       </ValidationObserver>
-
+      <nuxt-link to="/register" class="link" no-prefetch>Créer un compte</nuxt-link>
 
     </div>
   </div>
@@ -50,9 +50,15 @@
       ValidationProvider,
       ValidationObserver
     },
-    auth: "guest"
+    auth: "guest",
+    beforeRouteEnter(to: any, from: any, next: any) {
+      next((vm: { previousRoute: any; }) => {
+        vm.previousRoute = from
+      })
+    }
   })
   export default class extends Vue {
+    previousRoute: any = undefined;
 
     form: AuthRequest = {
       email: '',
@@ -80,7 +86,11 @@
             },
           });
 
-          this.$router.back()
+          if(this.previousRoute && this.previousRoute.name === 'register') {
+            this.$router.push('/')
+          } else {
+            this.$router.back()
+          }
 
         } catch (e) {
           const error: AxiosError = (e as AxiosError);

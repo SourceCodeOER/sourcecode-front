@@ -41,7 +41,8 @@
         </div>
       </ValidationObserver>
 
-      <a class="terms-of-use" href="/terms-of-use.pdf" target="_blank">Conditions d'utilisation</a>
+      <a class="link" href="/terms-of-use.pdf" target="_blank">Conditions d'utilisation</a>
+      &nbsp;&nbsp;<nuxt-link to="/login" class="link" no-prefetch>J'ai un déjà compte</nuxt-link>
 
     </div>
   </div>
@@ -59,9 +60,16 @@
       ValidationProvider,
       ValidationObserver
     },
-    auth: 'guest'
+    auth: 'guest',
+    beforeRouteEnter(to: any, from: any, next: any) {
+    next((vm: { previousRoute: any; }) => {
+      vm.previousRoute = from
+    })
+  }
   })
   export default class extends Vue {
+    previousRoute: any = undefined;
+
     form: RegisterRequest = {
       email: '',
       password: '',
@@ -93,7 +101,11 @@
             },
           });
 
-          this.$router.back()
+          if(this.previousRoute && this.previousRoute.name === 'login') {
+            this.$router.push('/')
+          } else {
+            this.$router.back()
+          }
         } catch (e) {
 
           const error: AxiosError = (e as AxiosError);
@@ -121,10 +133,4 @@
 <style lang="scss" scoped>
   @import "../assets/css/_auth";
   @import "../assets/css/_variables";
-
-  .terms-of-use {
-    display: inline-block;
-    margin-top: 25px;
-    color: $TERNARY_COLOR;
-  }
 </style>
