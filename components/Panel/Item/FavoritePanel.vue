@@ -78,15 +78,9 @@
 
         await this.$accessor.favorites.REMOVE_CONFIGURATION(id);
 
-        BusEvent.$emit('displayNotification', {
-          mode: 'success',
-          message: 'Votre favori a bien été supprimé.'
-        })
+        this.$displaySuccess('Votre favori a bien été supprimé.')
       } catch (e) {
-        BusEvent.$emit('displayNotification', {
-          mode: 'error',
-          message: 'Une erreur est survenue lors de la suppression du favori.'
-        })
+        this.$displayError('Une erreur est survenue lors de la suppression du favori.')
       }
     }
 
@@ -112,7 +106,7 @@
         return {...tag, state: true}
       });
 
-      this.$accessor.tags.applyConfirmedTags({confirmedTags, mode: "default"});
+      this.$accessor.tags.applyConfirmedTags({confirmedTags: confirmedTags.filter(tag => tag.isValidated), mode: "default"});
 
       searchCriterion.tags = this.$accessor.tags.tagsRequest;
       searchRequest.data = searchCriterion;
