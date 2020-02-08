@@ -1,4 +1,8 @@
 /**
+ * Types for everything related to an exercise
+ */
+
+/**
  * Exercise Single
  */
 import {Tag, TagProposal, TagState} from "~/types/tags";

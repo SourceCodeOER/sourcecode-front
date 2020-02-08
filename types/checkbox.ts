@@ -1,3 +1,7 @@
+/**
+ * Types for CheckBoxSelecter component
+ */
+
 export interface CheckboxObject {
   title: string,
   state: boolean

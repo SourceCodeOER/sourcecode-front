@@ -2,7 +2,7 @@ import {
   Category,
   SelectedTag,
   CategoryWithTags,
-  CategoryWithSelectedTags, TagExtended, TagsSettingsRequest, TagState
+  CategoryWithSelectedTags, TagExtended, TagState
 } from '~/types'
 import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
 
@@ -12,7 +12,7 @@ const DEACTIVATED = false;
 const ACTIVE = true;
 
 /**
- * helper function to map an array of TagSelecter into a map containing array or number of id's of a category
+ * helper function to map an array of SelectedTag into a map containing array or number of id's of a related category
  * @param map
  * @param tags
  */
@@ -38,11 +38,11 @@ export const state = () => ({
    */
   defaultTags: [] as CategoryWithSelectedTags[],
   /**
-   * All the tags selected in the filter section
+   * All the tags selected
    */
   selectedTags: [] as SelectedTag[],
   /**
-   * The defaultTags array with modification of state for tags
+   * The defaultTags array with modification that can be modified for selection of tags
    */
   tags: [] as CategoryWithSelectedTags[],
   /**
@@ -50,7 +50,13 @@ export const state = () => ({
    * example : [1, [2, 3]] = 1 n (2 v 3)
    */
   tagsRequest: [] as (number | number[])[],
+  /**
+   * Array of id's categories representing all the selected categories
+   */
   selectedCategories: [] as number[],
+  /**
+   * Filter tag with their current state
+   */
   selectedTagState: 'default' as TagState
 });
 
@@ -69,11 +75,9 @@ export const mutations = mutationTree(state, {
     state.tags[i].tags[j].state = ACTIVE;
   },
   /**
-   * Remove a tag in the selectedTag array unless this is a old confirmed one
-   * In this case, just the state is modified and. We update the state in the tags array too
+   * Remove a tag in the selectedTag and update the state in the tags array too
    * @param state
    * @param id
-   * @param category
    * @constructor
    */
   REMOVE_TAG(state, {tag_id, category_id}: SelectedTag) {
@@ -86,7 +90,7 @@ export const mutations = mutationTree(state, {
 
   },
   /**
-   * Initialization given an array of TagSelecter
+   * Initialization given an array of CategoryWithSelectedTags
    * default tags keeps a default copy of the data in order to clear the data
    * @param state
    * @param tags
@@ -112,7 +116,7 @@ export const mutations = mutationTree(state, {
     });
   },
   /**
-   * Enable to clear the data in the selected array and get the default copy of defaultTags for tags
+   * Clear all the data and copy the original defaultTags array into the tags array
    * @param state
    * @constructor
    */
@@ -123,19 +127,30 @@ export const mutations = mutationTree(state, {
     state.selectedCategories = [];
     state.selectedTagState = 'default'
   },
-  RESET_SETTINGS(state) {
-    state.selectedCategories = [];
-    state.selectedTagState = 'default';
-  },
-  RESET_SELECTED_TAG_STATE(state) {
-    state.selectedTagState = 'default';
-  },
+  /**
+   * Set the tag state filter
+   * @param state
+   * @param tagState
+   * @constructor
+   */
   SET_SELECTED_TAG_STATE(state, tagState: TagState) {
     state.selectedTagState = tagState;
   },
+  /**
+   * set the tag request array containing a CNF like structure
+   * @param state
+   * @param tagsRequest
+   * @constructor
+   */
   SET_TAGS_REQUEST(state, tagsRequest: (number | number[])[]) {
     state.tagsRequest = tagsRequest
   },
+  /**
+   * add a category into the selectedCategories array
+   * @param state
+   * @param index
+   * @constructor
+   */
   ADD_CATEGORY(state, index: number) {
     const indexOfId = state.selectedCategories.findIndex(id => index === id);
 
@@ -143,6 +158,12 @@ export const mutations = mutationTree(state, {
       state.selectedCategories.push(index)
     }
   },
+  /**
+   * Remove a category from the selectedCategories array
+   * @param state
+   * @param index
+   * @constructor
+   */
   REMOVE_CATEGORY(state, index: number) {
 
     const indexOfId = state.selectedCategories.findIndex(id => index === id);
@@ -173,7 +194,7 @@ export const actions = actionTree({state, mutations}, {
    * @param commit
    * @param getters
    * @param state
-   * @param mode
+   * @param mode : default for the CNF form and strict only with AND expression
    */
   apply({commit, getters, state}, mode: "strict" | "default") {
 
@@ -191,7 +212,7 @@ export const actions = actionTree({state, mutations}, {
 
   },
   /**
-   * Enable to apply a filter with a custom confirmedTags array
+   * Enable to apply a filter with a custom SelectedTag array
    * @param commit
    * @param state
    * @param payload
@@ -254,6 +275,12 @@ export const actions = actionTree({state, mutations}, {
     }
 
   },
+  /**
+   * Add/remove a category from the selectedCategories array
+   * @param commit
+   * @param state
+   * @param payload
+   */
   addOrRemoveCategory({commit, state}, payload: { index: number, state: boolean }) {
     if (payload.state) {
       commit('ADD_CATEGORY', payload.index)
@@ -267,6 +294,10 @@ export const actions = actionTree({state, mutations}, {
 
 
 export const getters = getterTree(state, {
+  /**
+   * get the list of all Categories
+   * @param state
+   */
   categories: (state): Category[] => {
     return state.tags.map((categoryWithSelectedTags: CategoryWithSelectedTags) => {
       return {
@@ -275,6 +306,10 @@ export const getters = getterTree(state, {
       }
     })
   },
+  /**
+   * get Filtered tags and categories
+   * @param state
+   */
   filteredTagByCategories: (state) => {
 
     const tagState: boolean | undefined = state.selectedTagState === 'validated' ? true : state.selectedTagState === 'pending' ? false : undefined;

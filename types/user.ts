@@ -1,5 +1,5 @@
 /**
- * User
+ * Types for everything related to a User
  */
 
 export type UserRole = "user" | "admin";

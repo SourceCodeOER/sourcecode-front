@@ -1,5 +1,5 @@
 /**
- * Tags
+ * types for everything related to Tags
  */
 
 export type TagState = "default" | "validated" | "pending";

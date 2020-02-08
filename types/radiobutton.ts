@@ -1,3 +1,6 @@
+/**
+ * Types for the RadioButtonSelecter component
+ */
 export interface RadiobuttonObject {
   title: string,
   value: any

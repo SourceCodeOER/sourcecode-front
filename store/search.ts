@@ -34,8 +34,17 @@ export const state = () => ({
     title: "",
     tags: []
   } as DataSearchExerciseRequest,
+  /**
+   * The include options settings to filter exercises
+   */
   includeOptions: {} as IncludeOptionsExerciseRequest,
+  /**
+   * The filter options settings to filter exercises
+   */
   filterOptions: {} as FilterOptionsExerciseRequest,
+  /**
+   * The orderBy options to make ordering of exercises
+   */
   orderBy: [] as OrderByExerciseRequest[]
 });
 
@@ -72,7 +81,7 @@ export const mutations = mutationTree(state, {
       pageSize: state.metadata.pageSize
     };
     state.includeOptions = {};
-    state.filterOptions = {}
+    state.filterOptions = {};
     state.orderBy = [];
     state.search_criterion = {
       title: "",
@@ -80,7 +89,7 @@ export const mutations = mutationTree(state, {
     };
   },
   /**
-   * Reset the search criterion with default values
+   * Reset the search criterion with default values and keeps the previous selected user_ids array
    * @param state
    * @constructor
    */
@@ -91,9 +100,19 @@ export const mutations = mutationTree(state, {
       user_ids: state.search_criterion.user_ids
     };
   },
+  /**
+   * Reset the vote criteria
+   * @param state
+   * @constructor
+   */
   RESET_VOTE(state) {
     delete state.search_criterion.vote
   },
+  /**
+   * Reset the state filter option for filtering exercises
+   * @param state
+   * @constructor
+   */
   RESET_STATE(state) {
     delete state.filterOptions.state
   },
@@ -125,7 +144,7 @@ export const mutations = mutationTree(state, {
     exercises.forEach(exercise => state.exercises.push(exercise));
   },
   /**
-   * Set the new search criterion based on the new value of the title or of new tags
+   * Update the search criterion by merging old and new data
    * @param state
    * @param searchCriterion
    * @constructor
@@ -133,12 +152,30 @@ export const mutations = mutationTree(state, {
   UPDATE_SEARCH_CRITERION(state, searchCriterion: DataSearchExerciseRequest | undefined) {
     state.search_criterion = {...state.search_criterion, ...searchCriterion};
   },
+  /**
+   * Update the new include options by merging old and new data
+   * @param state
+   * @param includeOptions
+   * @constructor
+   */
   UPDATE_INCLUDE_OPTIONS(state, includeOptions: IncludeOptionsExerciseRequest | undefined) {
     state.includeOptions = {...state.includeOptions, ...includeOptions}
   },
+  /**
+   * Update the new filter options by merging old and new data
+   * @param state
+   * @param filterOptions
+   * @constructor
+   */
   UPDATE_FILTER_OPTIONS(state, filterOptions: FilterOptionsExerciseRequest | undefined) {
     state.filterOptions = {...state.filterOptions, ...filterOptions}
   },
+  /**
+   * Update the order by array by merging old and new data
+   * @param state
+   * @param orderBy
+   * @constructor
+   */
   UPDATE_ORDER_BY(state, orderBy: OrderByExerciseRequest[] | undefined) {
 
     if (orderBy) {

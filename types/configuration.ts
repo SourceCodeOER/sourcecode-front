@@ -1,5 +1,5 @@
 /**
- * Configuration
+ * types for Configuration (favorites)
  */
 import {TagExtended} from "~/types/tags";
 
