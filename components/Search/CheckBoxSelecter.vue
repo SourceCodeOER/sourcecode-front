@@ -57,7 +57,6 @@
 
     @Emit('change')
     check(checkBoxObjectEmitted: CheckBoxObjectEmitted): CheckboxSelecterObjectEmitted[] {
-      console.log(checkBoxObjectEmitted);
       const changedOptions: CheckboxSelecterObjectEmitted[] = [];
       if (checkBoxObjectEmitted.id === -1) {
 
