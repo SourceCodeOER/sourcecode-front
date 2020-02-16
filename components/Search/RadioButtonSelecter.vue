@@ -18,7 +18,7 @@
       <li v-for="(el, index) in filteredTags" :key="el.title">
         <label>
           {{el.title}}
-          <input type="radio" @change="onChange(index)" v-model="selectedValue" :value="el.value">
+          <input type="radio" @change="onChange(el, index)" v-model="selectedValue" :value="el.value">
           <span class="radiobutton"></span>
         </label>
       </li>
@@ -59,11 +59,18 @@
     }
 
     @Emit('change')
-    onChange(index: number): RadiobuttonSelecterObjectEmitted {
+    onChange(el: RadiobuttonObject, index: number): RadiobuttonSelecterObjectEmitted {
       if (index === -1) {
         return {data: {title: '', value: 'default'}, index: -1}
       }
-      return {data: this.options[index], index}
+
+      const id: number = this.options.findIndex(option => option.value === el.value);
+      if(id !== -1) {
+        return {data: this.options[id], index: id}
+      } else {
+        return {data: {title: '', value: 'default'}, index: -1}
+      }
+
     }
 
     get filteredTags(): RadiobuttonObject[] {
