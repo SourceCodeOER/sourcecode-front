@@ -56,7 +56,8 @@
     }
 
     @Emit('change')
-    check(checkBoxObjectEmitted: CheckBoxObjectEmitted) : CheckboxSelecterObjectEmitted[]{
+    check(checkBoxObjectEmitted: CheckBoxObjectEmitted): CheckboxSelecterObjectEmitted[] {
+      console.log(checkBoxObjectEmitted);
       const changedOptions: CheckboxSelecterObjectEmitted[] = [];
       if (checkBoxObjectEmitted.id === -1) {
 
@@ -64,17 +65,20 @@
         this.options.forEach((object) => {
           if (object.state !== checkBoxObjectEmitted.state) {
             object.state = checkBoxObjectEmitted.state;
-            changedOptions.push({data: {...object, state:checkBoxObjectEmitted.state}, index})
+            changedOptions.push({data: {...object, state: checkBoxObjectEmitted.state}, index})
           }
           index++;
         });
 
       } else {
-        this.options[checkBoxObjectEmitted.id].state = checkBoxObjectEmitted.state;
-        changedOptions.push({
-          index: checkBoxObjectEmitted.id,
-          data: {title: checkBoxObjectEmitted.title, state: checkBoxObjectEmitted.state}
-        })
+        const index: number = this.options.findIndex((option) => option.title === checkBoxObjectEmitted.title);
+        if (index !== -1) {
+          this.options[index].state = checkBoxObjectEmitted.state;
+          changedOptions.push({
+            index,
+            data: {title: checkBoxObjectEmitted.title, state: checkBoxObjectEmitted.state}
+          })
+        }
       }
 
       return changedOptions;
@@ -83,14 +87,14 @@
     mounted() {
       let condition = false;
 
-      for(let i = 0; i < this.options.length ; i++) {
-        if(!this.options[i].state) {
+      for (let i = 0; i < this.options.length; i++) {
+        if (!this.options[i].state) {
           condition = true;
           break;
         }
       }
 
-      if(!condition) this.selectAllState = true;
+      if (!condition) this.selectAllState = true;
     }
 
   }
