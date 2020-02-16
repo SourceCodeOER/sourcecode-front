@@ -30,7 +30,7 @@
     </ValidationObserver>
 
     <h2 class="title--primary-color__light">Tags *</h2>
-    <button class="button--secondary-color-reverse" v-show="selectedTags.length === 0 && !voteTag"
+    <button class="button--secondary-color-reverse" v-show="selectedTags.length === 0"
             @click="changePanel(1)">
       Commencer la sélection
     </button>
