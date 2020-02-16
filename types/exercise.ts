@@ -58,13 +58,13 @@ export interface DataSearchExerciseRequest {
   title?: string,
   tags?: (number | number[])[],
   user_ids?: number[],
-  exercise_ids?:number[]
+  exercise_ids?: number[]
   vote?: VoteExerciseRequest
 }
 
 export interface FilterOptionsExerciseRequest {
   state?: ExerciseState[],
-  tags?:TagState
+  tags?: TagState
 }
 
 export interface IncludeOptionsExerciseRequest {
