@@ -32,23 +32,23 @@ export default {
     proxy: true
   },
   proxy: {
-    '/api/': { target: process.env.API_SERVER},
-    '/auth/': { target: process.env.API_SERVER}
+    '/api/': {target: process.env.API_SERVER},
+    '/auth/': {target: process.env.API_SERVER}
   },
   auth: {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'auth/login', method: 'post', propertyName: 'token' },
-          user: { url: 'auth/me', method: 'get', propertyName: false },
+          login: {url: 'auth/login', method: 'post', propertyName: 'token'},
+          user: {url: 'auth/me', method: 'get', propertyName: false},
           logout: false
         }
       }
     },
     redirect: {
       home: '/',
-      callback:false,
-      logout:'/'
+      callback: false,
+      logout: '/'
     }
   },
   moment: {
@@ -94,7 +94,7 @@ export default {
     injected: true,
     html: true,
     langPrefix: '',
-    use: [ 'markdown-it-highlightjs' ]
+    use: ['markdown-it-highlightjs']
   },
   /*
   ** Build configuration
