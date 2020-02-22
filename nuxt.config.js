@@ -1,6 +1,4 @@
-require('dotenv').config();
-
-export default {
+module.exports = {
   mode: 'universal',
   /*
   ** Headers of the page
@@ -10,8 +8,8 @@ export default {
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {name: 'theme-color', content: '#F5213F'},
-      {name: 'msapplication-TileColor', content: '#F5213F'},
+      {name: 'theme-color', content: '#2974fa'},
+      {name: 'msapplication-TileColor', content: '#2974fa'},
       {property: 'og:site_name', content: 'Source Code'},
       {property: 'og:image', content: ''},
       {property: 'og:type', content: 'website'},
@@ -32,8 +30,8 @@ export default {
     proxy: true
   },
   proxy: {
-    '/api/': {target: process.env.API_SERVER},
-    '/auth/': {target: process.env.API_SERVER}
+    '/api/': {target: undefined},
+    '/auth/': {target: undefined}
   },
   auth: {
     strategies: {
@@ -79,7 +77,6 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
-    '@nuxtjs/dotenv',
     '@nuxtjs/moment'
   ],
   /*
@@ -87,15 +84,8 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/auth'
   ],
-  markdownit: {
-    injected: true,
-    html: true,
-    langPrefix: '',
-    use: ['markdown-it-highlightjs']
-  },
   /*
   ** Build configuration
   */
@@ -105,4 +95,4 @@ export default {
       "/nuxt-typed-vuex/"
     ]
   }
-}
+};
