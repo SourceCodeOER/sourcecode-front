@@ -79,7 +79,7 @@
           <tr>
             <th class="item-checkbox"></th>
             <th class="item-left">Titre</th>
-            <th>Auteur</th>
+            <th>Créateur</th>
             <th>Nb de votes</th>
             <th>Moyenne</th>
             <th>Mis à jour</th>
@@ -97,7 +97,6 @@
             <td class="td--with-icon">
               <template v-if="exercise.creator">
                 {{exercise.creator.fullName}}
-                <Icon theme="theme--primary-color-light" type="mail"/>
               </template>
               <template v-else>-</template>
             </td>
