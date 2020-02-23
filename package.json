@@ -6,10 +6,10 @@
   "private": true,
   "scripts": {
     "dev": "cross-env node server/index.js",
-    "build": "nuxt-ts build",
+    "build": "NODE_ENV=production node server/build/index.js",
     "generate": "nuxt-ts generate",
     "start": "nuxt-ts start",
-    "prod": "cross-env NODE_ENV=production node server/index.js",
+    "prod": "NODE_ENV=production node server/index.js",
     "cypress:open": "cypress open"
   },
   "dependencies": {
