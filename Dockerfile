@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:13-alpine
 
 # Create app directory
 WORKDIR /frontend
@@ -8,12 +8,13 @@ WORKDIR /frontend
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
+
+COPY . .
+
 RUN npm run build
 
 EXPOSE 3000
-
-COPY . .
 
 # set app serving to permissive / assigned
 ENV NUXT_HOST=0.0.0.0
