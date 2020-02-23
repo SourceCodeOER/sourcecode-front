@@ -9,11 +9,12 @@ WORKDIR /frontend
 COPY package*.json ./
 
 RUN npm ci
+
+COPY . .
+
 RUN npm run build
 
 EXPOSE 3000
-
-COPY . .
 
 # set app serving to permissive / assigned
 ENV NUXT_HOST=0.0.0.0
