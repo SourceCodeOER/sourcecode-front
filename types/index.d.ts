@@ -7,6 +7,7 @@ export * from './user'
 export * from './historical'
 export * from './checkbox'
 export * from './radiobutton'
+export * from './environment'
 
 export interface CheckBoxObjectEmitted {
   title: string,

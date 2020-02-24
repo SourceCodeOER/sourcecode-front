@@ -1,0 +1,5 @@
+cypress
+
+# Common garbage
+node_modules
+npm-debug.log

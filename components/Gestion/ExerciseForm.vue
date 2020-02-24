@@ -338,7 +338,7 @@
     }
 
     created() {
-      const link: string | undefined = process.env.CDN_SERVER;
+      const link: string | undefined = this.$accessor.sharedEnv.CDN_SERVER;
       this.cdnLink = link ? link : ''
     }
   }
