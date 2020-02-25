@@ -1,0 +1,4 @@
+{
+  "api_server": "api:3000",
+  "cdn_server" : "api:3000/files"
+}
