@@ -8,8 +8,8 @@ const config = require('config');
  * @type       {Object}
  */
 const sharedEnv = {
-  API_SERVER: config.get("api_server"),
-  CDN_SERVER: config.get("cdn_server")
+  API_SERVER: config.get("API_SERVER"),
+  CDN_SERVER: config.get("CDN_SERVER")
 };
 
 module.exports = sharedEnv;

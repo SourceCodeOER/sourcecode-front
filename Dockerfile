@@ -3,9 +3,11 @@ FROM node:13-alpine
 # Create app directory
 WORKDIR /frontend
 
+# Needed tool to export ENV variables into a json file
+RUN apk --no-cache add jq
+
 # Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
 COPY package*.json ./
 
 RUN npm ci
@@ -22,4 +24,4 @@ ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=3000
 
 # start the app
-CMD [ "npm", "run" , "prod"]
+CMD jq -n env > config/production.json && npm run prod

@@ -1,4 +1,4 @@
 {
-  "api_server": "http://127.0.0.1:3333",
-  "cdn_server" : "http://127.0.0.1:3333/files"
+  "API_SERVER": "http://127.0.0.1:3333",
+  "CDN_SERVER" : "http://127.0.0.1:3333/files"
 }

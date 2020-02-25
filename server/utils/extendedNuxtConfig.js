@@ -15,8 +15,8 @@ const nuxtConfig = {
 // Do final object manipulation for things where
 // extending objects is not appropriate
 if (nuxtConfig.proxy && nuxtConfig.proxy['/api/'] && nuxtConfig.proxy['/auth/']) {
-  nuxtConfig.proxy['/api/'].target = config.get('api_server');
-  nuxtConfig.proxy['/auth/'].target = config.get('api_server');
+  nuxtConfig.proxy['/api/'].target = config.get('API_SERVER');
+  nuxtConfig.proxy['/auth/'].target = config.get('API_SERVER');
 }
 
 module.exports = nuxtConfig;
