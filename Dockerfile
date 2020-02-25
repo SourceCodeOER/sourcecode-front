@@ -13,6 +13,7 @@ RUN npm ci
 COPY . .
 
 RUN npm run build
+RUN apk --no-cache add jq
 
 EXPOSE 3000
 
@@ -22,4 +23,4 @@ ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=3000
 
 # start the app
-CMD [ "npm", "run" , "prod"]
+CMD jq -n env > config/production.json && npm run prod
