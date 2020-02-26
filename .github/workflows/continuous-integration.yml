@@ -22,7 +22,10 @@ jobs:
         run: |
           docker tag sourcecode-front ${{ secrets.DOCKER_USER }}/sourcecode-front:${{ github.sha }}
           docker tag sourcecode-front ${{ secrets.DOCKER_USER }}/sourcecode-front:latest
-      - name: Push
+      - name: Push version
         run: |
           docker push ${{ secrets.DOCKER_USER }}/sourcecode-front:${{ github.sha }}
+      - name: Push release ( only on master )
+        if: github.ref == 'refs/heads/master'
+        run: |
           docker push ${{ secrets.DOCKER_USER }}/sourcecode-front:latest
