@@ -21,6 +21,9 @@ COPY package*.json ./
 # For building, we need all the dependancies
 RUN npm ci
 
+# Copy needed files for compilation
+COPY . .
+
 # Generate the project
 RUN npm run build
 
