@@ -34,8 +34,12 @@ RUN npm run build
 # Create app directory
 WORKDIR /frontend
 
+# TODO little check
+RUN ls -l
+RUN pwd
+
 # Copy generated files
-COPY temp/ .
+ADD temp/ .
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
