@@ -34,12 +34,8 @@ RUN npm run build
 # Create app directory
 WORKDIR /frontend
 
-# TODO little check
-RUN ls -l
-RUN pwd
-
 # Copy generated files
-ADD temp/ .
+COPY temp/ ./
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
@@ -51,7 +47,6 @@ RUN npm ci --only=production
 
 # Remove temp folder from build
 RUN rmdir -rf temp/
-
 
 ##################################
 #      SET ENVIRONNEMENT         #
