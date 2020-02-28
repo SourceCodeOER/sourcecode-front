@@ -12,7 +12,7 @@ RUN apk --no-cache add jq
 ##################################
 
 # Temp work dir
-WORKDIR /temp
+WORKDIR /frontend/temp
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
@@ -35,7 +35,7 @@ RUN npm run build
 WORKDIR /frontend
 
 # Copy generated files
-COPY /temp .
+COPY temp/ .
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
@@ -46,7 +46,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Remove temp folder from build
-RUN rmdir -r /temp
+RUN rmdir -rf temp/
 
 
 ##################################
