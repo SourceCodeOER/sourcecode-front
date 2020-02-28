@@ -33,7 +33,8 @@
     "tiptap-extensions": "^1.28.6",
     "vee-validate": "^3.2.3",
     "vue-property-decorator": "^8.4.0",
-    "vuex-class-component": "^2.1.1"
+    "vuex-class-component": "^2.1.1",
+    "consola": "^2.11.3"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.3.4",
