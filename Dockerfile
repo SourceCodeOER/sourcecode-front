@@ -1,5 +1,8 @@
 FROM node:13-alpine
 
+# Create app directory
+WORKDIR /frontend
+
 ##################################
 #        NEEDED TOOL(S)          #
 ##################################
@@ -11,9 +14,6 @@ RUN apk --no-cache add jq
 #         BUILDING STEP          #
 ##################################
 
-# Temp work dir
-WORKDIR /frontend/temp
-
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
 COPY package*.json ./
@@ -21,7 +21,7 @@ COPY package*.json ./
 # For building, we need all the dependancies
 RUN npm ci
 
-# Copy needed files for compilation
+# Bundle app sources
 COPY . .
 
 # Generate the project
@@ -31,22 +31,9 @@ RUN npm run build
 #         RELEASE STEP           #
 ##################################
 
-# Create app directory
-WORKDIR /frontend
-
-# Copy generated files
-COPY temp/ ./
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
-COPY package*.json ./
-
 # For production, we need only production dependancies to be able to run the project
 # npm ci will clean the inherited node_module ( if you forgot to put that in .dockerignore )
 RUN npm ci --only=production
-
-# Remove temp folder from build
-RUN rmdir -rf temp/
 
 ##################################
 #      SET ENVIRONNEMENT         #
