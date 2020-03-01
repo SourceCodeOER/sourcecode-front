@@ -102,6 +102,18 @@ button {
     color: $TERNARY_COLOR;
   }
 
+  &.button--ternary-color--light {
+    border: 1px solid $TERNARY_COLOR_LIGHT;
+    background-color: transparent;
+    color: $TERNARY_COLOR_LIGHT;
+  }
+
+  &.button--ternary-color--light--reverse {
+    border: 1px solid $TERNARY_COLOR_LIGHT;
+    background-color: $TERNARY_COLOR_LIGHT;
+    color: white;
+  }
+
   &.button--primary-color {
     border: 1px solid $PRIMARY_COLOR;
     background-color: transparent;
@@ -136,6 +148,18 @@ button {
   &.button--secondary-color-reverse {
     border: 1px solid $SECONDARY_COLOR;
     background-color: $SECONDARY_COLOR;
+    color: white;
+  }
+
+  &.button--orange {
+    border: 1px solid $ORANGE;
+    background-color: transparent;
+    color: $ORANGE;
+  }
+
+  &.button--orange-reverse {
+    border: 1px solid $ORANGE;
+    background-color: $ORANGE;
     color: white;
   }
 
