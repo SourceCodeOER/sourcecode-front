@@ -44,7 +44,6 @@
           </div>
 
 
-
           <div class="menubar__button__wrapper">
 
 
@@ -204,10 +203,15 @@
   export default class RichTextEditor extends Vue {
     editor: null | any = null;
     @Ref() editorContent!: InstanceType<typeof EditorContent>;
-    @Prop({type:String, default: ''}) defaultContent!:string;
+    @Prop({type: String, default: ''}) defaultContent!: string;
+
+    content: string = '';
 
     mounted() {
-      const obj: { extensions: any[], content?: string } = {
+      const obj: { extensions: any[], content?: string, onUpdate?: (event: any) => void, onInit?: (event: any) => void } = {
+        onUpdate: ({getHTML}) => {
+          this.content = getHTML();
+        },
         extensions: [
           new Blockquote(),
           new BulletList(),
@@ -227,7 +231,7 @@
           new Underline(),
           new History(),
           new Placeholder({
-            showOnlyCurrent: false,
+            showOnlyCurrent: true,
             emptyNodeText: 'Entrez votre description...'
           }),
           new CodeBlockHighlight({
@@ -243,8 +247,9 @@
         ]
       };
 
-      if(this.defaultContent !== '') {
-        obj.content = this.defaultContent
+      if (this.defaultContent !== '') {
+        obj.content = this.defaultContent;
+        this.content = this.defaultContent;
       }
 
       this.editor = new Editor(obj)
@@ -256,14 +261,12 @@
       }
     }
 
-    reset(content:string='<p></p>') {
+    reset(content: string = '<p></p>') {
       this.editor.setContent(content);
     }
 
-    content() {
-      const element = (this.editorContent.$el as HTMLElement).querySelector(".ProseMirror");
-
-      return element ? element.innerHTML : '<p></p>'
+    get isEmpty(): boolean {
+      return this.content === '<p></p>' || this.content === '<p><br></p>' || this.content === '';
     }
   }
 </script>
