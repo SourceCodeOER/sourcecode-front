@@ -6,9 +6,7 @@ import {
   SearchExerciseRequest,
   SearchExerciseResponse,
   IncludeOptionsExerciseRequest,
-  VoteExerciseRequest,
   OrderByExerciseRequest,
-  Category,
   FilterOptionsExerciseRequest
 } from "~/types";
 import {actionTree, getterTree, mutationTree} from "nuxt-typed-vuex";

@@ -35,12 +35,19 @@
 
 
     <div class="tags__wrapper">
-      <Tag v-for="(tag, id) in selectedTags" :state="tag.state"
+      <Tag v-for="(tag, id) in selectedTags"
+           :state="tag.state"
            :title="tag.tag_text"
-           :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)" :validated="tag.isValidated"/>
+           :key="tag.tag_text + '_' + tag.category + '_'+ id"
+           :id="id"
+           @deleteTag="deleteTag($event, tag)"/>
 
-      <Tag v-for="(tag, id) in newTags" @deleteTag="deleteTagProposal" :title="tag.text"
-           :key="tag.tag_text + '_'+ id" :id="id"/>
+      <Tag v-for="(tag, id) in newTags"
+           @deleteTag="deleteTagProposal"
+           :title="tag.text"
+           state="NOT_VALIDATED"
+           :key="tag.tag_text + '_'+ id"
+           :id="id"/>
     </div>
 
 
@@ -49,6 +56,21 @@
       Pas de problème, vous pouvez toujours nous en proposer <span @click="showNewTagLayout = true"
                                                                    class="link">ici</span> !
     </p>
+
+    <div class="legend-wrapper">
+      <div class="legend__title">
+        Code couleur
+      </div>
+      <div class="legend legend--validated">
+        valide
+      </div>
+      <div class="legend legend--deprecated">
+        obsolète
+      </div>
+      <div class="legend legend--not-validated">
+        non valide
+      </div>
+    </div>
 
 
     <transition name="fade">

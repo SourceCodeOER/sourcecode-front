@@ -2,7 +2,7 @@
  * types for everything related to Tags
  */
 
-export type TagState = "default" | "validated" | "pending";
+export type TagState = "DEPRECATED" | "VALIDATED" | "NOT_VALIDATED";
 
 export interface TagsSettingsRequest {
   tags_ids?: number[],
@@ -18,12 +18,12 @@ export interface Tag {
 
 export interface TagExtended extends Tag {
   category_id: number,
-  isValidated: boolean,
+  state: TagState,
   version: number
 }
 
 export interface SelectedTag extends TagExtended {
-  state: boolean
+  isSelected: boolean
 }
 
 export interface TagProposal {
@@ -41,14 +41,13 @@ export interface UpdateTagCategory {
 
 export interface TagLabelObjectEmitted {
   title: string,
-  state: boolean,
   id: number
 }
 
 export interface TagRequest {
   text: string,
   category_id: number,
-  isValidated?: boolean
+  state?: TagState
 }
 
 export type CreateTagRequest = TagRequest[]

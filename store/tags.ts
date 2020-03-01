@@ -57,7 +57,7 @@ export const state = () => ({
   /**
    * Filter tag with their current state
    */
-  selectedTagState: 'default' as TagState
+  selectedTagState: [] as TagState[]
 });
 
 export const mutations = mutationTree(state, {
@@ -72,7 +72,7 @@ export const mutations = mutationTree(state, {
     const i = state.tags.findIndex((el) => el.id === selectedTag.category_id);
     const j = state.tags[i].tags.findIndex((el) => el.tag_id === selectedTag.tag_id);
 
-    state.tags[i].tags[j].state = ACTIVE;
+    state.tags[i].tags[j].isSelected = ACTIVE;
   },
   /**
    * Remove a tag in the selectedTag and update the state in the tags array too
@@ -86,7 +86,7 @@ export const mutations = mutationTree(state, {
 
     const i = state.tags.findIndex((el) => el.id === category_id);
     const j = state.tags[i].tags.findIndex((el) => el.tag_id === tag_id);
-    state.tags[i].tags[j].state = DEACTIVATED;
+    state.tags[i].tags[j].isSelected = DEACTIVATED;
 
   },
   /**
@@ -110,7 +110,7 @@ export const mutations = mutationTree(state, {
         const selectedTag: SelectedTag | undefined = tagsCategory.tags.find((el: SelectedTag) => el.tag_id === tag.tag_id);
 
         if (selectedTag !== undefined) {
-          selectedTag.state = ACTIVE
+          selectedTag.isSelected = ACTIVE
         }
       }
     });
@@ -125,7 +125,7 @@ export const mutations = mutationTree(state, {
     state.tags = cloneDeep(state.defaultTags);
     state.tagsRequest = [];
     state.selectedCategories = [];
-    state.selectedTagState = 'default'
+    state.selectedTagState = []
   },
   /**
    * Set the tag state filter
@@ -133,8 +133,35 @@ export const mutations = mutationTree(state, {
    * @param tagState
    * @constructor
    */
-  SET_SELECTED_TAG_STATE(state, tagState: TagState) {
+  SET_SELECTED_TAG_STATE(state, tagState: TagState[]) {
     state.selectedTagState = tagState;
+  },
+  REMOVE_SELECTED_TAG_STATE(state, tagStates: TagState[]) {
+    const selectedTagState = state.selectedTagState;
+    state.selectedTagState = selectedTagState
+      .filter(tagState => tagStates.findIndex(tag => tag === tagState) === -1);
+  },
+  UPDATE_SELECTED_TAG_STATE(state, tagStates: TagState[]) {
+      const selectedTagState: TagState[] = state.selectedTagState;
+      const notOverwriteTagState: TagState[] = [];
+
+      for (let n = 0; n < tagStates.length; n++) {
+        let overwrite = false;
+        const element = tagStates[n];
+
+        for (let m = 0; m < selectedTagState.length && !overwrite; m++) {
+          if (element === selectedTagState[m]) {
+            selectedTagState[m] = element;
+            overwrite = true;
+          }
+        }
+
+        if (!overwrite) {
+          notOverwriteTagState.push(element)
+        }
+      }
+
+      state.selectedTagState = [...state.selectedTagState, ...notOverwriteTagState]
   },
   /**
    * set the tag request array containing a CNF like structure
@@ -183,7 +210,7 @@ export const actions = actionTree({state, mutations}, {
    * @param payload
    */
   addOrRemoveTag({commit}, payload: SelectedTag) {
-    if (payload.state === ACTIVE) {
+    if (payload.isSelected === ACTIVE) {
       commit('ADD_TAG', payload)
     } else {
       commit('REMOVE_TAG', payload)
@@ -223,7 +250,7 @@ export const actions = actionTree({state, mutations}, {
     commit('CLEAR');
 
     payload.confirmedTags.forEach(el => {
-      el.state = true;
+      el.isSelected = true;
       commit('ADD_TAG', el)
     });
 
@@ -246,19 +273,21 @@ export const actions = actionTree({state, mutations}, {
    * @param state
    * @param stateOfTags
    */
-  async fetch({commit, state}, stateOfTags:TagState="default") {
+  async fetch({commit, state}, stateOfTags: TagState[] = []) {
 
     try {
-      const data: CategoryWithTags[] = await this.$axios.$get('api/tags_by_categories', {params: {
-        state:stateOfTags
-        }});
+      const data: CategoryWithTags[] = await this.$axios.$get('api/tags_by_categories', {
+        params: {
+          state: stateOfTags
+        }
+      });
       const array: CategoryWithSelectedTags[] = [];
 
       for (let i in data) {
         const {id, category, tags}: CategoryWithTags = data[i];
 
         const selectedTags: SelectedTag[] = tags.map((el: TagExtended) => {
-          const selectedTag: SelectedTag = {...el, state: DEACTIVATED};
+          const selectedTag: SelectedTag = {...el, isSelected: DEACTIVATED};
           return selectedTag
         });
 
@@ -312,9 +341,9 @@ export const getters = getterTree(state, {
    */
   filteredTagByCategories: (state) => {
 
-    const tagState: boolean | undefined = state.selectedTagState === 'validated' ? true : state.selectedTagState === 'pending' ? false : undefined;
+    const tagState: TagState[] | undefined = state.selectedTagState;
 
-    let categoriesWithTags:CategoryWithSelectedTags[];
+    let categoriesWithTags: CategoryWithSelectedTags[];
 
     if (state.selectedCategories.length > 0) {
       categoriesWithTags = state.tags.filter(categoryWithSelectedTag => {
@@ -326,15 +355,18 @@ export const getters = getterTree(state, {
       categoriesWithTags = state.tags;
     }
 
-    if(tagState !== undefined) {
+    if (tagState && tagState.length > 0) {
+
       return categoriesWithTags.map(cat => {
-          return {
-            ...cat,
-            tags: cat.tags.filter(el => el.isValidated === tagState)
-          }
-        })
+        return {
+          ...cat,
+          tags: cat.tags.filter(el => tagState.findIndex(state => state === el.state) !== -1)
+        }
+      })
     } else {
       return categoriesWithTags
     }
+
   }
+
 });

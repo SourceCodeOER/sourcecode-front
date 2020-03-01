@@ -14,14 +14,15 @@
           Catégories
         </CheckBoxSelecter>
 
-        <RadioButtonSelecter @change="setStateCriteria" @toggle-list="toggleList"
-                             :select-default-option="true"
-                             :default-options="[
-              {title:'Valide', value:'validated'},
-              {title:'Invalide', value:'pending'}
+        <CheckBoxSelecter @change="setStateCriteria" @toggle-list="toggleList"
+                          :select-all-option="true"
+                          :default-options="[
+              {title:'Valide', state: false},
+              {title:'Invalide', state: false},
+              {title:'Obsolète', state: false}
               ]">
           Status
-        </RadioButtonSelecter>
+        </CheckBoxSelecter>
       </ul>
     </div>
   </div>
@@ -39,7 +40,7 @@
     CategoryWithSelectedTags, CheckboxObject,
     CheckboxSelecterObjectEmitted,
     CreateConfigurationRequest, ExerciseState, RadiobuttonObject, RadiobuttonSelecterObjectEmitted,
-    SelectedTag, VoteExerciseRequest
+    SelectedTag, TagState, VoteExerciseRequest
   } from "~/types";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
 
@@ -109,12 +110,31 @@
       })
     }
 
-    setStateCriteria(event: RadiobuttonSelecterObjectEmitted) {
-      if (event.index === -1) {
-        this.$accessor.tags.SET_SELECTED_TAG_STATE('default')
-      } else {
-        this.$accessor.tags.SET_SELECTED_TAG_STATE(event.data.value)
-      }
+    setStateCriteria(event: CheckboxSelecterObjectEmitted[]) {
+
+      const switchFunction = function (el: CheckboxSelecterObjectEmitted) {
+        switch (el.index) {
+          case 0:
+            return 'VALIDATED';
+          case 1:
+            return 'NOT_VALIDATED';
+          case 2:
+            return 'DEPRECATED';
+          default:
+            return 'DEPRECATED';
+        }
+      };
+
+      const tagStateToAdd: TagState[] = event
+        .filter(el => el.data.state)
+        .map(switchFunction);
+
+      const tagStateToDelete: TagState[] = event
+        .filter(el => !el.data.state)
+        .map(switchFunction);
+
+      this.$accessor.tags.REMOVE_SELECTED_TAG_STATE(tagStateToDelete);
+      this.$accessor.tags.UPDATE_SELECTED_TAG_STATE(tagStateToAdd);
     }
 
     /**

@@ -4,7 +4,7 @@ import {
   Category,
   PostExerciseRequest,
   PostExerciseRequestWithFile,
-  SelectedTag,
+  SelectedTag, TagLabelObjectEmitted,
   TagProposal,
   UpdateExerciseRequest,
   UpdateExerciseRequestWithFile
@@ -193,8 +193,8 @@ export default class ExerciseFormMixins extends Vue {
     }
   }
 
-  async deleteTag(event: { title: string, id: number, state: boolean }, tag: SelectedTag) {
-    await this.$accessor.tags.addOrRemoveTag({...tag, state: event.state});
+  async deleteTag(event: TagLabelObjectEmitted, tag: SelectedTag) {
+    await this.$accessor.tags.addOrRemoveTag({...tag, isSelected: false});
     await this.$accessor.tags.apply('strict');
     await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
   }

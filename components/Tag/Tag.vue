@@ -1,5 +1,5 @@
 <template>
-  <div class="tag" :class="{'tag--confirmed' : validated, 'tag--deactivated': !validated}">
+  <div class="tag" :class="tagStateClass">
     {{title}}
     <Icon type="cross" @click.native.stop="deleteTag" theme="theme--white"/>
   </div>
@@ -8,7 +8,7 @@
 <script lang="ts">
   import {Vue, Component, Prop, Emit} from 'vue-property-decorator'
   import Icon from "~/components/Symbols/Icon.vue";
-  import {TagLabelObjectEmitted} from "~/types";
+  import {TagLabelObjectEmitted, TagState} from "~/types";
 
   @Component({
     components: {
@@ -17,16 +17,25 @@
   })
   export default class Tag extends Vue {
     @Prop({type: String, required: true}) readonly title!: string;
-    @Prop({type: Boolean, default: false}) readonly state!: boolean;
-    @Prop({type: Boolean, default: false}) readonly validated!: boolean;
+    @Prop({type: String, default: "VALIDATED"}) readonly state!: TagState;
     @Prop({type: Number, required: true}) readonly id!: number;
 
-    currentState: boolean = this.state;
+    get tagStateClass(): string {
+      switch (this.state) {
+        case "VALIDATED":
+          return "tag--validated";
+        case "NOT_VALIDATED":
+          return "tag--not-validated";
+        case "DEPRECATED":
+          return "tag--deprecated";
+        default:
+          return "tag--validated"
+      }
+    }
 
     @Emit('deleteTag')
     deleteTag(): TagLabelObjectEmitted {
-      this.currentState = !this.currentState;
-      return {title: this.title, state: this.currentState, id: this.id}
+      return {title: this.title, id: this.id}
     }
   }
 </script>
@@ -56,14 +65,20 @@
       cursor: pointer;
     }
 
-    &.tag--confirmed {
-      background-color: darken($SECONDARY_COLOR, 12);
+    &.tag--validated {
+      background-color: $SECONDARY_COLOR;
       border: 0;
       color: white;
     }
 
-    &.tag--deactivated {
-      background-color: lighten($TERNARY_COLOR, 10);
+    &.tag--not-validated {
+      background-color: lighten($RED, 10);
+      border: 0;
+      color: white;
+    }
+
+    &.tag--deprecated {
+      background-color: lighten($ORANGE, 13);
       border: 0;
       color: white;
     }

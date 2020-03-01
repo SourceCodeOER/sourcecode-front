@@ -68,7 +68,7 @@
         error({statusCode: 404, message: "Ce favori est introuvable"});
       } else {
         const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
-          return {...tag, state: true}
+          return {...tag, isSelected: true}
         });
 
         await $accessor.tags.fetch();

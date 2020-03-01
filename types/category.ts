@@ -9,13 +9,14 @@ export interface Category {
 }
 
 export interface CategoryExtended extends Category {
-  total:number,
-  total_validated:number,
-  total_unvalidated:number
+  total: number,
+  total_validated: number,
+  total_deprecated: number,
+  total_unvalidated: number
 }
 
 export interface CategoryExtendedWithState extends CategoryExtended {
-  state:boolean
+  state: boolean
 }
 
 export interface CategoryWithTagsSettings {
@@ -30,7 +31,7 @@ export interface CategoryWithTags {
   tags: TagExtended[]
 }
 
-export interface CategoryWithSelectedTags extends Category{
+export interface CategoryWithSelectedTags extends Category {
   tags: SelectedTag[]
 }
 

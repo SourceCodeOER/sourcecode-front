@@ -64,7 +64,7 @@ export interface DataSearchExerciseRequest {
 
 export interface FilterOptionsExerciseRequest {
   state?: ExerciseState[],
-  tags?: TagState
+  tags?: TagState[]
 }
 
 export interface IncludeOptionsExerciseRequest {
