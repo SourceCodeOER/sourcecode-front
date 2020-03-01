@@ -123,8 +123,9 @@
           <Icon type="archive" theme="theme--white"/>
           {{labelFileText}}</label>
         <span class="error-message">{{errors[0]}}</span>
-        <a v-if="exercise && exercise.file && filename" :href="`${cdnLink}/${exercise.file}`" target="_blank" class="message message--primary-color"
-              style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</a>
+        <a v-if="exercise && exercise.file && filename" :href="`${cdnLink}/${exercise.file}`" target="_blank"
+           class="message message--primary-color"
+           style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</a>
         <span class="message message--red" v-if="filename"
               style="text-decoration: underline; cursor: pointer;"
               @click="deleteFile">Supprimer le fichier</span>
@@ -219,13 +220,13 @@
       const isValid2 = await this.observer2.validate();
 
       // HTML description validation
-      const description: string = (this.richTextEditor as any).content();
-      const isHTMLValid = description !== '<p></p>' && description !== '<p><br></p>';
+      const description: string = (this.richTextEditor as any).content;
+      const isHTMLValid = !(this.richTextEditor as any).isEmpty;
 
       // Tags validation
       const selectedTags: number[] = this.selectedTags.map((tag: SelectedTag) => tag.tag_id);
       const tags: (TagProposal | number)[] = [...selectedTags, ...this.newTags];
-      const isTagsValid = tags.length !== 0;
+      const isTagsValid = this.selectedTags.filter(tag => tag.state === "VALIDATED").length >= 3;
 
       if (isValid1 && isValid2 && isHTMLValid && isTagsValid) {
 
@@ -280,23 +281,23 @@
             }
           }
 
-            let message = "";
-            if(exerciseState === "PENDING") {
-              message += "mis en attente"
-            } else if(exerciseState === "VALIDATED") {
-              message += "validé"
-            } else if(exerciseState === "NOT_VALIDATED") {
-              message += "marqué comme invalide"
-            } else if(exerciseState === "DRAFT") {
-              message += "marqué comme brouillon"
-            } else if(exerciseState === "ARCHIVED") {
-              message += "archivé"
-            }
+          let message = "";
+          if (exerciseState === "PENDING") {
+            message += "mis en attente"
+          } else if (exerciseState === "VALIDATED") {
+            message += "validé"
+          } else if (exerciseState === "NOT_VALIDATED") {
+            message += "marqué comme invalide"
+          } else if (exerciseState === "DRAFT") {
+            message += "marqué comme brouillon"
+          } else if (exerciseState === "ARCHIVED") {
+            message += "archivé"
+          }
 
-          if(this.admin) {
+          if (this.admin) {
             this.$displaySuccess("L'exercice a bien été " + message + " !")
           } else {
-            if(exerciseState === "PENDING") {
+            if (exerciseState === "PENDING") {
               this.$displaySuccess("Votre exercice a été publié ! Notre équipe le validera très prochainement.")
             } else {
               this.$displaySuccess("L'exercice a bien été " + message + " !")
@@ -304,7 +305,7 @@
           }
 
           if (this.backToParentPage) {
-            if(this.admin) {
+            if (this.admin) {
               this.$router.push('/administration/exercices')
             } else {
               this.$router.push('/gestion/mes-exercices')
@@ -342,6 +343,10 @@
           }
         }
 
+      } else if (!isHTMLValid) {
+        this.$displayWarning("Le champ description est obligatoire.", 5000)
+      } else if (!isTagsValid) {
+        this.$displayWarning("Vous devez ajouter au moins 3 tags valides.", 5000)
       } else {
         this.$displayWarning("Vous ne respectez pas les conditions pour la publication de cet exercice.", 5000)
       }
