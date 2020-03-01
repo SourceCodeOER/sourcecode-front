@@ -133,9 +133,6 @@
         .filter(el => !el.data.state)
         .map(switchFunction);
 
-      console.log(tagStateToAdd);
-      console.log(tagStateToDelete);
-
       this.$accessor.tags.REMOVE_SELECTED_TAG_STATE(tagStateToDelete);
       this.$accessor.tags.UPDATE_SELECTED_TAG_STATE(tagStateToAdd);
     }

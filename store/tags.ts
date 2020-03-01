@@ -143,7 +143,6 @@ export const mutations = mutationTree(state, {
   },
   UPDATE_SELECTED_TAG_STATE(state, tagStates: TagState[]) {
       const selectedTagState: TagState[] = state.selectedTagState;
-      console.log(selectedTagState);
       const notOverwriteTagState: TagState[] = [];
 
       for (let n = 0; n < tagStates.length; n++) {
