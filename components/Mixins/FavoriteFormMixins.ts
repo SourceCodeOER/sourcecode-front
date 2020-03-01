@@ -1,6 +1,6 @@
 import {Component, Vue, Ref} from "vue-property-decorator";
 import {ValidationObserver} from "vee-validate";
-import {CreateConfigurationRequest, SelectedTag, TagLabelObjectEmitted} from "~/types";
+import {CreateConfigurationRequest, SelectedTag} from "~/types";
 const debounce = require('lodash.debounce');
 
 
@@ -19,7 +19,7 @@ export default class extends Vue {
   }
 
   async deleteTag(event: { title: string, id: number, state: boolean }, tag: SelectedTag) {
-    await this.$accessor.tags.addOrRemoveTag({...tag, state: event.state});
+    await this.$accessor.tags.addOrRemoveTag({...tag, isSelected: event.state});
     await this.$accessor.tags.apply('default');
     await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
   }

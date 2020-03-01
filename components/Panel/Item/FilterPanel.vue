@@ -227,7 +227,7 @@
     get categoryWithSelectedTags(): { category: string, tags: CheckboxObject[] }[] {
       return this.$accessor.tags.tags.map((tag: CategoryWithSelectedTags) => {
         const tags: { title: string, state: boolean }[] = tag.tags.map(tagSelecter => {
-          return {title: tagSelecter.tag_text, state: tagSelecter.state}
+          return {title: tagSelecter.tag_text, state: tagSelecter.isSelected}
         });
         return {category: tag.category, tags}
       })
@@ -318,7 +318,7 @@
       selectedOptions.forEach(selectOption => {
         this.$accessor.tags.addOrRemoveTag({
           ...this.tags[index].tags[selectOption.index],
-          state: selectOption.data.state
+          isSelected: selectOption.data.state
         });
       });
 

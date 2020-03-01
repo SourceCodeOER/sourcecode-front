@@ -37,11 +37,28 @@
 
 
     <div class="tags__wrapper">
-      <Tag v-for="(tag, id) in selectedTags" :state="tag.state" :validated="tag.isValidated"
+      <Tag v-for="(tag, id) in selectedTags"
+           :state="tag.state"
            :title="tag.tag_text"
-           :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)"/>
+           :key="tag.tag_text + '_' + tag.category + '_'+ id"
+           :id="id"
+           @deleteTag="deleteTag($event, tag)"/>
     </div>
-    <br>
+
+    <div class="legend-wrapper">
+      <div class="legend__title">
+        Code couleur
+      </div>
+      <div class="legend legend--validated">
+        valide
+      </div>
+      <div class="legend legend--deprecated">
+        obsolète
+      </div>
+      <div class="legend legend--not-validated">
+        non valide
+      </div>
+    </div>
 
     <div class="cta__validate--wrapper">
       <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">

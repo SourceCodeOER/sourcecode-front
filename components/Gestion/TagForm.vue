@@ -35,11 +35,14 @@
     </ValidationObserver>
 
     <div class="cta__validate--wrapper">
-      <button @click="validateBeforeSubmit(false)" class="button--yellow-reverse cta__validate">
-        Mettre en attente
+      <button @click="validateBeforeSubmit('NOT_VALIDATED')" class="button--red-reverse cta__validate">
+        Invalider
       </button>
-      <button @click="validateBeforeSubmit(true)" class="button--ternary-color-reverse cta__validate">
-        Publier
+      <button @click="validateBeforeSubmit('DEPRECATED')" class="button--orange-reverse cta__validate">
+        Marquer comme obsolète
+      </button>
+      <button @click="validateBeforeSubmit('VALIDATED')" class="button--ternary-color-reverse cta__validate">
+        Valider
       </button>
     </div>
     <p class="disclaimer">* champs obligatoires</p>
@@ -54,7 +57,7 @@
   import {ValidationProvider, ValidationObserver} from 'vee-validate';
   import {AxiosError} from "axios";
   import {
-    TagProposal, Category, CreateTagRequest, TagExtended
+    TagState, Category, CreateTagRequest, TagExtended
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import Tag from "~/components/Tag/Tag.vue";
@@ -135,7 +138,7 @@
     /**
      * Validate the entire page and send the new exercise
      */
-    async validateBeforeSubmit(tagState: boolean) {
+    async validateBeforeSubmit(tagState: TagState) {
 
       // Basic validation form
       const isValid = await this.observer.validate();
@@ -145,7 +148,7 @@
         const tagsSettingsRequest: CreateTagRequest = [{
           text: this.form.title,
           category_id: this.categoriesWithoutLicense[this.selectedNewTag.index].id,
-          isValidated: tagState
+          state: tagState
         }];
 
         try {
@@ -156,7 +159,7 @@
               tag_id: this.tag.tag_id,
               tag_text: this.form.title,
               category_id: this.categoriesWithoutLicense[this.selectedNewTag.index].id,
-              isValidated: tagState,
+              state: tagState,
               version: this.tag.version
             };
 
@@ -167,7 +170,7 @@
             this.$displaySuccess("Le tag a bien été créé.");
           }
 
-          if(this.backToParentPage) {
+          if (this.backToParentPage) {
             this.$router.push('/administration/tags')
           }
 

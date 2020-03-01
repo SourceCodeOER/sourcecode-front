@@ -37,7 +37,7 @@
               <CustomSelect v-show="!isSelectedTagsEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Valider', 'Invalider', 'Supprimer']"/>
+                            :options="['Valider', 'Invalider', 'Marquer obsolète', 'Supprimer']"/>
             </transition>
 
             <nuxt-link to="/administration/tags/creer-tag">
@@ -65,7 +65,7 @@
 
             <tr v-for="tag in categoryWithTags.tags" :key="tag.tag_id + '_' + categoryWithTags.category + '_' + index">
               <td class="item-centered item-checkbox">
-                <CheckBox :state="tag.state" :id="tag.tag_id" @check="addOrRemoveTags($event, tag)"/>
+                <CheckBox :state="tag.isSelected" :id="tag.tag_id" @check="addOrRemoveTags($event, tag)"/>
               </td>
               <td class="item-left" @click="gotoExercise(tag.tag_id)">{{tag.tag_text}}</td>
               <td>
@@ -73,12 +73,16 @@
               </td>
               <td @click="gotoExercise(tag.tag_id)">{{tag.version}}</td>
               <td @click="gotoExercise(tag.tag_id)" class="item-centered">
-                <i title="Valide" v-if="tag.isValidated">
+                <i title="Valide" v-if="tag.state === 'VALIDATED'">
                   <Icon type="check" theme="theme--green"/>
                 </i>
 
-                <i title="Invalide" v-else-if="!tag.isValidated">
+                <i title="Invalide" v-else-if="tag.state === 'NOT_VALIDATED'">
                   <Icon type="close" theme="theme--red-light"/>
+                </i>
+
+                <i title="Invalide" v-else-if="tag.state === 'DEPRECATED'">
+                  <Icon type="archive" theme="theme--orange"/>
                 </i>
               </td>
             </tr>
@@ -95,7 +99,7 @@
   import {
     CategoryWithSelectedTags,
     CheckBoxObjectEmitted,
-    SelectedTag, TagExtended
+    SelectedTag, TagExtended, TagState
   } from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
@@ -170,7 +174,7 @@
      * @param tag
      */
     addOrRemoveTags({id, state}: CheckBoxObjectEmitted, tag: SelectedTag) {
-      this.$accessor.tags.addOrRemoveTag({...tag, state})
+      this.$accessor.tags.addOrRemoveTag({...tag, isSelected: state})
     }
 
     /**
@@ -190,12 +194,12 @@
     /**
      * update the state of exercises and notifies the user
      */
-    async updateStateOfTags(state: boolean) {
+    async updateStateOfTags(state: TagState) {
 
-      const updateState = (tag: SelectedTag, state: boolean) => {
+      const updateState = (tag: SelectedTag, state: TagState) => {
         const TagModified: TagExtended = {
           category_id: tag.category_id,
-          isValidated: state,
+          state: state,
           tag_id: tag.tag_id,
           tag_text: tag.tag_text,
           version: tag.version
@@ -204,10 +208,14 @@
         return this.$axios.$put('/api/tags', TagModified)
       };
 
+      const stateFormatted =
+        state === 'VALIDATED' ? 'validé' : state === 'NOT_VALIDATED'
+          ? 'invalidé' : `marqué${this.selectedTags.length === 1 ? '' : 's'} obsolète`;
+
       Promise
         .all(this.selectedTags.map(tag => updateState(tag, state)))
         .then((response) => {
-          this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${state ? 'validé' : 'invalidé'}${this.selectedTags.length === 1 ? '' : 's'}.`)
+          this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${stateFormatted}${this.selectedTags.length === 1 ? '' : 's'}.`);
           this.$accessor.tags.CLEAR();
           this.$accessor.tags.fetch();
 
@@ -242,14 +250,22 @@
       this.$router.push('/administration/tags/' + id)
     }
 
-
+    /**
+     * Handle action selection from CustomSelect component
+     * 0 : VALIDATED
+     * 1 : NOT_VALIDATED
+     * 2 : DEPRECATED
+     * 3 : delete the tag(s)
+     * @param action
+     */
     selectAction(action: { content: string, index: number }) {
-
       if (action.index === 0) {
-        this.updateStateOfTags(true)
+        this.updateStateOfTags("VALIDATED")
       } else if (action.index === 1) {
-        this.updateStateOfTags(false)
+        this.updateStateOfTags("NOT_VALIDATED")
       } else if (action.index === 2) {
+        this.updateStateOfTags("DEPRECATED")
+      } else if (action.index === 3) {
         this.deleteSelectedTags()
       }
 

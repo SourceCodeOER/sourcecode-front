@@ -8,16 +8,15 @@
         </h1>
 
         <div class="results">
-          {{nbOfResults}} résultats - <span @click.self="reset" class="init">Réinitialiser la recherche</span>
+          {{nbOfResults}} résultats - <span @click.self="reset" class="init">réinitialiser la recherche</span>
         </div>
       </div>
       <hr>
       <div class="tags-wrapper" v-if="confirmedTags.length > 0 || voteTag">
-        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text" :validated="true"
+        <Tag v-for="(tag, id) in confirmedTags" :state="tag.state" :title="tag.tag_text"
              :key="tag.tag_text + '_' + tag.category + '_'+ id" :id="id" @deleteTag="deleteTag($event, tag)"/>
-
         <Tag v-if="voteTag" :id="voteTag.id" :title="voteTag.title" :state="voteTag.state"
-             @deleteTag="removeRatingCriteria" :validated="true"/>
+             @deleteTag="removeRatingCriteria"/>
       </div>
     </header>
 
@@ -39,7 +38,7 @@
   import Tag from "~/components/Tag/Tag.vue";
   import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
-  import {Exercise, SelectedTag, TagLabelObjectEmitted} from "~/types";
+  import {Exercise, SelectedTag, TagLabelObjectEmitted, TagState} from "~/types";
 
   const ratio = .2;
 
@@ -85,7 +84,7 @@
       return this.$accessor.search.exercises
     }
 
-    get voteTag(): TagLabelObjectEmitted | undefined {
+    get voteTag(): { title: string, id: number, state: TagState } | undefined {
       const vote = this.$accessor.search.search_criterion.vote;
       let title = '';
 
@@ -98,7 +97,7 @@
 
         title += vote.value + ' étoiles'
 
-        return {title, id: 0, state: true}
+        return {title, id: 0, state: "VALIDATED"}
       }
       return undefined
     }
@@ -130,8 +129,8 @@
       })
     }
 
-    async deleteTag(event: { title: string, id: number, state: boolean }, tag: SelectedTag) {
-      await this.$accessor.tags.addOrRemoveTag({...tag, state: event.state});
+    async deleteTag(event: TagLabelObjectEmitted, tag: SelectedTag) {
+      await this.$accessor.tags.addOrRemoveTag({...tag, isSelected: false});
       await this.$accessor.tags.apply('default');
       await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
 

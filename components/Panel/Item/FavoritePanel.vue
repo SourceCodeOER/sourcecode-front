@@ -23,7 +23,6 @@
 </template>
 
 <script lang="ts">
-  import {BusEvent} from '~/components/Event/BusEvent'
   import {Component, Vue} from "vue-property-decorator";
   import {
     Configuration,
@@ -103,10 +102,10 @@
       searchCriterion.title = configuration.title ? configuration.title : "";
 
       const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
-        return {...tag, state: true}
+        return {...tag, isSelected: true}
       });
 
-      this.$accessor.tags.applyConfirmedTags({confirmedTags: confirmedTags.filter(tag => tag.isValidated), mode: "default"});
+      this.$accessor.tags.applyConfirmedTags({confirmedTags: confirmedTags.filter(tag => tag.isSelected), mode: "default"});
 
       searchCriterion.tags = this.$accessor.tags.tagsRequest;
       searchRequest.data = searchCriterion;
