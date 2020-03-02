@@ -45,20 +45,7 @@
            @deleteTag="deleteTag($event, tag)"/>
     </div>
 
-    <div class="legend-wrapper">
-      <div class="legend__title">
-        Code couleur
-      </div>
-      <div class="legend legend--validated">
-        valide
-      </div>
-      <div class="legend legend--deprecated">
-        obsolète
-      </div>
-      <div class="legend legend--not-validated">
-        non valide
-      </div>
-    </div>
+    <TagColorLegend/>
 
     <div class="cta__validate--wrapper">
       <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
@@ -76,11 +63,11 @@
   import FavoriteFormMixins from "~/components/Mixins/FavoriteFormMixins";
   import {Configuration, CreateConfigurationRequest, SelectedTag, UpdateConfigurationRequest} from "../../types";
   import {ValidationObserver, ValidationProvider} from "vee-validate";
-  import qs from "qs";
   import Tag from "../Tag/Tag.vue";
+  import TagColorLegend from "~/components/Tag/TagColorLegend.vue";
 
   @Component({
-    components: {Tag, ValidationProvider, ValidationObserver}
+    components: {TagColorLegend, Tag, ValidationProvider, ValidationObserver}
   })
   export default class FavoriteForm extends Mixins(FilterPanelMixins, FavoriteFormMixins) {
 

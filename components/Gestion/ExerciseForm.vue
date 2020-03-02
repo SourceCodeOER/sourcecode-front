@@ -57,21 +57,7 @@
                                                                    class="link">ici</span> !
     </p>
 
-    <div class="legend-wrapper">
-      <div class="legend__title">
-        Code couleur
-      </div>
-      <div class="legend legend--validated">
-        valide
-      </div>
-      <div class="legend legend--deprecated">
-        obsolète
-      </div>
-      <div class="legend legend--not-validated">
-        non valide
-      </div>
-    </div>
-
+    <TagColorLegend/>
 
     <transition name="fade">
       <ValidationObserver class="validation__tag" ref="observer3" tag="form" v-show="showNewTagLayout"
@@ -193,10 +179,11 @@
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import jsonFormData from 'json-form-data';
   import ExerciseFormMixins from "~/components/Mixins/ExerciseFormMixins";
+  import TagColorLegend from "~/components/Tag/TagColorLegend.vue";
 
   const debounce = require('lodash.debounce');
   @Component({
-    components: {CustomSelect, ValidationObserver, ValidationProvider, RichTextEditor, Tag, Icon}
+    components: {TagColorLegend, CustomSelect, ValidationObserver, ValidationProvider, RichTextEditor, Tag, Icon}
   })
   export default class ExerciseForm extends Mixins(FilterPanelMixins, ExerciseFormMixins) {
     @Prop({type: Object, default: undefined}) exercise!: Exercise | undefined;
