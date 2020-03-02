@@ -19,47 +19,6 @@ h1 {
   }
 }
 
-.legend-wrapper {
-  font-weight: 200;
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  .legend__title {
-    margin-bottom: 10px;
-    text-decoration: underline;
-  }
-
-  > .legend {
-    &:not(:last-child) {
-      margin-bottom: 7px;
-    }
-
-    &:before {
-      content: "";
-      position: relative;
-      width: 10px;
-      height: 10px;
-      @include border-radius(50%);
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 7px;
-    }
-  }
-
-
-  .legend--validated:before {
-    background-color: $SECONDARY_COLOR;
-  }
-
-  .legend--not-validated:before {
-    background-color: lighten($RED, 10);
-  }
-
-  .legend--deprecated:before {
-    background-color: lighten($ORANGE, 13);
-  }
-}
-
 .content {
   background-color: white;
   border-radius: 4px;
