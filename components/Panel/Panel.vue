@@ -56,7 +56,8 @@
         'historical-panel',
         'exercises-check-panel',
         'details-panel',
-        'tag-filter-panel'
+        'tag-filter-panel',
+        'user-filter-panel'
       ];
 
       // Search for every added panel
