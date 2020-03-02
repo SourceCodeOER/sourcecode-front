@@ -24,7 +24,7 @@
       <section class="exercise">
         <h1>{{exercise.title}}</h1>
         <span>Créé le {{$moment(exercise.createdAt).format("DD/MM/YY à H:mm")}}</span> | <span>Mis à jour le {{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</span>
-        <button v-if="isTheCreator || userRole === 'admin' || userRole === 'super_admin'" @click="modifyExercise" class="button--ternary-color-reverse">Modifier l'exercice</button>
+        <button v-if="isTheCreator || ['admin', 'super_admin'].includes(userRole)" @click="modifyExercise" class="button--ternary-color-reverse">Modifier l'exercice</button>
 
         <h2 class="title--primary-color__light">Description</h2>
 
