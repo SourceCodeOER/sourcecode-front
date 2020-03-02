@@ -15,9 +15,8 @@ async function start() {
   const {host, port} = nuxt.options.server;
 
   // Build only in dev mode
-  await nuxt.ready();
-
   if(config.dev) {
+    await nuxt.ready();
     const builder = new Builder(nuxt);
     await builder.build();
   }
