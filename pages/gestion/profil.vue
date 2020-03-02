@@ -14,7 +14,7 @@
 
         <div class="profile__item">
           <h2 class="title--secondary-color">Rôle</h2>
-          {{user.role}}
+          {{userRoleFormatted}}
         </div>
         <div class="profile__item">
           <h2 class="title--secondary-color">Adresse mail</h2>
@@ -46,6 +46,19 @@
   })
   export default class extends Vue {
     user!: UserInfo;
+
+    get userRoleFormatted() {
+      switch (this.user.role) {
+        case "admin":
+          return "Administrateur";
+        case "user":
+          return "Utilisateur";
+        case "super_admin":
+          return "Super Administrateur";
+        default:
+          return "Visiteur"
+      }
+    }
   }
 </script>
 

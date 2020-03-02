@@ -146,7 +146,7 @@
 
 
     <div class="cta__validate--wrapper">
-      <template v-if="userRole === 'admin'">
+      <template v-if="userRole === 'admin' || userRole === 'super_admin'">
         <button @click="validateBeforeSubmit('NOT_VALIDATED')" class="button--red-reverse cta__validate">
           Invalider
         </button>
@@ -157,7 +157,7 @@
       <button @click="validateBeforeSubmit('DRAFT')" class="button--ternary-color cta__validate">
         Brouillon
       </button>
-      <button v-if="userRole === 'admin'" @click="validateBeforeSubmit('VALIDATED')"
+      <button v-if="userRole === 'admin' || userRole === 'super_admin'" @click="validateBeforeSubmit('VALIDATED')"
               class="button--ternary-color-reverse cta__validate">
         Valider
       </button>
