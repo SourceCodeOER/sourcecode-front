@@ -35,7 +35,7 @@
             -->
 
             <transition name="fade">
-              <button v-show="!isSelectedCategoriesEmpty" @click="deleteSelectedCategories"
+              <button v-show="!isSelectedCategoriesEmpty && role === 'super_admin'" @click="deleteSelectedCategories"
                       class="button--red-reverse button--with-symbol">
                 Supprimer
                 <Icon type="trash" theme="theme--white"/>
@@ -54,7 +54,7 @@
         <table class="table--with-sticky-header">
           <thead>
           <tr>
-            <th class="item-checkbox"></th>
+            <th class="item-checkbox" v-if="role === 'super_admin'"></th>
             <th class="item-left">Nom</th>
             <th>Nb de tags</th>
             <th>Nb de tags valides</th>
@@ -67,7 +67,7 @@
 
           <tr v-for="(category, index) in filteredCategoriesWithSearchModel"
               :key="category.id + '_' + category.category + '_' + index">
-            <td class="item-centered item-checkbox">
+            <td class="item-centered item-checkbox" v-if="role === 'super_admin'">
               <CheckBox :state="category.state" :id="category.id" @check="addOrRemoveCategories($event, category)"/>
             </td>
             <td class="item-left" @click="gotoCategory(category.category)">{{category.category}}</td>
@@ -89,7 +89,7 @@
     Category, CategoryExtended, CategoryExtendedWithState,
     CategoryWithSelectedTags,
     CheckBoxObjectEmitted,
-    SelectedTag, TagExtended
+    SelectedTag, TagExtended, UserRole
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import CheckBox from "~/components/Input/CheckBox.vue";
@@ -144,6 +144,10 @@
       return this.selectedCategories.length === 0
     }
 
+    get role(): UserRole {
+      return this.$auth.user.role
+    }
+
     get selectedCategories(): CategoryExtendedWithState[] {
       return this.categories.filter(cat => cat.state)
     }
@@ -170,11 +174,13 @@
      * Remove from the databases the exercises and update the search store
      */
     async deleteSelectedCategories() {
+      if(this.role !== 'super_admin') return;
+
       try {
         const n = this.selectedCategories.length;
         await this.$axios.$delete('/api/bulk/delete_tags_categories', {data: this.selectedCategories.map(cat => cat.id)});
 
-        this.$displaySuccess(`${n} catégorie${n > 1 ? 's ont ' : 'a '} bien été supprimée${n > 1 ? 's' : ''}`);
+        this.$displaySuccess(`${n} catégorie${n > 1 ? 's ont ' : ' a '} bien été supprimée${n > 1 ? 's' : ''}`);
 
         const data: CategoryExtended[] = await this.$axios.$get('/api/tags_categories?fetchStats=1');
 
@@ -211,10 +217,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-  @import "../../../assets/css/variables";
-  @import "../../../assets/css/function";
-  @import "../../../assets/css/font";
   @import "../../../assets/css/table";
 </style>
 

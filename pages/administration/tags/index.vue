@@ -37,7 +37,7 @@
               <CustomSelect v-show="!isSelectedTagsEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Valider', 'Invalider', 'Marquer obsolète', 'Supprimer']"/>
+                            :options="dropdownSelectionOptions"/>
             </transition>
 
             <nuxt-link to="/administration/tags/creer-tag">
@@ -67,12 +67,12 @@
               <td class="item-centered item-checkbox">
                 <CheckBox :state="tag.isSelected" :id="tag.tag_id" @check="addOrRemoveTags($event, tag)"/>
               </td>
-              <td class="item-left" @click="gotoExercise(tag.tag_id)">{{tag.tag_text}}</td>
+              <td class="item-left" @click="gotoLink(tag.tag_id)">{{tag.tag_text}}</td>
               <td>
                 {{categoryWithTags.category}}
               </td>
-              <td @click="gotoExercise(tag.tag_id)">{{tag.version}}</td>
-              <td @click="gotoExercise(tag.tag_id)" class="item-centered">
+              <td @click="gotoLink(tag.tag_id)">{{tag.version}}</td>
+              <td @click="gotoLink(tag.tag_id)" class="item-centered">
                 <i title="Valide" v-if="tag.state === 'VALIDATED'">
                   <Icon type="check" theme="theme--green"/>
                 </i>
@@ -99,7 +99,7 @@
   import {
     CategoryWithSelectedTags,
     CheckBoxObjectEmitted,
-    SelectedTag, TagExtended, TagState
+    SelectedTag, TagExtended, TagState, UserRole
   } from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
@@ -152,6 +152,16 @@
       return this.$accessor.tags.selectedTags
     }
 
+
+    get role(): UserRole {
+      return this.$auth.user.role;
+    }
+
+    get dropdownSelectionOptions(): string[] {
+      const options: string[] = ['Valider', 'Invalider', 'Marquer obsolète'];
+      return this.role === 'admin' ? options : [...options, 'Supprimer']
+    }
+
     get filteredCategoriesWithSearchModel(): CategoryWithSelectedTags[] {
       return this.searchModel === '' ? this.categoriesWithTags : this.categoriesWithTags.map(categoryWithTags => {
         const filteredTags: SelectedTag[] = categoryWithTags.tags.filter(tag => {
@@ -178,7 +188,7 @@
     }
 
     /**
-     * Remove from the databases the exercises and update the search store
+     * Remove from the databases the tags and update the tag store
      */
     async deleteSelectedTags() {
       try {
@@ -192,7 +202,7 @@
     }
 
     /**
-     * update the state of exercises and notifies the user
+     * update the state of tags and notifies the user
      */
     async updateStateOfTags(state: TagState) {
 
@@ -243,10 +253,10 @@
     }
 
     /**
-     * Go to the exercise with a specific id
+     * Go to the tag with a specific id
      * @param id
      */
-    gotoExercise(id: number) {
+    gotoLink(id: number) {
       this.$router.push('/administration/tags/' + id)
     }
 
@@ -265,7 +275,7 @@
         this.updateStateOfTags("NOT_VALIDATED")
       } else if (action.index === 2) {
         this.updateStateOfTags("DEPRECATED")
-      } else if (action.index === 3) {
+      } else if (action.index === 3 && this.role === 'super_admin') {
         this.deleteSelectedTags()
       }
 
@@ -275,10 +285,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-  @import "../../../assets/css/variables";
-  @import "../../../assets/css/function";
-  @import "../../../assets/css/font";
   @import "../../../assets/css/table";
 </style>
 

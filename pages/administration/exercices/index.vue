@@ -35,7 +35,8 @@
         <h1>Gestion des exercices</h1>
 
         <div>Nombre de résultat(s) : {{nbExercises}}</div>
-        <div class="subheader"><span @click.self="exportAll" class="export">Exporter les résultats</span> - <span @click.self="reset" class="init">Réinitialiser la recherche</span></div>
+        <div class="subheader"><span @click.self="exportAll" class="export">Exporter les résultats</span> - <span
+          @click.self="reset" class="init">Réinitialiser la recherche</span></div>
 
 
         <div class="header-wrapper">
@@ -51,7 +52,7 @@
               <CustomSelect v-show="!isSelectedExercisesEmpty" :stateless="true" @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Valider', 'Brouillon', 'Mettre en attente', 'Invalider', 'Exporter', 'Archiver', 'Supprimer']"/>
+                            :options="dropdownSelectionOptions"/>
             </transition>
 
             <!-- In case you only want a delete button -->
@@ -147,7 +148,7 @@
     ExerciseState,
     ExerciseWithSelection,
     ExportExerciseRequest,
-    SearchExerciseRequest
+    SearchExerciseRequest, UserRole
   } from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
@@ -228,6 +229,15 @@
       return exercises.map((exercise: Exercise) => {
         return {...exercise, isSelected: binarySearch(this.selectedExercises, exercise.id, 0, length - 1)}
       });
+    }
+
+    get role(): UserRole {
+      return this.$auth.user.role;
+    }
+
+    get dropdownSelectionOptions(): string[] {
+      const options: string[] = ['Valider', 'Brouillon', 'Mettre en attente', 'Invalider', 'Exporter', 'Archiver'];
+      return this.role === 'admin' ? options : [...options, 'Supprimer']
     }
 
     /**
@@ -363,7 +373,7 @@
         this.exportExercises()
       } else if (action.index === 5) {
         this.updateStateOfExercises('ARCHIVED')
-      } else if (action.index === 6) {
+      } else if (action.index === 6 && this.role === 'super_admin') {
         this.deleteSelectedExercises()
       }
     }
@@ -389,7 +399,7 @@
         const orderBy = this.$accessor.search.orderBy;
         const includeOptions = this.$accessor.search.includeOptions;
 
-        const exportExerciseRequest:ExportExerciseRequest = {
+        const exportExerciseRequest: ExportExerciseRequest = {
           data,
           filterOptions,
           orderBy,
@@ -423,10 +433,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-  @import "../../../assets/css/variables";
-  @import "../../../assets/css/function";
-  @import "../../../assets/css/font";
   @import "../../../assets/css/table";
 </style>
 
