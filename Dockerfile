@@ -37,8 +37,6 @@ COPY package*.json ./
 
 # Install production dependancies
 RUN npm ci --only=production
-# Need @nuxt/typescript-build because of /server/index.js
-RUN npm install @nuxt/typescript-build --no-save
 
 # Default port
 EXPOSE 3000
