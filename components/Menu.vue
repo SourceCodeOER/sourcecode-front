@@ -37,7 +37,7 @@
           </nuxt-link>
         </ul>
 
-        <template v-if="isAuthenticated && role === 'admin'">
+        <template v-if="isAuthenticated && (role === 'admin' || role === 'super_admin')">
           <span>Administration</span>
           <ul>
             <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/exercices">
@@ -57,6 +57,12 @@
                 <Icon type="tags" theme="theme--white"/>
               </div>
               Tags
+            </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/utilisateurs">
+              <div class="logo-link-wrapper">
+                <Icon type="user" theme="theme--white"/>
+              </div>
+              Utilisateurs
             </nuxt-link>
           </ul>
         </template>

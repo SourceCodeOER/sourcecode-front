@@ -5,6 +5,7 @@ import * as tags from '~/store/tags'
 import * as historical from '~/store/historical'
 import * as search from '~/store/search'
 import * as favorites from '~/store/favorites'
+import * as users from '~/store/users'
 import {Environment} from "~/types";
 
 
@@ -45,6 +46,7 @@ export const accessorType = getAccessorType({
     tags,
     historical,
     search,
-    favorites
+    favorites,
+    users
   },
 });
