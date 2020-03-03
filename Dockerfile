@@ -35,8 +35,9 @@ RUN apk --no-cache add jq
 COPY --from=Build /frontend ./
 COPY package*.json ./
 
-# Install production dependancies
-RUN npm ci --only=production
+# TODO Only Install production dependancies (later)
+#RUN npm ci --only=production
+RUN npm ci
 
 # Removes unnecessary files in node modules
 RUN find "$(pwd)/node_modules" -type f -name "*.ts" -exec rm -f {} \;
