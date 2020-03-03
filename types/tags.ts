@@ -2,7 +2,7 @@
  * types for everything related to Tags
  */
 
-export type TagState = "DEPRECATED" | "VALIDATED" | "NOT_VALIDATED";
+export type TagState = "DEPRECATED" | "VALIDATED" | "NOT_VALIDATED" | "PENDING";
 
 export interface TagsSettingsRequest {
   tags_ids?: number[],
