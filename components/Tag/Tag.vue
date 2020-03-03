@@ -28,6 +28,8 @@
           return "tag--not-validated";
         case "DEPRECATED":
           return "tag--deprecated";
+        case "PENDING":
+          return "tag--pending";
         default:
           return "tag--validated"
       }
@@ -79,6 +81,12 @@
 
     &.tag--deprecated {
       background-color: lighten($ORANGE, 13);
+      border: 0;
+      color: white;
+    }
+
+    &.tag--pending {
+      background-color: lighten($YELLOW, 13);
       border: 0;
       color: white;
     }

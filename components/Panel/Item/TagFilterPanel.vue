@@ -18,8 +18,9 @@
                           :select-all-option="true"
                           :default-options="[
               {title:'Valide', state: false},
-              {title:'Invalide', state: false},
-              {title:'Obsolète', state: false}
+              {title:'En attente', state: false},
+              {title:'Obsolète', state: false},
+              {title:'Invalide', state: false}
               ]">
           Status
         </CheckBoxSelecter>
@@ -117,11 +118,13 @@
           case 0:
             return 'VALIDATED';
           case 1:
-            return 'NOT_VALIDATED';
+            return 'PENDING';
           case 2:
             return 'DEPRECATED';
+          case 3:
+            return 'NOT_VALIDATED';
           default:
-            return 'DEPRECATED';
+            return 'VALIDATED';
         }
       };
 

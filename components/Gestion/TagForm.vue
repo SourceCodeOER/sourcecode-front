@@ -41,6 +41,9 @@
       <button @click="validateBeforeSubmit('DEPRECATED')" class="button--orange-reverse cta__validate">
         Marquer comme obsolète
       </button>
+      <button @click="validateBeforeSubmit('PENDING')" class="button--yellow-reverse cta__validate">
+        Mettre en attente
+      </button>
       <button @click="validateBeforeSubmit('VALIDATED')" class="button--ternary-color-reverse cta__validate">
         Valider
       </button>
