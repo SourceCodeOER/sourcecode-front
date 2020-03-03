@@ -41,7 +41,7 @@ RUN npm ci --only=production
 # Removes unnecessary files in node modules
 RUN find "$(pwd)/node_modules" -type f -name "*.ts" -exec rm -f {} \;
 RUN find "$(pwd)/node_modules" -type f -name "*.md" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type d -name "docs" -exec rm -rf "{}" \;
+RUN find "$(pwd)/node_modules" -type d -name "docs" -prune -exec rm -rf {} +;
 
 # Default port
 EXPOSE 3000
