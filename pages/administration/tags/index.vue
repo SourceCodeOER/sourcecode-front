@@ -81,7 +81,11 @@
                   <Icon type="close" theme="theme--red-light"/>
                 </i>
 
-                <i title="Invalide" v-else-if="tag.state === 'DEPRECATED'">
+                <i title="En attente" v-else-if="tag.state === 'PENDING'">
+                  <Icon type="send" theme="theme--yellow"/>
+                </i>
+
+                <i title="Obsolète" v-else-if="tag.state === 'DEPRECATED'">
                   <Icon type="archive" theme="theme--orange"/>
                 </i>
               </td>
@@ -158,7 +162,7 @@
     }
 
     get dropdownSelectionOptions(): string[] {
-      const options: string[] = ['Valider', 'Invalider', 'Marquer obsolète'];
+      const options: string[] = ['Valider', ' Mettre en attente', 'Invalider', 'Marquer obsolète'];
       return this.role === 'admin' ? options : [...options, 'Supprimer']
     }
 
@@ -218,14 +222,32 @@
         return this.$axios.$put('/api/tags', TagModified)
       };
 
-      const stateFormatted =
-        state === 'VALIDATED' ? 'validé' : state === 'NOT_VALIDATED'
-          ? 'invalidé' : `marqué${this.selectedTags.length === 1 ? '' : 's'} obsolète`;
+      const length: number = this.selectedTags.length;
+      const plural: string = length ? '' : 's';
+
+      let message: string;
+
+      switch (state) {
+        case "DEPRECATED":
+          message = `marqué${plural} obsolète${plural}`;
+          break;
+        case "PENDING":
+          message = 'mis en attente';
+          break;
+        case "NOT_VALIDATED":
+          message = `invalidé${plural}`;
+          break;
+        case "VALIDATED":
+          message = `validé${plural}`;
+          break;
+        default:
+          message = `modifié${plural}`
+      }
 
       Promise
         .all(this.selectedTags.map(tag => updateState(tag, state)))
         .then((response) => {
-          this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${stateFormatted}${this.selectedTags.length === 1 ? '' : 's'}.`);
+          this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${message}.`);
           this.$accessor.tags.CLEAR();
           this.$accessor.tags.fetch();
 
@@ -263,19 +285,22 @@
     /**
      * Handle action selection from CustomSelect component
      * 0 : VALIDATED
-     * 1 : NOT_VALIDATED
-     * 2 : DEPRECATED
-     * 3 : delete the tag(s)
+     * 1 : PENDING
+     * 2 : NOT_VALIDATED
+     * 3 : DEPRECATED
+     * 4 : delete the tag(s)
      * @param action
      */
     selectAction(action: { content: string, index: number }) {
       if (action.index === 0) {
         this.updateStateOfTags("VALIDATED")
       } else if (action.index === 1) {
-        this.updateStateOfTags("NOT_VALIDATED")
+        this.updateStateOfTags("PENDING")
       } else if (action.index === 2) {
+        this.updateStateOfTags("NOT_VALIDATED")
+      } else if (action.index === 3) {
         this.updateStateOfTags("DEPRECATED")
-      } else if (action.index === 3 && this.role === 'super_admin') {
+      } else if (action.index === 4 && this.role === 'super_admin') {
         this.deleteSelectedTags()
       }
 

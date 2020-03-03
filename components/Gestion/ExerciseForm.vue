@@ -45,7 +45,7 @@
       <Tag v-for="(tag, id) in newTags"
            @deleteTag="deleteTagProposal"
            :title="tag.text"
-           state="NOT_VALIDATED"
+           state="PENDING"
            :key="tag.tag_text + '_'+ id"
            :id="id"/>
     </div>
