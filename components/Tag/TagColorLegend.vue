@@ -6,6 +6,9 @@
     <div class="legend legend--validated">
       valide
     </div>
+    <div class="legend legend--pending">
+      en attente
+    </div>
     <div class="legend legend--deprecated">
       obsolète
     </div>
@@ -61,6 +64,10 @@
 
     .legend--not-validated:before {
       background-color: lighten($RED, 10);
+    }
+
+    .legend--pending:before {
+      background-color: lighten($YELLOW, 13);
     }
 
     .legend--deprecated:before {
