@@ -35,7 +35,7 @@
             -->
 
             <transition name="fade">
-              <button v-show="!isSelectedCategoriesEmpty && role === 'super_admin'" @click="deleteSelectedCategories"
+              <button v-show="!isSelectedCategoriesEmpty && isSuperAdmin" @click="deleteSelectedCategories"
                       class="button--red-reverse button--with-symbol">
                 Supprimer
                 <Icon type="trash" theme="theme--white"/>
@@ -54,7 +54,7 @@
         <table class="table--with-sticky-header">
           <thead>
           <tr>
-            <th class="item-checkbox" v-if="role === 'super_admin'"></th>
+            <th class="item-checkbox" v-if="isSuperAdmin"></th>
             <th class="item-left">Nom</th>
             <th>Nb de tags</th>
             <th>Nb de tags valides</th>
@@ -67,7 +67,7 @@
 
           <tr v-for="(category, index) in filteredCategoriesWithSearchModel"
               :key="category.id + '_' + category.category + '_' + index">
-            <td class="item-centered item-checkbox" v-if="role === 'super_admin'">
+            <td class="item-centered item-checkbox" v-if="isSuperAdmin">
               <CheckBox :state="category.state" :id="category.id" @check="addOrRemoveCategories($event, category)"/>
             </td>
             <td class="item-left" @click="gotoCategory(category.category)">{{category.category}}</td>
@@ -84,18 +84,16 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue, Ref} from 'vue-property-decorator'
+  import {Component, Ref, Mixins} from 'vue-property-decorator'
   import {
-    Category, CategoryExtended, CategoryExtendedWithState,
-    CategoryWithSelectedTags,
-    CheckBoxObjectEmitted,
-    SelectedTag, TagExtended, UserRole
+    CategoryExtended, CategoryExtendedWithState,
+    CheckBoxObjectEmitted
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import CheckBox from "~/components/Input/CheckBox.vue";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import TagFilterPanel from "~/components/Panel/Item/TagFilterPanel.vue";
-  import {AxiosError} from "~/node_modules/axios";
+  import UserMixins from "~/components/Mixins/Api/UserMixins";
 
   @Component({
     components: {
@@ -127,7 +125,7 @@
     },
     middleware: ['auth', 'admin']
   })
-  export default class extends Vue {
+  export default class extends Mixins(UserMixins) {
 
     categories!: CategoryExtendedWithState[];
     /**
@@ -142,10 +140,6 @@
      */
     get isSelectedCategoriesEmpty() {
       return this.selectedCategories.length === 0
-    }
-
-    get role(): UserRole {
-      return this.$auth.user.role
     }
 
     get selectedCategories(): CategoryExtendedWithState[] {
@@ -174,7 +168,7 @@
      * Remove from the databases the exercises and update the search store
      */
     async deleteSelectedCategories() {
-      if(this.role !== 'super_admin') return;
+      if (!this.isSuperAdmin) return;
 
       try {
         const n = this.selectedCategories.length;

@@ -99,11 +99,11 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue, Ref} from 'vue-property-decorator'
+  import {Component, Ref, Mixins} from 'vue-property-decorator'
   import {
     CategoryWithSelectedTags,
     CheckBoxObjectEmitted,
-    SelectedTag, TagExtended, TagState, UserRole
+    SelectedTag, TagExtended, TagState
   } from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
@@ -115,6 +115,8 @@
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import TagFilterPanel from "~/components/Panel/Item/TagFilterPanel.vue";
   import {AxiosError} from "~/node_modules/axios";
+  import UserMixins from "~/components/Mixins/Api/UserMixins";
+  import {User} from "~/assets/js/api/user";
 
   @Component({
     components: {
@@ -133,7 +135,7 @@
     },
     middleware: ['auth', 'admin', 'reset-search-request']
   })
-  export default class extends Vue {
+  export default class extends Mixins(UserMixins) {
     /**
      * A reference to the input html element for the search
      */
@@ -157,13 +159,18 @@
     }
 
 
-    get role(): UserRole {
-      return this.$auth.user.role;
-    }
-
     get dropdownSelectionOptions(): string[] {
       const options: string[] = ['Valider', ' Mettre en attente', 'Invalider', 'Marquer obsolète'];
-      return this.role === 'admin' ? options : [...options, 'Supprimer']
+
+      switch (this.role) {
+        case User.ADMIN:
+          return options;
+        case User.SUPER_ADMIN:
+          return [...options, 'Supprimer'];
+      }
+
+      return []
+
     }
 
     get filteredCategoriesWithSearchModel(): CategoryWithSelectedTags[] {

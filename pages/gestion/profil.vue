@@ -14,7 +14,7 @@
 
         <div class="profile__item">
           <h2 class="title--secondary-color">Rôle</h2>
-          {{userRoleFormatted}}
+          {{userRoleFormatted(user.role)}}
         </div>
         <div class="profile__item">
           <h2 class="title--secondary-color">Adresse mail</h2>
@@ -31,35 +31,17 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
+  import {Component, Mixins} from 'vue-property-decorator'
   import Icon from "~/components/Symbols/Icon.vue";
-  import {UserInfo} from "~/types";
+  import UserMixins from "~/components/Mixins/Api/UserMixins";
 
   @Component({
     components: {
       Icon
     },
-    async asyncData({$auth}) {
-      return {user: $auth.user}
-    },
     middleware: 'auth'
   })
-  export default class extends Vue {
-    user!: UserInfo;
-
-    get userRoleFormatted() {
-      switch (this.user.role) {
-        case "admin":
-          return "Administrateur";
-        case "user":
-          return "Utilisateur";
-        case "super_admin":
-          return "Super Administrateur";
-        default:
-          return "Visiteur"
-      }
-    }
-  }
+  export default class extends Mixins(UserMixins) {}
 </script>
 
 <style lang="scss" scoped>
