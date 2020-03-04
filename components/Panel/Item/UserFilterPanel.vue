@@ -34,6 +34,7 @@
     UserRole
   } from "~/types";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
+  import {User} from "~/assets/js/api/user";
 
   @Component({
     components: {
@@ -78,13 +79,13 @@
       const switchFunction = function (el: CheckboxSelecterObjectEmitted) {
         switch (el.index) {
           case 0:
-            return 'user';
+            return User.USER;
           case 1:
-            return 'admin';
+            return User.ADMIN;
           case 2:
-            return 'super_admin';
+            return User.SUPER_ADMIN;
           default:
-            return 'user';
+            return User.USER;
         }
       };
 

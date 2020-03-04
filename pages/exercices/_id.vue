@@ -24,7 +24,9 @@
       <section class="exercise">
         <h1>{{exercise.title}}</h1>
         <span>Créé le {{$moment(exercise.createdAt).format("DD/MM/YY à H:mm")}}</span> | <span>Mis à jour le {{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</span>
-        <button v-if="isTheCreator || ['admin', 'super_admin'].includes(userRole)" @click="modifyExercise" class="button--ternary-color-reverse">Modifier l'exercice</button>
+        <button v-if="isTheCreator || isAdmin || isSuperAdmin" @click="modifyExercise"
+                class="button--ternary-color-reverse">Modifier l'exercice
+        </button>
 
         <h2 class="title--primary-color__light">Description</h2>
 
@@ -35,8 +37,8 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from "vue-property-decorator";
-  import {Exercise, UserRole} from "~/types";
+  import {Component, Mixins} from "vue-property-decorator";
+  import {Exercise} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import hljs from 'highlight.js/lib/highlight';
   import javascript from 'highlight.js/lib/languages/javascript';
@@ -48,6 +50,7 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import DetailsPanel from "~/components/Panel/Item/DetailsPanel.vue";
+  import UserMixins from "~/components/Mixins/Api/UserMixins";
 
   hljs.registerLanguage('javascript', javascript);
   hljs.registerLanguage('css', css);
@@ -67,7 +70,7 @@
       const id = params.id;
 
       try {
-        const exercise: Exercise = await $axios.$get(`api/exercises/${id}`, {params: {includeOptions: {includeCreator:true}}});
+        const exercise: Exercise = await $axios.$get(`api/exercises/${id}`, {params: {includeOptions: {includeCreator: true}}});
         return {exercise}
       } catch (e) {
         error({statusCode: 404, message: "Cette exercice est introuvable"});
@@ -78,40 +81,24 @@
     auth: false,
     middleware: ['exercises-store']
   })
-  export default class extends Vue {
+  export default class extends Mixins(UserMixins) {
     exercise!: Exercise;
 
     get creator() {
       return this.exercise.creator ? this.exercise.creator.email : ''
     }
 
-    get user(): string | undefined {
-      if(this.$auth.loggedIn) {
-        return this.$auth.user.email
-      } else {
-        return undefined
-      }
-    }
-
-    get userRole(): UserRole | undefined {
-      if(this.user) {
-        return this.$auth.user.role
-      } else {
-        return undefined
-      }
-    }
-
     get isTheCreator() {
-      if(!this.user || !this.userRole) return false;
+      if (!this.user) return false;
       else {
-        return this.user === this.creator
+        return this.user.email === this.creator
       }
     }
 
     modifyExercise() {
-      if(this.userRole === 'admin' || this.userRole === 'super_admin') {
+      if (this.isAdmin || this.isSuperAdmin) {
         this.$router.push('/administration/exercices/' + this.exercise.id)
-      } else if(this.userRole === 'user') {
+      } else if (this.isUser) {
         this.$router.push('/gestion/mes-exercices/' + this.exercise.id)
       }
     }
@@ -145,7 +132,7 @@
       button {
         position: absolute;
         right: 20px;
-        top:20px;
+        top: 20px;
         font-size: .75em;
       }
     }

@@ -148,7 +148,7 @@
     ExerciseState,
     ExerciseWithSelection,
     ExportExerciseRequest,
-    SearchExerciseRequest, UserRole
+    SearchExerciseRequest
   } from "~/types";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import HistoricalPanel from "~/components/Panel/Item/HistoricalPanel.vue";
@@ -161,6 +161,8 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
+  import UserMixins from "~/components/Mixins/Api/UserMixins";
+  import {User} from "~/assets/js/api/user";
 
   const debounce = require('lodash.debounce');
 
@@ -196,7 +198,7 @@
     },
     middleware: ['auth', 'admin', 'reset-search-request']
   })
-  export default class extends Mixins(IntersectMixins) {
+  export default class extends Mixins(UserMixins, IntersectMixins) {
     /**
      * A reference to the input html element for the search
      */
@@ -231,13 +233,17 @@
       });
     }
 
-    get role(): UserRole {
-      return this.$auth.user.role;
-    }
-
     get dropdownSelectionOptions(): string[] {
       const options: string[] = ['Valider', 'Brouillon', 'Mettre en attente', 'Invalider', 'Exporter', 'Archiver'];
-      return this.role === 'admin' ? options : [...options, 'Supprimer']
+
+      switch (this.role) {
+        case User.ADMIN:
+          return options;
+        case User.SUPER_ADMIN:
+          return [...options, 'Supprimer']
+      }
+
+      return []
     }
 
     /**
@@ -373,7 +379,7 @@
         this.exportExercises()
       } else if (action.index === 5) {
         this.updateStateOfExercises('ARCHIVED')
-      } else if (action.index === 6 && this.role === 'super_admin') {
+      } else if (action.index === 6 && this.isSuperAdmin) {
         this.deleteSelectedExercises()
       }
     }

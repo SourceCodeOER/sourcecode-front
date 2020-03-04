@@ -31,11 +31,11 @@
           <div class="header-wrapper__buttons">
 
             <transition name="fade">
-              <CustomSelect v-show="!isSelectedUsersEmpty && role === 'super_admin'" :stateless="true"
+              <CustomSelect v-show="!isSelectedUsersEmpty && isSuperAdmin" :stateless="true"
                             @change="selectAction"
                             name="moreActions" legend="Plus d'actions"
                             class="custom-select--primary-color custom-select-focus--primary-color"
-                            :options="['Utilisateur', 'Admin', 'Super-admin']"/>
+                            :options="options"/>
             </transition>
           </div>
 
@@ -44,7 +44,7 @@
         <table class="table--with-sticky-header">
           <thead>
           <tr>
-            <th class="item-checkbox" v-if="role === 'super_admin'"></th>
+            <th class="item-checkbox" v-if="isSuperAdmin"></th>
             <th class="item-left">ID</th>
             <th>Nom</th>
             <th>Email</th>
@@ -54,7 +54,7 @@
 
           <tbody>
           <tr v-for="user in users" :key="user.id">
-            <td class="item-centered item-checkbox" v-if="role === 'super_admin'">
+            <td class="item-centered item-checkbox" v-if="isSuperAdmin">
               <CheckBox :state="user.isSelected" :id="user.id" @check="addOrRemoveUser($event, user)"/>
             </td>
             <td class="item-left">{{user.id}}</td>
@@ -63,8 +63,7 @@
               {{user.email}}
             </td>
             <td>
-              {{user.role === 'admin' ? 'Administrateur' : user.role === 'super_admin' ? 'Super Administrateur' :
-              'Utilisateur'}}
+              {{userRoleFormatted(user.role)}}
             </td>
           </tr>
           <tr ref="anchor" id="Anchor"/>
@@ -92,6 +91,8 @@
   import sortedIndex from "lodash.sortedindex";
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
   import UserFilterPanel from "~/components/Panel/Item/UserFilterPanel.vue";
+  import {User} from "~/assets/js/api/user";
+  import UserMixins from "~/components/Mixins/Api/UserMixins";
 
   const ratio = .2;
   const debounce = require('lodash.debounce');
@@ -112,7 +113,7 @@
     },
     middleware: ['auth', 'admin', 'reset-users-store']
   })
-  export default class extends Mixins(IntersectMixins) {
+  export default class extends Mixins(UserMixins, IntersectMixins) {
     /**
      * A reference to the input html element for the search
      */
@@ -122,6 +123,11 @@
      * A reference to the anchor element in the table (for the intersection observer)
      */
     @Ref() anchor!: Element;
+
+    /**
+     * The available options for the options selector
+     */
+    private options = ['Utilisateur', 'Admin', 'Super-admin'];
 
     /**
      * Configuration for the intersection observer
@@ -136,10 +142,6 @@
      * The selected exercises with the checkboxes
      */
     selectedUsers: { id: number, email: string, fullName: string }[] = [];
-
-    get role(): UserRole {
-      return this.$auth.user.role
-    }
 
     /**
      * Retrieve the exercises from the store and add a state for the selection of the exercise
@@ -193,22 +195,7 @@
         .then((response) => {
           const length: number = this.selectedUsers.length;
 
-          let roleFormatted: string;
-
-          switch (state) {
-            case "admin":
-              roleFormatted = "Administrateur";
-              break;
-            case "user":
-              roleFormatted = "Utilisateur";
-              break;
-            case "super_admin":
-              roleFormatted = "Super Administrateur";
-              break;
-            default:
-              roleFormatted = "Visiteur";
-              break;
-          }
+          let roleFormatted: string = this.userRoleFormatted(state);
 
           const messageFormatted = `${length} utilisateur${length > 1 ? 's ont' : ' a'} été promu${length > 1 ? 's' : ''} : ${roleFormatted}`;
 
@@ -263,14 +250,14 @@
      * @param action
      */
     selectAction(action: { content: string, index: number }) {
-      if (this.role !== 'super_admin') return;
+      if (!this.isSuperAdmin) return;
 
       if (action.index === 0) {
-        this.updateStateOfUsers("user")
+        this.updateStateOfUsers(User.USER)
       } else if (action.index === 1) {
-        this.updateStateOfUsers("admin")
+        this.updateStateOfUsers(User.ADMIN)
       } else if (action.index === 2) {
-        this.updateStateOfUsers("super_admin")
+        this.updateStateOfUsers(User.SUPER_ADMIN)
       }
     }
 
