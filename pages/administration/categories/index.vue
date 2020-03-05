@@ -70,11 +70,11 @@
             <td class="item-centered item-checkbox" v-if="isSuperAdmin">
               <CheckBox :state="category.state" :id="category.id" @check="addOrRemoveCategories($event, category)"/>
             </td>
-            <td class="item-left" @click="gotoCategory(category.category)">{{category.category}}</td>
-            <td @click="gotoCategory(category.category)">{{category.total}}</td>
-            <td @click="gotoCategory(category.category)">{{category.total_validated}}</td>
-            <td @click="gotoCategory(category.category)">{{category.total_unvalidated}}</td>
-            <td @click="gotoCategory(category.category)">{{category.total_deprecated}}</td>
+            <td class="item-left" @click="gotoCategory(category.id)">{{category.category}}</td>
+            <td @click="gotoCategory(category.id)">{{category.total}}</td>
+            <td @click="gotoCategory(category.id)">{{category.total_validated}}</td>
+            <td @click="gotoCategory(category.id)">{{category.total_unvalidated}}</td>
+            <td @click="gotoCategory(category.id)">{{category.total_deprecated}}</td>
           </tr>
           </tbody>
         </table>
@@ -227,10 +227,10 @@
 
     /**
      * Go to the exercise with a specific id
-     * @param name
+     * @param id
      */
-    async gotoCategory(name: string) {
-      this.$router.push('/administration/categories/' + name)
+    async gotoCategory(id: number) {
+      this.$router.push('/administration/categories/' + id)
     }
 
 
