@@ -2,9 +2,11 @@ import {
   MetadataSearchUserResponse,
   SearchUserRequest,
   SearchUserRequestMetadata,
-  UserInfo, SearchUserResponse, TagState, UserRole
+  UserInfo, SearchUserResponse, TagState, UserRole, PutUserRequest
 } from "~/types";
 import {actionTree, getterTree, mutationTree} from "nuxt-typed-vuex";
+import {AxiosError} from "axios";
+import {User} from "~/assets/js/api/user";
 
 export const state = () => ({
   /**
@@ -142,8 +144,24 @@ export const actions = actionTree({state, mutations, getters}, {
       const response: SearchUserResponse = await this.app.$axios.$get('/api/users', {
         params: newSearchRequest
       });
+
       commit('INIT', response);
+
     } catch (e) {
+      const errorAxios = e as AxiosError;
+
+      if (errorAxios.response) {
+        const status: number = errorAxios.response.status;
+
+        if (status === 400) {
+          this.$displayError('Une erreur est survenue lors de la récupération des utilisateurs.');
+        } else if (status === 500) {
+          this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+        }
+      } else {
+        this.$displayError(`Une erreur est survenue lors de la récupération des utilisateurs.`);
+      }
+
       commit('RESET')
     }
   },
@@ -166,7 +184,86 @@ export const actions = actionTree({state, mutations, getters}, {
       commit('ADD_USERS', response.data);
       commit('SET_METADATA', response.metadata);
     } catch (e) {
+      const errorAxios = e as AxiosError;
+
+      if (errorAxios.response) {
+        const status: number = errorAxios.response.status;
+
+        if (status === 400) {
+          this.$displayError('Une erreur est survenue lors de la récupération des utilisateurs.');
+        } else if (status === 500) {
+          this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+        }
+      } else {
+        this.$displayError(`Une erreur est survenue lors de la récupération des utilisateurs.`);
+      }
       commit('RESET')
     }
+  },
+
+
+  async updateStateOfUsers({commit, dispatch}, payload: { userRole: UserRole, users: { id: number, fullName: string, email: string }[] }) {
+    const updateState = (user: { id: number, fullName: string, email: string }, userRole: UserRole) => {
+      const userModified: PutUserRequest = {
+        id: user.id,
+        role: userRole
+      };
+
+      return this.app.$axios.$put('/auth/update', userModified)
+    };
+
+    Promise
+      .all(payload.users.map(user => updateState(user, payload.userRole)))
+      .then(() => {
+        const length: number = payload.users.length;
+
+        let roleFormatted: string;
+
+        switch (payload.userRole) {
+          case User.USER:
+            roleFormatted = 'Utilisateur';
+            break;
+          case User.ADMIN:
+            roleFormatted = 'Administrateur';
+            break;
+          case User.SUPER_ADMIN:
+            roleFormatted = 'Super Administrateur';
+            break;
+          default:
+            roleFormatted = '-';
+            break;
+        }
+
+        const messageFormatted = `${length} utilisateur${length > 1 ? 's ont' : ' a'} été promu${length > 1 ? 's' : ''} : ${roleFormatted}`;
+
+        this.$displaySuccess(messageFormatted);
+
+        commit('RESET');
+        dispatch('fetch', {})
+
+      })
+      .catch((e: AxiosError) => {
+
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 400) {
+            this.$displayError(`Une erreur est survenue lors du changement d'état, vérifiez vos données.`);
+          } else if (status === 401) {
+            this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+          } else if (status === 403) {
+            this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors du changement d'état.`);
+        }
+
+      });
   }
+
+
 });

@@ -86,7 +86,7 @@
           orderBy: [{field: 'date', value: 'DESC'}, {field: 'id', value: 'ASC'}]
         };
 
-        await $accessor.search.fetch(searchRequest);
+        await $accessor.exercises.fetch(searchRequest);
 
         return {configuration}
 

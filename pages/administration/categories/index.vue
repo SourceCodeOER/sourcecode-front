@@ -94,6 +94,7 @@
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import TagFilterPanel from "~/components/Panel/Item/TagFilterPanel.vue";
   import UserMixins from "~/components/Mixins/Api/UserMixins";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {
@@ -102,7 +103,7 @@
       Icon,
       CheckBox
     },
-    async asyncData({app: {$axios}, redirect}) {
+    async asyncData({app: {$axios, $displayError}}) {
 
       try {
         const data: CategoryExtended[] = await $axios.$get('/api/tags_categories?fetchStats=1');
@@ -117,11 +118,21 @@
         }
 
       } catch (e) {
-        this.$displayError('Une erreur est survenue lors du chargement des catégories.');
-        redirect('/')
+        const errorAxios = e as AxiosError;
+
+        if (errorAxios.response) {
+          const status: number = errorAxios.response.status;
+
+          if (status === 400) {
+          } else if (status === 500) {
+            $displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`, {statusCode: status});
+          } else {
+            $displayError("Une erreur est survenue.", {statusCode: status});
+          }
+        } else {
+          $displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`, {statusCode: 400});
+        }
       }
-
-
     },
     middleware: ['auth', 'admin']
   })
@@ -186,7 +197,23 @@
         });
 
       } catch (e) {
-        this.$displayError(`Une erreur est survenue lors de la suppression.`);
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 400) {
+            this.$displayError(`Une erreur est survenue, vérifiez vos données.`);
+          } else if (status === 401) {
+            this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+          } else if (status === 403) {
+            this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors de la suppression.`);
+        }
       }
     }
 

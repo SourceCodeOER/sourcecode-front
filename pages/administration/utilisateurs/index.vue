@@ -148,9 +148,10 @@
      */
     get users(): UserInfoWithSelection[] {
       const users: UserInfo[] = this.$accessor.users.users;
+      const selectedUsers = this.selectedUsers;
       const length = users.length;
       return users.map((user: UserInfo) => {
-        return {...user, isSelected: binarySearch(this.selectedUsers.map(el => el.id), user.id, 0, length - 1)}
+        return {...user, isSelected: binarySearch(selectedUsers.map(el => el.id), user.id, 0, length - 1)}
       });
     }
 
@@ -180,43 +181,7 @@
      * update the state of exercises and notifies the user
      */
     async updateStateOfUsers(state: UserRole) {
-      const updateState = (user: { id: number, fullName: string, email: string }, state: UserRole) => {
-        const userModified: PutUserRequest = {
-          id: user.id,
-          role: state
-        };
-
-        return this.$axios.$put('/auth/update', userModified)
-      };
-
-
-      Promise
-        .all(this.selectedUsers.map(user => updateState(user, state)))
-        .then((response) => {
-          const length: number = this.selectedUsers.length;
-
-          let roleFormatted: string = this.userRoleFormatted(state);
-
-          const messageFormatted = `${length} utilisateur${length > 1 ? 's ont' : ' a'} été promu${length > 1 ? 's' : ''} : ${roleFormatted}`;
-
-          this.$displaySuccess(messageFormatted);
-          this.$accessor.users.RESET();
-          this.$accessor.users.fetch({});
-
-        }).catch((error: AxiosError) => {
-        if (error.response) {
-          const status: number = error.response.status;
-
-          if (status >= 400 && status < 500) {
-            this.$displayError(`Une erreur est survenue, vérifiez vos données.`)
-          } else {
-            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`)
-          }
-        } else {
-          this.$displayError(`Une erreur est survenue. Veuillez-nous en excuser.`)
-        }
-
-      });
+      await this.$accessor.users.updateStateOfUsers({userRole: state, users: this.selectedUsers});
     }
 
     /**

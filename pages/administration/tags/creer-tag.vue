@@ -23,16 +23,38 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import TagForm from "~/components/Gestion/TagForm.vue";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
+  import {AxiosError} from "axios";
 
 
   @Component({
     components: {CustomSelect, Icon, TagForm},
     middleware: ['auth', 'admin', 'reset-search-request'],
-    async fetch({app: {$accessor}}) {
-      await $accessor.tags.fetch();
+    async fetch({app: {$accessor}, error}) {
+      try {
+        await $accessor.tags.fetch();
+
+      } catch (e) {
+        const errorAxios = e as AxiosError;
+
+        if (errorAxios.response) {
+          const status: number = errorAxios.response.status;
+
+          if (status === 400) {
+            error({statusCode: status, message: "Une erreur est survenue."});
+          } else if (status === 500) {
+            error({
+              statusCode: status,
+              message: `Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`
+            });
+          }
+        } else {
+          error({statusCode: 400, message: "Une erreur est survenue."});
+        }
+      }
     }
   })
-  export default class extends Vue {}
+  export default class extends Vue {
+  }
 </script>
 
 <style lang="scss" scoped>

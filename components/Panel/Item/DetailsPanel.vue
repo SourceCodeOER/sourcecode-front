@@ -59,6 +59,7 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import Rating from "~/components/Rating/Rating.vue";
   import {BusEvent} from "~/components/Event/BusEvent";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {Rating, Icon}
@@ -139,9 +140,27 @@
       if(this.$auth.loggedIn) {
         try {
           await this.$axios.$post('/api/vote_for_exercise', {exercise_id: this.exercise.id, score: i});
-          BusEvent.$emit('displayNotification', {mode:'success', message:'Merci pour votre retour !'})
+          this.$displaySuccess('Merci pour votre retour !');
         } catch (e) {
-          BusEvent.$emit('displayNotification', {mode:'error', message:'Une erreur est survenue...'})
+          const error = e as AxiosError;
+
+          if(error.response) {
+            const status = error.response.status;
+
+            if(status === 400) {
+              this.$displayError('Une erreur est survenue, vérifiez vos données');
+            } else if(status === 401) {
+              this.$displayError('Vous devez vous connecter pour effectuer cette action !');
+            } else if(status === 403) {
+              this.$displayError("Vous n'êtes pas autorisé à effectuer cette action !");
+            } else if(status === 500) {
+              this.$displayError("Une erreur est survenue depuis nos serveurs, veuillez nous en excuser.");
+            } else {
+              this.$displayError("Une erreur est survenue.");
+            }
+          } else {
+              this.$displayError("Une erreur est survenue.");
+          }
         }
       }
     }

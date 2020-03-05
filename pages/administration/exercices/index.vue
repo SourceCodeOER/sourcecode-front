@@ -163,6 +163,7 @@
   import CustomSelect from "~/components/Input/CustomSelect.vue";
   import UserMixins from "~/components/Mixins/Api/UserMixins";
   import {User} from "~/assets/js/api/user";
+  import {AxiosError} from "axios";
 
   const debounce = require('lodash.debounce');
 
@@ -185,7 +186,7 @@
     async fetch({app: {$accessor}}) {
       await $accessor.tags.fetch();
       await $accessor.tags.apply("default");
-      await $accessor.search.fetch({
+      await $accessor.exercises.fetch({
         metadata: {size: 50},
         orderBy: [{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}],
         includeOptions: {
@@ -226,7 +227,7 @@
      * Retrieve the exercises from the store and add a state for the selection of the exercise
      */
     get exercises(): ExerciseWithSelection[] {
-      const exercises = this.$accessor.search.exercises;
+      const exercises = this.$accessor.exercises.exercises;
       const length = this.selectedExercises.length;
       return exercises.map((exercise: Exercise) => {
         return {...exercise, isSelected: binarySearch(this.selectedExercises, exercise.id, 0, length - 1)}
@@ -254,7 +255,7 @@
     }
 
     get nbExercises(): number {
-      return this.$accessor.search.metadata.totalItems
+      return this.$accessor.exercises.metadata.totalItems
     }
 
     /**
@@ -281,12 +282,28 @@
       try {
         await this.$axios.$delete('api/bulk/delete_exercises', {data: this.selectedExercises});
         this.$displaySuccess(`${this.selectedExercises.length} ${this.selectedExercises.length === 1 ? 'exercice a' : 'exercices ont'} été correctement supprimé.`);
-
-        this.selectedExercises = [];
-        this.$accessor.search.fetch({})
       } catch (e) {
-        this.$displayError(`Une erreur est survenue lors de la suppression.`);
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 400) {
+            this.$displayError(`Une erreur est survenue, vérifiez vos données.`);
+          } else if (status === 401) {
+            this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+          } else if (status === 403) {
+            this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors de la suppression.`);
+        }
       }
+
+      this.selectedExercises = [];
+      this.$accessor.exercises.fetch({})
     }
 
     /**
@@ -314,12 +331,28 @@
       try {
         await this.$axios.$put('/api/bulk/modify_exercises_status', {exercises: this.selectedExercises, state});
         this.$displaySuccess(message);
-
-        this.selectedExercises = [];
-        this.$accessor.search.fetch({})
       } catch (e) {
-        this.$displayError(`Une erreur est survenue lors du changement d'état.`);
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 400) {
+            this.$displayError(`Une erreur est survenue, vérifiez vos données.`);
+          } else if (status === 401) {
+            this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+          } else if (status === 403) {
+            this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors du changement d'état.`);
+        }
       }
+
+      this.selectedExercises = [];
+      this.$accessor.exercises.fetch({})
     }
 
     /**
@@ -328,7 +361,7 @@
      */
     debounceInput = debounce((e: any) => {
       const value = e.target.value;
-      this.$accessor.search.fetch({data: {title: value}});
+      this.$accessor.exercises.fetch({data: {title: value}});
       this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: value})
     }, 300);
 
@@ -353,8 +386,8 @@
      */
     handleIntersect(entries: IntersectionObserverEntry[]) {
       entries.forEach((entry: IntersectionObserverEntry) => {
-        if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
-          this.$accessor.search.next()
+        if (entry.intersectionRatio > ratio && this.$accessor.exercises.isRemainingPages) {
+          this.$accessor.exercises.next()
         }
       });
     }
@@ -394,16 +427,32 @@
         this.selectedExercises = [];
 
       } catch (e) {
-        this.$displayError(`Une erreur est survenue lors de l'export.`);
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 400) {
+            this.$displayError(`Une erreur est survenue, vérifiez vos données.`);
+          } else if (status === 401) {
+            this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+          } else if (status === 403) {
+            this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors de l'export.`);
+        }
       }
     }
 
     async exportAll() {
       try {
-        const data = this.$accessor.search.search_criterion;
-        const filterOptions = this.$accessor.search.filterOptions;
-        const orderBy = this.$accessor.search.orderBy;
-        const includeOptions = this.$accessor.search.includeOptions;
+        const data = this.$accessor.exercises.search_criterion;
+        const filterOptions = this.$accessor.exercises.filterOptions;
+        const orderBy = this.$accessor.exercises.orderBy;
+        const includeOptions = this.$accessor.exercises.includeOptions;
 
         const exportExerciseRequest: ExportExerciseRequest = {
           data,
@@ -420,19 +469,35 @@
         this.selectedExercises = [];
 
       } catch (e) {
-        this.$displayError(`Une erreur est survenue lors de l'export.`);
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 400) {
+            this.$displayError(`Une erreur est survenue, vérifiez vos données.`);
+          } else if (status === 401) {
+            this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+          } else if (status === 403) {
+            this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors de l'export.`);
+        }
       }
     }
 
     async reset() {
       this.$accessor.tags.CLEAR();
-      this.$accessor.search.RESET_SEARCH_CRITERION();
-      this.$accessor.search.RESET_STATE();
-      await this.$accessor.search.fetch({});
+      this.$accessor.exercises.RESET_SEARCH_CRITERION();
+      this.$accessor.exercises.RESET_STATE();
+      await this.$accessor.exercises.fetch({});
     }
 
     mounted() {
-      const title = this.$accessor.search.search_criterion.title;
+      const title = this.$accessor.exercises.search_criterion.title;
       this.inputText.value = !!title ? title : '';
     }
   }

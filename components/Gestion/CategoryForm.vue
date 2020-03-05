@@ -95,25 +95,26 @@
         } catch (e) {
           const error = e as AxiosError;
 
-          const response = error.response;
+          if(error.response) {
+            const status: number = error.response.status;
 
-          if (!response) {
-            this.$displayError("Une erreur est survenue depuis nos serveurs :(");
-          } else {
-            const status = response.status;
-            if (status >= 500 && status < 600) {
-              this.$displayError("Une erreur est survenue depuis nos serveurs :(");
-            } else if (status === 401) {
-              this.$displayError("Vous n'êtes pas autorisé à effectuer cette action. Reconnectez-vous avec un compte admin.");
-            } else if (status === 409) {
-              this.$displayError("Une catégorie avec le même nom existe déjà.");
-            } else {
-              this.$displayError("Une erreur est survenue, veuillez-nous en excuser.");
+            if(status === 400) {
+              this.$displayError(`Vous ne respectez pas les conditions pour publier la catégorie.`);
+            } else if(status === 401) {
+              this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+            } else if(status === 403) {
+              this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+            } else if(status === 409) {
+              this.$displayError(`Conflit ! Une catégorie avec le même nom existe déjà.`);
+            } else if(status === 500) {
+              this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
             }
+          } else {
+            this.$displayError(`Une erreur est survenue.`);
           }
         }
       } else {
-        this.$displayError("Vous ne respectez pas les conditions pour publier la catégorie.");
+        this.$displayWarning("Vous ne respectez pas les conditions pour publier la catégorie.");
       }
     }
 

@@ -55,6 +55,7 @@
   import {Component, Vue} from "vue-property-decorator";
   import {Configuration} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {Icon},
@@ -92,7 +93,21 @@
 
         this.$displaySuccess('Votre favori a bien été supprimé.');
       } catch (e) {
-        this.$displayError('Une erreur est survenue lors de la suppression du favori.');
+        const error = e as AxiosError;
+
+        if(error.response) {
+          const status:number = error.response.status;
+
+          if(status === 400) {
+            this.$displayError("La suppression du favori n'a pas pu être effectuée.");
+          } else if(status === 401 || status === 403) {
+            this.$displayError("Vous n'êtez pas autorisé à effectuer cette action.")
+          } else if(status === 500) {
+            this.$displayError('Une erreur est survenue depuis nos serveurs, veuillez-nous excuser.');
+          }
+        } else {
+          this.$displayError('Une erreur est survenue lors de la suppression du favori.');
+        }
       }
     }
 

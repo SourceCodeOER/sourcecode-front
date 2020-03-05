@@ -51,6 +51,7 @@
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import DetailsPanel from "~/components/Panel/Item/DetailsPanel.vue";
   import UserMixins from "~/components/Mixins/Api/UserMixins";
+  import {AxiosError} from "axios";
 
   hljs.registerLanguage('javascript', javascript);
   hljs.registerLanguage('css', css);
@@ -73,7 +74,24 @@
         const exercise: Exercise = await $axios.$get(`api/exercises/${id}`, {params: {includeOptions: {includeCreator: true}}});
         return {exercise}
       } catch (e) {
-        error({statusCode: 404, message: "Cette exercice est introuvable"});
+        const axiosError = e as AxiosError;
+
+        if(axiosError.response) {
+          const status: number = axiosError.response.status;
+
+          if(status === 404) {
+            error({statusCode: status, message: "Cet exercice est introuvable."});
+          } else if(status === 410) {
+            error({statusCode: 410, message: "Cet exercice a été archivé."});
+          } else if(status === 500) {
+            error({statusCode: status, message: "Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser."});
+          }
+        } else {
+          error({statusCode: 404, message: "Cet exercice est introuvable."});
+        }
+
+        return {exercise: undefined}
+
       }
 
 
