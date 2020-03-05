@@ -11,7 +11,8 @@
     <div class="wrapper wrapper--with-panel">
       <Panel>
         <PanelItem>
-          <FilterPanel :reset-button="true" :radio-button-rating="true" :favorite="true" :search-mode="true" :historical-mode="true"
+          <FilterPanel :reset-button="true" :radio-button-rating="true" :favorite="true" :search-mode="true"
+                       :historical-mode="true"
                        @reset="resetInput"/>
         </PanelItem>
         <PanelItem>
@@ -38,6 +39,7 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
+  import {AxiosError} from "axios";
 
   const debounce = require('lodash.debounce');
 
@@ -52,13 +54,14 @@
       HistoricalPanel,
       Icon
     },
-    async fetch({app: {$accessor}, $auth}) {
+    async fetch({app: {$accessor}, $auth, error}) {
       await $accessor.tags.fetch(["VALIDATED"]);
       await $accessor.tags.apply("default");
-      await $accessor.search.fetch({
+
+      await $accessor.exercises.fetch({
         metadata: {size: 30},
         includeOptions: {includeDescription: false},
-        orderBy: [{field: "date", value: "DESC"}, {field:'id', value:'ASC'}],
+        orderBy: [{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}],
         filterOptions: {
           state: ["VALIDATED"]
         }
@@ -67,6 +70,7 @@
       if ($auth.loggedIn) {
         await $accessor.favorites.fetch()
       }
+
     },
     auth: false,
     middleware: 'exercises-store'
@@ -76,11 +80,11 @@
 
     debounceInput = debounce((e: any) => {
       const value = e.target.value;
-      this.$accessor.search.fetch({data: {title: value}});
+      this.$accessor.exercises.fetch({data: {title: value}});
       this.$accessor.historical.addHistorical({
         tags: this.$accessor.tags.selectedTags,
         title: value,
-        vote: this.$accessor.search.search_criterion.vote
+        vote: this.$accessor.exercises.search_criterion.vote
       })
     }, 300);
 
@@ -89,7 +93,7 @@
     }
 
     mounted() {
-      const title = this.$accessor.search.search_criterion.title;
+      const title = this.$accessor.exercises.search_criterion.title;
       this.inputText.value = !!title ? title : ''
     }
   }

@@ -24,6 +24,7 @@
   import TagForm from "~/components/Gestion/TagForm.vue";
   import Icon from "~/components/Symbols/Icon.vue";
   import {TagExtended} from "~/types";
+  import {AxiosError} from "axios";
 
   @Component({
     middleware: ['auth', 'admin', 'reset-search-request'],
@@ -31,16 +32,16 @@
       TagForm,
       Icon
     },
-    async asyncData({app: {$accessor, $axios}, params}) {
+    async asyncData({app: {$accessor, $axios}, params, error}) {
       await $accessor.tags.fetch();
-      const data = await $axios.$get('/api/tags?tags_ids=' + params.id );
+      const data: TagExtended[] = await $axios.$get('/api/tags?tags_ids=' + params.id);
+      if (data.length === 0) error({statusCode: 404, message: `Cette page est introuvable.`});
 
-      return {tag:data[0]}
+      return {tag: data[0]}
     }
   })
   export default class extends Vue {
-    tag!:TagExtended
-
+    tag!: TagExtended
   }
 </script>
 

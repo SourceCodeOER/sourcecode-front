@@ -77,6 +77,7 @@
     VoteExerciseRequest
   } from "~/types";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {
@@ -168,12 +169,12 @@
     }
 
     get voteCriteria() {
-      const vote = this.$accessor.search.search_criterion.vote;
+      const vote = this.$accessor.exercises.search_criterion.vote;
       return vote ? vote : 'default';
     }
 
     get stateCriteria(): ExerciseState[] {
-      const state: ExerciseState[] | undefined = this.$accessor.search.filterOptions.state;
+      const state: ExerciseState[] | undefined = this.$accessor.exercises.filterOptions.state;
       return state ? state : [];
     }
 
@@ -237,19 +238,19 @@
 
       if (this.searchMode) {
         if (event.index === -1) {
-          this.$accessor.search.RESET_VOTE();
-          this.$accessor.search.fetch({});
+          this.$accessor.exercises.RESET_VOTE();
+          this.$accessor.exercises.fetch({});
         } else {
           const value: VoteExerciseRequest = event.data.value as VoteExerciseRequest;
-          this.$accessor.search.fetch({data: {vote: value}})
+          this.$accessor.exercises.fetch({data: {vote: value}})
         }
       }
 
       if (this.historicalMode) {
         this.$accessor.historical.addHistorical({
           tags: this.confirmedTags,
-          title: this.$accessor.search.search_criterion.title,
-          vote: this.$accessor.search.search_criterion.vote
+          title: this.$accessor.exercises.search_criterion.title,
+          vote: this.$accessor.exercises.search_criterion.vote
         });
       }
     }
@@ -300,7 +301,7 @@
 
       const states: ExerciseState[] = [...remainingStateCriteria, ...selectedStates];
 
-      await this.$accessor.search.fetch({filterOptions: {state: states.length > 0 ? states : undefined}})
+      await this.$accessor.exercises.fetch({filterOptions: {state: states.length > 0 ? states : undefined}})
 
     }
 
@@ -325,14 +326,14 @@
       await this.$accessor.tags.apply(this.mode);
 
       if (this.searchMode) {
-        await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+        await this.$accessor.exercises.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
       }
 
       if (this.historicalMode) {
         this.$accessor.historical.addHistorical({
           tags: this.confirmedTags,
-          title: this.$accessor.search.search_criterion.title,
-          vote: this.$accessor.search.search_criterion.vote
+          title: this.$accessor.exercises.search_criterion.title,
+          vote: this.$accessor.exercises.search_criterion.vote
         });
       }
     }
@@ -343,7 +344,7 @@
     async validateBeforeSubmit() {
       if (this.confirmedTags.length !== 0) {
         const tags_id: number[] = this.confirmedTags.map(tag => tag.tag_id);
-        const title: string | undefined = this.$accessor.search.search_criterion.title;
+        const title: string | undefined = this.$accessor.exercises.search_criterion.title;
 
         const configurationBuild: CreateConfigurationRequest = {
           tags: tags_id,
@@ -375,18 +376,18 @@
       this.$accessor.tags.CLEAR();
 
       if (this.searchMode) {
-        this.$accessor.search.RESET_SEARCH_CRITERION();
-        this.$accessor.search.RESET_STATE();
+        this.$accessor.exercises.RESET_SEARCH_CRITERION();
+        this.$accessor.exercises.RESET_STATE();
 
         if (this.strategy === 'guest') {
-          await this.$accessor.search.fetch({
+          await this.$accessor.exercises.fetch({
             filterOptions: {
               state: ["VALIDATED"]
             }
           });
 
         } else {
-          await this.$accessor.search.fetch({});
+          await this.$accessor.exercises.fetch({});
         }
       }
 

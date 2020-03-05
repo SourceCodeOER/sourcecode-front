@@ -67,29 +67,29 @@
      * Get the search exercises
      */
     get exercises(): Exercise[] {
-      return this.$accessor.search.exercises
+      return this.$accessor.exercises.exercises
     }
 
     /**
      * Count the total number of exercises
      */
     get nbResults(): number {
-      return this.$accessor.search.metadata.totalItems
+      return this.$accessor.exercises.metadata.totalItems
     }
 
     /**
      * check if a search criteria is used or not. Check if the user searches for something
      */
     get searched(): boolean {
-      const tags = this.$accessor.search.search_criterion.tags;
-      const vote = this.$accessor.search.search_criterion.vote;
-      return(tags && tags.length !== 0) || this.$accessor.search.search_criterion.title !== '' || !!vote
+      const tags = this.$accessor.exercises.search_criterion.tags;
+      const vote = this.$accessor.exercises.search_criterion.vote;
+      return(tags && tags.length !== 0) || this.$accessor.exercises.search_criterion.title !== '' || !!vote
     }
 
     handleIntersect(entries: IntersectionObserverEntry[]) {
       entries.forEach((entry: IntersectionObserverEntry) => {
-        if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
-          this.$accessor.search.next()
+        if (entry.intersectionRatio > ratio && this.$accessor.exercises.isRemainingPages) {
+          this.$accessor.exercises.next()
         }
       });
     }

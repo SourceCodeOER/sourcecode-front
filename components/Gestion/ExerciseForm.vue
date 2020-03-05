@@ -136,6 +136,9 @@
         <button @click="validateBeforeSubmit('NOT_VALIDATED')" class="button--red-reverse cta__validate">
           Invalider
         </button>
+        <button @click="validateBeforeSubmit('ARCHIVED')" class="button--orange-reverse cta__validate">
+          Archiver
+        </button>
         <button @click="validateBeforeSubmit('PENDING')" class="button--yellow-reverse cta__validate">
           Mettre en attente
         </button>
@@ -243,6 +246,7 @@
 
             const formData: FormData = jsonFormData(exerciseBuild);
 
+            // Modify exercise
             if (this.exercise !== undefined) {
 
               await this.$axios.$put('/api/exercises/' + this.exercise.id, formData, {
@@ -250,7 +254,7 @@
                   'Content-Type': 'multipart/form-data'
                 }
               });
-            } else {
+            } else { // Create new exercise
               await this.$axios.$post('/api/create_exercise', formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data'
@@ -259,11 +263,11 @@
             }
 
           } else {
-
+            // Modify exercise
             if (this.exercise !== undefined) {
               if (this.filename === null) (exerciseBuild as UpdateExerciseRequest).removePreviousFile = true;
               await this.$axios.$put('/api/exercises/' + this.exercise.id, exerciseBuild);
-            } else {
+            } else { // Create new exercise
               await this.$axios.$post('/api/create_exercise', exerciseBuild);
             }
           }
@@ -310,32 +314,31 @@
         } catch (e) {
           const error = e as AxiosError;
 
-          const response = error.response;
+          if(error.response) {
+            const status: number = error.response.status;
 
-          if (!response) {
-
-            this.$displayError("Une erreur est survenue depuis nos serveurs :(")
-
-          } else {
-            const status = response.status;
-            if (status >= 500 && status < 600) {
-              this.$displayError("Une erreur est survenue depuis nos serveurs :(")
-            } else if (status === 401) {
-              this.$displayError("Vous n'êtes pas autorisé à publier cette exercice. Reconnectez-vous !")
-            } else if (status === 409) {
-              this.$displayError("Vous ne pouvez pas ajouter plusieurs fois le même tag !")
-            } else {
-              this.$displayError("La publication de votre exercice à échoué. Vérifiez le formulaire ou contactez notre support.")
+            if(status === 400) {
+              this.$displayError(`Vous ne respectez pas les conditions pour publier la catégorie.`);
+            } else if(status === 401) {
+              this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+            } else if(status === 403) {
+              this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+            } else if(status === 409) {
+              this.$displayError(`Un conflit a été détecté. Vérifiez vos données.`);
+            } else if(status === 500) {
+              this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
             }
+          } else {
+            this.$displayError(`La publication de votre exercice à échoué. Vérifiez le formulaire ou contactez notre support.`);
           }
         }
 
       } else if (!isHTMLValid) {
-        this.$displayWarning("Le champ description est obligatoire.", 5000)
+        this.$displayWarning("Le champ description est obligatoire.", {time: 5000})
       } else if (!isTagsValid) {
-        this.$displayWarning("Vous devez ajouter au moins 3 tags valides.", 5000)
+        this.$displayWarning("Vous devez ajouter au moins 3 tags valides.", {time: 5000})
       } else {
-        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de cet exercice.", 5000)
+        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de cet exercice.", {time: 5000})
       }
     }
 

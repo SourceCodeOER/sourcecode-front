@@ -185,28 +185,27 @@
         } catch (e) {
           const error = e as AxiosError;
 
-          const response = error.response;
+          if(error.response) {
+            const status: number = error.response.status;
 
-          if (!response) {
-            this.$displayError("Une erreur est survenue depuis nos serveurs :(");
-          } else {
-            const status = response.status;
-            if (status >= 500 && status < 600) {
-
-              this.$displayError("Une erreur est survenue depuis nos serveurs :(");
-
-            } else if (status === 401) {
-              this.$displayError("Vous n'êtes pas autorisé à publier ce tag. Reconnectez-vous !")
-            } else if (status === 409) {
-              this.$displayError("ce tag a déjà été créé !")
-            } else {
-              this.$displayError("La publication du tag à échoué. Vérifiez le formulaire ou contactez notre support.")
+            if(status === 400) {
+              this.$displayError(`Vous ne respectez pas les conditions pour publier le tag.`);
+            } else if(status === 401) {
+              this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+            } else if(status === 403) {
+              this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+            } else if(status === 409) {
+              this.$displayError(`Ce tag existe déjà !`);
+            } else if(status === 500) {
+              this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
             }
+          } else {
+            this.$displayError("La publication du tag à échoué. Vérifiez le formulaire ou contactez notre support.");
           }
         }
 
       } else {
-        this.$displayWarning("Vous ne respectez pas les conditions pour la publication de votre exercice.", 5000)
+        this.$displayWarning("Vous ne respectez pas les conditions pour publier le tag.", {time: 5000})
       }
     }
 
@@ -224,7 +223,7 @@
         }
       }).catch(err => {
         this.categories = [];
-        this.$displayError('Une erreur est survenue lors de la récupération des catégories.')
+        this.$displayError('Une erreur est survenue lors de la récupération des catégories.');
       });
 
     }

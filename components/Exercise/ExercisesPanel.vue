@@ -69,23 +69,23 @@
     }
 
     get searchModel() {
-      return this.$accessor.search.search_criterion.title
+      return this.$accessor.exercises.search_criterion.title
     }
 
     get isEmptySearchModel(): boolean {
-      return this.$accessor.search.search_criterion.title === ""
+      return this.$accessor.exercises.search_criterion.title === ""
     }
 
     get nbOfResults(): number {
-      return this.$accessor.search.metadata.totalItems
+      return this.$accessor.exercises.metadata.totalItems
     }
 
     get exercises(): Exercise[] {
-      return this.$accessor.search.exercises
+      return this.$accessor.exercises.exercises
     }
 
     get voteTag(): { title: string, id: number, state: TagState } | undefined {
-      const vote = this.$accessor.search.search_criterion.vote;
+      const vote = this.$accessor.exercises.search_criterion.vote;
       let title = '';
 
       if (vote) {
@@ -116,10 +116,10 @@
     }
 
     async removeRatingCriteria() {
-      await this.$accessor.search.RESET_VOTE();
-      await this.$accessor.search.fetch({});
+      await this.$accessor.exercises.RESET_VOTE();
+      await this.$accessor.exercises.fetch({});
 
-      const search_criterion = this.$accessor.search.search_criterion;
+      const search_criterion = this.$accessor.exercises.search_criterion;
       const selectedTags = this.$accessor.tags.selectedTags;
 
       await this.$accessor.historical.addHistorical({
@@ -132,9 +132,9 @@
     async deleteTag(event: TagLabelObjectEmitted, tag: SelectedTag) {
       await this.$accessor.tags.addOrRemoveTag({...tag, isSelected: false});
       await this.$accessor.tags.apply('default');
-      await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+      await this.$accessor.exercises.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
 
-      const search_criterion = this.$accessor.search.search_criterion;
+      const search_criterion = this.$accessor.exercises.search_criterion;
       const selectedTags = this.$accessor.tags.selectedTags;
 
       await this.$accessor.historical.addHistorical({
@@ -146,9 +146,9 @@
 
     async reset() {
       this.$accessor.tags.CLEAR();
-      this.$accessor.search.RESET_SEARCH_CRITERION();
-      this.$accessor.search.RESET_STATE();
-      await this.$accessor.search.fetch({
+      this.$accessor.exercises.RESET_SEARCH_CRITERION();
+      this.$accessor.exercises.RESET_STATE();
+      await this.$accessor.exercises.fetch({
         filterOptions: {
           state: ["VALIDATED"]
         }
@@ -157,8 +157,8 @@
 
     handleIntersect(entries: IntersectionObserverEntry[]) {
       entries.forEach((entry: IntersectionObserverEntry) => {
-        if (entry.intersectionRatio > ratio && this.$accessor.search.isRemainingPages) {
-          this.$accessor.search.next()
+        if (entry.intersectionRatio > ratio && this.$accessor.exercises.isRemainingPages) {
+          this.$accessor.exercises.next()
         }
       });
     }

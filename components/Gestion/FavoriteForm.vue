@@ -65,6 +65,7 @@
   import {ValidationObserver, ValidationProvider} from "vee-validate";
   import Tag from "../Tag/Tag.vue";
   import TagColorLegend from "~/components/Tag/TagColorLegend.vue";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {TagColorLegend, Tag, ValidationProvider, ValidationObserver}
@@ -117,7 +118,25 @@
           }
 
         } catch (e) {
-          this.$displayError('Une erreur est survenue lors de la modification du favori.')
+          const error = e as AxiosError;
+
+          if(error.response) {
+            const status: number = error.response.status;
+
+            if(status === 400) {
+              this.$displayError(`Vous ne respectez pas les conditions pour publier ce favori.`);
+            } else if(status === 401) {
+              this.$displayError("Vous devez vous connecter pour effectuer cette action.")
+            } else if(status === 403) {
+              this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
+            } else if(status === 409) {
+              this.$displayError(`Cette catégorie existe déjà.`);
+            } else if(status === 500) {
+              this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
+            }
+          } else {
+            this.$displayError('Une erreur est survenue lors de la publication du favori.')
+          }
         }
       } else {
         this.$displayError('Vous ne respectez pas les conditions pour ajouter votre favori.')

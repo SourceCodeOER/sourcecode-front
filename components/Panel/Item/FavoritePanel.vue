@@ -33,6 +33,7 @@
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import {Prop} from "~/node_modules/vue-property-decorator";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {
@@ -79,7 +80,25 @@
 
         this.$displaySuccess('Votre favori a bien été supprimé.')
       } catch (e) {
-        this.$displayError('Une erreur est survenue lors de la suppression du favori.')
+        const error = e as AxiosError;
+
+        if(error.response) {
+          const status = error.response.status;
+
+          if(status === 400) {
+            this.$displayError('Une erreur est survenue lors de la suppression du favori.')
+          } else if(status === 401) {
+            this.$displayError('Vous devez vous connecter pour effectuer cette action !');
+          } else if(status === 403) {
+            this.$displayError("Vous n'êtes pas autorisé à effectuer cette action !");
+          } else if(status === 500) {
+            this.$displayError("Une erreur est survenue depuis nos serveurs, veuillez nous en excuser.");
+          } else {
+            this.$displayError('Une erreur est survenue lors de la suppression du favori.')
+          }
+        } else {
+          this.$displayError('Une erreur est survenue lors de la suppression du favori.')
+        }
       }
     }
 
@@ -110,7 +129,7 @@
       searchCriterion.tags = this.$accessor.tags.tagsRequest;
       searchRequest.data = searchCriterion;
 
-      await this.$accessor.search.fetch(searchRequest);
+      await this.$accessor.exercises.fetch(searchRequest);
     }
   }
 </script>

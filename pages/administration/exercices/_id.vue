@@ -61,7 +61,7 @@
       FilterPanel,
       ExercisesCheckPanel
     },
-    async asyncData({params, error, app: {$axios, $accessor}, $auth, redirect}) {
+    async asyncData({params, error, app: {$axios, $accessor}}) {
       const id = params.id;
       const includeOptions = {
         includeOptions: {
@@ -95,11 +95,11 @@
           includeOptions: {includeDescription: false, includeTags: false}
         };
 
-        await $accessor.search.fetch(searchRequest);
+        await $accessor.exercises.fetch(searchRequest);
 
         return {exercise}
       } catch (e) {
-        error({statusCode: 404, message: "Cette exercice est introuvable"});
+        error({statusCode: 404, message: "Cet exercice est introuvable"});
       }
     },
     middleware: ['auth', 'admin', 'reset-search-request']

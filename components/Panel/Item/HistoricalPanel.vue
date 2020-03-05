@@ -98,7 +98,7 @@
         title = historical.title
       }
 
-      await this.$accessor.search.fetch({data: {tags: tagsRequest, title: title, vote: historical.vote}});
+      await this.$accessor.exercises.fetch({data: {tags: tagsRequest, title: title, vote: historical.vote}});
     }
   }
 </script>

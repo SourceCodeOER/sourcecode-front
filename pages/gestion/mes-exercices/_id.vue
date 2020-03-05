@@ -47,6 +47,7 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import ExerciseForm from "~/components/Gestion/ExerciseForm.vue";
+  import {AxiosError} from "axios";
 
   const debounce = require('lodash.debounce');
 
@@ -99,11 +100,25 @@
           includeOptions: {includeDescription: false, includeTags: false}
         };
 
-        await $accessor.search.fetch(searchRequest);
+        await $accessor.exercises.fetch(searchRequest);
 
         return {exercise}
       } catch (e) {
-        error({statusCode: 404, message: "Cette exercice est introuvable"});
+        const errorAxios = e as AxiosError;
+
+        if(errorAxios.response) {
+          const status = errorAxios.response.status;
+
+          if(status === 404) {
+            error({statusCode: status, message: "Cet exercice est introuvable."});
+          } else if(status === 410) {
+            error({statusCode: status, message: "Cet exercice a été archivé."});
+          } else if(status === 500) {
+            error({statusCode: status, message: "Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser."});
+          }
+        }
+
+        error({statusCode: 404, message: "Cet exercice est introuvable."});
       }
     },
     middleware: ['auth', 'reset-search-request']

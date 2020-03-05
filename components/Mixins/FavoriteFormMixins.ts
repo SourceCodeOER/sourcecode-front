@@ -21,12 +21,12 @@ export default class extends Vue {
   async deleteTag(event: { title: string, id: number, state: boolean }, tag: SelectedTag) {
     await this.$accessor.tags.addOrRemoveTag({...tag, isSelected: event.state});
     await this.$accessor.tags.apply('default');
-    await this.$accessor.search.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
+    await this.$accessor.exercises.fetch({data: {tags: this.$accessor.tags.tagsRequest}});
   }
 
   async removeRatingCriteria() {
-    await this.$accessor.search.RESET_VOTE();
-    await this.$accessor.search.fetch({});
+    await this.$accessor.exercises.RESET_VOTE();
+    await this.$accessor.exercises.fetch({});
   }
 
   /**
@@ -34,6 +34,6 @@ export default class extends Vue {
    */
   debounceInput = debounce((e: any) => {
     const value = e.target.value;
-    this.$accessor.search.fetch({data: {title: value}});
+    this.$accessor.exercises.fetch({data: {title: value}});
   }, 300);
 }

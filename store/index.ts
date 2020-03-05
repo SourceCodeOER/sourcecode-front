@@ -3,7 +3,7 @@ import {actionTree, getAccessorType, mutationTree} from 'nuxt-typed-vuex'
 // Import all your submodules
 import * as tags from '~/store/tags'
 import * as historical from '~/store/historical'
-import * as search from '~/store/search'
+import * as exercises from '~/store/exercises'
 import * as favorites from '~/store/favorites'
 import * as users from '~/store/users'
 import {Environment} from "~/types";
@@ -45,7 +45,7 @@ export const accessorType = getAccessorType({
     // The key (submodule) needs to match the Nuxt namespace (e.g. ~/store/submodule.ts)
     tags,
     historical,
-    search,
+    exercises,
     favorites,
     users
   },

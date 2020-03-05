@@ -1,7 +1,7 @@
 import { Middleware } from '@nuxt/types'
 
 const middleware: Middleware = ({app}) => {
-    app.$accessor.search.RESET();
+    app.$accessor.exercises.RESET();
     app.$accessor.tags.CLEAR();
 };
 

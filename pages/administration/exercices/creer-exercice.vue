@@ -41,17 +41,19 @@
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
   import ExerciseForm from "~/components/Gestion/ExerciseForm.vue";
   import Icon from "~/components/Symbols/Icon.vue";
+  import {AxiosError} from "axios";
 
   @Component({
     components: {Icon, ExerciseForm, FilterPanel, ExercisesCheckPanel, PanelItem, Panel},
     async fetch({app: {$accessor}}) {
-      await $accessor.tags.fetch();
-      $accessor.search.UPDATE_INCLUDE_OPTIONS({includeDescription: false, includeTags: false});
-      $accessor.search.UPDATE_ORDER_BY([{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}])
-      $accessor.search.UPDATE_FILTER_OPTIONS({state: ['VALIDATED']})
+        await $accessor.tags.fetch();
+        $accessor.exercises.UPDATE_INCLUDE_OPTIONS({includeDescription: false, includeTags: false});
+        $accessor.exercises.UPDATE_ORDER_BY([{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}]);
+        $accessor.exercises.UPDATE_FILTER_OPTIONS({state: ['VALIDATED']})
     },
     middleware: ['auth', 'admin', 'reset-search-request']
   })
-  export default class extends Vue {}
+  export default class extends Vue {
+  }
 </script>
 

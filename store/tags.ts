@@ -2,9 +2,10 @@ import {
   Category,
   SelectedTag,
   CategoryWithTags,
-  CategoryWithSelectedTags, TagExtended, TagState
+  CategoryWithSelectedTags, TagExtended, TagState, CreateTagRequest
 } from '~/types'
 import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
+import {AxiosError} from "axios";
 
 const cloneDeep = require('lodash.clonedeep');
 
@@ -300,6 +301,22 @@ export const actions = actionTree({state, mutations}, {
 
       commit('INIT', array)
     } catch (e) {
+      const errorAxios = e as AxiosError;
+
+      if (errorAxios.response) {
+        const status: number = errorAxios.response.status;
+
+        if (status === 400) {
+          this.$displayError("Une erreur est survenue.", {statusCode: status});
+        } else if (status === 500) {
+          this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`, {statusCode: status});
+        } else {
+          this.$displayError("Une erreur est survenue.", {statusCode: status});
+        }
+      } else {
+          this.$displayError("Une erreur est survenue.", {statusCode: 400});
+      }
+
       commit('CLEAR')
     }
 
@@ -316,6 +333,9 @@ export const actions = actionTree({state, mutations}, {
     } else {
       commit('REMOVE_CATEGORY', payload.index)
     }
+  },
+  createNewTags({commit}, payload: CreateTagRequest) {
+
   }
 
 
