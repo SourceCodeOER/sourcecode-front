@@ -35,7 +35,14 @@
     async asyncData({app: {$axios}, params, error}) {
 
       try {
-        const data: Category[] = await $axios.$post('/api/bulk/create_or_find_tag_categories', [params.id]);
+        const id: number = parseInt(params.id);
+
+        if (isNaN(id)) {
+          error({statusCode: 400, message: "Une erreur est survenue."});
+          return {category: undefined}
+        }
+
+        const data: Category[] = await $axios.$get('/api/tags_categories', {params: {category_ids: [id]}});
         return {category: data[0]}
       } catch (e) {
         const errorAxios = e as AxiosError;
