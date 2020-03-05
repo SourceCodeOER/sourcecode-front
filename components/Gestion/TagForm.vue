@@ -103,14 +103,7 @@
      * Only get the names of each categories
      */
     protected get categoriesName(): string[] {
-      return this.categories.map(el => el.category).filter(el => el !== 'licence');
-    }
-
-    /**
-     * Only get categories without licence
-     */
-    protected get categoriesWithoutLicense(): Category[] {
-      return this.categories.filter(el => el.category !== 'licence');
+      return this.categories.map(el => el.category)
     }
 
     /**
@@ -150,7 +143,7 @@
 
         const tagsSettingsRequest: CreateTagRequest = [{
           text: this.form.title,
-          category_id: this.categoriesWithoutLicense[this.selectedNewTag.index].id,
+          category_id: this.categories[this.selectedNewTag.index].id,
           state: tagState
         }];
 
@@ -161,7 +154,7 @@
             const tag: TagExtended = {
               tag_id: this.tag.tag_id,
               tag_text: this.form.title,
-              category_id: this.categoriesWithoutLicense[this.selectedNewTag.index].id,
+              category_id: this.categories[this.selectedNewTag.index].id,
               state: tagState,
               version: this.tag.version
             };
@@ -211,7 +204,8 @@
 
     mounted() {
       this.$axios.$get('/api/tags_categories').then(categories => {
-        this.categories = categories
+        this.categories = categories.filter((cat: Category) => cat.category !== 'licence');
+
         if (this.tag !== undefined) {
           this.form.title = this.tag.tag_text;
           const cat_ID = this.tag.category_id;
