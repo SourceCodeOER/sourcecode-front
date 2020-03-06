@@ -101,19 +101,19 @@
               <Icon type="close" theme="theme--red-light" v-else/>
             </td>
             <td @click="gotoExercise(exercise.id)" class="item-centered td--with-icon">
-              <i title="Valide" v-if="exercise.state === 'VALIDATED'">
+              <i title="Validé" v-if="exercise.state === 'VALIDATED'">
                 <Icon type="check" theme="theme--green"/>
               </i>
 
-              <i title="Invalide" v-else-if="exercise.state === 'NOT_VALIDATED'">
+              <i title="Invalidé" v-else-if="exercise.state === 'NOT_VALIDATED'">
                 <Icon type="close" theme="theme--red-light"/>
               </i>
 
-              <i title="Traitement en cours" v-else-if="exercise.state === 'PENDING'">
+              <i title="En attente de validation" v-else-if="exercise.state === 'PENDING'">
                 <Icon type="send" theme="theme--yellow"/>
               </i>
 
-              <i title="Envoyé" v-else-if="exercise.state === 'DRAFT'">
+              <i title="Brouillon" v-else-if="exercise.state === 'DRAFT'">
                 <Icon type="paper" theme="theme--primary-color-light"/>
               </i>
               <i title="Archivé" v-else-if="exercise.state === 'ARCHIVED'">

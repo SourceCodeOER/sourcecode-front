@@ -73,7 +73,7 @@
               </td>
               <td @click="gotoLink(tag.tag_id)">{{tag.version}}</td>
               <td @click="gotoLink(tag.tag_id)" class="item-centered">
-                <i title="Valide" v-if="tag.state === 'VALIDATED'">
+                <i title="Validé" v-if="tag.state === 'VALIDATED'">
                   <Icon type="check" theme="theme--green"/>
                 </i>
 

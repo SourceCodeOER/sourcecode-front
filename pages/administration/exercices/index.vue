@@ -111,11 +111,11 @@
               <Icon type="close" theme="theme--red-light" v-else/>
             </td>
             <td @click="gotoExercise(exercise.id)" class="item-centered">
-              <i title="Valide" v-if="exercise.state === 'VALIDATED'">
+              <i title="Validé" v-if="exercise.state === 'VALIDATED'">
                 <Icon type="check" theme="theme--green"/>
               </i>
 
-              <i title="Invalide" v-else-if="exercise.state === 'NOT_VALIDATED'">
+              <i title="Invalidé" v-else-if="exercise.state === 'NOT_VALIDATED'">
                 <Icon type="close" theme="theme--red-light"/>
               </i>
 
@@ -123,7 +123,7 @@
                 <Icon type="send" theme="theme--yellow"/>
               </i>
 
-              <i title="Non répertorié" v-else-if="exercise.state === 'DRAFT'">
+              <i title="Brouillon" v-else-if="exercise.state === 'DRAFT'">
                 <Icon title="Créé" type="paper" theme="theme--primary-color-light"/>
               </i>
 
