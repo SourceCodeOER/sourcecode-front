@@ -19,7 +19,7 @@ export const mutations = mutationTree(state, {
    * @constructor
    */
   ADD_HISTORICAL(state, historical: Historical) {
-    state.historical.push(historical)
+    state.historical.splice(0, 0, historical)
   },
   RESET(state) {
     state.historical = []

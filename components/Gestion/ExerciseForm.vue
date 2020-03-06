@@ -119,13 +119,13 @@
 
       <ValidationProvider tag="label"
                           name="url"
-                          :rules="{regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/}"
+                          rules="url"
                           v-slot="{ errors }">
             <span class="label__name">
               Url vers l'exercice
             </span>
-        <input id="Url" placeholder="Entrez l'url absolue vers votre exercice" name="url" v-model="form.url"
-               class="input--grey" type="text">
+        <input id="Url" type="url" placeholder="Entrez l'url absolue vers votre exercice" name="url" v-model="form.url"
+               class="input--grey">
         <span class="error-message">{{errors[0]}}</span>
       </ValidationProvider>
     </ValidationObserver>
