@@ -59,6 +59,7 @@
             <th>Nb de tags</th>
             <th>Nb de tags valides</th>
             <th>Nb de tags invalides</th>
+            <th>Nb de tags en attente</th>
             <th>Nb de tags Obsolètes</th>
           </tr>
           </thead>
@@ -74,6 +75,7 @@
             <td @click="gotoCategory(category.id)">{{category.total}}</td>
             <td @click="gotoCategory(category.id)">{{category.total_validated}}</td>
             <td @click="gotoCategory(category.id)">{{category.total_unvalidated}}</td>
+            <td @click="gotoCategory(category.id)">{{category.total_pending}}</td>
             <td @click="gotoCategory(category.id)">{{category.total_deprecated}}</td>
           </tr>
           </tbody>
