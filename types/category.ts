@@ -12,7 +12,8 @@ export interface CategoryExtended extends Category {
   total: number,
   total_validated: number,
   total_deprecated: number,
-  total_unvalidated: number
+  total_unvalidated: number,
+  total_pending: number
 }
 
 export interface CategoryExtendedWithState extends CategoryExtended {
