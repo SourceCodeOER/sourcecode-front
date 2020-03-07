@@ -1,6 +1,6 @@
 import {localize} from 'vee-validate';
 import fr from 'vee-validate/dist/locale/fr.json'
-import validator from 'validator';
+//import validator from 'validator';
 
 import {extend} from 'vee-validate';
 import {required, email, alpha_spaces, max, min, numeric, regex, mimes, oneOf} from 'vee-validate/dist/rules';
@@ -15,6 +15,7 @@ extend('regex', regex);
 extend('mimes', mimes);
 extend('oneOf', oneOf);
 
+/*
 const urlValidation = {
   validate(value) {
     if (validator.isURL(value)) {
@@ -26,6 +27,7 @@ const urlValidation = {
 };
 
 extend('url', urlValidation);
+ */
 
 export default function ({app}) {
   localize('fr', fr);

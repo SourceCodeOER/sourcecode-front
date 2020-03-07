@@ -119,7 +119,7 @@
 
       <ValidationProvider tag="label"
                           name="url"
-                          rules="url"
+                          rules="required"
                           v-slot="{ errors }">
             <span class="label__name">
               Url vers l'exercice
