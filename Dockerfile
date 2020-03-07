@@ -2,7 +2,7 @@
 #                 BUILD                        #
 ################################################
 
-FROM node:13-alpine AS Build
+FROM node:12-alpine AS Build
 
 # Create app directory
 WORKDIR /frontend
@@ -23,7 +23,7 @@ RUN npm run build
 #                 PRODUCTION                   #
 ################################################
 
-FROM node:13-alpine AS Package
+FROM node:12-alpine AS Package
 
 # Create app directory
 WORKDIR /frontend
