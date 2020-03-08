@@ -10,7 +10,7 @@ WORKDIR /frontend
 # Install app dependencies ( everything )
 # A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --no-optional
 
 # copy every file
 COPY . .
@@ -37,7 +37,7 @@ COPY package*.json ./
 
 # TODO Only Install production dependancies (later)
 #RUN npm ci --only=production
-RUN npm ci
+RUN npm ci --no-optional
 
 # Removes unnecessary files in node modules
 RUN find "$(pwd)/node_modules" -type f -name "*.ts" -exec rm -f {} \;
