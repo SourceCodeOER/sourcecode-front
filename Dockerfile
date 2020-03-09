@@ -30,6 +30,8 @@ WORKDIR /frontend
 
 # Needed tool to export ENV variables into a json file
 RUN apk --no-cache add jq
+RUN apk add --no-cache curl
+RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | /bin/sh -s -- -b /usr/local/bin
 
 # Copy generated files from build
 COPY --from=Build /frontend ./
@@ -40,9 +42,7 @@ COPY package*.json ./
 RUN npm ci --no-optional
 
 # Removes unnecessary files in node modules
-RUN find "$(pwd)/node_modules" -type f -name "*.ts" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "*.md" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type d -name "docs" -prune -exec rm -rf {} +;
+RUN node-prune
 
 # Default port
 EXPOSE 3000
