@@ -33,7 +33,7 @@
       Icon
     },
     async asyncData({app: {$accessor, $axios}, params, error}) {
-      await $accessor.tags.fetch();
+      await $accessor.tags.fetch({});
       const data: TagExtended[] = await $axios.$get('/api/tags?tags_ids=' + params.id);
       if (data.length === 0) error({statusCode: 404, message: `Cette page est introuvable.`});
 

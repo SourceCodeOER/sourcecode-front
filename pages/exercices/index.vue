@@ -23,7 +23,7 @@
           <FavoritePanel/>
         </PanelItem>
       </Panel>
-      <ExercisesPanel/>
+      <ExercisesPanel @reset="resetInput"/>
     </div>
   </div>
 </template>
@@ -55,7 +55,7 @@
       Icon
     },
     async fetch({app: {$accessor}, $auth, error}) {
-      await $accessor.tags.fetch(["VALIDATED"]);
+      await $accessor.tags.fetch({state: ["VALIDATED"], countStates: ["VALIDATED"]});
       await $accessor.tags.apply("default");
 
       await $accessor.exercises.fetch({
@@ -89,7 +89,7 @@
     }, 300);
 
     resetInput() {
-      this.inputText.value = ''
+      this.inputText.value = ""
     }
 
     mounted() {

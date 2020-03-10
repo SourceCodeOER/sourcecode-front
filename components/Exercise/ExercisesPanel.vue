@@ -153,6 +153,8 @@
           state: ["VALIDATED"]
         }
       });
+
+      this.$emit('reset');
     }
 
     handleIntersect(entries: IntersectionObserverEntry[]) {

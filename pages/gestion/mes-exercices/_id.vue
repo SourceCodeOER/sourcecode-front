@@ -85,7 +85,7 @@
 
         const tags: SelectedTag[] = await $axios.$get(`api/tags?${queryString}`);
 
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({});
         await $accessor.tags.applyConfirmedTags({confirmedTags: tags, mode: 'strict'});
 
         const searchRequest: SearchExerciseRequest = {

@@ -29,7 +29,7 @@
     DataSearchExerciseRequest,
     SearchExerciseRequest,
     SelectedTag,
-    TagExtended
+    TagExtended, TagExtendedWithTotal
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import {Prop} from "~/node_modules/vue-property-decorator";
@@ -120,7 +120,7 @@
 
       searchCriterion.title = configuration.title ? configuration.title : "";
 
-      const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
+      const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtendedWithTotal) => {
         return {...tag, isSelected: true}
       });
 

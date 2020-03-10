@@ -31,7 +31,7 @@
     middleware: ['auth', 'admin', 'reset-search-request'],
     async fetch({app: {$accessor}, error}) {
       try {
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({});
 
       } catch (e) {
         const errorAxios = e as AxiosError;

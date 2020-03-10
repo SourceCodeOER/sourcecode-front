@@ -52,7 +52,7 @@
     },
     async fetch({app: {$accessor}, error}) {
       try {
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({countStates: ["VALIDATED"]});
         $accessor.exercises.UPDATE_INCLUDE_OPTIONS({includeDescription: false, includeTags: false});
         $accessor.exercises.UPDATE_ORDER_BY([{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}])
         $accessor.exercises.UPDATE_FILTER_OPTIONS({state:['VALIDATED']})

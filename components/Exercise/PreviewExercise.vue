@@ -57,21 +57,24 @@
             const orderedTextTags: string[] = [];
 
             for (const tag of tags) {
-                if (tag.category.category_text === 'difficulté' && orderedTextTags[0] === undefined) {
+                if (tag.category.category_text === 'cours' && orderedTextTags[0] === undefined) {
                     orderedTextTags[0] = tag.tag_text;
                     counter++
                 } else if (tag.category.category_text === 'langage' && orderedTextTags[1] === undefined) {
-                    orderedTextTags[1] = tag.tag_text;
-                    counter++
-                } else if (tag.category.category_text === "type d'exercice" && orderedTextTags[2] === undefined) {
+                  orderedTextTags[1] = tag.tag_text;
+                  counter++
+                } else if (tag.category.category_text === 'langage' && orderedTextTags[2] === undefined) {
                     orderedTextTags[2] = tag.tag_text;
                     counter++
-                } else if (tag.category.category_text === 'thématique' && orderedTextTags[3] === undefined) {
+                } else if (tag.category.category_text === "type d'exercice" && orderedTextTags[3] === undefined) {
                     orderedTextTags[3] = tag.tag_text;
+                    counter++
+                } else if (tag.category.category_text === 'thématique' && orderedTextTags[4] === undefined) {
+                    orderedTextTags[4] = tag.tag_text;
                     counter++
                 }
 
-                if (counter === 4) break
+                if (counter === 5) break
             }
 
             let formatted: string = '';
