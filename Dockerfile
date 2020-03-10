@@ -39,10 +39,36 @@ COPY package*.json ./
 #RUN npm ci --only=production
 RUN npm ci --no-optional
 
-# Removes unnecessary files in node modules
-RUN find "$(pwd)/node_modules" -type f -name "*.ts" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "*.md" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type d -name "docs" -prune -exec rm -rf {} +;
+# Removes unnecessary files/folders in node modules
+# Files
+RUN find "$(pwd)/node_modules" -type f \( \
+    -name "*.ts" -o \
+    -name "*.md" -o \
+    -name "*.swp" -o \
+    -name ".npm*" -o \
+    -name "LICENSE" -o \
+    -name "AUTHORS" -o \
+    -name "CONTRIBUTORS" -o \
+    -name "CHANGES" -o \
+    -name ".prettierrc*" -o \
+    -name ".travis.yml" -o \
+    -name "appveyor.yml" -o \
+    -name ".coveralls.yml" \
+\) -exec rm -f {} \;
+
+# Folders
+RUN find "$(pwd)/node_modules" -type d \( \
+    -name "docs" -o \
+    -name "doc" -o \
+    -name "tests" -o \
+    -name "test" -o \
+    -name "__tests__" -o \
+    -name ".idea" -o \
+    -name ".vscode" -o \
+    -name "coverage" -o \
+    -name ".github" -o \
+    -name ".circleci" \
+\) -prune -exec rm -rf {} +;
 
 # Default port
 EXPOSE 3000
