@@ -88,9 +88,6 @@
             title: exercise.title,
             tags: $accessor.tags.tagsRequest
           },
-          filterOptions: {
-            state: ['VALIDATED']
-          },
           orderBy: [{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}],
           includeOptions: {includeDescription: false, includeTags: false}
         };

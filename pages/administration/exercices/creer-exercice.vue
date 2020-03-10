@@ -49,7 +49,7 @@
         await $accessor.tags.fetch({});
         $accessor.exercises.UPDATE_INCLUDE_OPTIONS({includeDescription: false, includeTags: false});
         $accessor.exercises.UPDATE_ORDER_BY([{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}]);
-        $accessor.exercises.UPDATE_FILTER_OPTIONS({state: ['VALIDATED']})
+        $accessor.exercises.UPDATE_FILTER_OPTIONS({});
     },
     middleware: ['auth', 'admin', 'reset-search-request']
   })
