@@ -41,6 +41,7 @@
       paper: () => import('./library/PaperSymbol.vue'),
       bookmark: () => import('./library/BookmarkSymbol.vue'),
       mail: () => import('./library/MailSymbol.vue'),
+      clock: () => import('./library/ClockSymbol.vue'),
       book: () => import('./library/BookSymbol.vue')
     }
   })

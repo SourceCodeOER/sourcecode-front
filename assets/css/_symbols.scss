@@ -2,52 +2,104 @@
 
 .theme--default {
   fill:$PRIMARY_COLOR;
+
+  &--stroke {
+    stroke:$PRIMARY_COLOR;
+  }
 }
 
 .theme--primary-color {
   fill: $PRIMARY_COLOR;
+
+  &--stroke {
+    stroke:$PRIMARY_COLOR;
+  }
 }
 
 .theme--primary-color-light {
   fill: $PRIMARY_COLOR_LIGHT;
+
+  &--stroke {
+    stroke:$PRIMARY_COLOR_LIGHT;
+  }
 }
 
 .theme--secondary-color {
   fill: darken($SECONDARY_COLOR, 12);
+
+  &--stroke {
+    stroke:darken($SECONDARY_COLOR, 12);
+  }
 }
 
 .theme--ternary-color {
   fill: $TERNARY_COLOR;
+
+  &--stroke {
+    stroke:$TERNARY_COLOR;
+  }
 }
 
 .theme--red {
   fill: $RED;
+
+  &--stroke {
+    stroke:$RED;
+  }
 }
 
 .theme--green {
   fill: $GREEN;
+
+  &--stroke {
+    stroke:$GREEN;
+  }
 }
 
 .theme--grey {
   fill: $GREY;
+
+  &--stroke {
+    stroke:$GREY;
+  }
 }
 
 .theme--grey-light {
   fill:lighten($GREY, 20);
+
+  &--stroke {
+    stroke:lighten($GREY, 20);
+  }
 }
 
 .theme--red-light {
   fill:$LIGHT_RED;
+
+  &--stroke {
+    stroke:$LIGHT_RED;
+  }
 }
 
 .theme--orange {
-  fill:$ORANGE
+  fill:$ORANGE;
+
+  &--stroke {
+    stroke:$ORANGE;
+  }
 }
 
 .theme--yellow {
-  fill:$YELLOW
+  fill:$YELLOW;
+
+  &--stroke {
+    stroke:$YELLOW;
+  }
 }
 
 .theme--white {
   fill:white;
+
+  &--stroke {
+    stroke:white;
+  }
 }
