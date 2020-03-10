@@ -2,7 +2,7 @@ import {
   Category,
   SelectedTag,
   CategoryWithTags,
-  CategoryWithSelectedTags, TagExtended, TagState, CreateTagRequest
+  CategoryWithSelectedTags, TagExtended, TagState, CreateTagRequest, ExerciseState, TagExtendedWithTotal
 } from '~/types'
 import {mutationTree, actionTree, getterTree} from 'nuxt-typed-vuex'
 import {AxiosError} from "axios";
@@ -272,14 +272,16 @@ export const actions = actionTree({state, mutations}, {
    * Fetch all the tags with categories on the database
    * @param commit
    * @param state
+   * @param params
    * @param stateOfTags
    */
-  async fetch({commit, state}, stateOfTags: TagState[] = []) {
+  async fetch({commit, state}, params: {state?: TagState[], countStates?: ExerciseState[]}) {
 
     try {
       const data: CategoryWithTags[] = await this.$axios.$get('api/tags_by_categories', {
         params: {
-          state: stateOfTags
+          state: params.state,
+          countStates: params.countStates
         }
       });
       const array: CategoryWithSelectedTags[] = [];
@@ -287,7 +289,7 @@ export const actions = actionTree({state, mutations}, {
       for (let i in data) {
         const {id, category, tags}: CategoryWithTags = data[i];
 
-        const selectedTags: SelectedTag[] = tags.map((el: TagExtended) => {
+        const selectedTags: SelectedTag[] = tags.map((el: TagExtendedWithTotal) => {
           const selectedTag: SelectedTag = {...el, isSelected: DEACTIVATED};
           return selectedTag
         });
