@@ -181,6 +181,7 @@
       font-weight: bold;
       padding: 0 $PADDING_MENU;
       text-align: center;
+      @include hyphens(true);
 
       .connection-profile--login {
         text-decoration: underline;
