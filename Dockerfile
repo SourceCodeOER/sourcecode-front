@@ -41,18 +41,20 @@ RUN npm ci --no-optional
 
 # Removes unnecessary files/folders in node modules
 # Files
-RUN find "$(pwd)/node_modules" -type f -name "*.ts" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "*.md" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "*.swp" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "LICENSE" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "AUTHORS" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "CONTRIBUTORS" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "CHANGES" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name ".prettierrc*" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name ".npm*" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name ".travis.yml" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "appveyor.yml" -exec rm -f {} \;
-RUN find "$(pwd)/node_modules" -type f -name "*.coveralls.yml" -exec rm -f {} \;
+RUN find "$(pwd)/node_modules" -type f \( \
+    -name "*.ts" -o \
+    -name "*.md" -o \
+    -name "*.swp" -o \
+    -name ".npm*" -o \
+    -name "LICENSE" -o \
+    -name "AUTHORS" -o \
+    -name "CONTRIBUTORS" -o \
+    -name "CHANGES" -o \
+    -name ".prettierrc*" -o \
+    -name ".travis.yml" -o \
+    -name "appveyor.yml" -o \
+    -name ".coveralls.yml" \
+\) -exec rm -f {} \;
 
 # Folders
 RUN find "$(pwd)/node_modules" -type d -name "docs?" -prune -exec rm -rf {} +;
