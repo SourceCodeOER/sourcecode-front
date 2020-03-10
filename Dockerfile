@@ -57,12 +57,18 @@ RUN find "$(pwd)/node_modules" -type f \( \
 \) -exec rm -f {} \;
 
 # Folders
-RUN find "$(pwd)/node_modules" -type d -name "docs?" -prune -exec rm -rf {} +;
-RUN find "$(pwd)/node_modules" -type d -name "tests?" -prune -exec rm -rf {} +;
-RUN find "$(pwd)/node_modules" -type d -name ".idea" -prune -exec rm -rf {} +;
-RUN find "$(pwd)/node_modules" -type d -name ".vscode" -prune -exec rm -rf {} +;
-RUN find "$(pwd)/node_modules" -type d -name "__tests__" -prune -exec rm -rf {} +;
-RUN find "$(pwd)/node_modules" -type d -name "coverage" -prune -exec rm -rf {} +;
+RUN find "$(pwd)/node_modules" -type d \( \
+    -name "docs" -o \
+    -name "doc" -o \
+    -name "tests" -o \
+    -name "test" -o \
+    -name "__tests__" -o \
+    -name ".idea" -o \
+    -name ".vscode" -o \
+    -name "coverage" -o \
+    -name ".github" -o \
+    -name ".circleci" \
+\) -prune -exec rm -rf {} +;
 
 # Default port
 EXPOSE 3000
