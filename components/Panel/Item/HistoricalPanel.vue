@@ -48,7 +48,7 @@
     /**
      * The default icon of this panel (see Icon component)
      */
-    @Prop({type: String, default: "search"}) icon!: string;
+    @Prop({type: String, default: "clock"}) icon!: string;
 
     /**
      * Get the historical of the user from the store
