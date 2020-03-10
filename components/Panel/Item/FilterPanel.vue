@@ -228,7 +228,7 @@
     get categoryWithSelectedTags(): { category: string, tags: CheckboxObject[] }[] {
       return this.$accessor.tags.tags.map((tag: CategoryWithSelectedTags) => {
         const tags: { title: string, state: boolean }[] = tag.tags.map(tagSelecter => {
-          return {title: tagSelecter.tag_text, state: tagSelecter.isSelected}
+          return {title: `${tagSelecter.tag_text} (${tagSelecter.total})`, state: tagSelecter.isSelected}
         });
         return {category: tag.category, tags}
       })

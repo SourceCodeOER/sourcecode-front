@@ -38,7 +38,7 @@
     Configuration,
     SearchExerciseRequest,
     SelectedTag,
-    TagExtended,
+    TagExtended, TagExtendedWithTotal,
   } from "~/types";
   import ExercisesCheckPanel from "~/components/Panel/Item/ExercisesCheckPanel.vue";
   import FilterPanel from "~/components/Panel/Item/FilterPanel.vue";
@@ -67,11 +67,11 @@
       if (!configuration) {
         error({statusCode: 404, message: "Ce favori est introuvable"});
       } else {
-        const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtended) => {
+        const confirmedTags: SelectedTag[] = configuration.tags.map((tag: TagExtendedWithTotal) => {
           return {...tag, isSelected: true}
         });
 
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({countStates: ["VALIDATED"]});
         await $accessor.tags.applyConfirmedTags({confirmedTags, mode: "default"});
 
         const searchRequest: SearchExerciseRequest = {

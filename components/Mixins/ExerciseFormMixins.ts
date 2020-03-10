@@ -265,7 +265,7 @@ export default class ExerciseFormMixins extends Vue {
     this.$accessor.exercises.RESET();
     this.$accessor.tags.CLEAR();
 
-    await this.$accessor.tags.fetch();
+    await this.$accessor.tags.fetch({});
     await this.$accessor.tags.apply("strict");
   }
 

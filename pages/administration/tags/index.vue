@@ -55,6 +55,7 @@
             <th class="item-checkbox"></th>
             <th class="item-left">Nom</th>
             <th>Catégorie</th>
+            <th>Exercices tagués</th>
             <th>Version</th>
             <th class="item-centered">Status</th>
           </tr>
@@ -71,6 +72,7 @@
               <td>
                 {{categoryWithTags.category}}
               </td>
+              <td @click="gotoLink(tag.tag_id)">{{tag.total}}</td>
               <td @click="gotoLink(tag.tag_id)">{{tag.version}}</td>
               <td @click="gotoLink(tag.tag_id)" class="item-centered">
                 <i title="Validé" v-if="tag.state === 'VALIDATED'">
@@ -132,7 +134,7 @@
     },
     async fetch({app: {$accessor}, error}) {
       try {
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({});
       } catch (e) {
         const errorAxios = e as AxiosError;
 
@@ -225,7 +227,7 @@
         await this.$axios.$delete('/api/bulk/delete_tags', {data: this.selectedTags.map(tag => tag.tag_id)});
         this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement supprimé${this.selectedTags.length === 1 ? '' : 's'}.`);
         this.$accessor.tags.CLEAR();
-        this.$accessor.tags.fetch();
+        this.$accessor.tags.fetch({});
       } catch (e) {
         const error = e as AxiosError;
 
@@ -287,7 +289,7 @@
         .then((response) => {
           this.$displaySuccess(`${this.selectedTags.length} ${this.selectedTags.length === 1 ? 'tag a' : 'tags ont'} été correctement ${message}.`);
           this.$accessor.tags.CLEAR();
-          this.$accessor.tags.fetch();
+          this.$accessor.tags.fetch({});
 
         })
         .catch((error: AxiosError) => {

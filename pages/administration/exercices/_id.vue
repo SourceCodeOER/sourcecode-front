@@ -80,16 +80,13 @@
 
         const tags: SelectedTag[] = await $axios.$get(`api/tags?${queryString}`);
 
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({});
         await $accessor.tags.applyConfirmedTags({confirmedTags: tags, mode: 'strict'});
 
         const searchRequest: SearchExerciseRequest = {
           data: {
             title: exercise.title,
             tags: $accessor.tags.tagsRequest
-          },
-          filterOptions: {
-            state: ['VALIDATED']
           },
           orderBy: [{field: "date", value: "DESC"}, {field: 'id', value: 'ASC'}],
           includeOptions: {includeDescription: false, includeTags: false}

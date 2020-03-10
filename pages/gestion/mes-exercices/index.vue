@@ -35,7 +35,7 @@
         <h1>Mes exercices</h1>
 
         <div>Nombre de résultat(s) : {{nbExercises}} - <span @click.self="reset"
-                                                             class="init">Réinitialiser la recherche</span></div>
+                                                             class="init">réinitialiser la recherche</span></div>
 
         <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
@@ -162,7 +162,7 @@
     },
     async fetch({app: {$accessor}, $auth, error}) {
       try {
-        await $accessor.tags.fetch();
+        await $accessor.tags.fetch({});
         await $accessor.tags.apply("default");
         await $accessor.exercises.fetch({
           metadata: {size: 50},
@@ -363,6 +363,7 @@
     }
 
     async reset() {
+      this.resetInput();
       this.$accessor.tags.CLEAR();
       this.$accessor.exercises.RESET_SEARCH_CRITERION();
       this.$accessor.exercises.RESET_STATE();

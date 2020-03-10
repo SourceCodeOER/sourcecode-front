@@ -1,13 +1,13 @@
 /**
  * types for Configuration (favorites)
  */
-import {TagExtended} from "~/types/tags";
+import {TagExtended, TagExtendedWithTotal} from "~/types/tags";
 
 export interface Configuration {
   name: string,
   title: string,
   id: number,
-  tags: TagExtended[]
+  tags: TagExtendedWithTotal[]
 }
 
 export interface UpdateConfigurationRequest {
