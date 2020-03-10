@@ -22,7 +22,11 @@ export interface TagExtended extends Tag {
   version: number
 }
 
-export interface SelectedTag extends TagExtended {
+export interface TagExtendedWithTotal extends TagExtended{
+  total:number
+}
+
+export interface SelectedTag extends TagExtendedWithTotal {
   isSelected: boolean
 }
 
