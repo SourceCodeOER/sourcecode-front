@@ -12,26 +12,6 @@
         </div>
       </div>
 
-      <div>
-        <h3>Notes</h3>
-        <template v-if="$auth.loggedIn">
-          <h4>Votre note</h4>
-          <Rating :rating="rating" @rating="rate"/>
-        </template>
-        <h4>Moyenne</h4>
-        <div class="avg-score" v-if="nbVotes !== 0">
-          <span>{{avgVote}}</span>
-          <Icon theme="theme--primary-color" type="star"/>
-        </div>
-        <div v-else>
-          <span>Pas encore évalué</span>
-        </div>
-        <h4>Nombre de votes</h4>
-        <div>
-          <span>{{nbVotes}}</span>
-        </div>
-
-      </div>
 
       <div v-if="!!exercise.url || !!exercise.file" class="sources">
         <h3>Sources</h3>
@@ -111,60 +91,6 @@
       return arrayOfTagByCategories
     }
 
-    get rating() {
-      return this.exercise.vote ? this.exercise.vote : 0
-    }
-
-    get avgVote() {
-
-      const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
-
-      if(metrics) {
-        return metrics.avg_score
-      }
-
-      return '-'
-    }
-
-    get nbVotes() {
-      const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
-
-      if(metrics) {
-        return metrics.votes
-      }
-
-      return 0
-    }
-
-    private async rate(i:number) {
-      if(this.$auth.loggedIn) {
-        try {
-          await this.$axios.$post('/api/vote_for_exercise', {exercise_id: this.exercise.id, score: i});
-          this.$displaySuccess('Merci pour votre retour !');
-        } catch (e) {
-          const error = e as AxiosError;
-
-          if(error.response) {
-            const status = error.response.status;
-
-            if(status === 400) {
-              this.$displayError('Une erreur est survenue, vérifiez vos données');
-            } else if(status === 401) {
-              this.$displayError('Vous devez vous connecter pour effectuer cette action !');
-            } else if(status === 403) {
-              this.$displayError("Vous n'êtes pas autorisé à effectuer cette action !");
-            } else if(status === 500) {
-              this.$displayError("Une erreur est survenue depuis nos serveurs, veuillez nous en excuser.");
-            } else {
-              this.$displayError("Une erreur est survenue.");
-            }
-          } else {
-              this.$displayError("Une erreur est survenue.");
-          }
-        }
-      }
-    }
-
     created() {
       const link: string | undefined = this.$accessor.sharedEnv.CDN_SERVER;
       this.cdnLink = link ? link : ''
@@ -216,20 +142,5 @@
         width: 100%;
       }
     }
-
-
-    .avg-score {
-      display: inline-block;
-      span {
-        display: inline-block;
-      }
-
-      svg {
-        width: 25px;
-        vertical-align: -6px;
-      }
-    }
-
-
   }
 </style>

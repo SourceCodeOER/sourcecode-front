@@ -24,6 +24,23 @@
       <section class="exercise">
         <h1>{{exercise.title}}</h1>
         <span>Créé le {{$moment(exercise.createdAt).format("DD/MM/YY à H:mm")}}</span> | <span>Mis à jour le {{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</span>
+
+        <div class="score__info">
+          <div v-if="$auth.loggedIn">
+            <h4 class="title--primary-color__light">Votre note</h4>
+            <Rating :rating="rating" @rating="rate"/>
+          </div>
+          <div>
+            <h4 class="title--primary-color__light">Moyenne de l'exercice</h4>
+            <div class="avg-score" v-if="nbVotes !== 0">
+              <span>{{avgVote}}</span>
+              <Icon theme="theme--primary-color" type="star"/>
+            </div>
+            <div v-else>
+              <span>Pas encore évalué</span>
+            </div>
+          </div>
+        </div>
         <button v-if="isTheCreator || isAdmin || isSuperAdmin" @click="modifyExercise"
                 class="button--ternary-color-reverse">Modifier l'exercice
         </button>
@@ -38,7 +55,7 @@
 
 <script lang="ts">
   import {Component, Mixins} from "vue-property-decorator";
-  import {Exercise} from "~/types";
+  import {Exercise, ExerciseMetrics} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
   import hljs from 'highlight.js/lib/highlight';
   import javascript from 'highlight.js/lib/languages/javascript';
@@ -52,6 +69,7 @@
   import DetailsPanel from "~/components/Panel/Item/DetailsPanel.vue";
   import UserMixins from "~/components/Mixins/Api/UserMixins";
   import {AxiosError} from "axios";
+  import Rating from "~/components/Rating/Rating.vue";
 
   hljs.registerLanguage('javascript', javascript);
   hljs.registerLanguage('css', css);
@@ -62,6 +80,7 @@
 
   @Component({
     components: {
+      Rating,
       DetailsPanel,
       PanelItem,
       Panel,
@@ -76,15 +95,18 @@
       } catch (e) {
         const axiosError = e as AxiosError;
 
-        if(axiosError.response) {
+        if (axiosError.response) {
           const status: number = axiosError.response.status;
 
-          if(status === 404) {
+          if (status === 404) {
             error({statusCode: status, message: "Cet exercice est introuvable."});
-          } else if(status === 410) {
+          } else if (status === 410) {
             error({statusCode: 410, message: "Cet exercice a été archivé."});
-          } else if(status === 500) {
-            error({statusCode: status, message: "Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser."});
+          } else if (status === 500) {
+            error({
+              statusCode: status,
+              message: "Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser."
+            });
           }
         } else {
           error({statusCode: 404, message: "Cet exercice est introuvable."});
@@ -110,6 +132,61 @@
       if (!this.user) return false;
       else {
         return this.user.email === this.creator
+      }
+    }
+
+    get rating() {
+      return this.exercise.vote ? this.exercise.vote : 0
+    }
+
+    get avgVote() {
+
+      const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
+
+      if(metrics) {
+        return metrics.avg_score
+      }
+
+      return '-'
+    }
+
+    get nbVotes() {
+      const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
+
+      if (metrics) {
+        console.log(metrics);
+        return metrics.votes
+      }
+
+      return 0
+    }
+
+    private async rate(i: number) {
+      if (this.$auth.loggedIn) {
+        try {
+          await this.$axios.$post('/api/vote_for_exercise', {exercise_id: this.exercise.id, score: i});
+          this.$displaySuccess('Merci pour votre retour !');
+        } catch (e) {
+          const error = e as AxiosError;
+
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 400) {
+              this.$displayError('Une erreur est survenue, vérifiez vos données');
+            } else if (status === 401) {
+              this.$displayError('Vous devez vous connecter pour effectuer cette action !');
+            } else if (status === 403) {
+              this.$displayError("Vous n'êtes pas autorisé à effectuer cette action !");
+            } else if (status === 500) {
+              this.$displayError("Une erreur est survenue depuis nos serveurs, veuillez nous en excuser.");
+            } else {
+              this.$displayError("Une erreur est survenue.");
+            }
+          } else {
+            this.$displayError("Une erreur est survenue.");
+          }
+        }
       }
     }
 
@@ -145,7 +222,32 @@
   #Exercise {
 
     .exercise {
-      position: relative;
+
+      .score__info {
+        display: flex;
+
+        h4 {
+          margin-bottom: 5px;
+        }
+
+        > div:not(:first-child) {
+          margin-left: 35px;
+        }
+
+      }
+
+      .avg-score {
+        display: inline-block;
+
+        span {
+          display: inline-block;
+        }
+
+        svg {
+          width: 25px;
+          vertical-align: -6px;
+        }
+      }
 
       button {
         position: absolute;
