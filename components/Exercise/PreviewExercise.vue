@@ -2,14 +2,6 @@
   <article>
     <div class="rating" :class="{'rating--empty': exercise.metrics.votes === 0}">
         {{rating}}
-        <div @click="gotoExercise" class="overlay">
-          <span v-if="!$auth.loggedIn">
-            Connectez-vous pour côter cet exercice !
-          </span>
-          <span v-else>
-            Soyez le premier à côter cet exercice !
-          </span>
-        </div>
     </div>
 
     <div class="info-wrapper">
@@ -99,10 +91,11 @@
           const metrics = this.exercise.metrics;
 
           if(metrics) {
+            if(metrics.votes === 0) return '-';
             return metrics.avg_score
           }
 
-          return 0
+          return '-'
 
         }
 
@@ -152,7 +145,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor:pointer;
       @include transitionHelper(opacity .4s ease);
 
       span {
@@ -161,11 +153,6 @@
       }
     }
 
-    .rating--empty:hover .overlay {
-      visibility: visible;
-      opacity: 1;
-
-    }
 
     button {
       margin: 0;
@@ -187,7 +174,6 @@
       align-items: center;
 
       &.rating--empty {
-        cursor:pointer;
         color:lighten($GREY, 30);
       }
     }
