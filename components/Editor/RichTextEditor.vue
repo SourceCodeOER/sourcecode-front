@@ -11,6 +11,7 @@
 
             <button
               class="menubar__button"
+              title="Mettre en gras"
               :class="{ 'button--grey-light-reverse': isActive.bold(), 'button--grey-light': !isActive.bold() }"
               @click="commands.bold"
             >
@@ -19,6 +20,7 @@
 
             <button
               class="menubar__button"
+              title="Mettre en italic"
               :class="{ 'button--grey-light-reverse': isActive.italic(), 'button--grey-light': !isActive.italic() }"
               @click="commands.italic"
             >
@@ -27,6 +29,7 @@
 
             <button
               class="menubar__button"
+              title="Barrer"
               :class="{ 'button--grey-light-reverse': isActive.strike(), 'button--grey-light': !isActive.strike() }"
               @click="commands.strike"
             >
@@ -35,8 +38,8 @@
 
             <button
               class="menubar__button"
+              title="Souligner"
               :class="{ 'button--grey-light-reverse': isActive.underline(), 'button--grey-light': !isActive.underline() }"
-
               @click="commands.underline"
             >
               <u>u</u>
@@ -49,6 +52,7 @@
 
             <button
               class="menubar__button"
+              title="Paragraphe"
               :class="{ 'button--grey-light-reverse': isActive.paragraph(), 'button--grey-light': !isActive.paragraph() }"
               @click="commands.paragraph"
             >
@@ -57,6 +61,7 @@
 
             <button
               class="menubar__button menubar__button--with-icon"
+              title="Citation"
               :class="{ 'button--grey-light-reverse': isActive.blockquote(), 'button--grey-light': !isActive.blockquote() }"
               @click="commands.blockquote"
             >
@@ -65,6 +70,7 @@
 
             <button
               class="menubar__button menubar__button--with-icon button--grey-light"
+              title="Séparateur horizontal"
               @click="commands.horizontal_rule"
             >
               <Icon type="lineH" theme="theme--grey-light"/>
@@ -77,6 +83,7 @@
             <button
               class="menubar__button"
               :class="{ 'button--grey-light-reverse': isActive.heading({ level: 2 }), 'button--grey-light': !isActive.heading({ level: 2 }) }"
+              title="Titre de niveau 2"
               @click="commands.heading({ level: 2 })"
             >
               H2
@@ -85,6 +92,7 @@
             <button
               class="menubar__button"
               :class="{ 'button--grey-light-reverse': isActive.heading({ level: 3 }), 'button--grey-light': !isActive.heading({ level: 3 }) }"
+              title="Titre de niveau 3"
               @click="commands.heading({ level: 3 })"
             >
               H3
@@ -97,6 +105,7 @@
             <button
               class="menubar__button"
               :class="{ 'button--grey-light-reverse': isActive.bullet_list(), 'button--grey-light': !isActive.bullet_list() }"
+              title="Liste à puces"
               @click="commands.bullet_list"
             >
               ul
@@ -104,6 +113,7 @@
 
             <button
               class="menubar__button"
+              title="Liste ordonnée"
               :class="{ 'button--grey-light-reverse': isActive.ordered_list(), 'button--grey-light': !isActive.ordered_list() }"
               @click="commands.ordered_list"
             >
@@ -118,6 +128,7 @@
             <button
               class="menubar__button menubar__button--with-icon"
               :class="{ 'button--grey-light-reverse': isActive.code(), 'button--grey-light': !isActive.code() }"
+              title="Code sur une ligne"
               @click="commands.code"
             >
               <Icon type="codeBasic" :theme="isActive.code() ? 'theme--white' : 'theme--grey-light'"/>
@@ -127,6 +138,7 @@
               class="menubar__button menubar__button--with-icon"
               :class="{ 'button--grey-light-reverse': isActive.code_block(), 'button--grey-light': !isActive.code_block() }"
               @click="commands.code_block"
+              title="Bloc de code"
             >
               <Icon type="codeBlock" :theme="isActive.code_block() ? 'theme--white' : 'theme--grey-light'"/>
             </button>
@@ -138,6 +150,7 @@
             <button
               class="menubar__button menubar__button--with-icon button--grey-light"
               @click="commands.undo"
+              title="Revenir en arrière"
             >
               <Icon type="undo" theme="theme--grey-light"/>
 
@@ -146,6 +159,7 @@
             <button
               class="menubar__button menubar__button--with-icon button--grey-light"
               @click="commands.redo"
+              title="Revenir en avant"
             >
               <Icon type="redo" theme="theme--grey-light"/>
             </button>
