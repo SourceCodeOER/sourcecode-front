@@ -17,12 +17,12 @@
 
     </ValidationObserver>
 
+    <p class="disclaimer">* champs obligatoires</p>
     <div class="cta__validate--wrapper">
       <button @click="validateBeforeSubmit" class="button--ternary-color-reverse cta__validate">
         Publier
       </button>
     </div>
-    <p class="disclaimer">* champs obligatoires</p>
 
   </section>
 

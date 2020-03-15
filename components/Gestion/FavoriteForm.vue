@@ -47,12 +47,12 @@
 
     <TagColorLegend/>
 
+    <p class="disclaimer">* champs obligatoires</p>
     <div class="cta__validate--wrapper">
       <button @click="validateBeforeSubmit" class="button--ternary-color-reverse button__validate">
         sauver le favori
       </button>
     </div>
-    <p class="disclaimer">* champs obligatoires</p>
   </section>
 
 </template>

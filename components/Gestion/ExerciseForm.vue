@@ -131,6 +131,7 @@
     </ValidationObserver>
 
 
+    <p class="disclaimer">* champs obligatoires</p>
     <div class="cta__validate--wrapper">
       <template v-if="['admin', 'super_admin'].includes(userRole)">
         <button @click="validateBeforeSubmit('NOT_VALIDATED')" class="button--red-reverse cta__validate">
@@ -155,7 +156,6 @@
         Soumettre
       </button>
     </div>
-    <p class="disclaimer">* champs obligatoires</p>
 
   </section>
 
