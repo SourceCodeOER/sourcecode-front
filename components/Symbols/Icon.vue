@@ -42,6 +42,7 @@
       bookmark: () => import('./library/BookmarkSymbol.vue'),
       mail: () => import('./library/MailSymbol.vue'),
       clock: () => import('./library/ClockSymbol.vue'),
+      info: () => import('./library/InfoSymbol.vue'),
       book: () => import('./library/BookSymbol.vue')
     }
   })

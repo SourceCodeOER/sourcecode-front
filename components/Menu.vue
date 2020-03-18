@@ -35,6 +35,13 @@
             </div>
             Bibliothèque
           </nuxt-link>
+
+          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/tutoriel/introduction">
+            <div class="logo-link-wrapper">
+              <Icon type="info" theme="theme--white"/>
+            </div>
+            Tutoriel
+          </nuxt-link>
         </ul>
 
         <template v-if="isAuthenticated && (role === 'admin' || role === 'super_admin')">

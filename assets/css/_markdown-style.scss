@@ -96,7 +96,11 @@
   }
 
   a {
-    color: $NIGHT_BLUE
+    color: $NIGHT_BLUE;
+
+    &.external-link {
+      color: $TERNARY_COLOR
+    }
   }
 
   blockquote {
