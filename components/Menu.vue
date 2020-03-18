@@ -229,6 +229,12 @@
       position: relative;
       padding: 0 $PADDING_MENU/1.5 0 $PADDING_MENU/1.5;
 
+
+      &.cta-link-with-arrow.nuxt-link-exact-active {
+        background-color: rgba(white, .2);
+        @include transitionHelper(background-color .3s ease)
+      }
+
       &.cta-link-with-arrow:after {
         content: url("~assets/logo/arrow.svg");
         position: absolute;
