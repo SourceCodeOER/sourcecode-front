@@ -14,7 +14,7 @@
     padding: 10px;
     display: flex;
     background-color: lighten($GREY, 64);
-
+    border-top: 1px solid lighten($GREY, 20);;
   }
 
   .menubar__button__wrapper {
@@ -60,6 +60,9 @@
 
   .editor__content {
     //margin-top: 30px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 500px;
 
     .ProseMirror {
       padding: 20px 20px;
@@ -67,6 +70,20 @@
       -moz-appearance: none;
       appearance: none;
       outline: none;
+
+      pre {
+        position: relative;
+      }
+
+      pre:hover:after {
+        content: "ctrl + enter pour quitter le mode bloc de code";
+        font-style: italic;
+        font-weight: bold;
+        display: block;
+        position: absolute;
+        bottom: 0;
+      }
+
       > p:first-of-type {
         margin-top: 0;
       }

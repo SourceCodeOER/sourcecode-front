@@ -34,6 +34,7 @@
 
     </ValidationObserver>
 
+    <p class="disclaimer">* champs obligatoires</p>
     <div class="cta__validate--wrapper">
       <button @click="validateBeforeSubmit('NOT_VALIDATED')" class="button--red-reverse cta__validate">
         Invalider
@@ -48,7 +49,6 @@
         Valider
       </button>
     </div>
-    <p class="disclaimer">* champs obligatoires</p>
 
   </section>
 
