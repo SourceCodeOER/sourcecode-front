@@ -97,7 +97,7 @@
                         @submit.prevent="validateBeforeSubmit">
       <ValidationProvider tag="div"
                           name="archive zip"
-                          rules="mimes:application/zip"
+                          rules="mimes:application/zip,application/x-zip,application/x-zip-compressed,application/octet-stream"
                           ref="fileObserver"
                           v-slot="{ errors, validate }">
             <span class="label__name">
