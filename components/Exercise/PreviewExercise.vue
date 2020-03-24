@@ -29,15 +29,32 @@
     export default class PreviewExercise extends Vue {
         @Prop({type: Object, required: true}) readonly exercise!: Exercise;
 
-        get metaTitleLink() {
+      /**
+       * Return the meta title of the exercise
+       */
+      get metaTitleLink() {
             return `${this.exercise.title} | Source Code`
         }
 
-        get metaLink() {
+      /**
+       * Return the link of the exercise containing its id
+       */
+      get metaLink() {
             return `/exercices/${this.exercise.id}`
         }
 
-        get tagsFormatted(): string {
+      /**
+       * return a formatted list of tags
+       * Here's the order :
+       * 1) cours
+       * 2) difficulté
+       * 3) langage
+       * 4) type d'exercice
+       * 5) thématique
+       *
+       * If a category does not contain any tag, it will be not display
+       */
+      get tagsFormatted(): string {
             const tags: ExerciseTag[] = this.exercise.tags;
 
             if(!tags) return '';
@@ -52,7 +69,7 @@
                 if (tag.category.category_text === 'cours' && orderedTextTags[0] === undefined) {
                     orderedTextTags[0] = tag.tag_text;
                     counter++
-                } else if (tag.category.category_text === 'langage' && orderedTextTags[1] === undefined) {
+                } else if (tag.category.category_text === 'difficulté' && orderedTextTags[1] === undefined) {
                   orderedTextTags[1] = tag.tag_text;
                   counter++
                 } else if (tag.category.category_text === 'langage' && orderedTextTags[2] === undefined) {
@@ -86,7 +103,10 @@
             return formatted
         }
 
-        get rating() {
+      /**
+       * Return the rating of the exercise
+       */
+      get rating() {
 
           const metrics = this.exercise.metrics;
 
@@ -97,14 +117,6 @@
 
           return '-'
 
-        }
-
-        gotoExercise() {
-          if(this.$auth.loggedIn) {
-            this.$router.push(this.metaLink)
-          } else {
-            this.$router.push('/login')
-          }
         }
     }
 </script>

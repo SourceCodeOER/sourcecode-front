@@ -275,10 +275,17 @@
       }
     }
 
+    /**
+     * Reset the text editor
+     * @param content
+     */
     reset(content: string = '<p></p>') {
       this.editor.setContent(content);
     }
 
+    /**
+     * Check if the text editor is empty
+     */
     get isEmpty(): boolean {
       return this.content === '<p></p>' || this.content === '<p><br></p>' || this.content === '';
     }

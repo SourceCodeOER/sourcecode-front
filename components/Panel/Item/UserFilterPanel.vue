@@ -64,16 +64,19 @@
 
 
     /**
-     * A reference to each TagSelecter components
+     * A reference to each CheckBoxSelecter components
      */
     @Ref() checkBoxSelecter!: CheckBoxSelecter;
 
     /**
-     * The current opened tag selecter component
+     * The current opened CheckBoxSelecter component
      */
     selectedCheckBoxSelecter: CheckBoxSelecter | undefined = undefined;
 
 
+    /**
+     * Filter all users in terms of role
+     */
     setUserCriteria(event: CheckboxSelecterObjectEmitted[]) {
 
       const switchFunction = function (el: CheckboxSelecterObjectEmitted) {
@@ -121,7 +124,7 @@
     }
 
     /**
-     * Save the current tagSelecter or close a tag selecter if previously activated
+     * Save the current CheckBoxSelecter or close a CheckBoxSelecterif previously activated
      * @param userSelecter
      */
     toggleList(userSelecter: CheckBoxSelecter) {

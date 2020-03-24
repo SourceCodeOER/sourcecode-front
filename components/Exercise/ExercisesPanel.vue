@@ -59,31 +59,51 @@
       threshold: ratio
     };
 
-
+    /**
+     * return the number of selected tags
+     */
     get numberOfFilter() {
       return this.$accessor.tags.selectedTags.length
     }
 
+    /**
+     * return all the selected tags
+     */
     get confirmedTags(): SelectedTag[] {
       return this.$accessor.tags.selectedTags
     }
 
+    /**
+     * Return the searched title for an exercise
+     */
     get searchModel() {
       return this.$accessor.exercises.search_criterion.title
     }
 
+    /**
+     * Check if the search request is empty
+     */
     get isEmptySearchModel(): boolean {
       return this.$accessor.exercises.search_criterion.title === ""
     }
 
+    /**
+     * Return the number of exercises corresponding to the search request
+     */
     get nbOfResults(): number {
       return this.$accessor.exercises.metadata.totalItems
     }
 
+    /**
+     * Return all the fetched exercises
+     */
     get exercises(): Exercise[] {
       return this.$accessor.exercises.exercises
     }
 
+    /**
+     * formats the selection tag according to the quotation in a human readable way
+     */
     get voteTag(): { title: string, id: number, state: TagState } | undefined {
       const vote = this.$accessor.exercises.search_criterion.vote;
       let title = '';
@@ -102,6 +122,9 @@
       return undefined
     }
 
+    /**
+     * Refresh the size of the box containing all exercises if the number of selected tags change
+     */
     @Watch('numberOfFilter')
     onNumberOfFilterChange() {
       this.$nextTick(() => {
@@ -115,6 +138,9 @@
       })
     }
 
+    /**
+     * Remove the rating criteria and refresh the search request
+     */
     async removeRatingCriteria() {
       await this.$accessor.exercises.RESET_VOTE();
       await this.$accessor.exercises.fetch({});
@@ -129,6 +155,11 @@
       })
     }
 
+    /**
+     * Remove on tag from the search request and fetch the exercises
+     * @param event
+     * @param tag
+     */
     async deleteTag(event: TagLabelObjectEmitted, tag: SelectedTag) {
       await this.$accessor.tags.addOrRemoveTag({...tag, isSelected: false});
       await this.$accessor.tags.apply('default');
@@ -144,6 +175,9 @@
       })
     }
 
+    /**
+     * Reset the search request
+     */
     async reset() {
       this.$accessor.tags.CLEAR();
       this.$accessor.exercises.RESET_SEARCH_CRITERION();
