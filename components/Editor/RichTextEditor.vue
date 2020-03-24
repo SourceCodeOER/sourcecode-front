@@ -124,6 +124,14 @@
 
           <div class="menubar__button__wrapper">
 
+            <button
+              class="menubar__button menubar__button--with-icon"
+              :class="{ 'button--grey-light-reverse': isActive.code_block(), 'button--grey-light': !isActive.code_block() }"
+              @click="commands.code_block"
+              title="Bloc de code"
+            >
+              <Icon type="codeBlock" :theme="isActive.code_block() ? 'theme--white' : 'theme--grey-light'"/>
+            </button>
 
             <button
               class="menubar__button menubar__button--with-icon"
@@ -134,14 +142,6 @@
               <Icon type="codeBasic" :theme="isActive.code() ? 'theme--white' : 'theme--grey-light'"/>
             </button>
 
-            <button
-              class="menubar__button menubar__button--with-icon"
-              :class="{ 'button--grey-light-reverse': isActive.code_block(), 'button--grey-light': !isActive.code_block() }"
-              @click="commands.code_block"
-              title="Bloc de code"
-            >
-              <Icon type="codeBlock" :theme="isActive.code_block() ? 'theme--white' : 'theme--grey-light'"/>
-            </button>
 
           </div>
 
