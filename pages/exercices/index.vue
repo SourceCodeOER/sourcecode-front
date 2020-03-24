@@ -20,7 +20,7 @@
         </PanelItem>
 
         <PanelItem :is-active="$auth.loggedIn">
-          <FavoritePanel/>
+          <FavoritePanel @fetch="setInput"/>
         </PanelItem>
       </Panel>
       <ExercisesPanel @reset="resetInput"/>
@@ -92,9 +92,13 @@
       this.inputText.value = ""
     }
 
-    mounted() {
+    setInput() {
       const title = this.$accessor.exercises.search_criterion.title;
-      this.inputText.value = !!title ? title : ''
+      this.inputText.value = !!title ? title : '';
+    }
+
+    mounted() {
+      this.setInput();
     }
   }
 </script>
