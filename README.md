@@ -22,7 +22,8 @@ To make **Source Code** works, you must enable the databases and run the applica
 
 ## Build Setup
 
-First, you have to create a .env file in the root of the project with these variables :
+First, following your installation of the API, you have to set the environment variables in the config folder.
+Here's an explanation of each one.
 
 ``` .env
 # change the api server
