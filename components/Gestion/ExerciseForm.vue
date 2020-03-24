@@ -3,6 +3,30 @@
 
     <h1>{{title}}</h1>
 
+    <h2 v-if="exercise" class="title--primary-color__light">Status actuel de la ressource</h2>
+
+    <div v-if="exercise" class="status">
+      <template v-if="exercise.state === 'VALIDATED'">
+        Valide <Icon type="check" theme="theme--green"/>
+      </template>
+
+      <template v-else-if="exercise.state === 'NOT_VALIDATED'">
+        Non valide <Icon type="close" theme="theme--red-light"/>
+      </template>
+
+      <template v-else-if="exercise.state === 'PENDING'">
+        En attente <Icon type="send" theme="theme--yellow"/>
+      </template>
+
+      <template v-else-if="exercise.state === 'DRAFT'">
+        Brouillon <Icon title="Créé" type="paper" theme="theme--primary-color-light"/>
+      </template>
+
+      <template v-else-if="exercise.state === 'ARCHIVED'">
+        Archivé <Icon type="archive" theme="theme--red-light"/>
+      </template>
+    </div>
+
     <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit()">
       <ValidationProvider tag="label"
                           name="titre"

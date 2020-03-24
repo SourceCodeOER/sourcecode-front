@@ -24,7 +24,28 @@
       <section class="exercise">
         <h1>{{exercise.title}}</h1>
         <span>Créé le {{$moment(exercise.createdAt).format("DD/MM/YY à H:mm")}}</span> | <span>Mis à jour le {{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</span>
+        <div class="status">
+          <b>status</b> -
+          <template v-if="exercise.state === 'VALIDATED'">
+            Valide <Icon type="check" theme="theme--green"/>
+          </template>
 
+          <template v-else-if="exercise.state === 'NOT_VALIDATED'">
+            Non valide <Icon type="close" theme="theme--red-light"/>
+          </template>
+
+          <template v-else-if="exercise.state === 'PENDING'">
+            En attente <Icon type="send" theme="theme--yellow"/>
+          </template>
+
+          <template v-else-if="exercise.state === 'DRAFT'">
+            Brouillon <Icon title="Créé" type="paper" theme="theme--primary-color-light"/>
+          </template>
+
+          <template v-else-if="exercise.state === 'ARCHIVED'">
+            Archivé <Icon type="archive" theme="theme--red-light"/>
+          </template>
+        </div>
         <div class="score__info">
           <div v-if="$auth.loggedIn">
             <h4 class="title--primary-color__light">Votre note</h4>
@@ -220,6 +241,18 @@
   @import "../../assets/css/_font";
 
   #Exercise {
+
+    .status {
+        font-weight: 300;
+        line-height: 25px;
+        margin-top: 5px;
+        svg {
+          vertical-align: middle;
+          width: 25px;
+          margin-left: 5px;
+        }
+
+    }
 
     .exercise {
       position: relative;
