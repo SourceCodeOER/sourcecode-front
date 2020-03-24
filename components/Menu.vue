@@ -142,8 +142,6 @@
     }
 
     get role(): UserRole {
-      console.log(this.$route.path);
-
       return this.$auth.user.role
     }
 
@@ -181,12 +179,6 @@
       const regex = new RegExp(/^(\/tutoriel)/gm);
       if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
       return '';
-    }
-
-    get routeLol() {
-      console.log(this.$route);
-
-      return this.$route;
     }
 
     async logout() {
