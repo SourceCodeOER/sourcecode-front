@@ -19,6 +19,17 @@ h1 {
   }
 }
 
+.status {
+  line-height: 25px;
+  svg {
+    vertical-align: middle;
+    width: 25px;
+    margin-left: 5px;
+  }
+
+  margin-bottom: 30px;
+}
+
 .content {
   background-color: white;
   border-radius: 4px;
