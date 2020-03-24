@@ -36,7 +36,7 @@
             Bibliothèque
           </nuxt-link>
 
-          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/tutoriel/introduction">
+          <nuxt-link class="cta-link cta-link-with-arrow" tag="li" :class="isTutorialLink" to="/tutoriel/introduction">
             <div class="logo-link-wrapper">
               <Icon type="info" theme="theme--white"/>
             </div>
@@ -47,19 +47,19 @@
         <template v-if="isAuthenticated && (role === 'admin' || role === 'super_admin')">
           <span>Administration</span>
           <ul>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/exercices">
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" :class="isAdministrationExerciseLink" to="/administration/exercices">
               <div class="logo-link-wrapper">
                 <Icon type="document" theme="theme--white"/>
               </div>
               Exercices
             </nuxt-link>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/categories">
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" :class="isAdministrationCategoryLink" to="/administration/categories">
               <div class="logo-link-wrapper">
                 <Icon type="bookmark" theme="theme--white"/>
               </div>
               Catégories
             </nuxt-link>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/tags">
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" :class="isAdministrationTagLink" to="/administration/tags">
               <div class="logo-link-wrapper">
                 <Icon type="tags" theme="theme--white"/>
               </div>
@@ -77,13 +77,13 @@
         <template v-if="isAuthenticated">
           <span>Gestion</span>
           <ul>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/mes-exercices">
+            <nuxt-link class="cta-link cta-link-with-arrow" :class="isGestionLink" tag="li" to="/gestion/mes-exercices">
               <div class="logo-link-wrapper">
                 <Icon type="document" theme="theme--white"/>
               </div>
               Mes exercices
             </nuxt-link>
-            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/gestion/mes-favoris">
+            <nuxt-link class="cta-link cta-link-with-arrow" :class="isFavoriteLink" tag="li" to="/gestion/mes-favoris">
               <div class="logo-link-wrapper">
                 <Icon type="star" theme="theme--white"/>
               </div>
@@ -142,7 +142,51 @@
     }
 
     get role(): UserRole {
+      console.log(this.$route.path);
+
       return this.$auth.user.role
+    }
+
+    get isAdministrationExerciseLink() {
+      const regex = new RegExp(/^(\/administration\/exercices)/gm);
+      if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
+      return '';
+    }
+
+    get isAdministrationTagLink() {
+      const regex = new RegExp(/^(\/administration\/tags)/gm);
+      if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
+      return '';
+    }
+
+    get isAdministrationCategoryLink() {
+      const regex = new RegExp(/^(\/administration\/categories)/gm);
+      if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
+      return '';
+    }
+
+    get isGestionLink() {
+      const regex = new RegExp(/^(\/gestion\/mes-exercices)/gm);
+      if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
+      return '';
+    }
+
+    get isFavoriteLink() {
+      const regex = new RegExp(/^(\/gestion\/mes-favoris)/gm);
+      if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
+      return '';
+    }
+
+    get isTutorialLink() {
+      const regex = new RegExp(/^(\/tutoriel)/gm);
+      if(this.$route.path.match(regex)) return 'nuxt-link-exact-active';
+      return '';
+    }
+
+    get routeLol() {
+      console.log(this.$route);
+
+      return this.$route;
     }
 
     async logout() {
