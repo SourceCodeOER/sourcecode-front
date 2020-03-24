@@ -130,6 +130,8 @@
       searchRequest.data = searchCriterion;
 
       await this.$accessor.exercises.fetch(searchRequest);
+
+      this.$emit('fetch');
     }
   }
 </script>

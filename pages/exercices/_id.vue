@@ -222,6 +222,7 @@
   #Exercise {
 
     .exercise {
+      position: relative;
 
       .score__info {
         display: flex;
