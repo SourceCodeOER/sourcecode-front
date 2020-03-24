@@ -48,6 +48,27 @@
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import Icon from "~/components/Symbols/Icon.vue";
 
+  const formatNameOfPage = function (name: string) {
+    switch (name) {
+      case "tutoriel-bibliotheque":
+        return 'Bibliothèque';
+      case "tutoriel-comptes-et-utilisateurs":
+        return 'Comptes et utilisateurs';
+      case "tutoriel-ressources-informatiques":
+        return 'Ressources informatiques';
+      case "tutoriel-favoris":
+        return 'Favoris';
+      case "tutoriel-introduction":
+        return 'Introduction';
+      case "tutoriel-editeur-de-texte":
+        return 'Editeur de texte';
+      case "tutoriel-mes-exercices":
+        return 'Mes exercices';
+      case "tutoriel-administration":
+        return 'Administration';
+    }
+  };
+
   @Component({
     components: {
       Icon,
@@ -62,40 +83,17 @@
 
     get tutorialNameFormatted() {
       const name = this.$route.name;
-
-      switch (name) {
-        case "tutoriel-bibliotheque":
-          return 'Bibliothèque';
-        case "tutoriel-comptes-et-utilisateurs":
-          return 'Comptes et utilisateurs';
-        case "tutoriel-panneau-a-onglets":
-          return 'Panneau à onglets';
-        case "tutoriel-favoris":
-          return 'Favoris';
-        case "tutoriel-introduction":
-          return 'Introduction';
-      }
+      if (name) return formatNameOfPage(name);
 
       return this.$route.name
     }
 
     tutorialLink(pageName: string) {
-      switch (pageName) {
-        case "bibliotheque":
-          return 'Bibliothèque';
-        case "panneau-a-onglets":
-          return 'Panneau à onglets';
-        case "favoris":
-          return 'Favoris';
-        case "comptes-et-utilisateurs":
-          return 'Comptes et utilisateurs';
-        case "introduction":
-          return 'Introduction';
-      }
+      return formatNameOfPage('tutoriel-' + pageName);
     }
 
     created() {
-      this.pageNames = ["introduction", "comptes-et-utilisateurs", "bibliotheque", "panneau-a-onglets", "favoris"];
+      this.pageNames = ["introduction", "comptes-et-utilisateurs", "bibliotheque", "ressources-informatiques", "favoris", "mes-exercices", "editeur-de-texte", "administration"];
     }
   }
 </script>
@@ -117,21 +115,21 @@
         margin-bottom: 5px;
       }
 
-      h2 {
-        margin-bottom: 10px;
-        margin-top: 30px;
 
-        ~ h3 {
-          margin-top:20px;
-        }
-      }
-
-      h3 {
-        font-size: 1em;
-      }
 
       > .exercise-article {
         font-size: .875em;
+        p, blockquote {
+          max-width: 1000px;
+        }
+
+        ul.list--with-img {
+          li img, li svg {
+            width: 25px;
+            margin: 0 5px 0 0;
+            vertical-align: middle;
+          }
+        }
 
         ol {
           > li {
@@ -147,8 +145,18 @@
         ul {
           max-width: 700px;
         }
+
         > ul > li {
           margin-bottom: 10px;
+        }
+
+        .img-wrapper {
+          display: flex;
+
+          .content {
+            max-width: 400px;
+            margin-left: 20px;
+          }
         }
 
         img.extra-large {
@@ -168,6 +176,11 @@
 
         img.small {
           max-width: 250px;
+          width: 100%;
+        }
+
+        img.extra-small {
+          max-width: 125px;
           width: 100%;
         }
       }

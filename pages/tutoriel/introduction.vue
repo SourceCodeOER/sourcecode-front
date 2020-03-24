@@ -16,41 +16,58 @@
           <nuxt-link to="comptes-et-utilisateurs">
             Comptes et utilisateurs
           </nuxt-link>
-          <ul>
-            <li>Quels sont les avantages d'un compte ?</li>
-            <li>Comment se créer un compte ?</li>
-            <li>Comment se connecter à son compte ?</li>
-            <li>Les différents rôles d'utilisateur</li>
-          </ul>
         </li>
         <li>
           <nuxt-link to="bibliotheque">
             Bibliothèque
           </nuxt-link>
           <ul>
-            <li>Quel est le but de cette page ?</li>
-            <li>Comprendre le système de recherche</li>
-            <li>Guider sa recherche avec le panneau latéral</li>
+            <li><nuxt-link to="bibliotheque#Tutorial_preview-exercise">Informations sur la preview d'une ressource</nuxt-link></li>
+            <li><nuxt-link to="bibliotheque#Tutorial_panel_library">Le panneau à onglets</nuxt-link></li>
           </ul>
         </li>
-        <li>
-          <nuxt-link to="panneau-a-onglets">
-            Panneau à onglets
-          </nuxt-link>
-          <ul>
-            <li>Filtres</li>
-            <li>Historique</li>
-            <li>Favoris</li>
-            <li>Ressources similaires</li>
-          </ul>
-        </li>
+        <li><nuxt-link to="ressources-informatiques">Ressources informatiques</nuxt-link></li>
         <li>
           <nuxt-link to="favoris">
             Favoris
           </nuxt-link>
           <ul>
-            <li>L'intérêt des favoris</li>
-            <li>Où peut-on les utiliser ?</li>
+            <li><nuxt-link to="favoris#Tutorial_favorite_home">Accueil de gestion des favoris</nuxt-link></li>
+            <li><nuxt-link to="favoris#Tutorial_favorite_form">Formulaire de création/modification d'un favori</nuxt-link></li>
+          </ul>
+        </li>
+        <li>
+          <nuxt-link to="mes-exercices">
+            Mes exercices
+          </nuxt-link>
+          <ul>
+            <li><nuxt-link to="mes-exercices#Tutorial_gestion_ressources">Gestion des ressources</nuxt-link></li>
+            <li><nuxt-link to="mes-exercices#Tutorial_status">Status d'une ressource informatique</nuxt-link></li>
+            <li><nuxt-link to="mes-exercices#Tutorial_gestion_status">Gestion du status de la ressource</nuxt-link></li>
+            <li><nuxt-link to="mes-exercices#Tutorial_ressource_form">Création/modification d'une ressource</nuxt-link></li>
+            <li><nuxt-link to="mes-exercices#Tutorial_submission">Soumission</nuxt-link></li>
+          </ul>
+        </li>
+        <li>
+          <nuxt-link to="editeur-de-texte">
+            Editeur de texte
+          </nuxt-link>
+          <ul>
+            <li><nuxt-link to="editeur-de-texte#Tutorial_style">Styles de base</nuxt-link></li>
+            <li><nuxt-link to="editeur-de-texte#Tutorial_structure">Structurer le texte</nuxt-link></li>
+            <li><nuxt-link to="editeur-de-texte#Tutorial_list">Utiliser des listes</nuxt-link></li>
+            <li><nuxt-link to="editeur-de-texte#Tutorial_code">Formatter du code</nuxt-link></li>
+            <li><nuxt-link to="editeur-de-texte#Tutorial_undo">Undo/redo</nuxt-link></li>
+          </ul>
+        </li>
+        <li>
+          <nuxt-link to="administration">
+            Administration
+          </nuxt-link>
+          <ul>
+            <li><nuxt-link to="administration#Tutorial_exercises">Gestion des exercices</nuxt-link></li>
+            <li><nuxt-link to="administration#Tutorial_tags">Gestion des tags</nuxt-link></li>
+            <li><nuxt-link to="administration#Tutorial_categories">Gestion des catégories</nuxt-link></li>
           </ul>
         </li>
       </ol>
