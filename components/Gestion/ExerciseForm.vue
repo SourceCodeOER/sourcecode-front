@@ -135,7 +135,7 @@
         <span class="error-message">{{errors[0]}}</span>
         <a v-if="exercise && exercise.file && filename" :href="`${cdnLink}/${exercise.file}`" target="_blank"
            class="message message--primary-color"
-           style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</a>
+           style="text-decoration: underline; cursor: pointer;" download>Télécharger le fichier</a>
         <span class="message message--red" v-if="filename"
               style="text-decoration: underline; cursor: pointer;"
               @click="deleteFile">Supprimer le fichier</span>

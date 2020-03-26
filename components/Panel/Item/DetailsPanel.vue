@@ -22,8 +22,8 @@
           </button>
         </a>
 
-        <a v-if="!!exercise.file" :href="`${cdnLink}/${exercise.file}`" target="_blank" class="button-wrapper">
-          <button class=" button--ternary-color-reverse">
+        <a v-if="!!exercise.file" :href="`${cdnLink}/${exercise.file}`" class="button-wrapper" download>
+          <button class="button--ternary-color-reverse">
             Télécharger l'exercice
           </button>
         </a>
