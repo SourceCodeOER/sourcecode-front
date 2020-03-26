@@ -133,9 +133,9 @@
           <Icon type="archive" theme="theme--white"/>
           {{labelFileText}}</label>
         <span class="error-message">{{errors[0]}}</span>
-        <a v-if="exercise && exercise.file && filename" :href="`${cdnLink}/${exercise.file}`" target="_blank"
+        <span v-if="exercise && exercise.file && filename" @click="downloadFile"
            class="message message--primary-color"
-           style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</a>
+           style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</span>
         <span class="message message--red" v-if="filename"
               style="text-decoration: underline; cursor: pointer;"
               @click="deleteFile">Supprimer le fichier</span>
@@ -209,6 +209,9 @@
   import TagColorLegend from "~/components/Tag/TagColorLegend.vue";
 
   const debounce = require('lodash.debounce');
+
+  const download = require('downloadjs');
+
   @Component({
     components: {TagColorLegend, CustomSelect, ValidationObserver, ValidationProvider, RichTextEditor, Tag, Icon}
   })
@@ -363,6 +366,34 @@
         this.$displayWarning("Vous devez ajouter au moins 3 tags valides.", {time: 5000})
       } else {
         this.$displayWarning("Vous ne respectez pas les conditions pour la publication de cet exercice.", {time: 5000})
+      }
+    }
+
+    async downloadFile() {
+      if(this.exercise) {
+        try {
+
+          const result:Blob = await this.$axios.$get(`/files/${this.exercise.file}`, {responseType: 'blob'});
+
+          download(result, "archive.zip", result.type);
+
+          this.$displaySuccess("Téléchargement éffectué.");
+
+        } catch (e) {
+          const error = e as AxiosError;
+
+          if (error.response) {
+            const status: number = error.response.status;
+
+            if (status === 404) {
+              this.$displayError(`Ce fichier est introuvable`);
+            } else if (status === 500) {
+              this.$displayError(`Une erreur est survenue lors du téléchargement.`);
+            }
+          } else {
+            this.$displayError(`Une erreur est survenue lors du téléchargement.`);
+          }
+        }
       }
     }
 

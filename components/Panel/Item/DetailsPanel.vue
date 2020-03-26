@@ -22,11 +22,11 @@
           </button>
         </a>
 
-        <a v-if="!!exercise.file" :href="`${cdnLink}/${exercise.file}`" target="_blank" class="button-wrapper">
-          <button class=" button--ternary-color-reverse">
+        <div v-if="!!exercise.file" @click="downloadFile" class="button-wrapper">
+          <button class="button--ternary-color-reverse">
             Télécharger l'exercice
           </button>
-        </a>
+        </div>
 
       </div>
     </div>
@@ -40,6 +40,8 @@
   import Rating from "~/components/Rating/Rating.vue";
   import {BusEvent} from "~/components/Event/BusEvent";
   import {AxiosError} from "axios";
+
+  const download = require('downloadjs');
 
   @Component({
     components: {Rating, Icon}
@@ -89,6 +91,32 @@
       }
 
       return arrayOfTagByCategories
+    }
+
+    async downloadFile() {
+      try {
+
+        const result:Blob = await this.$axios.$get(`/files/${this.exercise.file}`, {responseType: 'blob'});
+
+        download(result, "archive.zip", result.type);
+
+        this.$displaySuccess("Téléchargement éffectué.");
+
+      } catch (e) {
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 404) {
+            this.$displayError(`Ce fichier est introuvable`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue lors du téléchargement.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors du téléchargement.`);
+        }
+      }
     }
 
     created() {

@@ -31,6 +31,7 @@ module.exports = {
   },
   proxy: {
     '/api/': {target: undefined},
+    '/files/': {target: undefined},
     '/auth/': {target: undefined}
   },
   auth: {
