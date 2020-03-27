@@ -3,8 +3,8 @@
     <h1>Bibliothèque</h1>
     <div class="exercise-article">
       <p>
-        la
-        <nuxt-link class="external-link" to="/exercices">page bibliothèque</nuxt-link>
+        La
+        <nuxt-link class="external-link" to="/exercices">page Bibliothèque</nuxt-link>
         contient toutes les <em>ressources informatiques</em> ayant été validées par les
         <nuxt-link to="/">modérateurs</nuxt-link>
         de la plateforme. Dans cette section, nous allons donc parcourir tout ce qui concerne la recherche.
