@@ -49,12 +49,13 @@
 
   .tag {
     display: inline-block;
-    padding: 10px 10px;
+    padding: 12px 12px;
+    letter-spacing: .5px;
     border-radius: 4px;
     background-color: white;
     color: darken($SECONDARY_COLOR, 12);
     border: 1px solid darken($SECONDARY_COLOR, 12);
-    font-weight: lighter;
+    font-weight: bold;
     font-size: .75em;
     margin-right: 5px;
     margin-bottom: 10px;
