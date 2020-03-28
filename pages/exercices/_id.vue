@@ -63,12 +63,31 @@
           </div>
         </div>
         <button v-if="isTheCreator || isAdmin || isSuperAdmin" @click="modifyExercise"
-                class="button--ternary-color-reverse">Modifier l'exercice
+                class="button--ternary-color-reverse modify-button">Modifier l'exercice
         </button>
 
         <h2 class="title--primary-color__light">Description</h2>
 
         <article v-html="exercise.description" class="exercise-article"></article>
+
+        <template v-if="!!exercise.url || !!exercise.file">
+
+          <h2 class="title--primary-color__light">Sources</h2>
+
+          <a v-if="!!exercise.url" :href="exercise.url" target="_blank" class="button-wrapper">
+            <button class=" button--ternary-color-reverse">
+              Lien vers l'exercice
+            </button>
+          </a>
+
+          <div v-if="!!exercise.file" @click="downloadFile" class="button-wrapper">
+            <button class="button--ternary-color-reverse">
+              Télécharger l'exercice
+            </button>
+          </div>
+
+        </template>
+
       </section>
     </div>
   </div>
@@ -98,6 +117,8 @@
   hljs.registerLanguage('python', python);
   hljs.registerLanguage('cmake', cmake);
   hljs.registerLanguage('cs', cs);
+
+  const download = require('downloadjs');
 
   @Component({
     components: {
@@ -219,6 +240,33 @@
       }
     }
 
+    async downloadFile() {
+      try {
+
+        const result:Blob = await this.$axios.$get(`/files/${this.exercise.file}`, {responseType: 'blob'});
+
+        download(result, "archive.zip", result.type);
+
+        this.$displaySuccess("Téléchargement éffectué.");
+
+      } catch (e) {
+        const error = e as AxiosError;
+
+        if (error.response) {
+          const status: number = error.response.status;
+
+          if (status === 404) {
+            this.$displayError(`Ce fichier est introuvable`);
+          } else if (status === 500) {
+            this.$displayError(`Une erreur est survenue lors du téléchargement.`);
+          }
+        } else {
+          this.$displayError(`Une erreur est survenue lors du téléchargement.`);
+        }
+      }
+    }
+
+
     mounted() {
       if (process.client) {
         const exercise: Element | null = document.querySelector("#Exercise");
@@ -283,11 +331,19 @@
         }
       }
 
+      .button-wrapper {
+        text-align: left;
+      }
+
       button {
+        font-size: .75em;
+        min-width: 250px;
+      }
+
+      button.modify-button {
         position: absolute;
         right: 20px;
         top: 20px;
-        font-size: .75em;
       }
     }
 

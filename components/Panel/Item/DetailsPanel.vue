@@ -12,36 +12,16 @@
         </div>
       </div>
 
-
-      <div v-if="!!exercise.url || !!exercise.file" class="sources">
-        <h3>Sources</h3>
-
-        <a v-if="!!exercise.url" :href="exercise.url" target="_blank" class="button-wrapper">
-          <button class=" button--ternary-color-reverse">
-            Lien vers l'exercice
-          </button>
-        </a>
-
-        <div v-if="!!exercise.file" @click="downloadFile" class="button-wrapper">
-          <button class="button--ternary-color-reverse">
-            Télécharger l'exercice
-          </button>
-        </div>
-
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import {Component, Prop, Vue} from "vue-property-decorator";
-  import {Exercise, ExerciseMetrics, ExerciseTag} from "../../../types";
+  import {Exercise, ExerciseTag} from "../../../types";
   import Icon from "~/components/Symbols/Icon.vue";
   import Rating from "~/components/Rating/Rating.vue";
-  import {BusEvent} from "~/components/Event/BusEvent";
   import {AxiosError} from "axios";
-
-  const download = require('downloadjs');
 
   @Component({
     components: {Rating, Icon}
@@ -61,9 +41,7 @@
      * The exercise containing details, tags,...
      */
     @Prop({type: Object, required: true}) exercise!: Exercise;
-
-    private cdnLink!: string;
-
+    
     /**
      * Classify all tags by categories and sorts the categories
      */
@@ -91,37 +69,6 @@
       }
 
       return arrayOfTagByCategories
-    }
-
-    async downloadFile() {
-      try {
-
-        const result:Blob = await this.$axios.$get(`/files/${this.exercise.file}`, {responseType: 'blob'});
-
-        download(result, "archive.zip", result.type);
-
-        this.$displaySuccess("Téléchargement éffectué.");
-
-      } catch (e) {
-        const error = e as AxiosError;
-
-        if (error.response) {
-          const status: number = error.response.status;
-
-          if (status === 404) {
-            this.$displayError(`Ce fichier est introuvable`);
-          } else if (status === 500) {
-            this.$displayError(`Une erreur est survenue lors du téléchargement.`);
-          }
-        } else {
-          this.$displayError(`Une erreur est survenue lors du téléchargement.`);
-        }
-      }
-    }
-
-    created() {
-      const link: string | undefined = this.$accessor.sharedEnv.CDN_SERVER;
-      this.cdnLink = link ? link : ''
     }
 
   }
