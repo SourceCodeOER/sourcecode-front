@@ -22,7 +22,7 @@
         </PanelItem>
 
         <PanelItem>
-          <FilterPanel strategy="user" :reset-button="true" :search-mode="true" title="Tags"/>
+          <FilterPanel strategy="user" :search-mode="true" title="Tags"/>
         </PanelItem>
       </Panel>
 
