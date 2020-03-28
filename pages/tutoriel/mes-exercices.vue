@@ -30,7 +30,7 @@
 
       <blockquote>
         Pour parcourir toutes vos ressources, scrollez dans le tableau. Arrivé en bas de celui-ci, l'application
-        chargera les ressources suivantes (si il en reste).
+        chargera les ressources suivantes (s'il en reste).
       </blockquote>
 
       <img src="/img/tutorial/accueil-mes-exercices.png" class="extra-large" alt="">
@@ -185,7 +185,7 @@
 
       <ul>
         <li>Un tag <b>valide</b> pourra être utilisé depuis la bibliothèque pour filtrer les ressources informatiques.
-         Ceci garanti un meilleur référencement pour la ressource.</li>
+         Ceci garantit un meilleur référencement pour la ressource.</li>
         <li>Un tag <b>obsolète</b> risque d'être remplacé par un autre tag ou d'être supprimé ultérieurement.</li>
         <li>Un tag <b>en attente</b> n'a pas encore passé la validation d'un administrateur.</li>
         <li>Un tag <b>non valide</b> n'a pas été accepté l'administration. Il se peut qu'il soit modifié ultérieurement.</li>
