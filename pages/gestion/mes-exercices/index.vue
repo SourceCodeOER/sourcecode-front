@@ -15,7 +15,6 @@
         <PanelItem>
           <FilterPanel strategy="user" :radio-button-rating="true"
                        :radio-button-state="true"
-                       :reset-button="true"
                        :favorite="true"
                        :search-mode="true"
                        :historical-mode="true"
@@ -40,7 +39,7 @@
         <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
             <Icon type="search"/>
-            <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput"
+            <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keypress.enter="debounceInput"
                    placeholder="Rechercher">
           </div>
 
@@ -312,11 +311,19 @@
      * Event for the input html element
      * Search with the title entered and update the store
      */
-    debounceInput = debounce((e: any) => {
+    debounceInput(e: any) {
       const value = e.target.value;
       this.$accessor.exercises.fetch({data: {title: value}});
       this.$accessor.historical.addHistorical({tags: this.$accessor.tags.selectedTags, title: value})
-    }, 300);
+    }
+
+    resetIfEmpty(e:any) {
+      const value:string =  e.target.value;
+
+      if(value === '') {
+        this.$accessor.exercises.fetch({data: {title: ""}});
+      }
+    }
 
     /**
      * Reset the input value
