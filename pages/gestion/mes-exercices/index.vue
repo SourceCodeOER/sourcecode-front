@@ -21,11 +21,11 @@
                        @reset="resetInput"/>
         </PanelItem>
         <PanelItem>
-          <HistoricalPanel/>
+          <HistoricalPanel @refresh="refreshInput"/>
         </PanelItem>
 
         <PanelItem>
-          <FavoritePanel/>
+          <FavoritePanel @fetch="refreshInput"/>
         </PanelItem>
       </Panel>
 
@@ -323,6 +323,11 @@
       if(value === '') {
         this.$accessor.exercises.fetch({data: {title: ""}});
       }
+    }
+
+
+    refreshInput() {
+      this.inputText.value = this.$accessor.exercises.search_criterion.title || '';
     }
 
     /**

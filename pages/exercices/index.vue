@@ -16,7 +16,7 @@
                        @reset="resetInput"/>
         </PanelItem>
         <PanelItem>
-          <HistoricalPanel/>
+          <HistoricalPanel @refresh="refreshInput"/>
         </PanelItem>
 
         <PanelItem :is-active="$auth.loggedIn">
@@ -39,7 +39,6 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
-  import {AxiosError} from "axios";
 
   @Component({
     components: {
@@ -88,6 +87,10 @@
 
     resetInput() {
       this.inputText.value = ""
+    }
+
+    refreshInput() {
+      this.inputText.value = this.$accessor.exercises.search_criterion.title || '';
     }
 
     setInput() {
