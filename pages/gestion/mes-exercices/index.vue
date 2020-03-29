@@ -37,9 +37,9 @@
                                                              class="init">réinitialiser la recherche</span></div>
 
         <div class="header-wrapper">
-          <div class="input-wrapper--with-icon">
+          <div class="input-wrapper--with-icon input-with--enter-icon">
             <Icon type="search"/>
-            <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keypress.enter="debounceInput"
+            <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keydown.enter="debounceInput"
                    placeholder="Rechercher">
           </div>
 

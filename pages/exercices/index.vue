@@ -1,9 +1,9 @@
 <template>
   <div class="container--with-menu">
     <div class="banner search-banner">
-      <div class="input-wrapper--with-icon">
+      <div class="input-wrapper--with-icon one-third input-with--enter-icon">
         <Icon type="search"/>
-        <input ref="inputText" class="input--primary-color" type="text" @keypress.enter="debounceInput"
+        <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keydown.enter="debounceInput"
                placeholder="Rechercher">
       </div>
     </div>
@@ -87,6 +87,14 @@
 
     resetInput() {
       this.inputText.value = ""
+    }
+
+    resetIfEmpty(e:any) {
+      const value:string =  e.target.value;
+
+      if(value === '') {
+        this.$accessor.exercises.fetch({data: {title: ""}});
+      }
     }
 
     refreshInput() {
