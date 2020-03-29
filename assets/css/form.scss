@@ -58,10 +58,10 @@ input[type=file] {
   display: none;
 
   + label {
-    color:white;
+    color: white;
     border-radius: 4px;
     padding: 10px 15px;
-    cursor:pointer;
+    cursor: pointer;
     text-transform: uppercase;
     font-size: .7em;
     font-weight: bold;
@@ -79,15 +79,30 @@ input[type=file] {
 
 .input-wrapper--with-icon {
   position: relative;
+
+  &.one-third {
+    max-width: 33%;
+  }
+
+  &.input-with--enter-icon:after {
+    content: "↵";
+    color:$PRIMARY_COLOR;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    @include transformHelper(translateY(-50%));
+  }
+
   input:not([type=radio]) {
     padding-left: 50px;
   }
+
   svg {
     width: 15px;
     position: absolute;
     top: 50%;
     left: 20px;
-    transform: translateY(-50%);
+    @include transformHelper(translateY(-50%));
   }
 }
 
