@@ -244,7 +244,7 @@
 
     header {
       .results {
-        font-weight: lighter;
+        font-weight: 500;
       }
     }
 

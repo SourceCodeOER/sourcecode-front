@@ -18,7 +18,7 @@
         <div class="header-wrapper">
           <div class="input-wrapper--with-icon">
             <Icon type="search"/>
-            <input ref="inputText" class="input--primary-color" type="text" v-model="searchModel"
+            <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keypress.enter="debounceInput"
                    placeholder="Rechercher">
           </div>
 
@@ -163,6 +163,22 @@
       return this.searchModel === '' ? this.categories : this.categories.filter(cat => {
         return cat.category.toLowerCase().match(this.searchModel.toLowerCase()) !== null
       })
+    }
+
+    /**
+     * Event for the input html element
+     * Search with the title entered and update the store
+     */
+    debounceInput(e: any)  {
+      this.searchModel = e.target.value;
+    }
+
+    resetIfEmpty(e:any) {
+      const value:string =  e.target.value;
+
+      if(value === '') {
+        this.searchModel = "";
+      }
     }
 
     /**

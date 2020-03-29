@@ -99,6 +99,8 @@
       }
 
       await this.$accessor.exercises.fetch({data: {tags: tagsRequest, title: title, vote: historical.vote}});
+
+      this.$emit('refresh');
     }
   }
 </script>

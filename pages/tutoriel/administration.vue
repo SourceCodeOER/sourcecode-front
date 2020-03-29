@@ -28,7 +28,7 @@
 
 
       <p>
-        En tant qu'administrateur, vous possédez néanmoins des foncionnalités additionnelles.
+        En tant qu'administrateur, vous possédez néanmoins des fonctionnalités additionnelles.
         Laissez-nous vous les introduire.
       </p>
 
@@ -91,7 +91,7 @@
           Le nombre de ressources informatiques utilisant ce tag (<b>exercices tagués</b>).
         </li>
         <li>
-          Le nombre de fois que le tag a subit une modification (<b>version</b>).
+          Le nombre de fois que le tag a subi une modification (<b>version</b>).
         </li>
         <li>
           Le <b>status</b> du tag.
@@ -155,7 +155,7 @@
       <h2 class="title--secondary-color"  id="Tutorial_categories">Gestion des catégories</h2>
 
       <p>
-        La gestion des catégories se limite uniquement à la modification du titre ou la création d'une nouvelles
+        La gestion des catégories se limite uniquement à la modification du titre ou la création d'une nouvelle
         catégorie. La suppression est réservée au super-administrateur.
       </p>
 

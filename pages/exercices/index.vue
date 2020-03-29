@@ -3,7 +3,7 @@
     <div class="banner search-banner">
       <div class="input-wrapper--with-icon">
         <Icon type="search"/>
-        <input ref="inputText" class="input--primary-color" type="text" v-on:input="debounceInput"
+        <input ref="inputText" class="input--primary-color" type="text" @keypress.enter="debounceInput"
                placeholder="Rechercher">
       </div>
     </div>
@@ -11,12 +11,12 @@
     <div class="wrapper wrapper--with-panel">
       <Panel>
         <PanelItem>
-          <FilterPanel :reset-button="true" :radio-button-rating="true" :favorite="true" :search-mode="true"
+          <FilterPanel :radio-button-rating="true" :favorite="true" :search-mode="true"
                        :historical-mode="true"
                        @reset="resetInput"/>
         </PanelItem>
         <PanelItem>
-          <HistoricalPanel/>
+          <HistoricalPanel @refresh="refreshInput"/>
         </PanelItem>
 
         <PanelItem :is-active="$auth.loggedIn">
@@ -39,9 +39,6 @@
   import Panel from "~/components/Panel/Panel.vue";
   import PanelItem from "~/components/Panel/PanelItem.vue";
   import RadioButtonSelecter from "~/components/Search/RadioButtonSelecter.vue";
-  import {AxiosError} from "axios";
-
-  const debounce = require('lodash.debounce');
 
   @Component({
     components: {
@@ -78,7 +75,7 @@
   export default class extends Vue {
     @Ref() inputText!: HTMLInputElement;
 
-    debounceInput = debounce((e: any) => {
+    debounceInput(e: any) {
       const value = e.target.value;
       this.$accessor.exercises.fetch({data: {title: value}});
       this.$accessor.historical.addHistorical({
@@ -86,10 +83,14 @@
         title: value,
         vote: this.$accessor.exercises.search_criterion.vote
       })
-    }, 300);
+    }
 
     resetInput() {
       this.inputText.value = ""
+    }
+
+    refreshInput() {
+      this.inputText.value = this.$accessor.exercises.search_criterion.title || '';
     }
 
     setInput() {

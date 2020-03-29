@@ -47,7 +47,7 @@
         <li>La cotation de la ressource (sur <em>5</em>)
           <ul>
             <li>
-              lorsque'aucun vote n'a été effectué, un tiret (-) grisé est affiché. Nous donnons une grande importance
+              lorsqu'aucun vote n'a été effectué, un tiret (-) grisé est affiché. Nous donnons une grande importance
               au feedback de la communauté ! En évaluant ces ressources, vous contribuez ainsi à maintenir une
               plateforme ayant du contenu de qualité.
             </li>
@@ -78,7 +78,7 @@
       <h3 class="title--ternary-color" id="Tutorial_filters">Filtres</h3>
       <p>
         <i>Les filtres</i> vous permettent d'affiner votre recherche de <em>ressources informatiques</em>.
-        Les tags que vous cochez apparaitront juste au dessus des résultats. <b>Si vous voulez retirer un de vos choix</b>,
+        Les tags que vous cochez apparaitront juste au-dessus des résultats. <b>Si vous voulez retirer un de vos choix</b>,
         il suffit de décocher un des tags en question ou de cliquer sur la croix du label représentant le tag
         que vous avez sélectionné.
       </p>
@@ -91,7 +91,7 @@
 
       <p>
         <b>Vous pouvez choisir plusieurs tags dans une même catégorie</b>. Dans ce cas, la recherche vous donnera des
-        résultats comprenant au moins un des tags que vous avez sélectionné.
+        résultats comprenant au moins un des tags que vous avez sélectionnés.
       </p>
 
       <p>
@@ -118,12 +118,12 @@
       <h3 class="title--ternary-color" id="Tutorial_historical">Historique</h3>
 
       <p>
-        <i>L'historique</i> vous permet de naviguer à travers les recherches que vous avez précedemment effectuées.
+        <i>L'historique</i> vous permet de naviguer à travers les recherches que vous avez précédemment effectuées.
         Il restera disponible tout au long de votre session, après quoi il sera réinitialisé.
       </p>
 
       <blockquote>
-        L'historique est utile pour revenir dans vos précedentes recherches, mais vous pouvez sauvegarder
+        L'historique est utile pour revenir dans vos précédentes recherches, mais vous pouvez sauvegarder
         votre sélection avec les favoris !
       </blockquote>
 
@@ -156,7 +156,7 @@
 
       <ul>
         <li>Le crayon vous permet de modifier le favori. Il vous mènera donc sur la page de modification de ce favori.</li>
-        <li>Le poubelle vous permet de supprimer votre favori directement depuis le panneau.</li>
+        <li>La poubelle vous permet de supprimer votre favori directement depuis le panneau.</li>
       </ul>
 
     </div>
