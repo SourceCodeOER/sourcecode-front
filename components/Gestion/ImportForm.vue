@@ -11,7 +11,7 @@
     <ValidationObserver ref="observer" tag="form"
                         @submit.prevent="validateBeforeSubmit">
       <ValidationProvider tag="div"
-                          name="archive zip"
+                          name="fichier json"
                           rules="mimes:application/json"
                           ref="fileObserver"
                           v-slot="{ errors }">
@@ -49,8 +49,6 @@
   import {AxiosError} from "axios";
   import Icon from "~/components/Symbols/Icon.vue";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
-
-  const debounce = require('lodash.debounce');
 
   @Component({
     components: {CustomSelect, ValidationObserver, ValidationProvider, Icon}
@@ -147,37 +145,42 @@
         const file: File | null = this.file();
 
         if (file !== null) {
+          reader.onloadend = async () => {
+            if (reader.result !== null) {
+              const buffer = reader.result as ArrayBuffer;
+              const string: string = new TextDecoder().decode(buffer);
 
-          reader.readAsText(file, "UTF-8");
-          reader.onload = async (evt: any) => {
-            const text: string = evt.target.result;
-            try {
-              this.$nuxt.$loading.start();
-              await this.$axios.$post("/api/bulk/create_exercises", JSON.parse(text));
-              this.$displaySuccess("L'importation s'est correctement déroulée.");
-            } catch (e) {
-              const error = e as AxiosError;
+              try {
+                this.$nuxt.$loading.start();
+                await this.$axios.$post("/api/bulk/create_exercises", JSON.parse(string));
+                this.$displaySuccess("L'importation s'est correctement déroulée.");
+              } catch (e) {
+                const error = e as AxiosError;
 
-              if (error.response) {
-                const status = error.response.status;
+                if (error.response) {
+                  const status = error.response.status;
 
-                if (status === 400) {
-                  this.$displayWarning("Votre fichier ne possède pas le bon format.")
-                } else if (status === 401) {
-                  this.$displayWarning("Vous n'êtes pas autorisé à effectuer cette action.")
-                } else if (status === 500) {
-                  this.$displayError("Une erreur est survenue depuis nos serveurs.")
+                  if (status === 400) {
+                    this.$displayWarning("Votre fichier ne possède pas le bon format.")
+                  } else if (status === 401) {
+                    this.$displayWarning("Vous n'êtes pas autorisé à effectuer cette action.")
+                  } else if (status === 500) {
+                    this.$displayError("Une erreur est survenue depuis nos serveurs.")
+                  } else {
+                    this.$displayError("Une erreur est survenue.")
+                  }
                 } else {
                   this.$displayError("Une erreur est survenue.")
                 }
-              } else {
-                this.$displayError("Une erreur est survenue.")
+              } finally {
+                this.$nuxt.$loading.finish();
               }
 
-            } finally {
-              this.$nuxt.$loading.finish();
             }
           };
+
+          reader.readAsArrayBuffer(file);
+
         }
 
         requestAnimationFrame(() => {
