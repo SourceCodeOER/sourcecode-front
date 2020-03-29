@@ -49,9 +49,11 @@
 
       <p>
         <i><b>L'avant-dernier bloc</b></i> de boutons permet de styliser du code. Le premier bouton crée un bloc
-        de code. Il suffit d'insérer du code et l'éditeur reconnaitra automatiquement le langage pour appliquer la
+        de code. Pour insérer le code, <b>cliquez d'abord sur le bouton de création</b> de bloc de code et <b>collez ensuite
+        votre code</b> dans la box.
+        Il suffit d'insérer du code et l'éditeur reconnaitra automatiquement le langage pour appliquer la
         coloration syntaxique. Actuellement, le bloc de code reconnait : <i>javascript, css, java, python, cmake et
-        cs</i>. Pour quitter le mode bloc de code, <b>tapez sur shift + enter</b>.
+        c</i>. Pour quitter le mode bloc de code, <b>tapez sur shift + enter</b>.
         Le dernier bouton permet de mettre en évidence un mot en le soulignant.
       </p>
 
