@@ -196,7 +196,6 @@
       const metrics: ExerciseMetrics | undefined = this.exercise.metrics;
 
       if (metrics) {
-        console.log(metrics);
         return metrics.votes
       }
 
