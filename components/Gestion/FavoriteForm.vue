@@ -20,7 +20,7 @@
                           rules="max:100"
                           v-slot="{ errors }">
             <span class="label__name">
-              Titre de la sélection
+              Titre de recherche
             </span>
         <input id="Title" placeholder="Entrez le titre de votre recherche" name="title" v-model="form.title"
                v-on:input="debounceInput" class="input--grey" type="text">
