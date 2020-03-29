@@ -25,7 +25,7 @@
         La recherche fonctionne de la même manière que dans la <nuxt-link to="bibliotheque">bibliothèque</nuxt-link>,
         à la différence qu'elle est effectuée dans <b>vos</b> exercices seulement.
         Consultez la section du <nuxt-link to="bibliotheque#Tutorial_panel_library">panneau à onglets</nuxt-link>
-        latéral pour comprendre son fonctionnement.
+        pour comprendre son fonctionnement.
       </p>
 
       <blockquote>
@@ -122,7 +122,7 @@
       <h2 class="title--secondary-color" id="Tutorial_gestion_status">Gestion du status de la ressource</h2>
       <p>
         Pour modifier l'état d'une ressource, cochez une ou plusieurs ressources. Une liste déroulante d'actions
-        apparaitra à coté du bouton de création d'exercice. Vous pourrez alors publier (envoyer pour révision),
+        apparaitra à côté du bouton de création d'exercice. Vous pourrez alors publier (envoyer pour révision),
         mettre en brouillon ou archiver la/les ressource(s) sélectionnée(s).
       </p>
       <img src="/img/tutorial/selection-mes-exercices.png" class="large" alt="">
@@ -199,7 +199,7 @@
 
       <ul>
         <li><b>Brouillon</b> : Vous estimez que votre ressource informatique n'est pas encore prête pour être validée,
-          vous la laissez donc en stand-by pour la modifier plus tard. A noter que vous <b>DEVEZ</b> remplir les
+          vous la laissez donc en stand-by pour la modifier plus tard. À noter que vous <b>DEVEZ</b> remplir les
           champs obligatoires pour l'enregistrer sous cet état.</li>
         <li>
           <b>Soumettre</b> : Vous estimez que votre ressource informatique est prête pour inspection. En cliquant sur
@@ -226,7 +226,7 @@
           la prenne en charge pour validation.
         </li>
         <li><b>Brouillon</b> : Vous estimez que votre ressource informatique n'est pas encore prête pour être validée,
-          vous la laissez donc en stand-by pour la modifier plus tard. A noter que vous <b>DEVEZ</b> remplir les
+          vous la laissez donc en stand-by pour la modifier plus tard. À noter que vous <b>DEVEZ</b> remplir les
           champs obligatoires pour l'enregistrer sous cet état.
         </li>
         <li><b>Valider</b> : Vous estimez que votre ressource informatique est prête à apparaitre publiquement

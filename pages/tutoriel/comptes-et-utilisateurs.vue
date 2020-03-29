@@ -39,7 +39,7 @@
         <i>L'administrateur</i> est un rôle capital car lui seul permet de garantir du contenu de qualité.
         Il est chargé de valider les <em>ressources informatiques</em> soumises par les
         utilisateurs, de valider les tags et de créer de nouvelles catégories de tags.
-        En plus de ces droits ci, <i>l'administrateur</i> possède bien évidement tous les droits
+        En plus de ces droits-ci, <i>l'administrateur</i> possède bien évidement tous les droits
         de l'<nuxt-link :to="{hash: 'Tutorial_SimpleUser'}">utilisateur</nuxt-link> !
       </p>
     </div>

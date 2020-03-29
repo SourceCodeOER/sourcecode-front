@@ -3,7 +3,7 @@
     <h1>Ressources informatiques</h1>
     <div class="exercise-article">
       <p>
-        Les ressources informatiques sont le coeur de <b><i>Source Code</i></b>. Elles représentent toutes
+        Les ressources informatiques sont le cœur de <b><i>Source Code</i></b>. Elles représentent toutes
         les contributions émises par la communauté. Vous pouvez les consulter depuis la
         <nuxt-link to="bibliotheque">bibliothèque</nuxt-link> en cliquant ensuite sur "voir l'exercice".
       </p>

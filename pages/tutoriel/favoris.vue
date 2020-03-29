@@ -24,7 +24,7 @@
       <h2 class="title--secondary-color" id="Tutorial_favorite_home">Accueil de gestion des favoris</h2>
 
       <p>Vous pouvez gérer vos favoris en passant votre souri sur un de vos favoris. Deux icônes apparaitront, le
-        crayon permettant de modifier le favori et la poubelle permettant de le supprimer. A noter que
+        crayon permettant de modifier le favori et la poubelle permettant de le supprimer. À noter que
         la modification vous renverra sur le formulaire de modification du favori.
       </p>
       <img src="/img/tutorial/accueil-favoris.png" class="extra-large" alt="">
@@ -71,7 +71,7 @@
             correspondant à votre recherche.
           </p>
 
-          <p>Vous pouvez consulter la ressource en passant votre souri sur un des élements et en cliquant sur "voir".</p>
+          <p>Vous pouvez consulter la ressource en passant votre souri sur un des éléments et en cliquant sur "voir".</p>
         </div>
       </div>
     </div>

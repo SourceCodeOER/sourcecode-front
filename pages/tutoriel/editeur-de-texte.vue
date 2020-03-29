@@ -30,7 +30,7 @@
 
       <p>
         <i><b>Le deuxième bloc</b></i> de boutons permet de structurer le texte en y ajoutant (dans l'ordre) <b>paragraphe</b>,
-        <b>citation</b> et <b>séparateur horizontal</b>. A noter que lorsque vous utiliser la <b>citation</b>,
+        <b>citation</b> et <b>séparateur horizontal</b>. À noter que lorsque vous utiliser la <b>citation</b>,
         vous devez taper <b>deux fois sur la touche enter</b> pour sortir de ce mode.
       </p>
 
@@ -39,8 +39,8 @@
       <img src="/img/tutorial/listes.png" class="large" alt="">
 
       <p>
-        <i><b>Le troisième bloc</b></i> de boutons permet d'interragir avec deux types de listes : à puces ou ordonnées.
-        A noter que vous devez taper <b>deux fois sur la touche enter</b> pour quitter le mode liste.
+        <i><b>Le troisième bloc</b></i> de boutons permet d'interagir avec deux types de listes : à puces ou ordonnées.
+        À noter que vous devez taper <b>deux fois sur la touche enter</b> pour quitter le mode liste.
       </p>
 
       <h2 class="title--secondary-color" id="Tutorial_code">Formatter du code</h2>
