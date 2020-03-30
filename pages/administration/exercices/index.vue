@@ -430,7 +430,9 @@
       try {
         const result = await this.$axios.$post('/api/export', {data: {exercise_ids: this.selectedExercises}});
 
-        download(JSON.stringify(result), "export.json", 'application/json');
+        const blob = new Blob([JSON.stringify(result)], {type: 'application/json;charset=utf-8;'});
+
+        download(blob, "export.json", 'application/json;charset=utf-8;');
 
         this.$displaySuccess("L'export a bien été effectué.");
         this.selectedExercises = [];
@@ -472,7 +474,9 @@
 
         const result = await this.$axios.$post('/api/export', exportExerciseRequest);
 
-        download(JSON.stringify(result), "export.json", 'application/json');
+        const blob = new Blob([JSON.stringify(result)], {type: 'application/json;charset=utf-8;'});
+
+        download(blob, "export.json", 'application/json;charset=utf-8;');
 
         this.$displaySuccess("L'export a bien été effectué.");
         this.selectedExercises = [];
