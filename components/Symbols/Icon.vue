@@ -43,6 +43,7 @@
       mail: () => import('./library/MailSymbol.vue'),
       clock: () => import('./library/ClockSymbol.vue'),
       info: () => import('./library/InfoSymbol.vue'),
+      upload: () => import('./library/UploadSymbol.vue'),
       book: () => import('./library/BookSymbol.vue')
     }
   })

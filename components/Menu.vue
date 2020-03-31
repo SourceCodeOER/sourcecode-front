@@ -53,6 +53,12 @@
               </div>
               Exercices
             </nuxt-link>
+            <nuxt-link class="cta-link cta-link-with-arrow" tag="li" to="/administration/importer-des-exercices">
+              <div class="logo-link-wrapper">
+                <Icon type="upload" theme="theme--white"/>
+              </div>
+              Importer
+            </nuxt-link>
             <nuxt-link class="cta-link cta-link-with-arrow" tag="li" :class="isAdministrationCategoryLink" to="/administration/categories">
               <div class="logo-link-wrapper">
                 <Icon type="bookmark" theme="theme--white"/>
