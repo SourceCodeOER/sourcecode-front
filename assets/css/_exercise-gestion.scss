@@ -72,31 +72,6 @@ form {
     font-weight: bold;
   }
 
-  label[for=Archive] {
-    align-self: flex-start;
-  }
-
-  .message {
-    margin-top: 10px;
-    font-style: italic;
-    font-size: .75em;
-
-    &.message--primary-color {
-      color: $PRIMARY_COLOR
-    }
-
-    &.message--red {
-      color: $RED
-    }
-  }
-
-  .error-message {
-    margin-top: 10px;
-
-    &.error-message--red {
-      color: $RED;
-    }
-  }
 }
 
 .validation__tag {
