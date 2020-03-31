@@ -16,7 +16,7 @@
 
 <script lang="ts">
   import {ValidationProvider} from 'vee-validate';
-  import {Component, Emit, Prop, Ref, Vue} from "vue-property-decorator";
+  import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
   import Icon from "~/components/Symbols/Icon.vue";
 
   @Component({
@@ -41,6 +41,11 @@
      * Validation Observer for the zip archive and the url
      */
     @Ref() fileObserver!: InstanceType<typeof ValidationProvider>;
+
+    @Watch("defaultFilename")
+    onDefaultFilenameChange(val:string) {
+      this.filename = val;
+    }
 
     /**
      * The name of the uploaded file

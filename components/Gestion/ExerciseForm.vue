@@ -7,38 +7,44 @@
 
     <div v-if="exercise" class="status">
       <template v-if="exercise.state === 'VALIDATED'">
-        Valide <Icon type="check" theme="theme--green"/>
+        Valide
+        <Icon type="check" theme="theme--green"/>
       </template>
 
       <template v-else-if="exercise.state === 'NOT_VALIDATED'">
-        Non valide <Icon type="close" theme="theme--red-light"/>
+        Non valide
+        <Icon type="close" theme="theme--red-light"/>
       </template>
 
       <template v-else-if="exercise.state === 'PENDING'">
-        En attente <Icon type="send" theme="theme--yellow"/>
+        En attente
+        <Icon type="send" theme="theme--yellow"/>
       </template>
 
       <template v-else-if="exercise.state === 'DRAFT'">
-        Brouillon <Icon title="Créé" type="paper" theme="theme--primary-color-light"/>
+        Brouillon
+        <Icon title="Créé" type="paper" theme="theme--primary-color-light"/>
       </template>
 
       <template v-else-if="exercise.state === 'ARCHIVED'">
-        Archivé <Icon type="archive" theme="theme--red-light"/>
+        Archivé
+        <Icon type="archive" theme="theme--red-light"/>
       </template>
     </div>
 
     <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit()">
-      <ValidationProvider tag="label"
-                          name="titre"
-                          rules="required|min:3|max:200"
-                          v-slot="{ errors }">
-            <span class="label__name">
+      <TextInput
+        tag="label"
+        name="titre"
+        v-model="form.title"
+        :value="form.title"
+        @input="debounceInput"
+        placeholder="Entrez le nom de votre exercice"
+        rules="required|min:3|max:200">
+        <span class="label__name">
               Titre *
-            </span>
-        <input id="Title" placeholder="Entrez le nom de votre exercice" name="title" v-model="form.title"
-               v-on:input="debounceInput" class="input--grey" type="text">
-        <span class="error-message">{{errors[0]}}</span>
-      </ValidationProvider>
+        </span>
+      </TextInput>
 
     </ValidationObserver>
 
@@ -101,15 +107,13 @@
           <span class="error-message">{{errors[0]}}</span>
         </ValidationProvider>
 
-        <ValidationProvider tag="label"
-                            name="tag"
-                            rules="required|min:3|max:100"
-                            v-slot="{ errors }">
-          <input id="NewTagName" name="selectedNewTag.text" placeholder="Entrez votre nouveau tag"
-                 v-model="selectedNewTag.text"
-                 class="input--grey" type="text">
-          <span class="error-message">{{errors[0]}}</span>
-        </ValidationProvider>
+        <TextInput
+          tag="label"
+          name="tag"
+          rules="required|min:3|max:100"
+          v-model="selectedNewTag.text"
+          placeholder="Entrez votre nouveau tag">
+        </TextInput>
 
         <button :class="{'button--ternary-color-reverse': valid, 'button--ternary-color': !valid}" type="submit">
           Ajouter ce tag
@@ -119,39 +123,36 @@
 
     <ValidationObserver ref="observer2" tag="form"
                         @submit.prevent="validateBeforeSubmit">
-      <ValidationProvider tag="div"
-                          name="archive zip"
-                          rules="mimes:application/zip,application/x-zip,application/x-zip-compressed,application/octet-stream"
-                          ref="fileObserver"
-                          v-slot="{ errors, validate }">
-            <span class="label__name">
-              Uploadez votre archive (zip)
-            </span>
-        <input id="Archive" name="archive" ref="inputFile" @change="selectedFile" class="input--secondary-color"
-               type="file">
-        <label for="Archive">
-          <Icon type="archive" theme="theme--white"/>
-          {{labelFileText}}</label>
-        <span class="error-message">{{errors[0]}}</span>
-        <span v-if="exercise && exercise.file && filename" @click="downloadFile"
-           class="message message--primary-color"
-           style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</span>
-        <span class="message message--red" v-if="filename"
-              style="text-decoration: underline; cursor: pointer;"
-              @click="deleteFile">Supprimer le fichier</span>
-      </ValidationProvider>
+      <FileInput
+        name="archive zip"
+        rules="mimes:application/zip,application/x-zip,application/x-zip-compressed,application/octet-stream"
+        :default-filename="filename"
+        @input="updateFile"
+        ref="fileObserver">
 
-      <ValidationProvider tag="label"
-                          name="url"
-                          rules="url"
-                          v-slot="{ errors }">
-            <span class="label__name">
+        <span class="label__name">
+              Uploadez votre archive (zip)
+        </span>
+
+        <template v-slot:footer>
+        <span v-if="exercise && exercise.file && filename" @click="downloadFile"
+              class="message message--primary-color"
+              style="text-decoration: underline; cursor: pointer;">Télécharger le fichier</span>
+
+        </template>
+      </FileInput>
+
+      <TextInput
+        tag="label"
+        name="url"
+        type="url"
+        v-model="form.url"
+        placeholder="Entrez l'url absolue vers votre exercice"
+        rules="url">
+        <span class="label__name">
               Url vers l'exercice
-            </span>
-        <input id="Url" type="url" placeholder="Entrez l'url absolue vers votre exercice" name="url" v-model="form.url"
-               class="input--grey">
-        <span class="error-message">{{errors[0]}}</span>
-      </ValidationProvider>
+        </span>
+      </TextInput>
     </ValidationObserver>
 
 
@@ -207,13 +208,17 @@
   import jsonFormData from 'json-form-data';
   import ExerciseFormMixins from "~/components/Mixins/ExerciseFormMixins";
   import TagColorLegend from "~/components/Tag/TagColorLegend.vue";
-
-  const debounce = require('lodash.debounce');
+  import TextInput from "~/components/Input/TextInput.vue";
+  import FileInput from "~/components/Input/FileInput.vue";
 
   const download = require('downloadjs');
 
   @Component({
-    components: {TagColorLegend, CustomSelect, ValidationObserver, ValidationProvider, RichTextEditor, Tag, Icon}
+    components: {
+      FileInput,
+      TextInput,
+      TagColorLegend, CustomSelect, ValidationObserver, ValidationProvider, RichTextEditor, Tag, Icon
+    }
   })
   export default class ExerciseForm extends Mixins(FilterPanelMixins, ExerciseFormMixins) {
     @Prop({type: Object, default: undefined}) exercise!: Exercise | undefined;
@@ -265,7 +270,7 @@
             exerciseBuild.url = this.form.url;
           }
 
-          const file: File | null = this.file();
+          const file: File | null = this.file;
 
           if (file !== null) {
 
@@ -341,18 +346,18 @@
         } catch (e) {
           const error = e as AxiosError;
 
-          if(error.response) {
+          if (error.response) {
             const status: number = error.response.status;
 
-            if(status === 400) {
+            if (status === 400) {
               this.$displayError(`Vous ne respectez pas les conditions pour publier la catégorie.`);
-            } else if(status === 401) {
+            } else if (status === 401) {
               this.$displayError("Vous devez vous connecter pour effectuer cette action.")
-            } else if(status === 403) {
+            } else if (status === 403) {
               this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
-            } else if(status === 409) {
+            } else if (status === 409) {
               this.$displayError(`Un conflit a été détecté. Vérifiez vos données.`);
-            } else if(status === 500) {
+            } else if (status === 500) {
               this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
             }
           } else {
@@ -370,10 +375,10 @@
     }
 
     async downloadFile() {
-      if(this.exercise) {
+      if (this.exercise) {
         try {
 
-          const result:Blob = await this.$axios.$get(`/files/${this.exercise.file}`, {responseType: 'blob'});
+          const result: Blob = await this.$axios.$get(`/files/${this.exercise.file}`, {responseType: 'blob'});
 
           download(result, "archive.zip", result.type);
 

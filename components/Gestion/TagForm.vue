@@ -3,17 +3,16 @@
     <h1>{{title}}</h1>
 
     <ValidationObserver ref="observer" tag="form" @submit.prevent="validateBeforeSubmit">
-      <ValidationProvider tag="label"
-                          name="titre"
-                          rules="required|min:1|max:200"
-                          v-slot="{ errors }">
-            <span class="label__name">
-              Titre *
-            </span>
-        <input id="Title" placeholder="Entrez le nom du tag" name="title" v-model="form.title"
-               class="input--grey" type="text">
-        <span class="error-message">{{errors[0]}}</span>
-      </ValidationProvider>
+      <TextInput tag="label"
+                 name="titre"
+                 placeholder="Entrez le nom du tag"
+                 v-model="form.title"
+                 rules="required|min:1|max:200">
+
+        <span class="label__name">
+          Titre *
+        </span>
+      </TextInput>
 
       <ValidationProvider tag="label"
                           name="catégorie"
@@ -65,9 +64,10 @@
   import Icon from "~/components/Symbols/Icon.vue";
   import Tag from "~/components/Tag/Tag.vue";
   import CustomSelect from "~/components/Input/CustomSelect.vue";
+  import TextInput from "~/components/Input/TextInput.vue";
 
   @Component({
-    components: {CustomSelect, ValidationObserver, ValidationProvider, Tag, Icon}
+    components: {TextInput, CustomSelect, ValidationObserver, ValidationProvider, Tag, Icon}
   })
   export default class ExerciseForm extends Vue {
 
@@ -178,18 +178,18 @@
         } catch (e) {
           const error = e as AxiosError;
 
-          if(error.response) {
+          if (error.response) {
             const status: number = error.response.status;
 
-            if(status === 400) {
+            if (status === 400) {
               this.$displayError(`Vous ne respectez pas les conditions pour publier le tag.`);
-            } else if(status === 401) {
+            } else if (status === 401) {
               this.$displayError("Vous devez vous connecter pour effectuer cette action.")
-            } else if(status === 403) {
+            } else if (status === 403) {
               this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
-            } else if(status === 409) {
+            } else if (status === 409) {
               this.$displayError(`Ce tag existe déjà !`);
-            } else if(status === 500) {
+            } else if (status === 500) {
               this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
             }
           } else {

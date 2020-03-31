@@ -1,5 +1,5 @@
 import {Component, Ref, Vue} from "vue-property-decorator";
-import {ValidationObserver, ValidationProvider} from 'vee-validate';
+import {ValidationObserver} from 'vee-validate';
 import {
   Category,
   PostExerciseRequest,
@@ -12,6 +12,7 @@ import {
 import RichTextEditor from "~/components/Editor/RichTextEditor.vue"
 import {BusEvent} from "~/components/Event/BusEvent";
 import CustomSelect from "~/components/Input/CustomSelect.vue";
+import FileInput from "~/components/Input/FileInput.vue";
 
 const debounce = require('lodash.debounce');
 
@@ -28,7 +29,7 @@ export default class ExerciseFormMixins extends Vue {
   /**
    * Validation Observer for the zip archive and the url
    */
-  @Ref() fileObserver!: InstanceType<typeof ValidationProvider>;
+  @Ref() fileObserver!: FileInput;
   /**
    * ValidationObserver for the Tag section
    */
@@ -41,10 +42,6 @@ export default class ExerciseFormMixins extends Vue {
    * The component containing the description with the editor
    */
   @Ref() richTextEditor!: RichTextEditor;
-  /**
-   * Observer for the input file element
-   */
-  @Ref() inputFile!: HTMLInputElement;
 
   /**
    * A new tag proposal
@@ -83,6 +80,11 @@ export default class ExerciseFormMixins extends Vue {
   filename: string | null = null;
 
   /**
+   * The file uploaded (in zip)
+   */
+  file: File | null = null;
+
+  /**
    * Returns true if either the tags selected in the tags panel is empty or the array of new tags added
    */
   protected get isEmptyTags(): boolean {
@@ -110,66 +112,22 @@ export default class ExerciseFormMixins extends Vue {
     return this.$accessor.tags.selectedTags
   }
 
-  /**
-   * Returns the name of the uploaded file or a default message instead
-   */
-  protected get labelFileText() {
-    if (this.filename !== null) {
-      if (this.filename.length > 18) {
-        return this.filename.slice(0, 18) + '...'
-      }
-
-      return this.filename
-    }
-
-    return 'Choisir un fichier...'
-  }
-
-  /**
-   * Get the zip archive from the input file element
-   */
-  file(): File | null {
-
-    const inputFile: any = this.fileObserver.value;
-
-    if (!inputFile) {
-      return null;
-    }
-
-    return inputFile
-  }
 
   /**
    * Event for the title input to search after similar exercises
    */
-  debounceInput = debounce((e: any) => {
-    const value = e.target.value;
+  debounceInput = debounce((value: string) => {
     this.$accessor.exercises.fetch({data: {title: value}});
   }, 300);
 
 
-  /**
-   * Delete file from input and reset the filename
-   */
-  deleteFile() {
-    this.filename = null;
-    this.inputFile.files = null;
-    this.fileObserver.reset();
-  }
-
-  /**
-   * Event for the changed state of the input file (archive)
-   */
-  async selectedFile(event: Event) {
-    const inputElement: HTMLInputElement | null = event.target as HTMLInputElement | null;
-
-    if (inputElement !== null) {
-      const files = inputElement.files;
-      if (files !== null) {
-        const file: File | null = files.item(0);
-        this.filename = file !== null ? file.name : null;
-        await this.fileObserver.validate(file);
-      }
+  updateFile(file: File | null) {
+    if (file !== null) {
+      this.filename = file.name;
+      this.file = file;
+    } else {
+      this.file = null;
+      this.filename = null;
     }
   }
 
@@ -260,6 +218,11 @@ export default class ExerciseFormMixins extends Vue {
     this.richTextEditor.reset();
 
     this.newTags = [];
+
+    if(this.file !== null) {
+      // @ts-ignore
+      this.fileObserver.deleteFile();
+    }
 
     this.$accessor.exercises.RESET_SEARCH_CRITERION();
     this.$accessor.exercises.RESET();

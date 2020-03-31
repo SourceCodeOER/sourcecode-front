@@ -2,30 +2,29 @@
   <section class="content">
     <h1>{{title}}</h1>
 
-    <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit()">
-      <ValidationProvider tag="label"
-                          name="favori"
-                          rules="required|max:200"
-                          v-slot="{ errors }">
-            <span class="label__name">
-              Nom du favori *
-            </span>
-        <input id="Name" placeholder="Entrez le nom de votre favori" name="name" v-model="form.name"
-               class="input--grey" type="text">
-        <span class="error-message">{{errors[0]}}</span>
-      </ValidationProvider>
+    <ValidationObserver ref="observer1" tag="form" @submit.prevent="validateBeforeSubmit">
+      <TextInput
+        tag="label"
+        name="favori"
+        v-model="form.name"
+        placeholder="Entrez le nom de votre favori"
+        rules="required|max:200">
+        <span class="label__name">
+          Nom du favori *
+        </span>
+      </TextInput>
 
-      <ValidationProvider tag="label"
-                          name="titre"
-                          rules="max:100"
-                          v-slot="{ errors }">
-            <span class="label__name">
+      <TextInput
+        tag="label"
+        name="titre"
+        v-model="form.title"
+        @input="debounceInput"
+        placeholder="Entrez le titre de votre recherche"
+        rules="max:100">
+        <span class="label__name">
               Titre de recherche
-            </span>
-        <input id="Title" placeholder="Entrez le titre de votre recherche" name="title" v-model="form.title"
-               v-on:input="debounceInput" class="input--grey" type="text">
-        <span class="error-message">{{errors[0]}}</span>
-      </ValidationProvider>
+        </span>
+      </TextInput>
 
     </ValidationObserver>
 
@@ -62,13 +61,14 @@
   import FilterPanelMixins from "~/components/Mixins/FilterPanelMixins.vue";
   import FavoriteFormMixins from "~/components/Mixins/FavoriteFormMixins";
   import {Configuration, CreateConfigurationRequest, SelectedTag, UpdateConfigurationRequest} from "../../types";
-  import {ValidationObserver, ValidationProvider} from "vee-validate";
+  import {ValidationObserver} from "vee-validate";
   import Tag from "../Tag/Tag.vue";
   import TagColorLegend from "~/components/Tag/TagColorLegend.vue";
   import {AxiosError} from "axios";
+  import TextInput from "~/components/Input/TextInput.vue";
 
   @Component({
-    components: {TagColorLegend, Tag, ValidationProvider, ValidationObserver}
+    components: {TextInput, TagColorLegend, Tag, ValidationObserver}
   })
   export default class FavoriteForm extends Mixins(FilterPanelMixins, FavoriteFormMixins) {
 
@@ -120,18 +120,18 @@
         } catch (e) {
           const error = e as AxiosError;
 
-          if(error.response) {
+          if (error.response) {
             const status: number = error.response.status;
 
-            if(status === 400) {
+            if (status === 400) {
               this.$displayError(`Vous ne respectez pas les conditions pour publier ce favori.`);
-            } else if(status === 401) {
+            } else if (status === 401) {
               this.$displayError("Vous devez vous connecter pour effectuer cette action.")
-            } else if(status === 403) {
+            } else if (status === 403) {
               this.$displayError(`Vous n'êtes pas autorisé à effectuer cette action !`);
-            } else if(status === 409) {
+            } else if (status === 409) {
               this.$displayError(`Cette catégorie existe déjà.`);
-            } else if(status === 500) {
+            } else if (status === 500) {
               this.$displayError(`Une erreur est survenue depuis nos serveurs, veuillez-nous en excuser.`);
             }
           } else {
