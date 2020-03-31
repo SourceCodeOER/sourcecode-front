@@ -32,8 +32,7 @@ export default class extends Vue {
   /**
    * Event for the title input to search after similar exercises
    */
-  debounceInput = debounce((e: any) => {
-    const value = e.target.value;
+  debounceInput = debounce((value: string) => {
     this.$accessor.exercises.fetch({data: {title: value}});
   }, 300);
 }

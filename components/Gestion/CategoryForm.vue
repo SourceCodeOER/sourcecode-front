@@ -3,18 +3,15 @@
     <h1>{{title}}</h1>
 
     <ValidationObserver ref="observer" tag="form" @submit.prevent="validateBeforeSubmit">
-      <ValidationProvider tag="label"
-                          name="catégorie"
-                          rules="required|min:3|max:100"
-                          v-slot="{ errors }">
+      <TextInput tag="label"
+                 name="catégorie"
+                 v-model="form.title"
+                 placeholder="Entrez le nom de la catégorie"
+                 rules="required|min:3|max:100">
             <span class="label__name">
               Nom *
             </span>
-        <input id="Title" placeholder="Entrez le nom de la catégorie" name="title" v-model="form.title"
-               class="input--grey" type="text">
-        <span class="error-message">{{errors[0]}}</span>
-      </ValidationProvider>
-
+      </TextInput>
     </ValidationObserver>
 
     <p class="disclaimer">* champs obligatoires</p>
@@ -31,15 +28,16 @@
 <script lang="ts">
 
   import {Component, Vue, Ref, Prop} from "vue-property-decorator";
-  import {ValidationProvider, ValidationObserver} from 'vee-validate';
+  import {ValidationObserver} from 'vee-validate';
   import {AxiosError} from "axios";
   import {
     Category
   } from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
+  import TextInput from "~/components/Input/TextInput.vue";
 
   @Component({
-    components: {ValidationObserver, ValidationProvider, Icon}
+    components: {TextInput, ValidationObserver, Icon}
   })
   export default class ExerciseForm extends Vue {
 
