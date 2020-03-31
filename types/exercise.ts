@@ -155,4 +155,17 @@ export interface VoteRequest {
   score: number
 }
 
-
+// For import feature that used export ( simplest version )
+export interface ImportExportFormat {
+  categories: { [key: string]: string; },
+  exercises: {
+    title: string,
+    description: string,
+    state: ExerciseState,
+    url: null | string,
+    tags: {
+      text: string,
+      category: number
+    }[]
+  }[]
+}
