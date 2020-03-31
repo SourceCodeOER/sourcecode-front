@@ -6,28 +6,21 @@
     <p>
       Vous pouvez importer des exercices depuis cette interface en tenant compte de ce
       <a href="https://sourcecodeoer.github.io/sourcecode_api/#operation/createMultipleExercises" target="_blank">
-        format</a>.
+        format</a>. Votre fichier doit être en UTF-8 !
     </p>
-    <ValidationObserver ref="observer" tag="form"
+    <ValidationObserver ref="observer"
+                        tag="form"
                         @submit.prevent="validateBeforeSubmit">
-      <ValidationProvider tag="div"
-                          name="fichier json"
-                          rules="mimes:application/json"
-                          ref="fileObserver"
-                          v-slot="{ errors }">
+
+      <FileInput
+        ref="fileObserver"
+        rules="required|mimes:application/json"
+        name="fichier json"
+        @input="updateFile">
             <span class="label__name">
               Uploadez votre fichier (json)
             </span>
-        <input id="Archive" name="archive" ref="inputFile" @change="selectedFile" class="input--secondary-color"
-               type="file">
-        <label for="Archive">
-          <Icon type="archive" theme="theme--white"/>
-          {{labelFileText}}</label>
-        <span class="error-message">{{errors[0]}}</span>
-        <span class="message message--red" v-if="filename"
-              style="text-decoration: underline; cursor: pointer;"
-              @click="deleteFile">Supprimer le fichier</span>
-      </ValidationProvider>
+      </FileInput>
 
     </ValidationObserver>
 
@@ -45,89 +38,30 @@
 <script lang="ts">
 
   import {Component, Vue, Prop, Ref} from "vue-property-decorator";
-  import {ValidationProvider, ValidationObserver} from 'vee-validate';
+  import {ValidationObserver} from 'vee-validate';
   import {AxiosError} from "axios";
   import Icon from "~/components/Symbols/Icon.vue";
-  import CustomSelect from "~/components/Input/CustomSelect.vue";
+  import FileInput from "~/components/Input/FileInput.vue";
 
   @Component({
-    components: {CustomSelect, ValidationObserver, ValidationProvider, Icon}
+    components: {FileInput, ValidationObserver, Icon}
   })
   export default class ExerciseForm extends Vue {
     /**
      * Validation Observer for the zip archive and the url
      */
     @Ref() observer!: InstanceType<typeof ValidationObserver>;
-    /**
-     * Observer for the input file element
-     */
-    @Ref() inputFile!: HTMLInputElement;
-    /**
-     * Validation Observer for the zip archive and the url
-     */
-    @Ref() fileObserver!: InstanceType<typeof ValidationProvider>;
+
+    @Ref() fileObserver!: FileInput;
 
     @Prop({type: String, required: true}) title!: string;
 
-    /**
-     * The name of the uploaded file
-     * Default is null
-     */
-    filename: string | null = null;
+    form: {file: File | null} = {
+      file: null
+    };
 
-
-    /**
-     * Returns the name of the uploaded file or a default message instead
-     */
-    protected get labelFileText() {
-      if (this.filename !== null) {
-        if (this.filename.length > 18) {
-          return this.filename.slice(0, 18) + '...'
-        }
-
-        return this.filename
-      }
-
-      return 'Choisir un fichier...'
-    }
-
-    /**
-     * Get the json file from the input file element
-     */
-    file(): File | null {
-
-      const inputFile: any = this.fileObserver.value;
-
-      if (!inputFile) {
-        return null;
-      }
-
-      return inputFile
-    }
-
-    /**
-     * Event for the changed state of the input file
-     */
-    async selectedFile(event: Event) {
-      const inputElement: HTMLInputElement | null = event.target as HTMLInputElement | null;
-
-      if (inputElement !== null) {
-        const files = inputElement.files;
-        if (files !== null) {
-          const file: File | null = files.item(0);
-          this.filename = file !== null ? file.name : null;
-          await this.fileObserver.validate(file);
-        }
-      }
-    }
-
-    /**
-     * Delete file from input and reset the filename
-     */
-    deleteFile() {
-      this.filename = null;
-      this.inputFile.files = null;
-      this.fileObserver.reset();
+    updateFile(file: File | null) {
+      this.form.file = file;
     }
 
     /**
@@ -142,7 +76,7 @@
 
       if (isValid) {
 
-        const file: File | null = this.file();
+        const file: File | null = this.form.file;
 
         if (file !== null) {
           reader.onloadend = async () => {
@@ -154,6 +88,13 @@
                 this.$nuxt.$loading.start();
                 await this.$axios.$post("/api/bulk/create_exercises", JSON.parse(string));
                 this.$displaySuccess("L'importation s'est correctement déroulée.");
+
+                this.$nextTick(() => {
+                  this.form.file;
+                  // @ts-ignore
+                  this.fileObserver.deleteFile();
+                  this.observer.reset();
+                })
               } catch (e) {
                 const error = e as AxiosError;
 
@@ -170,7 +111,7 @@
                     this.$displayError("Une erreur est survenue.")
                   }
                 } else {
-                  this.$displayError("Une erreur est survenue.")
+                  this.$displayError("Le contenu de votre fichier n'est pas correct.")
                 }
               } finally {
                 this.$nuxt.$loading.finish();
