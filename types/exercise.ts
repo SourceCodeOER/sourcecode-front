@@ -165,7 +165,8 @@ export interface ImportExportFormat {
     url: null | string,
     tags: {
       text: string,
-      category: number
+      category: number,
+      state: TagState
     }[]
   }[]
 }

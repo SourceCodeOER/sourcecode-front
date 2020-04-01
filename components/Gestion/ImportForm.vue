@@ -85,17 +85,24 @@
               const buffer = reader.result as ArrayBuffer;
               const string: string = new TextDecoder().decode(buffer);
 
-              this.$nuxt.$loading.start();
-              let jsonInput: ImportExportFormat | any[];
+              let jsonInput: ImportExportFormat | any;
+              // since TypeScript doesn't check type at runtime ; better check that
+              const isExportFormat = (obj: any) =>
+                (obj as ImportExportFormat).categories &&
+                (obj as ImportExportFormat).exercises &&
+                Array.isArray(obj.exercises) &&
+                typeof (obj as ImportExportFormat).categories == "object"
+              ;
 
               try {
+                this.$nuxt.$loading.start();
                 // first validate the json before anything else
                 jsonInput = JSON.parse(string);
                 // at the end, both import type use the same endpoint
                 let exercises;
 
                 // Type Guards to distinct the two types
-                if ((jsonInput as ImportExportFormat).categories) {
+                if (isExportFormat(jsonInput)) {
 
                   const exportFormat = jsonInput as ImportExportFormat;
 
@@ -125,9 +132,9 @@
                       state: ex.state,
                       tags: ex.tags.map(tag => (
                         {
-                          // TODO : tag state ???
                           text: tag.text,
-                          category_id: tags_dictionary[exportFormat.categories[tag.category]][0].id
+                          category_id: tags_dictionary[exportFormat.categories[tag.category]][0].id,
+                          state: tag.state
                         }
                       ))
                     })
@@ -149,7 +156,7 @@
                 })
               } catch (e) {
 
-                if (e instanceof SyntaxError) {
+                if (e instanceof SyntaxError || e instanceof TypeError || e instanceof ReferenceError) {
                   this.$displayError("Le contenu de votre fichier n'est pas correct.");
                 } else {
                   const error = e as AxiosError;
