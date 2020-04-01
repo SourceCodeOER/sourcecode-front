@@ -56,7 +56,7 @@
             <th>Catégorie</th>
             <th>Exercices tagués</th>
             <th>Version</th>
-            <th class="item-centered">Status</th>
+            <th class="item-centered">Statut</th>
           </tr>
           </thead>
 

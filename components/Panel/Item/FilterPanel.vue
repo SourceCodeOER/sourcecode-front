@@ -52,7 +52,7 @@
                           @toggle-list="toggleList"
                           @change="setStateCriteria"
         >
-          Status
+          Statut
         </CheckBoxSelecter>
 
       </ul>

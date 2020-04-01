@@ -50,7 +50,7 @@
         </li>
       </ul>
 
-      <p>Un <i>code couleur</i> vous est présenté pour vous tenir au courant du <b>status des tags</b>.</p>
+      <p>Un <i>code couleur</i> vous est présenté pour vous tenir au courant du <b>statut des tags</b>.</p>
 
       <ul>
         <li>Un tag <b>valide</b> pourra être utilisé depuis la bibliothèque pour filtrer les ressources informatiques.

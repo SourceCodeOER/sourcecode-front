@@ -14,7 +14,7 @@
       <ol>
         <li><nuxt-link to="#Tutorial_gestion_ressources">Gestion des ressources</nuxt-link></li>
         <li><nuxt-link to="#Tutorial_status">Status d'une ressource informatique</nuxt-link></li>
-        <li><nuxt-link to="#Tutorial_gestion_status">Gestion du status de la ressource</nuxt-link></li>
+        <li><nuxt-link to="#Tutorial_gestion_status">Gestion du statut de la ressource</nuxt-link></li>
         <li><nuxt-link to="#Tutorial_ressource_form">Création/modification d'une ressource</nuxt-link></li>
         <li><nuxt-link to="#Tutorial_submission">Soumission</nuxt-link></li>
       </ol>
@@ -54,7 +54,7 @@
           La présence d'une archive zip pour la ressource informatique
         </li>
         <li>
-          Le status de la ressource (voir cette section)
+          Le statut de la ressource (voir cette section)
         </li>
       </ul>
 
@@ -119,7 +119,7 @@
         </li>
       </ul>
 
-      <h2 class="title--secondary-color" id="Tutorial_gestion_status">Gestion du status de la ressource</h2>
+      <h2 class="title--secondary-color" id="Tutorial_gestion_status">Gestion du statut de la ressource</h2>
       <p>
         Pour modifier l'état d'une ressource, cochez une ou plusieurs ressources. Une liste déroulante d'actions
         apparaitra à côté du bouton de création d'exercice. Vous pourrez alors publier (envoyer pour révision),
@@ -181,7 +181,7 @@
         reportez-vous au <b>panneau à onglets</b> en cliquant sur l'onglet avec <b>l'icône de filtre</b>.
       </p>
 
-      <p>Un <i>code couleur</i> vous est présenté pour vous tenir au courant du <b>status des tags</b>.</p>
+      <p>Un <i>code couleur</i> vous est présenté pour vous tenir au courant du <b>statut des tags</b>.</p>
 
       <ul>
         <li>Un tag <b>valide</b> pourra être utilisé depuis la bibliothèque pour filtrer les ressources informatiques.

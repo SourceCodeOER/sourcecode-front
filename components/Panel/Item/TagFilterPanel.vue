@@ -22,7 +22,7 @@
               {title:'Obsolète', state: false},
               {title:'Invalide', state: false}
               ]">
-          Status
+          Statut
         </CheckBoxSelecter>
       </ul>
     </div>
