@@ -1,7 +1,7 @@
 import qs from 'qs'
 import {Plugin} from '@nuxt/types'
 
-const axios: Plugin = ({$axios, redirect, $auth}) => {
+const axios: Plugin = ({$axios, redirect, $auth, route}) => {
 
   // Set array format to repeat
   $axios.onRequest(config => {
@@ -16,10 +16,11 @@ const axios: Plugin = ({$axios, redirect, $auth}) => {
       return response
     },
     async (error) => {
-      if (error.response.status === 401) {
+      if (error.response.status === 401 && route.path !== '/login') {
         if($auth.loggedIn) {
           await $auth.logout();
         }
+
         redirect(401, "/login");
       } else {
         return Promise.reject(error);
