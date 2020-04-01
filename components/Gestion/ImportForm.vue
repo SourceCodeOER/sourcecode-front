@@ -42,6 +42,7 @@
   import {AxiosError} from "axios";
   import Icon from "~/components/Symbols/Icon.vue";
   import FileInput from "~/components/Input/FileInput.vue";
+  import {ImportExportFormat} from "~/types/exercise";
 
   @Component({
     components: {FileInput, ValidationObserver, Icon}
@@ -56,7 +57,7 @@
 
     @Prop({type: String, required: true}) title!: string;
 
-    form: {file: File | null} = {
+    form: { file: File | null } = {
       file: null
     };
 
@@ -84,11 +85,69 @@
               const buffer = reader.result as ArrayBuffer;
               const string: string = new TextDecoder().decode(buffer);
 
+              let jsonInput: ImportExportFormat | any;
+              // since TypeScript doesn't check type at runtime ; better check that
+              const isExportFormat = (obj: any) =>
+                (obj as ImportExportFormat).categories &&
+                (obj as ImportExportFormat).exercises &&
+                Array.isArray(obj.exercises) &&
+                typeof (obj as ImportExportFormat).categories == "object"
+              ;
+
               try {
                 this.$nuxt.$loading.start();
-                await this.$axios.$post("/api/bulk/create_exercises", JSON.parse(string));
-                this.$displaySuccess("L'importation s'est correctement déroulée.");
+                // first validate the json before anything else
+                jsonInput = JSON.parse(string);
+                // at the end, both import type use the same endpoint
+                let exercises;
 
+                // Type Guards to distinct the two types
+                if (isExportFormat(jsonInput)) {
+
+                  const exportFormat = jsonInput as ImportExportFormat;
+
+                  // need that function in the next lines
+                  // Credits to https://gist.github.com/JamieMason/0566f8412af9fe6a1d470aa1e089a752
+                  const groupBy = (key: string) => (array: any[]) =>
+                    array.reduce((objectsByKeyValue, obj) => {
+                      const value = obj[key];
+                      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+                      return objectsByKeyValue;
+                    }, {});
+
+                  // creates or find the category/ies
+                  const tags_categories = Object.values(exportFormat.categories);
+                  const tags_categories_ids: {
+                    id: number,
+                    category: string
+                  }[] = await this.$axios.$post("/api/bulk/create_or_find_tag_categories", tags_categories);
+                  const tags_dictionary = groupBy("category")(tags_categories_ids);
+
+                  // prepare json
+                  exercises = exportFormat.exercises.map(
+                    ex => ({
+                      title: ex.title,
+                      description: ex.description,
+                      url: ex.url,
+                      state: ex.state,
+                      tags: ex.tags.map(tag => (
+                        {
+                          text: tag.text,
+                          category_id: tags_dictionary[exportFormat.categories[tag.category]][0].id,
+                          state: tag.state
+                        }
+                      ))
+                    })
+                  );
+
+                } else {
+                  exercises = jsonInput;
+                }
+
+                // Trial time : execute query
+                await this.$axios.$post("/api/bulk/create_exercises", exercises);
+
+                this.$displaySuccess("L'importation s'est correctement déroulée.");
                 this.$nextTick(() => {
                   this.form.file;
                   // @ts-ignore
@@ -96,22 +155,24 @@
                   this.observer.reset();
                 })
               } catch (e) {
-                const error = e as AxiosError;
 
-                if (error.response) {
-                  const status = error.response.status;
-
-                  if (status === 400) {
-                    this.$displayWarning("Votre fichier ne possède pas le bon format.")
-                  } else if (status === 401) {
-                    this.$displayWarning("Vous n'êtes pas autorisé à effectuer cette action.")
-                  } else if (status === 500) {
-                    this.$displayError("Une erreur est survenue depuis nos serveurs.")
-                  } else {
-                    this.$displayError("Une erreur est survenue.")
-                  }
+                if (e instanceof SyntaxError || e instanceof TypeError || e instanceof ReferenceError) {
+                  this.$displayError("Le contenu de votre fichier n'est pas correct.");
                 } else {
-                  this.$displayError("Le contenu de votre fichier n'est pas correct.")
+                  const error = e as AxiosError;
+                  if (error.response) {
+                    const status = error.response.status;
+
+                    if (status === 400) {
+                      this.$displayWarning("Votre fichier ne possède pas le bon format.")
+                    } else if (status === 401) {
+                      this.$displayWarning("Vous n'êtes pas autorisé à effectuer cette action.")
+                    } else if (status === 500) {
+                      this.$displayError("Une erreur est survenue depuis nos serveurs.")
+                    } else {
+                      this.$displayError("Une erreur est survenue.")
+                    }
+                  }
                 }
               } finally {
                 this.$nuxt.$loading.finish();
