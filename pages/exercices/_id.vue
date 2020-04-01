@@ -25,7 +25,7 @@
         <h1>{{exercise.title}}</h1>
         <span>Créé le {{$moment(exercise.createdAt).format("DD/MM/YY à H:mm")}}</span> | <span>Mis à jour le {{$moment(exercise.updatedAt).format("DD/MM/YY à H:mm")}}</span>
         <div class="status">
-          <b>status</b> -
+          <b>statut</b> -
           <template v-if="exercise.state === 'VALIDATED'">
             Valide <Icon type="check" theme="theme--green"/>
           </template>

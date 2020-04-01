@@ -42,8 +42,8 @@
           </nuxt-link>
           <ul>
             <li><nuxt-link to="mes-exercices#Tutorial_gestion_ressources">Gestion des ressources</nuxt-link></li>
-            <li><nuxt-link to="mes-exercices#Tutorial_status">Status d'une ressource informatique</nuxt-link></li>
-            <li><nuxt-link to="mes-exercices#Tutorial_gestion_status">Gestion du status de la ressource</nuxt-link></li>
+            <li><nuxt-link to="mes-exercices#Tutorial_status">Statut d'une ressource informatique</nuxt-link></li>
+            <li><nuxt-link to="mes-exercices#Tutorial_gestion_status">Gestion du statut de la ressource</nuxt-link></li>
             <li><nuxt-link to="mes-exercices#Tutorial_ressource_form">Création/modification d'une ressource</nuxt-link></li>
             <li><nuxt-link to="mes-exercices#Tutorial_submission">Soumission</nuxt-link></li>
           </ul>

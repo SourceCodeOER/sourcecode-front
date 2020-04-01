@@ -75,7 +75,7 @@
         <nuxt-link to="/administration/tags" class="external-link">tags</nuxt-link>
       </p>
 
-      <p>Utilisez le panneau latéral pour filtrer les tags par catégories ou par status. Vous pouvez aussi rechercher
+      <p>Utilisez le panneau latéral pour filtrer les tags par catégories ou par statut. Vous pouvez aussi rechercher
         des tags en utilisant le champ de recherche.</p>
 
       <p>Plusieurs informations sont disponibles pour identifier les tags :</p>
@@ -94,7 +94,7 @@
           Le nombre de fois que le tag a subi une modification (<b>version</b>).
         </li>
         <li>
-          Le <b>status</b> du tag.
+          Le <b>statut</b> du tag.
         </li>
       </ul>
 

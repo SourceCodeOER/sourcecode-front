@@ -84,7 +84,7 @@
             <th>Moyenne</th>
             <th>Mis à jour</th>
             <th class="item-centered">Fichier(s)</th>
-            <th class="item-centered">Status</th>
+            <th class="item-centered">Statut</th>
           </tr>
           </thead>
 
