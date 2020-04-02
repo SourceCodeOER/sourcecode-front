@@ -4,10 +4,22 @@
     <h1>{{title}}</h1>
 
     <p>
-      Vous pouvez importer des exercices depuis cette interface en tenant compte de ce
-      <a href="https://sourcecodeoer.github.io/sourcecode_api/#operation/createMultipleExercises" target="_blank">
-        format</a>. Votre fichier doit être en UTF-8 !
+      Vous pouvez importer des exercices depuis cette interface de deux façons (fichier en <b>UTF-8</b> !!) :
     </p>
+
+    <ul>
+      <li>
+        <a href="https://sourcecodeoer.github.io/sourcecode_api/#operation/createMultipleExercises" target="_blank">
+          Format d'import classique
+        </a>
+      </li>
+      <li>
+        <a href="https://sourcecodeoer.github.io/sourcecode_api/#operation/ExportExercises" target="_blank">
+          Format d'export de ressources informatiques
+        </a>
+      </li>
+    </ul>
+
     <ValidationObserver ref="observer"
                         tag="form"
                         @submit.prevent="validateBeforeSubmit">
@@ -199,4 +211,13 @@
 
 <style lang="scss" scoped>
   @import "../../assets/css/exercise-gestion";
+  @import "../../assets/css/_variables";
+
+  a {
+    color: $TERNARY_COLOR;
+  }
+
+  ul {
+    margin-bottom: 30px;
+  }
 </style>
