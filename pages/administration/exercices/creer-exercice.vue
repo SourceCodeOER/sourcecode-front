@@ -57,3 +57,8 @@
   }
 </script>
 
+<style scoped>
+  .wrapper {
+    margin-bottom: 40px;
+  }
+</style>
