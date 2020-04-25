@@ -42,17 +42,17 @@ module.exports = {
           user: {url: 'auth/me', method: 'get', propertyName: false},
           logout: false
         }
-      },
-      cookie: {
-        options: {
-          maxAge: 10
-        }
       }
     },
     redirect: {
       home: '/',
       callback: false,
       logout: '/'
+    },
+    cookie: {
+      options: {
+        maxAge: 10
+      }
     }
   },
   moment: {
