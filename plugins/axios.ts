@@ -28,6 +28,7 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
 
         $auth.setToken('local', undefined);
         $auth.setRefreshToken('local', undefined);
+        $auth.$storage.setUniversal('local', undefined);
 
         //$auth.setToken('local', undefined)
         redirect(status, "/login");
