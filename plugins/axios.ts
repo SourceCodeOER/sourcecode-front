@@ -18,6 +18,10 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
     async (error) => {
       const status = parseInt(error.response && error.response.status);
       const shouldRefresh = [401, 403].includes(status);
+      console.log("JE PASSE ICI");
+      console.log(status);
+      console.log(shouldRefresh);
+      console.log(app.router);
       if (shouldRefresh) {
          await $auth.logout();
       }
