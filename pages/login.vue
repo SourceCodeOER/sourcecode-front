@@ -86,6 +86,7 @@
             },
           });
 
+          console.log('hello');
           if(this.previousRoute && this.previousRoute.name === 'register') {
             this.$router.push('/')
           } else {

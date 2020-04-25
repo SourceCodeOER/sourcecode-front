@@ -18,6 +18,8 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
     async (error) => {
       const status = error.response.status;
 
+      console.log(app.router);
+
       if ([401, 403].includes(status) && app.router && app.router.currentRoute.path !== '/login') {
 
         if($auth.loggedIn) {
