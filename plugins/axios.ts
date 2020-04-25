@@ -16,12 +16,14 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
       return response
     },
     async (error) => {
-      const status = parseInt(error.response && error.response.status);
-      const shouldRefresh = [401, 403].includes(status);
-      if (shouldRefresh) {
-         await $auth.logout();
-      }
-      if (shouldRefresh && app.router && app.router.currentRoute.path !== '/login') {
+      const status = error.response.status;
+
+      if ([401, 403].includes(status) && app.router && app.router.currentRoute.path !== '/login') {
+
+        if($auth.loggedIn) {
+          await $auth.logout();
+        }
+
         redirect(status, "/login");
       } else {
         return Promise.reject(error);
