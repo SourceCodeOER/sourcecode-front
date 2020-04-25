@@ -26,6 +26,9 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
         if($auth.loggedIn) await $auth.logout();
         else await $auth.reset();
 
+        $auth.setToken('local', undefined);
+        $auth.setRefreshToken('local', undefined);
+
         //$auth.setToken('local', undefined)
         redirect(status, "/login");
       } else {
