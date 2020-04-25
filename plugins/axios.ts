@@ -20,9 +20,8 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
 
       if ([401, 403].includes(status) && app.router && app.router.currentRoute.path !== '/login') {
 
-        if($auth.loggedIn) {
-          await $auth.logout();
-        }
+        if($auth.loggedIn) await $auth.logout();
+        else await $auth.reset();
 
         redirect(status, "/login");
       } else {
