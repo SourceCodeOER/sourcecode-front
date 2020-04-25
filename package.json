@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.2.4",
-    "@nuxtjs/auth": "^4.8.4",
+    "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.9.5",
     "config": "^3.2.6",
     "consola": "^2.11.3",
