@@ -21,14 +21,12 @@ const axios: Plugin = ({$axios, redirect, $auth, app}) => {
       console.log(app.router);
 
       if ([401, 403].includes(status) && app.router && app.router.currentRoute.path !== '/login') {
-        // @ts-ignore
-        if($auth.loggedIn || $auth.strategies.local.options.endpoints.user.headers['Authorization'] !== null) {
-          await $auth.logout();
-          // @ts-ignore
-          $auth.strategies.local.options.endpoints.user.headers['Authorization'] = null;
-          $auth.setToken('local', undefined)
-        }
 
+
+        if($auth.loggedIn) await $auth.logout();
+        else await $auth.reset();
+
+        //$auth.setToken('local', undefined)
         redirect(status, "/login");
       } else {
         return Promise.reject(error);
