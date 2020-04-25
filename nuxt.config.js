@@ -49,11 +49,7 @@ module.exports = {
       callback: false,
       logout: '/'
     },
-    cookie: {
-      options: {
-        maxAge: 10
-      }
-    }
+    plugins: [{src: '~/plugins/axios', ssr:true}]
   },
   moment: {
     defaultLocale: 'fr',
@@ -73,7 +69,6 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/axios',
     '~/plugins/notifications',
     '~/plugins/validator'
   ],
