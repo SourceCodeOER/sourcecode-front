@@ -1,10 +1,10 @@
 <template>
   <div class="container--with-menu">
-    <div class="banner search-banner">
-      <div class="input-wrapper--with-icon one-third input-with--enter-icon">
-        <Icon type="search"/>
-        <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keydown.enter="debounceInput"
-               placeholder="Rechercher">
+    <div class="banner banner--with-shadow-bottom">
+      <div class="banner__nav">
+        <span>
+          Bibliothèque
+        </span>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
           <FavoritePanel @fetch="setInput"/>
         </PanelItem>
       </Panel>
-      <ExercisesPanel @reset="resetInput"/>
+      <ExercisesPanel ref="exercisesPanel"/>
     </div>
   </div>
 </template>
@@ -73,41 +73,22 @@
     middleware: 'exercises-store'
   })
   export default class extends Vue {
-    @Ref() inputText!: HTMLInputElement;
 
-    debounceInput(e: any) {
-      const value = e.target.value;
-      this.$accessor.exercises.fetch({data: {title: value}});
-      this.$accessor.historical.addHistorical({
-        tags: this.$accessor.tags.selectedTags,
-        title: value,
-        vote: this.$accessor.exercises.search_criterion.vote
-      })
-    }
+    @Ref() exercisesPanel!: ExercisesPanel;
 
     resetInput() {
-      this.inputText.value = ""
-    }
-
-    resetIfEmpty(e:any) {
-      const value:string =  e.target.value;
-
-      if(value === '') {
-        this.$accessor.exercises.fetch({data: {title: ""}});
-      }
+      // @ts-ignore
+      this.exercisesPanel.resetInput();
     }
 
     refreshInput() {
-      this.inputText.value = this.$accessor.exercises.search_criterion.title || '';
+      // @ts-ignore
+      this.exercisesPanel.refreshInput();
     }
 
     setInput() {
-      const title = this.$accessor.exercises.search_criterion.title;
-      this.inputText.value = !!title ? title : '';
-    }
-
-    mounted() {
-      this.setInput();
+      // @ts-ignore
+      this.exercisesPanel.setInput();
     }
   }
 </script>

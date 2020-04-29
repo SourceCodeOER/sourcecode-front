@@ -4,7 +4,7 @@
 
       <div class="banner__nav banner__nav--with-link">
         <span>
-          Exercices > {{exercise.title}}
+          Bibliothèque > {{exercise.title}}
         </span>
         <nuxt-link to="/exercices" tag="span">
           <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
