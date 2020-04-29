@@ -8,13 +8,17 @@
       </div>
 
       <div class="input-favorite-wrapper" v-else-if="favorite && $auth.loggedIn && createFavoriteInput">
-        <ValidationObserver v-slot="{valid}">
+        <ValidationObserver v-slot="{valid}" tag="form" @submit.prevent="validateBeforeSubmit">
           <ValidationProvider name="name" rules="required">
             <input v-model="favoriteName" type="text" placeholder="Nommer le favori" class="input--primary-color">
           </ValidationProvider>
-          <button :disabled="!valid" type="submit" @click="validateBeforeSubmit"
-                  :class="{'button--primary-color': !valid, 'button--primary-color-reverse': valid}">OK
-          </button>
+
+          <div>
+            <button :disabled="!valid" type="submit" @click="validateBeforeSubmit"
+                    :class="{'button--primary-color': !valid, 'button--primary-color-reverse': valid}">OK
+            </button>
+            <button type="submit" @click="closeFavoriteInput" class="button--red-reverse">Annuler</button>
+          </div>
         </ValidationObserver>
       </div>
     </transition>
@@ -312,6 +316,10 @@
       this.createFavoriteInput = true;
     }
 
+    closeFavoriteInput() {
+      this.createFavoriteInput = false;
+    }
+
     /**
      * Apply the search request of the user
      */
@@ -493,15 +501,25 @@
       margin-top: 30px;
       margin-bottom: 15px;
 
-      > span {
+      > form {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+      }
+      input {
+        width: 100%;
+      }
+
+      div {
+        margin-top: 10px;
+
+        display: flex;
         justify-content: space-between;
       }
 
       button {
         padding: 8px 14px;
         height: 40px;
+        width: 48%;
         margin-top: 0;
       }
     }
