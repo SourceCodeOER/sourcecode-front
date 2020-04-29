@@ -412,7 +412,8 @@
      */
     toggleList(tagSelecter: CheckBoxSelecter) {
       if (this.selectedTagSelecter !== undefined) {
-        this.selectedTagSelecter.$data.active = false;
+        // @ts-ignore
+        this.selectedTagSelecter.closeList();
         this.selectedTagSelecter = undefined;
       }
 
@@ -535,8 +536,6 @@
     .selectable-tags {
       list-style-type: none;
       padding: 0;
-      overflow-y: scroll;
-      overflow-x: visible;
       height: 100%;
       margin-bottom: 0;
 
