@@ -31,6 +31,7 @@
     "nuxt-typed-vuex": "^0.1.10",
     "qs": "^6.9.1",
     "tiptap": "^1.26.6",
+    "tiptap-commands": "^1.13.1",
     "tiptap-extensions": "^1.28.6",
     "validator": "^12.2.0",
     "vee-validate": "^3.2.3",
