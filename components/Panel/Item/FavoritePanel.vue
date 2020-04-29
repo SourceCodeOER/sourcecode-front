@@ -5,9 +5,21 @@
     </div>
 
     <div v-show="!isConfigurationsEmpty" class="panel-wrapper">
-      <div class="historical" @click="fetch(configuration)" v-for="configuration in configurations"
+      <div class="favorite" @click="fetch(configuration)" v-for="configuration in configurations"
            :key="configuration.id">
         <h4>{{configuration.name}}</h4>
+
+        <div class="content">
+          <div v-if="configuration.title" class="title">
+            {{configuration.title}}
+          </div>
+          <div>
+            <template v-for="(tag, i) in configuration.tags">
+              <span v-if="i === 0" :key="tag.tag_id">{{tag.tag_text}}</span>
+              <span v-else :key="tag.tag_id"><span class="separator"> |</span> {{tag.tag_text}}</span>
+            </template>
+          </div>
+        </div>
         <div class="cta-wrapper">
           <span @click.stop="editFavorite(configuration.id)">
             <Icon type="edit" theme="theme--grey"/>
@@ -199,14 +211,18 @@
       }
     }
 
-    .historical {
+    .favorite {
       cursor: pointer;
       border-bottom: 1px solid rgba($GREY, .1);
+
+      .content {
+        padding: 0 20px;
+      }
 
 
       .title {
         margin-bottom: 20px;
-        color: $TERNARY_COLOR;
+        color: $PRIMARY_COLOR_LIGHT;
         font-family: $CircularStd;
       }
 
