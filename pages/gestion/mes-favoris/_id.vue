@@ -6,7 +6,7 @@
           Gestion > Mes Favoris > {{configuration.name}}
         </span>
         <nuxt-link to="/gestion/mes-favoris" tag="span">
-          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color"/>
           Mes favoris
         </nuxt-link>
       </div>

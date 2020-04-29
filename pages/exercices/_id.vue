@@ -7,7 +7,7 @@
           Bibliothèque > {{exercise.title}}
         </span>
         <nuxt-link to="/exercices" tag="span">
-          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color"/>
           Retour à la recherche
         </nuxt-link>
       </div>

@@ -6,7 +6,7 @@
           Administration > Gestion des exercices > Créer un exercice
         </span>
         <nuxt-link to="/administration/exercices" tag="span">
-          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color"/>
           Gestion des exercices
         </nuxt-link>
       </div>

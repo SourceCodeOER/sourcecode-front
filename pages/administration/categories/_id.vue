@@ -6,7 +6,7 @@
           Administration > Gestion des catégories > {{category.category}}
         </span>
         <nuxt-link to="/administration/categories" tag="span">
-          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color"/>
           Gestion des catégories
         </nuxt-link>
       </div>
