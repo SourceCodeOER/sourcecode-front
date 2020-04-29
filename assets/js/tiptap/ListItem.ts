@@ -1,5 +1,4 @@
 import { Node } from 'tiptap'
-// @ts-ignore
 import {splitListItem, liftListItem, sinkListItem, insertText, chainCommands} from 'tiptap-commands'
 
 export default class ListItem extends Node {
@@ -20,8 +19,7 @@ export default class ListItem extends Node {
     }
   }
 
-  // @ts-ignore
-  keys({ type }) {
+  keys({ type } : any) {
     return {
       Enter: splitListItem(type),
       Tab: chainCommands(sinkListItem(type), insertText("    ")),
