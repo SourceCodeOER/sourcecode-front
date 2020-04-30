@@ -350,7 +350,6 @@
      * Validating part for the favorite input
      */
     async validateBeforeSubmit() {
-      if (this.confirmedTags.length !== 0) {
         const tags_id: number[] = this.confirmedTags.map(tag => tag.tag_id);
         const title: string | undefined = this.$accessor.exercises.search_criterion.title;
 
@@ -369,11 +368,8 @@
           this.createFavoriteInput = false;
           this.$displaySuccess("Votre favori a bien été créé.");
         } catch (e) {
-          this.$displayError("Vos favoris n'ont pas pu être chargé");
+          this.$displayError('Un problème est survenu lors de la création du favori.');
         }
-      } else {
-        this.$displayWarning('Un problème est survenu lors de la création du favori.')
-      }
     }
 
     /**
