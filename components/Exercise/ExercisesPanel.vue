@@ -2,10 +2,12 @@
   <section id="ExercisesPanel" class="exercises-wrapper">
     <header ref="headerExercise">
       <div class="header-wrapper">
-        <h1>
-          Résultats de recherche
-          <span v-if="!isEmptySearchModel"> - {{searchModel}}</span>
-        </h1>
+
+        <div class="input-wrapper--with-icon input-with--enter-icon">
+          <Icon type="search"/>
+          <input ref="inputText" class="input--primary-color" type="text" @input="resetIfEmpty" @keydown.enter="debounceInput"
+                 placeholder="Rechercher">
+        </div>
 
         <div class="results">
           {{nbOfResults}} résultats - <span @click.self="reset" class="init">réinitialiser la recherche</span>
@@ -39,11 +41,13 @@
   import PreviewExercise from '~/components/Exercise/PreviewExercise.vue'
   import IntersectMixins from "~/components/Mixins/IntersectMixins.vue";
   import {Exercise, SelectedTag, TagLabelObjectEmitted, TagState} from "~/types";
+  import Icon from "~/components/Symbols/Icon.vue";
 
   const ratio = .2;
 
   @Component({
     components: {
+      Icon,
       Tag,
       PreviewExercise
     }
@@ -52,6 +56,9 @@
     @Ref() headerExercise!: HTMLElement;
     @Ref() bodyExercise!: HTMLElement;
     @Ref() anchor!: Element;
+    @Ref() inputText!: HTMLInputElement;
+
+
 
     intersectionObserverOptions: IntersectionObserverInit = {
       root: null,
@@ -188,7 +195,38 @@
         }
       });
 
-      this.$emit('reset');
+      this.resetInput();
+    }
+
+    debounceInput(e: any) {
+      const value = e.target.value;
+      this.$accessor.exercises.fetch({data: {title: value}});
+      this.$accessor.historical.addHistorical({
+        tags: this.$accessor.tags.selectedTags,
+        title: value,
+        vote: this.$accessor.exercises.search_criterion.vote
+      })
+    }
+
+    resetInput() {
+      this.inputText.value = ""
+    }
+
+    resetIfEmpty(e:any) {
+      const value:string =  e.target.value;
+
+      if(value === '') {
+        this.$accessor.exercises.fetch({data: {title: ""}});
+      }
+    }
+
+    refreshInput() {
+      this.inputText.value = this.$accessor.exercises.search_criterion.title || '';
+    }
+
+    setInput() {
+      const title = this.$accessor.exercises.search_criterion.title;
+      this.inputText.value = !!title ? title : '';
     }
 
     handleIntersect(entries: IntersectionObserverEntry[]) {
@@ -201,6 +239,10 @@
 
     targets(): Element[] {
       return [this.anchor]
+    }
+
+    mounted() {
+      this.setInput();
     }
   }
 </script>
@@ -233,6 +275,16 @@
       hr {
         border: 0;
         border-top: 1px solid rgba($GREY, .3);
+      }
+    }
+
+    .input-wrapper--with-icon {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 15px;
+
+      input {
+        width: 100%;
       }
     }
 

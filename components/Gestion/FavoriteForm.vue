@@ -81,9 +81,8 @@
 
       // Tags validation
       const tags: number[] = this.selectedTags.map((tag: SelectedTag) => tag.tag_id);
-      const isTagsValid = tags.length !== 0;
 
-      if (isValid && isTagsValid) {
+      if (isValid) {
 
         const request: UpdateConfigurationRequest | CreateConfigurationRequest = {
           name: this.form.name,

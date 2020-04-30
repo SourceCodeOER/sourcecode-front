@@ -6,7 +6,7 @@
           Administration > Gestion des tags > {{tag.tag_text}}
         </span>
         <nuxt-link to="/administration/tags" tag="span">
-          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color"/>
           Gestion des tags
         </nuxt-link>
       </div>

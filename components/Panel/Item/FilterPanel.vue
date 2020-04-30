@@ -8,13 +8,17 @@
       </div>
 
       <div class="input-favorite-wrapper" v-else-if="favorite && $auth.loggedIn && createFavoriteInput">
-        <ValidationObserver v-slot="{valid}">
+        <ValidationObserver v-slot="{valid}" tag="form" @submit.prevent="validateBeforeSubmit">
           <ValidationProvider name="name" rules="required">
             <input v-model="favoriteName" type="text" placeholder="Nommer le favori" class="input--primary-color">
           </ValidationProvider>
-          <button :disabled="!valid" type="submit" @click="validateBeforeSubmit"
-                  :class="{'button--primary-color': !valid, 'button--primary-color-reverse': valid}">OK
-          </button>
+
+          <div>
+            <button :disabled="!valid" type="submit"
+                    :class="{'button--primary-color': !valid, 'button--primary-color-reverse': valid}">OK
+            </button>
+            <button class="button--red-reverse">Annuler</button>
+          </div>
         </ValidationObserver>
       </div>
     </transition>
@@ -312,6 +316,10 @@
       this.createFavoriteInput = true;
     }
 
+    closeFavoriteInput() {
+      this.createFavoriteInput = false;
+    }
+
     /**
      * Apply the search request of the user
      */
@@ -342,7 +350,6 @@
      * Validating part for the favorite input
      */
     async validateBeforeSubmit() {
-      if (this.confirmedTags.length !== 0) {
         const tags_id: number[] = this.confirmedTags.map(tag => tag.tag_id);
         const title: string | undefined = this.$accessor.exercises.search_criterion.title;
 
@@ -361,11 +368,8 @@
           this.createFavoriteInput = false;
           this.$displaySuccess("Votre favori a bien été créé.");
         } catch (e) {
-          this.$displayError("Vos favoris n'ont pas pu être chargé");
+          this.$displayError('Un problème est survenu lors de la création du favori.');
         }
-      } else {
-        this.$displayWarning('Vous devez ajouter au moins un tag afin de créer votre favori')
-      }
     }
 
     /**
@@ -404,7 +408,8 @@
      */
     toggleList(tagSelecter: CheckBoxSelecter) {
       if (this.selectedTagSelecter !== undefined) {
-        this.selectedTagSelecter.$data.active = false;
+        // @ts-ignore
+        this.selectedTagSelecter.closeList();
         this.selectedTagSelecter = undefined;
       }
 
@@ -493,15 +498,25 @@
       margin-top: 30px;
       margin-bottom: 15px;
 
-      > span {
+      > form {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+      }
+      input {
+        width: 100%;
+      }
+
+      div {
+        margin-top: 10px;
+
+        display: flex;
         justify-content: space-between;
       }
 
       button {
         padding: 8px 14px;
         height: 40px;
+        width: 48%;
         margin-top: 0;
       }
     }
@@ -517,8 +532,6 @@
     .selectable-tags {
       list-style-type: none;
       padding: 0;
-      overflow-y: scroll;
-      overflow-x: visible;
       height: 100%;
       margin-bottom: 0;
 

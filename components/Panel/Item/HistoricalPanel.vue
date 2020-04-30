@@ -114,6 +114,7 @@
 
   #HistoricalPanel {
     padding: 0 0 20px;
+    position: relative;
 
     h3 {
       padding-left: 20px;

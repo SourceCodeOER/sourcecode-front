@@ -4,7 +4,7 @@
       <Icon type="arrowRight"/>
       <slot></slot>
     </span>
-    <ul :class="{active}">
+    <ul ref="list">
       <li>
         <input type="text" class="input--primary-color" v-model="filter" placeholder="Filtrer">
       </li>
@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import CheckBox from "~/components/Input/CheckBox.vue";
-  import {Vue, Component, Prop, Emit, Watch} from "vue-property-decorator";
+  import {Vue, Component, Prop, Emit, Watch, Ref} from "vue-property-decorator";
   import {CheckboxObject, CheckBoxObjectEmitted, CheckboxSelecterObjectEmitted} from "~/types";
   import Icon from "~/components/Symbols/Icon.vue";
 
@@ -33,6 +33,7 @@
   export default class CheckBoxSelecter extends Vue {
     @Prop({type: Array, required: true}) readonly defaultOptions!: CheckboxObject[];
     @Prop({type: Boolean, default: false}) readonly selectAllOption!: boolean;
+    @Ref() list!: HTMLElement;
 
     filter: string = "";
     active: boolean = false;
@@ -52,6 +53,19 @@
     @Emit()
     toggleList(): CheckBoxSelecter {
       this.active = !this.active;
+
+      if(this.active) {
+        this.list.style.maxHeight = this.list.scrollHeight.toString() + "px";
+      } else {
+        this.list.style.maxHeight = "0";
+      }
+
+      return this
+    }
+
+    closeList(): CheckBoxSelecter {
+      this.active = false;
+      this.list.style.maxHeight = "0";
       return this
     }
 

@@ -192,7 +192,6 @@
     HorizontalRule,
     OrderedList,
     BulletList,
-    ListItem,
     TodoItem,
     TodoList,
     Bold,
@@ -205,6 +204,7 @@
     CodeBlockHighlight,
     Placeholder
   } from 'tiptap-extensions'
+  import ListItem from "~/assets/js/tiptap/ListItem"
   import {Component, Prop, Ref, Vue} from "vue-property-decorator";
 
   @Component({

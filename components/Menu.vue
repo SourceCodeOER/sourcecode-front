@@ -276,13 +276,7 @@
         background-color: rgba(white, .2);
         @include transitionHelper(background-color .3s ease)
       }
-
-      &.cta-link-with-arrow:after {
-        content: url("~assets/logo/arrow.svg");
-        position: absolute;
-        right: $PADDING_MENU/1.5;
-
-      }
+      
 
       &.cta-animate {
         @include animation(blink-background 1.5s linear)

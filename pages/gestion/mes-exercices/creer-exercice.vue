@@ -6,7 +6,7 @@
           Gestion > Mes exercices > Créer un exercice
         </span>
         <nuxt-link to="/gestion/mes-exercices" tag="span">
-          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color-light"/>
+          <Icon type="arrowLeft" class="reversed-arrow" theme="theme--primary-color"/>
           Mes exercices
         </nuxt-link>
       </div>

@@ -41,7 +41,7 @@
      * The exercise containing details, tags,...
      */
     @Prop({type: Object, required: true}) exercise!: Exercise;
-    
+
     /**
      * Classify all tags by categories and sorts the categories
      */
@@ -80,7 +80,7 @@
   @import "assets/css/font";
 
   #DetailsPanel {
-
+    position: relative;
     padding: 20px;
 
     h4 {

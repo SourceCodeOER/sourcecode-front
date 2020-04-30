@@ -107,6 +107,7 @@
 
   #ExercisesCheckPanel {
     padding: 20px 0;
+    position: relative;
 
     .results {
       padding: 0 20px;
