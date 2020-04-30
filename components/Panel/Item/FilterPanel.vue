@@ -372,7 +372,7 @@
           this.$displayError("Vos favoris n'ont pas pu être chargé");
         }
       } else {
-        this.$displayWarning('Vous devez ajouter au moins un tag afin de créer votre favori')
+        this.$displayWarning('Un problème est survenu lors de la création du favori.')
       }
     }
 
