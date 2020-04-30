@@ -101,7 +101,16 @@
       });
 
       BusEvent.$on('changePanel', (id: number) => {
-        this.changePanel(id)
+        this.changePanel(id);
+
+        const classList: DOMTokenList = this.$el.classList;
+
+        if(!classList.contains("animatePanel")) {
+          this.$el.classList.add("animatePanel");
+          setTimeout(() => {
+            this.$el.classList.remove("animatePanel");
+          }, 1500);
+        }
       })
     }
 
@@ -124,6 +133,7 @@
       right: 0;
       z-index: 1000;
       display: flex;
+      border-radius: 4px 4px 0 0;
       width: 100%;
       justify-content: stretch;
       overflow: hidden;

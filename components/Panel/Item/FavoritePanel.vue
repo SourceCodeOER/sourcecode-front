@@ -157,6 +157,8 @@
 
   #FavoritePanel {
     padding: 0;
+    position: relative;
+
 
     .disclaimer {
       padding: 0 20px;
