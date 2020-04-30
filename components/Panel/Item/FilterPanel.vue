@@ -14,10 +14,10 @@
           </ValidationProvider>
 
           <div>
-            <button :disabled="!valid" type="submit" @click="validateBeforeSubmit"
+            <button :disabled="!valid" type="submit"
                     :class="{'button--primary-color': !valid, 'button--primary-color-reverse': valid}">OK
             </button>
-            <button type="submit" @click="closeFavoriteInput" class="button--red-reverse">Annuler</button>
+            <button class="button--red-reverse">Annuler</button>
           </div>
         </ValidationObserver>
       </div>
