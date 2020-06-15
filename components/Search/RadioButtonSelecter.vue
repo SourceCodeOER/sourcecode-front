@@ -80,7 +80,7 @@
     }
 
     @Emit()
-    toggleList() {
+    toggleList(): RadioButtonSelecter {
       this.active = !this.active;
 
       if(this.active) {
