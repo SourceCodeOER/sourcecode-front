@@ -147,7 +147,7 @@
     /**
      * The current opened tag selecter component
      */
-    selectedTagSelecter: CheckBoxSelecter | undefined = undefined;
+    selectedTagSelecter: CheckBoxSelecter | RadioButtonSelecter | undefined = undefined;
     /**
      * If active, the input form is displayed to let the user enters the name of the favorite
      */
@@ -406,7 +406,7 @@
      * Save the current tagSelecter or close a tag selecter if previously activated
      * @param tagSelecter
      */
-    toggleList(tagSelecter: CheckBoxSelecter) {
+    toggleList(tagSelecter: CheckBoxSelecter | RadioButtonSelecter) {
       if (this.selectedTagSelecter !== undefined) {
         // @ts-ignore
         this.selectedTagSelecter.closeList();
