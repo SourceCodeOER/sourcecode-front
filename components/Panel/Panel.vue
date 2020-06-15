@@ -127,7 +127,7 @@
 
   .panel__main {
     .panel__nav__wrapper {
-      position: sticky;
+      position: absolute;
       top: 0;
       left: 0;
       right: 0;

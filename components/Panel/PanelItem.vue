@@ -55,6 +55,7 @@
 <style lang="scss" scoped>
   .panel__item {
     height: calc(100% - 50px);
+    margin-top: 50px;
     overflow-y: scroll;
     overflow-x: hidden;
   }
