@@ -147,7 +147,7 @@
     /**
      * The current opened tag selecter component
      */
-    selectedTagSelecter: CheckBoxSelecter | undefined = undefined;
+    selectedTagSelecter: CheckBoxSelecter | RadioButtonSelecter | undefined = undefined;
     /**
      * If active, the input form is displayed to let the user enters the name of the favorite
      */
