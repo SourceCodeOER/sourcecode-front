@@ -406,7 +406,7 @@
      * Save the current tagSelecter or close a tag selecter if previously activated
      * @param tagSelecter
      */
-    toggleList(tagSelecter: CheckBoxSelecter) {
+    toggleList(tagSelecter: CheckBoxSelecter | RadioButtonSelecter) {
       if (this.selectedTagSelecter !== undefined) {
         // @ts-ignore
         this.selectedTagSelecter.closeList();

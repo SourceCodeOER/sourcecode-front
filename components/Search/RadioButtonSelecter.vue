@@ -4,7 +4,7 @@
       <Icon type="arrowRight"/>
       <slot></slot>
     </span>
-    <ul :class="{active}">
+    <ul :class="{active}" ref="list">
       <li>
         <input type="text" class="input--primary-color" v-model="filter" placeholder="Filtrer">
       </li>
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-  import {Vue, Component, Prop, Emit, Watch} from "vue-property-decorator";
+  import {Vue, Component, Prop, Emit, Watch, Ref} from "vue-property-decorator";
   import Icon from "~/components/Symbols/Icon.vue";
   import {RadiobuttonObject, RadiobuttonSelecterObjectEmitted} from "~/types";
 
@@ -43,6 +43,8 @@
     @Prop({type: Array, required: true}) readonly defaultOptions!: RadiobuttonObject[];
     @Prop({default: 'default'}) readonly defaultValue!: any;
     @Prop({type: Boolean, default: false}) readonly selectDefaultOption!: boolean;
+    @Ref() list!: HTMLElement;
+
 
     selectedValue: any = this.defaultValue;
 
@@ -80,6 +82,19 @@
     @Emit()
     toggleList() {
       this.active = !this.active;
+
+      if(this.active) {
+        this.list.style.maxHeight = this.list.scrollHeight.toString() + "px";
+      } else {
+        this.list.style.maxHeight = "0";
+      }
+
+      return this
+    }
+
+    closeList(): RadioButtonSelecter {
+      this.active = false;
+      this.list.style.maxHeight = "0";
       return this
     }
 
