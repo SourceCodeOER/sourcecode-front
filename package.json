@@ -33,7 +33,7 @@
     "tiptap": "1.26.6",
     "tiptap-extensions": "1.28.6",
     "tiptap-commands": "1.12.5",
-    "validator": "^12.2.0",
+    "validator": "^13.7.0",
     "vee-validate": "^3.2.3",
     "vue-property-decorator": "8.4.2",
     "vuex-class-component": "^2.1.1"
